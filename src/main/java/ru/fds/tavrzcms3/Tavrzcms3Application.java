@@ -20,15 +20,15 @@ public class Tavrzcms3Application {
 
 //        SpringApplication.run(Tavrzcms3Application.class, args);
         ApplicationContext context = SpringApplication.run(Tavrzcms3Application.class);
-        EmployeeRepository repository = context.getBean(EmployeeRepository.class);
 
-        Employee employee = new Employee();
-        employee.setSurname("qwert");
-        employee.setName("Ниefghна");
-        employee.setPatronymic("Влаdfghдимировна");
-        System.out.println("Before: = " + employee.toString());
-        repository.insert(employee);
-        System.out.println("After: = " + employee.toString());
+//        EmployeeRepository repository = context.getBean(EmployeeRepository.class);
+//        Employee employee = new Employee();
+//        employee.setSurname("qwert");
+//        employee.setName("Ниefghна");
+//        employee.setPatronymic("Влаdfghдимировна");
+//        System.out.println("After: = " + employee.toString());
+//        repository.insert(employee);
+//        System.out.println("Before: = " + employee.toString());
 //        employee.setPatronymic("Николавевна");
 //        repository.update(employee);
 //        System.out.println("Before2: = " + employee.toString());
@@ -46,28 +46,33 @@ public class Tavrzcms3Application {
 //        for(Employee e : employeeList)
 //            System.out.println(e.toString());
 
-        ClientManager clientManager = new ClientManager();
-        clientManager.setSurname("Романенко");
-        clientManager.setName("Ктрилл");
-        clientManager.setPatronymic("Юрьевич");
-        ClientManagerRepository clientManagerRepository = new ClientManagerRepository();
-        System.out.println("ClientManager before insert = " + clientManager.toString());
-        clientManagerRepository.insert(clientManager);
-        System.out.println("ClientManager after insert = " + clientManager.toString());
+//        ClientManager clientManager = new ClientManager();
+//        clientManager.setSurname("Романенко");
+//        clientManager.setName("Ктрилл");
+//        clientManager.setPatronymic("Юрьевич");
+//        ClientManagerRepository clientManagerRepository = context.getBean(ClientManagerRepository.class);
+//        System.out.println("ClientManager before insert = " + clientManager.toString());
+//        clientManagerRepository.insert(clientManager);
+//        System.out.println("ClientManager after insert = " + clientManager.toString());
+
 
 //        ClientIndividual clientIndividual = new ClientIndividual();
 //        clientIndividual.setSurname("Иванов");
 //        clientIndividual.setName("Иван");
 //        clientIndividual.setPatronymic("Иванович");
 //        clientIndividual.setPasportNum("5532 123765");
-//        clientIndividual.setClientManager(clientManager);
-//        EmployeeRepository employeeRepository = new EmployeeRepository();
-//        Employee employee = employeeRepository.getBySurname("Фокин");
-//        clientIndividual.setEmployee(employee);
-//        ClientIndividualRepository clientIndividualRepository = new ClientIndividualRepository();
+//        ClientManagerRepository clientManagerRepository = context.getBean(ClientManagerRepository.class);
+//        clientIndividual.setClientManager(clientManagerRepository.getBySurname("Романенко"));
+//        EmployeeRepository employeeRepository = context.getBean(EmployeeRepository.class);
+//        clientIndividual.setEmployee(employeeRepository.getBySurname("Фокин"));
+//        ClientIndividualRepository clientIndividualRepository = context.getBean(ClientIndividualRepository.class);
 //        System.out.println("ClientIndividual before insert = " + clientIndividual.toString());
 //        clientIndividualRepository.insert(clientIndividual);
 //        System.out.println("ClientIndividual after insert = " + clientIndividual.toString());
+
+        ClientIndividualRepository clientIndividualRepository = context.getBean(ClientIndividualRepository.class);
+        ClientIndividual clientIndividual = clientIndividualRepository.getById(2);
+        System.out.println(clientIndividual);
 
     }
 

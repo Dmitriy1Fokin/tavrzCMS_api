@@ -35,7 +35,7 @@ public class ClientManagerRepository {
     }
 
     public ClientManager getBySurname(String surname) {
-        TypedQuery<ClientManager> query = entityManager.createQuery("select cm from ClientManager ci where cm.surname = :surname", ClientManager.class);
+        TypedQuery<ClientManager> query = entityManager.createQuery("select cm from ClientManager cm where cm.surname = :surname", ClientManager.class);
         query.setParameter("surname", surname);
         return query.getSingleResult();
     }

@@ -6,7 +6,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "loaner_legal_entity")
+@Table(name = "client_legal_entity")
 public class ClientLegalEntity extends Client {
 	
 	@Column(name ="organizational_form")
@@ -63,7 +63,8 @@ public class ClientLegalEntity extends Client {
 				"organizationalForm='" + organizationalForm + '\'' +
 				", name='" + name + '\'' +
 				", inn='" + inn + '\'' +
-				", client=" + client +
+				", clientId=" + getClientId() +
+				", typeOfClient='" + getTypeOfClient() + '\'' +
 				'}';
 	}
 }

@@ -6,7 +6,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "loaner_individual")
+@Table(name = "client_individual")
 public class ClientIndividual extends Client {
 	
 	@Column(name ="surname")
@@ -20,12 +20,13 @@ public class ClientIndividual extends Client {
 
 	@Column(name = "pasport_number")
 	private String pasportNum;
-	
+
 	@OneToOne(mappedBy = "clientIndividual")
 	private Client client;
 
 	public ClientIndividual(){
 		super.setTypeOfClient("фл");
+
 	}
 
 	public String getSurname() {
@@ -75,7 +76,8 @@ public class ClientIndividual extends Client {
 				", name='" + name + '\'' +
 				", patronymic='" + patronymic + '\'' +
 				", pasportNum='" + pasportNum + '\'' +
-				", client=" + client +
-				'}';
+				", clientId=" + getClientId() +
+				", typeOfClient='" + getTypeOfClient() + '\'' +
+				"} ";
 	}
 }

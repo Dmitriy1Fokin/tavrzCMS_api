@@ -36,7 +36,7 @@ public class Client {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_id")
 	private Employee employee;
-	
+
 	@OneToOne
 	@JoinColumn(name = "client_id")
 	private ClientIndividual clientIndividual;
@@ -91,11 +91,11 @@ public class Client {
 		this.clientIndividual = clientIndividual;
 	}
 
-	public ru.fds.tavrzcms3.domain.ClientLegalEntity getClientLegalEntity() {
+	public ClientLegalEntity getClientLegalEntity() {
 		return ClientLegalEntity;
 	}
 
-	public void setClientLegalEntity(ru.fds.tavrzcms3.domain.ClientLegalEntity clientLegalEntity) {
+	public void setClientLegalEntity(ClientLegalEntity clientLegalEntity) {
 		ClientLegalEntity = clientLegalEntity;
 	}
 
