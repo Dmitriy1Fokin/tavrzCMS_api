@@ -1,19 +1,24 @@
 package ru.fds.tavrzcms3.rest;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.repository.RepositoryEmployee;
 
 import java.util.List;
 
+
 @Controller
-public class EmployeeController {
+public class PagesController {
 
     private final RepositoryEmployee repositoryEmployee;
 
-    public EmployeeController(RepositoryEmployee repositoryEmployee){
+    public PagesController(RepositoryEmployee repositoryEmployee) {
         this.repositoryEmployee = repositoryEmployee;
     }
 
@@ -40,5 +45,30 @@ public class EmployeeController {
         System.out.println("Cool!!!!!!!!!!!!!!!!!!!!!!");
         model.addAttribute("employee", emp);
         return "edit";
+    }
+
+    @GetMapping("/user")
+    public String userPage() {
+        //myService.onlyUser();
+        return "user";
+    }
+
+    @GetMapping("/admin")
+    public String adminPage() {
+        //myService.onlyAdmin();
+        return "admin";
+    }
+
+    @GetMapping("/authenticated")
+    public String authenticatedPage() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
+        System.out.println(userDetails.getUsername());
+        return "authenticated";
+    }
+
+    @GetMapping("/success")
+    public String successPage() {
+        return "success";
     }
 }
