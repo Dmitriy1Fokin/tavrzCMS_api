@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Договоры залога на сопровождении</title>
+</head>
+<body>
+<h1>Договоры залога:</h1>
+
+<table class="pledgeEgreement">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <div th:each="pledgors : ${employee.getClients()}">
+        <tr th:each="pe : ${pledgors.getPledgeEgreements()}">
+            <td th:text="${pe.getNumPE()}"></td>
+            <td th:text="${pe.getDateBeginPE()}"></td>
+            <td th:each="loanEgreement : ${pe.getLoanEgreements()}">
+                <a th:text="${loanEgreement.getNumLE()}"></a>
+            </td>
+            <td>
+            </td>
+        </tr>
+    </div>
+
+    <!--<tr th:each="pe : ${pledgeEgreements}">-->
+        <!--<td th:text="${pe.getNumPE()}"></td>-->
+        <!--<td th:text="${pe.getDateBeginPE()}"></td>-->
+        <!--<td th:each="loanEgreement : ${pe.getLoanEgreements()}">-->
+            <!--<a th:text="${loanEgreement.getNumLE()}"></a>-->
+        <!--</td>-->
+        <!--<td>-->
+        <!--</td>-->
+    <!--</tr>-->
+    </tbody>
+</table>
+</body>
+</html>

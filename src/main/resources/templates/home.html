@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Домашняя страница</title>
+</head>
+<body>
+<div>Сотрудник</div>
+<div th:text="${employee.surname}"></div>
+<div th:text="${employee.name}"></div>
+<div th:text="${employee.patronymic}"></div>
+<br>
+<div>Всего договоров залога на сопровождении:</div>
+<div th:text="${countOfAllPledgeEgreement}"></div>
+<a th:href="@{/pledge_egreements(id=${employee.employeeId})}" href="pledge_egreements.html">подробнее</a>
+<div>Из них первичных:</div>
+
+</body>
+</html>
