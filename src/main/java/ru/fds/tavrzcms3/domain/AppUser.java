@@ -18,6 +18,9 @@ public class AppUser {
     @Column(name ="password")
     private String password;
 
+    @OneToOne(mappedBy = "appUser")
+    private Employee employee;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "db_user_role", joinColumns = @JoinColumn(name ="user_id"), inverseJoinColumns = @JoinColumn(name ="role_id"))
     private List<AppRole> appRoles;
@@ -44,6 +47,14 @@ public class AppUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public List<AppRole> getAppRoles() {

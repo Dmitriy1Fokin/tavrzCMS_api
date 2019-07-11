@@ -14,6 +14,7 @@ import ru.fds.tavrzcms3.repository.RepositoryAppUser;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class AppUserDetailsService implements UserDetailsService {
 

@@ -2,13 +2,7 @@ package ru.fds.tavrzcms3.domain;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "employee")
@@ -27,9 +21,10 @@ public class Employee {
 	
 	@Column(name ="patronymic")
 	private String patronymic;
-	
-	@Column(name ="login")
-	private String login;
+
+	@OneToOne
+	@JoinColumn(name = "login")
+	private AppUser appUser;
 	
 	@OneToMany(mappedBy = "employee")
 	private List<Client> clients;
@@ -66,12 +61,12 @@ public class Employee {
 		this.patronymic = patronymic;
 	}
 
-	public String getLogin() {
-		return login;
+	public AppUser getAppUser() {
+		return appUser;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public void setAppUser(AppUser appUser) {
+		this.appUser = appUser;
 	}
 
 	public List<Client> getClients() {
@@ -89,7 +84,7 @@ public class Employee {
 				", surname='" + surname + '\'' +
 				", name='" + name + '\'' +
 				", patronymic='" + patronymic + '\'' +
-				", login='" + login + '\'' +
+				", appUser=" + appUser +
 				'}';
 	}
 }
