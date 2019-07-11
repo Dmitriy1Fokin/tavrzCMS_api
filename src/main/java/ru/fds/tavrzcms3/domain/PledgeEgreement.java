@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -47,7 +46,7 @@ public class PledgeEgreement {
 	@Column(name ="notice")
 	private String noticePE;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "kd_dz", joinColumns = @JoinColumn(name ="dz_id"), inverseJoinColumns = @JoinColumn(name ="kd_id"))
 	private List<LoanEgreement> loanEgreements;
 	
@@ -149,7 +148,7 @@ public class PledgeEgreement {
 				", pervPosl='" + pervPosl + '\'' +
 				", statusPE='" + statusPE + '\'' +
 				", noticePE='" + noticePE + '\'' +
-				", pledgor=" + pledgor +
+//				", pledgor=" + pledgor +
 				'}';
 	}
 }

@@ -1,13 +1,17 @@
 package ru.fds.tavrzcms3.rest;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.fds.tavrzcms3.Service.EmployeeService;
 import ru.fds.tavrzcms3.domain.Employee;
+import ru.fds.tavrzcms3.domain.PledgeEgreement;
 import ru.fds.tavrzcms3.repository.RepositoryEmployee;
 
 import java.util.List;
@@ -17,17 +21,43 @@ import java.util.List;
 public class PagesController {
 
     private final RepositoryEmployee repositoryEmployee;
+    private final EmployeeService employeeService;
 
-    public PagesController(RepositoryEmployee repositoryEmployee) {
+
+    public PagesController(RepositoryEmployee repositoryEmployee, EmployeeService employeeService) {
         this.repositoryEmployee = repositoryEmployee;
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/")
-    public String listPage(Model model) {
-        List<Employee> employees = repositoryEmployee.findAll();
-        model.addAttribute("employees", employees);
-        return "list";
+    public String homePage(@AuthenticationPrincipal User user, Model model) {
+        Employee employee = employeeService.getEmployeeByAppUser(user);
+        model.addAttribute("employee", employee);
+        int countOfPE = employeeService.getCountOfAllPledgeEgreements(user);
+        model.addAttribute("countOfAllPledgeEgreement", countOfPE);
+
+        return "home";
     }
+
+    @GetMapping("/pledge_egreements")
+    public String pledgeEgreementPage(@RequestParam("id") long id, Model model) {
+        Employee employee = repositoryEmployee.getOne(id);
+        model.addAttribute("employee", employee);
+        return "pledge_egreements";
+
+//        List<PledgeEgreement> pledgeEgreements = employeeService.getPledgeEgreementByEmployeeId(id);
+//        model.addAttribute("pledgeEgreements", pledgeEgreements);
+//        return "pledge_egreements";
+    }
+
+
+
+
+
+
+
+
+
 
     @GetMapping("/edit")
     public String editPage(@RequestParam("id") long id, Model model) {
@@ -71,4 +101,6 @@ public class PagesController {
     public String successPage() {
         return "success";
     }
+
+
 }
