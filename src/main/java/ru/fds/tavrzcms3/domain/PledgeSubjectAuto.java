@@ -21,11 +21,11 @@ public class PledgeSubjectAuto extends PledgeSubject {
 	@Column(name ="num_of_engine")
 	private String numOfEngine;
 	
-	@Column(name ="num_of_PTS")
+	@Column(name ="num_of_pts")
 	private String numOfPTS;
 	
 	@Column(name ="year_of_manufacture")
-	private int yearOfManufacture;
+	private Integer yearOfManufacture;
 	
 	@Column(name ="inventory_number")
 	private String inventoryNum;
@@ -76,11 +76,11 @@ public class PledgeSubjectAuto extends PledgeSubject {
 		this.numOfPTS = numOfPTS;
 	}
 
-	public int getYearOfManufacture() {
+	public Integer getYearOfManufacture() {
 		return yearOfManufacture;
 	}
 
-	public void setYearOfManufacture(int yearOfManufacture) {
+	public void setYearOfManufacture(Integer yearOfManufacture) {
 		this.yearOfManufacture = yearOfManufacture;
 	}
 

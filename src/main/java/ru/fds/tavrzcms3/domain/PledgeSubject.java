@@ -20,13 +20,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "pledgeSubject")
+@Table(name = "pledge_subject")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class PledgeSubject {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name ="pledgeSubject_id")
+	@Column(name ="pledge_subject_id")
 	private long pledgeSubjectId;
 	
 	@Column(name ="name")
@@ -35,19 +35,19 @@ public class PledgeSubject {
 	@Column(name ="liquidity")
 	private String liquidity;
 
-	@Column(name ="ZS_DZ")
+	@Column(name ="zs_dz")
 	private double zsDz;
 
-	@Column(name ="ZS_ZZ")
+	@Column(name ="zs_zz")
 	private double zsZz;
 
-	@Column(name ="RS_DZ")
+	@Column(name ="rs_dz")
 	private double rsDz;
 
-	@Column(name ="RS_ZZ")
+	@Column(name ="rs_zz")
 	private double rsZz;
 
-	@Column(name ="SS")
+	@Column(name ="ss")
 	private double ss;
 
 	@Column(name ="date_monitoring")
@@ -92,7 +92,7 @@ public class PledgeSubject {
 	private String insuranceObligation;
 	
 	@ManyToMany
-	@JoinTable(name = "dz_pledgeSubject", joinColumns = @JoinColumn(name ="pledgeSubject_id"), inverseJoinColumns = @JoinColumn(name ="dz_id"))
+	@JoinTable(name = "dz_ps", joinColumns = @JoinColumn(name ="pledge_subject_id"), inverseJoinColumns = @JoinColumn(name ="dz_id"))
 	private List<PledgeEgreement> pledgeEgreements;
 	
 	@OneToMany(mappedBy = "pledgeSubject")

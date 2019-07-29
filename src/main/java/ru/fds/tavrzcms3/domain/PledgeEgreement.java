@@ -54,8 +54,8 @@ public class PledgeEgreement {
 	@JoinColumn(name = "pledgor_id")
 	private Client pledgor;
 
-	@ManyToMany
-	@JoinTable(name = "dz_pledgeSubject", joinColumns = @JoinColumn(name ="dz_id"), inverseJoinColumns = @JoinColumn(name ="pledgeSubject_id"))
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "dz_ps", joinColumns = @JoinColumn(name ="dz_id"), inverseJoinColumns = @JoinColumn(name ="pledge_subject_id"))
 	private List<PledgeSubject> pledgeSubjects;
 
 	public long getPledgeEgreementId() {

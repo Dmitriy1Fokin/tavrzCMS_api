@@ -6,10 +6,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "pledge_TBO")
+@Table(name = "pledge_tbo")
 public class PledgeSubjectTBO extends PledgeSubject {
 	
-	@Column(name ="count_of_TBO")
+	@Column(name ="count_of_tbo")
 	private int countOfTBO;
 	
 	@Column(name ="carrying_amount")

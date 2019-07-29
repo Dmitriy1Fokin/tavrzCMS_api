@@ -62,8 +62,8 @@ public class PledgeSubjectRealtyBuilding extends PledgeSubjectRealty {
 		return "PledgeSubjectRealtyBuilding{" +
 				"readinessDegree=" + readinessDegree +
 				", yearOfConstruction=" + yearOfConstruction +
-				", pledgeSubjectRealty=" + pledgeSubjectRealty +
-				", marketSegment=" + marketSegment +
+//				", pledgeSubjectRealty=" + pledgeSubjectRealty +
+//				", marketSegment=" + marketSegment +
 				'}';
 	}
 }

@@ -30,25 +30,31 @@ public class Tavrzcms3Application {
     @Autowired
     private RepositoryPledgeEgreement repositoryPledgeEgreement;
 
+    @Autowired
+    private RepositoryPledgeSubject repositoryPledgeSubject;
+
     @PostConstruct
     public void init(){
-        ClientIndividual clientList = repositoryClientIndividual.findByPasportNum("5532 123765");
-        System.out.println(clientList);
-
-        System.out.println("-------------FIND ALL EMPLOYEES------------");
-        List<Employee> employees = repositoryEmployee.findAll();
-        for(Employee emp : employees)
-            System.out.println(emp);
-
-        System.out.println("-------------FIND ALL PledgeEgreement------------");
-        System.out.println(employees.get(3));
-        List<Client> clients = repositoryClient.findByEmployee(employees.get(3));
-        for(Client c : clients)
-            System.out.println(c);
-
-        List<PledgeEgreement> pledgeEgreements = repositoryPledgeEgreement.findByPledgorIn(clients);
-        for(PledgeEgreement pe : pledgeEgreements)
-            System.out.println(pe);
+//        ClientIndividual clientList = repositoryClientIndividual.findByPasportNum("5532 123765");
+//        System.out.println(clientList);
+//
+//        System.out.println("-------------FIND ALL EMPLOYEES------------");
+//        List<Employee> employees = repositoryEmployee.findAll();
+//        for(Employee emp : employees)
+//            System.out.println(emp);
+//
+//        System.out.println("-------------FIND ALL PledgeEgreement------------");
+//        System.out.println(employees.get(1));
+//        List<Client> clients = repositoryClient.findByEmployee(employees.get(1));
+//        for(Client c : clients)
+//            System.out.println(c);
+//
+//        List<PledgeEgreement> pledgeEgreements = repositoryPledgeEgreement.findByPledgorIn(clients);
+//        for(PledgeEgreement pe : pledgeEgreements)
+//            System.out.println(pe);
+//
+//
+//        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + repositoryPledgeSubject.findById((long)234));
 
     }
 }

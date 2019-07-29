@@ -13,7 +13,7 @@ public class PledgeSubjectVessel extends PledgeSubject {
 	private int imo;
 	
 	@Column(name ="mmsi")
-	private int mmsi;
+	private Integer mmsi;
 	
 	@Column(name ="flag")
 	private String flag;
@@ -44,11 +44,11 @@ public class PledgeSubjectVessel extends PledgeSubject {
 		this.imo = imo;
 	}
 
-	public int getMmsi() {
+	public Integer getMmsi() {
 		return mmsi;
 	}
 
-	public void setMmsi(int mmsi) {
+	public void setMmsi(Integer mmsi) {
 		this.mmsi = mmsi;
 	}
 
