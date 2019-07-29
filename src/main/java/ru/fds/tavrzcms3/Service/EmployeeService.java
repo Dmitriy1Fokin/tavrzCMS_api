@@ -39,6 +39,11 @@ public class EmployeeService {
         return repositoryPledgeEgreement.countAllByPledgorIn(clients);
     }
 
+    public int getCountOfPervPledgeEgreements(User user){
+        List<Client> clients = repositoryClient.findByEmployee(getEmployeeByAppUser(user));
+        return repositoryPledgeEgreement.countAllByPledgorInAndPervPoslEquals(clients, "перв");
+    }
+
     public List<PledgeEgreement> getPledgeEgreementByEmployeeId(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> clients = repositoryClient.findByEmployee(employee);

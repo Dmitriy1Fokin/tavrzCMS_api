@@ -11,9 +11,9 @@
 <div th:text="${employee.patronymic}"></div>
 <br>
 <div>Всего договоров залога на сопровождении:</div>
-<div th:text="${countOfAllPledgeEgreement}"></div>
-<a th:href="@{/pledge_egreements(id=${employee.employeeId})}" href="pledge_egreements.html">подробнее</a>
+<!--<div th:text="${countOfAllPledgeEgreement}"></div>-->
+<a th:href="@{/pledge_egreements(id=${employee.employeeId}, pervOrAll='all')}" href="pledge_egreements.html" th:text="${countOfAllPledgeEgreement}">0</a>
 <div>Из них первичных:</div>
-
+<a th:href="@{/pledge_egreements(id=${employee.employeeId}, pervOrAll='perv')}" href="pledge_egreements.html" th:text="${countOfPervPledgeEgreements}">0</a>
 </body>
 </html>

@@ -33,16 +33,21 @@ public class PagesController {
     public String homePage(@AuthenticationPrincipal User user, Model model) {
         Employee employee = employeeService.getEmployeeByAppUser(user);
         model.addAttribute("employee", employee);
+
         int countOfPE = employeeService.getCountOfAllPledgeEgreements(user);
         model.addAttribute("countOfAllPledgeEgreement", countOfPE);
+
+        int countOfPervPE = employeeService.getCountOfPervPledgeEgreements(user);
+        model.addAttribute("countOfPervPledgeEgreements", countOfPervPE);
 
         return "home";
     }
 
     @GetMapping("/pledge_egreements")
-    public String pledgeEgreementPage(@RequestParam("id") long id, Model model) {
+    public String pledgeEgreementPage(@RequestParam("id") long id, @RequestParam("pervOrAll") String pervOrAll, Model model) {
         Employee employee = repositoryEmployee.getOne(id);
         model.addAttribute("employee", employee);
+        model.addAttribute("pervOrAll", pervOrAll);
         return "pledge_egreements";
 
 //        List<PledgeEgreement> pledgeEgreements = employeeService.getPledgeEgreementByEmployeeId(id);
