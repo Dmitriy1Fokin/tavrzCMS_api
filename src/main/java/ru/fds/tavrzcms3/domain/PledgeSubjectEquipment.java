@@ -26,6 +26,12 @@ public class PledgeSubjectEquipment extends PledgeSubject {
 	
 	@Column(name ="type_of_equipment")
 	private String typeOfquipment;
+
+	@Column(name = "productivity")
+	private Double productivity;
+
+	@Column(name = "type_of_productivity")
+	private String typeOfProductivity;
 	
 	@OneToOne(mappedBy = "pledgeSubjectEquipment")
 	private PledgeSubject pledgeSubject;
@@ -76,6 +82,22 @@ public class PledgeSubjectEquipment extends PledgeSubject {
 
 	public void setTypeOfquipment(String typeOfquipment) {
 		this.typeOfquipment = typeOfquipment;
+	}
+
+	public Double getProductivity() {
+		return productivity;
+	}
+
+	public void setProductivity(Double productivity) {
+		this.productivity = productivity;
+	}
+
+	public String getTypeOfProductivity() {
+		return typeOfProductivity;
+	}
+
+	public void setTypeOfProductivity(String typeOfProductivity) {
+		this.typeOfProductivity = typeOfProductivity;
 	}
 
 	public PledgeSubject getPledgeSubject() {

@@ -32,6 +32,9 @@ public class PledgeSubjectAuto extends PledgeSubject {
 	
 	@Column(name ="type_of_auto")
 	private String typeOfAuto;
+
+	@Column(name ="horsepower")
+	private Double horsepower;
 	
 	@OneToOne(mappedBy = "pledgeSubjectAuto")
 	private PledgeSubject pledgeSubject;
@@ -98,6 +101,14 @@ public class PledgeSubjectAuto extends PledgeSubject {
 
 	public void setTypeOfAuto(String typeOfAuto) {
 		this.typeOfAuto = typeOfAuto;
+	}
+
+	public Double getHorsepower() {
+		return horsepower;
+	}
+
+	public void setHorsepower(Double horsepower) {
+		this.horsepower = horsepower;
 	}
 
 	public PledgeSubject getPledgeSubject() {
