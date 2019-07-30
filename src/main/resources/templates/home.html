@@ -1,19 +1,29 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Домашняя страница</title>
 </head>
 <body>
+
 <div>Сотрудник</div>
 <div th:text="${employee.surname}"></div>
 <div th:text="${employee.name}"></div>
 <div th:text="${employee.patronymic}"></div>
+
 <br>
-<div>Всего договоров залога на сопровождении:</div>
-<!--<div th:text="${countOfAllPledgeEgreement}"></div>-->
+
+<p>Договоров залога на сопровождении:</p>
+<label>Всего:</label>
+<a th:href="@{/pledge_egreements(id=${employee.employeeId}, pervPosl='all')}" href="pledge_egreements.html" th:text="${countOfAllPledgeEgreement}">0</a>
+<label>Первичных:</label>
+<a th:href="@{/pledge_egreements(id=${employee.employeeId}, pervPosl='perv')}" href="pledge_egreements.html" th:text="${countOfPervPledgeEgreements}">0</a>
+<label>Последующих:</label>
+<a th:href="@{/pledge_egreements(id=${employee.employeeId}, pervPosl='posl')}" href="pledge_egreements.html" th:text="${countOfPoslPledgeEgreements}">0</a>
+
+<p>Кредитных договоров на сопровождении:</p>
 <a th:href="@{/pledge_egreements(id=${employee.employeeId}, pervOrAll='all')}" href="pledge_egreements.html" th:text="${countOfAllPledgeEgreement}">0</a>
-<div>Из них первичных:</div>
-<a th:href="@{/pledge_egreements(id=${employee.employeeId}, pervOrAll='perv')}" href="pledge_egreements.html" th:text="${countOfPervPledgeEgreements}">0</a>
+
+
 </body>
 </html>

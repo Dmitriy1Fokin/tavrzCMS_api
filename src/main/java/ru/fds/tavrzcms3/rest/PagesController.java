@@ -13,8 +13,7 @@ import ru.fds.tavrzcms3.Service.EmployeeService;
 import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.domain.PledgeEgreement;
 import ru.fds.tavrzcms3.repository.RepositoryEmployee;
-
-import java.util.List;
+import ru.fds.tavrzcms3.repository.RepositoryPledgeEgreement;
 
 
 @Controller
@@ -22,11 +21,13 @@ public class PagesController {
 
     private final RepositoryEmployee repositoryEmployee;
     private final EmployeeService employeeService;
+    private final RepositoryPledgeEgreement repositoryPledgeEgreement;
 
 
-    public PagesController(RepositoryEmployee repositoryEmployee, EmployeeService employeeService) {
+    public PagesController(RepositoryEmployee repositoryEmployee, EmployeeService employeeService, RepositoryPledgeEgreement repositoryPledgeEgreement) {
         this.repositoryEmployee = repositoryEmployee;
         this.employeeService = employeeService;
+        this.repositoryPledgeEgreement = repositoryPledgeEgreement;
     }
 
     @GetMapping("/")
@@ -40,19 +41,25 @@ public class PagesController {
         int countOfPervPE = employeeService.getCountOfPervPledgeEgreements(user);
         model.addAttribute("countOfPervPledgeEgreements", countOfPervPE);
 
+        int countOfPoslPE = employeeService.getCountOfPoslPledgeEgreements(user);
+        model.addAttribute("countOfPoslPledgeEgreements", countOfPoslPE);
+
         return "home";
     }
 
     @GetMapping("/pledge_egreements")
-    public String pledgeEgreementPage(@RequestParam("id") long id, @RequestParam("pervOrAll") String pervOrAll, Model model) {
+    public String pledgeEgreementPage(@RequestParam("id") long id, @RequestParam("pervPosl") String pervPosl, Model model) {
         Employee employee = repositoryEmployee.getOne(id);
         model.addAttribute("employee", employee);
-        model.addAttribute("pervOrAll", pervOrAll);
+        model.addAttribute("pervPosl", pervPosl);
         return "pledge_egreements";
+    }
 
-//        List<PledgeEgreement> pledgeEgreements = employeeService.getPledgeEgreementByEmployeeId(id);
-//        model.addAttribute("pledgeEgreements", pledgeEgreements);
-//        return "pledge_egreements";
+    @GetMapping("/pledge_subjects")
+    public String pledgeSubjectsPage(@RequestParam("pledgeEgreementId") long pledgeEgreementId, Model model){
+        PledgeEgreement pledgeEgreement = repositoryPledgeEgreement.getOne(pledgeEgreementId);
+        model.addAttribute("pledgeEgreement", pledgeEgreement);
+        return "pledge_subjects";
     }
 
 
