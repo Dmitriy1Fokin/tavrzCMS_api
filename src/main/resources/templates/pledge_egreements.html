@@ -7,131 +7,269 @@
         body {
             padding: 50px;
         }
-
+        .containerTable{
+            width: 3000px;
+        }
         .pledgeEgreement, .pledgeEgreement td {
             border: 1px solid lightgray;
             padding: 5px;
             table-layout: fixed;
         }
-        .costs td{
-            width: 500px;
-        }
-        .dates{
-            width: 1000px;
-        }
     </style>
 </head>
 <body>
 <h1>Договоры залога:</h1>
+<div class="containerTable">
+    <table class="pledgeEgreement">
+        <thead>
+        <tr>
+            <th>№ДЗ</th>
+            <th>Дата начала ДЗ</th>
+            <th>Дата окончания ДЗ</th>
+            <th>Залогодатель</th>
+            <th>Описание предметов залога</th>
+            <th>Количество предметов залога</th>
+            <th>РС ДЗ</th>
+            <th>ЗС ДЗ</th>
+            <th>РС ЗЗ</th>
+            <th>ЗС ЗЗ</th>
+            <th>СС</th>
+            <th>Дата ЗЗ</th>
+            <th>Дата мониторинга</th>
+            <th>Рузультат мониторинга</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:switch="${pervPosl}">
+            <div th:case="all">
+                <div th:each="pledgor : ${employee.getClients()}">
+                    <tr th:each="pe : ${pledgor.getPledgeEgreements()}">
+                        <td th:text="${pe.getNumPE()}"></td>
 
-<table class="pledgeEgreement">
-    <thead>
-    <tr>
-        <th>№ДЗ</th>
-        <th class="dates">Дата начала ДЗ</th>
-        <th>Дата окончания ДЗ</th>
-        <th>Залогодатель</th>
-        <th>Описание предметов залога</th>
-        <th>Количество предметов залога</th>
-        <th>РС ДЗ</th>
-        <th>ЗС ДЗ</th>
-        <th>РС ЗЗ</th>
-        <th>ЗС ЗЗ</th>
-        <th>СС</th>
-        <th>Дата ЗЗ</th>
-        <th>Дата мониторинга</th>
-        <th>Рузультат мониторинга</th>
-    </tr>
-    </thead>
-    <tbody>
-    <div th:each="pledgors : ${employee.getClients()}">
-        <tr th:each="pe : ${pledgors.getPledgeEgreements()}">
+                        <td th:text="${pe.getDateBeginPE()}"></td>
 
-            <td th:text="${pe.getNumPE()}"></td>
+                        <td th:text="${pe.getDateEndPE()}"></td>
 
-            <td th:text="${pe.getDateBeginPE()}"></td>
-
-            <td th:text="${pe.getDateEndPE()}"></td>
-
-            <div th:switch="${pledgors.getTypeOfClient()}">
-                <div th:case="юл">
-                    <td th:text="${pledgors.getClientLegalEntity().getOrganizationalForm() + ' ' + pledgors.getClientLegalEntity().getName()}"></td>
-                </div>
-                <div th:case="фл">
-                    <td th:text="${pledgors.getClientIndividual().getSurname() + ' ' + pledgors.getClientIndividual().getName()}"></td>
-                </div>
-            </div>
-
-            <td >
-                <ol>
-                    <div th:if="${pe.getPledgeSubjects().size() &gt; 5}">
-                        <div th:each="ps, countStat: ${pe.getPledgeSubjects()}">
-                            <div th:if="${countStat.index &lt; 5}" th:remove="tag">
-                               <li th:text="${ps.getName()}"></li>
+                        <div th:switch="${pledgor.getTypeOfClient()}">
+                            <div th:case="юл">
+                                <td th:text="${pledgor.getClientLegalEntity().getOrganizationalForm() + ' ' + pledgor.getClientLegalEntity().getName()}"></td>
+                            </div>
+                            <div th:case="фл">
+                                <td th:text="${pledgor.getClientIndividual().getSurname() + ' ' + pledgor.getClientIndividual().getName()}"></td>
                             </div>
                         </div>
-                        <span>...</span>
-                    </div>
-                    <div th:unless="${pe.getPledgeSubjects().size() &gt; 5}">
-                        <div th:each="ps : ${pe.getPledgeSubjects()}">
-                            <li th:text="${ps.getName()}"></li>
+
+                        <td>
+                            <ol>
+                                <div th:if="${pe.getPledgeSubjects().size() &gt; 5}">
+                                    <div th:each="ps, countStat: ${pe.getPledgeSubjects()}">
+                                        <div th:if="${countStat.index &lt; 5}" th:remove="tag">
+                                            <li th:text="${ps.getName()}"></li>
+                                        </div>
+                                    </div>
+                                    <span>...</span>
+                                </div>
+                                <div th:unless="${pe.getPledgeSubjects().size() &gt; 5}">
+                                    <div th:each="ps : ${pe.getPledgeSubjects()}">
+                                        <li th:text="${ps.getName()}"></li>
+                                    </div>
+                                </div>
+                            </ol>
+                            <a th:href="@{/pledge_subjects(pledgeEgreementId=${pe.getPledgeEgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
+                        </td>
+
+                        <td th:text="${pe.getPledgeSubjects().size()}">0</td>
+
+                        <!--<td th:text="${#numbers.formatDecimal(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()), 0, 'COMMA', 2, 'POINT')}">0.00</td>-->
+                        <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()))}">0.00</td>
+
+                        <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsDz(pe.getPledgeEgreementId()))}">0.00</td>
+
+                        <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsZz(pe.getPledgeEgreementId()))}">0.00</td>
+
+                        <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsZz(pe.getPledgeEgreementId()))}">0.00</td>
+
+                        <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getSs(pe.getPledgeEgreementId()))}">0.00</td>
+
+                        <td>
+                            <div th:each="dateOfConclusion : ${@pledgeEgreementService.getDatesOfConclusion(pe.getPledgeEgreementId())}">
+                                <span th:text="${dateOfConclusion}">н/д</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div th:each="dateOfMonitoring : ${@pledgeEgreementService.getDatesOfMonitoring(pe.getPledgeEgreementId())}">
+                                <span th:text="${dateOfMonitoring}">н/д</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div th:each="resultsOfMonitoring : ${@pledgeEgreementService.getResultsOfMonitoring(pe.getPledgeEgreementId())}">
+                                <span th:text="${resultsOfMonitoring}">н/д</span>
+                            </div>
+                        </td>
+                    </tr>
+                </div>
+            </div>
+            <div th:case="perv">
+                <div th:each="pledgor : ${employee.getClients()}">
+                    <div th:each="pe : ${pledgor.getPledgeEgreements()}">
+                        <div th:switch="${pe.getPervPosl()}">
+                            <div th:case="перв">
+                                <tr>
+                                    <td th:text="${pe.getNumPE()}"></td>
+
+                                    <td th:text="${pe.getDateBeginPE()}"></td>
+
+                                    <td th:text="${pe.getDateEndPE()}"></td>
+
+                                    <div th:switch="${pledgor.getTypeOfClient()}">
+                                        <div th:case="юл">
+                                            <td th:text="${pledgor.getClientLegalEntity().getOrganizationalForm() + ' ' + pledgor.getClientLegalEntity().getName()}"></td>
+                                        </div>
+                                        <div th:case="фл">
+                                            <td th:text="${pledgor.getClientIndividual().getSurname() + ' ' + pledgor.getClientIndividual().getName()}"></td>
+                                        </div>
+                                    </div>
+
+                                    <td>
+                                        <ol>
+                                            <div th:if="${pe.getPledgeSubjects().size() &gt; 5}">
+                                                <div th:each="ps, countStat: ${pe.getPledgeSubjects()}">
+                                                    <div th:if="${countStat.index &lt; 5}" th:remove="tag">
+                                                        <li th:text="${ps.getName()}"></li>
+                                                    </div>
+                                                </div>
+                                                <span>...</span>
+                                            </div>
+                                            <div th:unless="${pe.getPledgeSubjects().size() &gt; 5}">
+                                                <div th:each="ps : ${pe.getPledgeSubjects()}">
+                                                    <li th:text="${ps.getName()}"></li>
+                                                </div>
+                                            </div>
+                                        </ol>
+                                        <a th:href="@{/pledge_subjects(pledgeEgreementId=${pe.getPledgeEgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
+                                    </td>
+
+                                    <td th:text="${pe.getPledgeSubjects().size()}">0</td>
+
+                                    <!--<td th:text="${#numbers.formatDecimal(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()), 0, 'COMMA', 2, 'POINT')}">0.00</td>-->
+                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()))}">0.00</td>
+
+                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsDz(pe.getPledgeEgreementId()))}">0.00</td>
+
+                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsZz(pe.getPledgeEgreementId()))}">0.00</td>
+
+                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsZz(pe.getPledgeEgreementId()))}">0.00</td>
+
+                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getSs(pe.getPledgeEgreementId()))}">0.00</td>
+
+                                    <td>
+                                        <div th:each="dateOfConclusion : ${@pledgeEgreementService.getDatesOfConclusion(pe.getPledgeEgreementId())}">
+                                            <span th:text="${dateOfConclusion}">н/д</span>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div th:each="dateOfMonitoring : ${@pledgeEgreementService.getDatesOfMonitoring(pe.getPledgeEgreementId())}">
+                                            <span th:text="${dateOfMonitoring}">н/д</span>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div th:each="resultsOfMonitoring : ${@pledgeEgreementService.getResultsOfMonitoring(pe.getPledgeEgreementId())}">
+                                            <span th:text="${resultsOfMonitoring}">н/д</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </div>
                         </div>
                     </div>
-                </ol>
-                <span>подробнее</span>
-            </td>
-
-            <td th:text="${pe.getPledgeSubjects().size()}">0</td>
-
-            <!--<td th:text="${#numbers.formatDecimal(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()), 0, 'COMMA', 2, 'POINT')}">0.00</td>-->
-            <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()))}" class="costs">0.00</td>
-
-            <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsDz(pe.getPledgeEgreementId()))}" class="costs">0.00</td>
-
-            <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsZz(pe.getPledgeEgreementId()))}" class="costs">0.00</td>
-
-            <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsZz(pe.getPledgeEgreementId()))}" class="costs">0.00</td>
-
-            <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getSs(pe.getPledgeEgreementId()))}" class="costs">0.00</td>
-
-            <td>
-                <div th:each="dateOfConclusion : ${@pledgeEgreementService.getDatesOfConclusion(pe.getPledgeEgreementId())}">
-                    <span th:text="${dateOfConclusion}">н/д</span>
                 </div>
-            </td>
+            </div>
+            <div th:case="posl">
+                <div th:each="pledgor : ${employee.getClients()}">
+                    <div th:each="pe : ${pledgor.getPledgeEgreements()}">
+                        <div th:switch="${pe.getPervPosl()}">
+                            <div th:case="посл">
+                                <tr>
+                                    <td th:text="${pe.getNumPE()}"></td>
 
-            <td>
-                <div th:each="dateOfMonitoring : ${@pledgeEgreementService.getDatesOfMonitoring(pe.getPledgeEgreementId())}">
-                    <span th:text="${dateOfMonitoring}">н/д</span>
+                                    <td th:text="${pe.getDateBeginPE()}"></td>
+
+                                    <td th:text="${pe.getDateEndPE()}"></td>
+
+                                    <div th:switch="${pledgor.getTypeOfClient()}">
+                                        <div th:case="юл">
+                                            <td th:text="${pledgor.getClientLegalEntity().getOrganizationalForm() + ' ' + pledgor.getClientLegalEntity().getName()}"></td>
+                                        </div>
+                                        <div th:case="фл">
+                                            <td th:text="${pledgor.getClientIndividual().getSurname() + ' ' + pledgor.getClientIndividual().getName()}"></td>
+                                        </div>
+                                    </div>
+
+                                    <td>
+                                        <ol>
+                                            <div th:if="${pe.getPledgeSubjects().size() &gt; 5}">
+                                                <div th:each="ps, countStat: ${pe.getPledgeSubjects()}">
+                                                    <div th:if="${countStat.index &lt; 5}" th:remove="tag">
+                                                        <li th:text="${ps.getName()}"></li>
+                                                    </div>
+                                                </div>
+                                                <span>...</span>
+                                            </div>
+                                            <div th:unless="${pe.getPledgeSubjects().size() &gt; 5}">
+                                                <div th:each="ps : ${pe.getPledgeSubjects()}">
+                                                    <li th:text="${ps.getName()}"></li>
+                                                </div>
+                                            </div>
+                                        </ol>
+                                        <a th:href="@{/pledge_subjects(pledgeEgreementId=${pe.getPledgeEgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
+                                    </td>
+
+                                    <td th:text="${pe.getPledgeSubjects().size()}">0</td>
+
+                                    <!--<td th:text="${#numbers.formatDecimal(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()), 0, 'COMMA', 2, 'POINT')}">0.00</td>-->
+                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()))}">0.00</td>
+
+                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsDz(pe.getPledgeEgreementId()))}">0.00</td>
+
+                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsZz(pe.getPledgeEgreementId()))}">0.00</td>
+
+                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsZz(pe.getPledgeEgreementId()))}">0.00</td>
+
+                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getSs(pe.getPledgeEgreementId()))}">0.00</td>
+
+                                    <td>
+                                        <div th:each="dateOfConclusion : ${@pledgeEgreementService.getDatesOfConclusion(pe.getPledgeEgreementId())}">
+                                            <span th:text="${dateOfConclusion}">н/д</span>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div th:each="dateOfMonitoring : ${@pledgeEgreementService.getDatesOfMonitoring(pe.getPledgeEgreementId())}">
+                                            <span th:text="${dateOfMonitoring}">н/д</span>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div th:each="resultsOfMonitoring : ${@pledgeEgreementService.getResultsOfMonitoring(pe.getPledgeEgreementId())}">
+                                            <span th:text="${resultsOfMonitoring}">н/д</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </td>
-
-            <td>
-                <div th:each="resultsOfMonitoring : ${@pledgeEgreementService.getResultsOfMonitoring(pe.getPledgeEgreementId())}">
-                    <span th:text="${resultsOfMonitoring}">н/д</span>
-                </div>
-            </td>
+            </div>
+        </div>
 
 
-            <!--<td th:each="loanEgreement : ${pe.getLoanEgreements()}">-->
-                <!--<ol>-->
-                    <!--<li th:text="${loanEgreement.getNumLE()}"></li>-->
-                <!--</ol>-->
-            <!--</td>-->
 
-        </tr>
-    </div>
 
-    <!--<tr th:each="pe : ${pledgeEgreements}">-->
-        <!--<td th:text="${pe.getNumPE()}"></td>-->
-        <!--<td th:text="${pe.getDateBeginPE()}"></td>-->
-        <!--<td th:each="loanEgreement : ${pe.getLoanEgreements()}">-->
-            <!--<a th:text="${loanEgreement.getNumLE()}"></a>-->
-        <!--</td>-->
-        <!--<td>-->
-        <!--</td>-->
-    <!--</tr>-->
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
