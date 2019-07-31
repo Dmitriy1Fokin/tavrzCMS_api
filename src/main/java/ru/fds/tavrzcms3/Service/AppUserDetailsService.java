@@ -35,8 +35,6 @@ public class AppUserDetailsService implements UserDetailsService {
 
         UserDetails userDetails = (UserDetails) new User(appUser.getName(), appUser.getPassword(),authorityList);
 
-        System.out.println(userDetails.getUsername() + "!!!!!!!!!" + userDetails.getPassword() + "!!!!!!!!!!!!!!!" + userDetails.getAuthorities().toString());
-
         return userDetails;
     }
 }

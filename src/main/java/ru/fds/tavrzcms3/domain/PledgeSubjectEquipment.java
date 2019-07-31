@@ -117,7 +117,7 @@ public class PledgeSubjectEquipment extends PledgeSubject {
 				", yearOfManufacture=" + yearOfManufacture +
 				", inventoryNum='" + inventoryNum + '\'' +
 				", typeOfquipment='" + typeOfquipment + '\'' +
-				", pledgeSubject=" + pledgeSubject +
+//				", pledgeSubject=" + pledgeSubject +
 				'}';
 	}
 }

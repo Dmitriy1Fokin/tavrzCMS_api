@@ -111,11 +111,11 @@ public class PledgeSubjectRealty extends PledgeSubject {
 				"area=" + area +
 				", cadastralNum='" + cadastralNum + '\'' +
 				", conditionalNum='" + conditionalNum + '\'' +
-				", pledgeSubject=" + pledgeSubject +
-				", pledgeSubjectRealtyBuilding=" + pledgeSubjectRealtyBuilding +
-				", pledgeSubjectRealtyLandLease=" + pledgeSubjectRealtyLandLease +
-				", pledgeSubjectRealtyLandOwnership=" + pledgeSubjectRealtyLandOwnership +
-				", pledgeSubjectRealtyRoom=" + pledgeSubjectRealtyRoom +
+//				", pledgeSubject=" + pledgeSubject +
+//				", pledgeSubjectRealtyBuilding=" + pledgeSubjectRealtyBuilding +
+//				", pledgeSubjectRealtyLandLease=" + pledgeSubjectRealtyLandLease +
+//				", pledgeSubjectRealtyLandOwnership=" + pledgeSubjectRealtyLandOwnership +
+//				", pledgeSubjectRealtyRoom=" + pledgeSubjectRealtyRoom +
 				'}';
 	}
 }

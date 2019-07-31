@@ -59,7 +59,7 @@ public class PledgeSubjectTBO extends PledgeSubject {
                 "countOfTBO=" + countOfTBO +
                 ", carryingAmount=" + carryingAmount +
                 ", typeOfTBO='" + typeOfTBO + '\'' +
-                ", pledgeSubject=" + pledgeSubject +
+//                ", pledgeSubject=" + pledgeSubject +
                 '}';
     }
 }

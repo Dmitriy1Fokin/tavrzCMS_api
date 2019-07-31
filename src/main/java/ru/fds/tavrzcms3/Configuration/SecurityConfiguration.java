@@ -24,6 +24,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 //.and()
 //                .authorizeRequests().antMatchers("/home", "/", "/pledge_egreements").hasRole("USER")
 //                .and()
+                .authorizeRequests().antMatchers("/").hasRole("USER")
+                .and()
                 .authorizeRequests().antMatchers("/edit").hasAnyRole("USER", "ADMIN", "GUEST")
                 .and()
                 .formLogin()

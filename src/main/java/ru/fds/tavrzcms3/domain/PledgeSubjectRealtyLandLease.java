@@ -104,7 +104,7 @@ public class PledgeSubjectRealtyLandLease extends PledgeSubjectRealty {
 				", cadastralNumOfBuilding='" + cadastralNumOfBuilding + '\'' +
 				", dateBeginLease=" + dateBeginLease +
 				", dateEndLease=" + dateEndLease +
-				", pledgeSubjectRealty=" + pledgeSubjectRealty +
+//				", pledgeSubjectRealty=" + pledgeSubjectRealty +
 				", landCategory=" + landCategory +
 				'}';
 	}

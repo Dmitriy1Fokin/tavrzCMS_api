@@ -33,6 +33,7 @@ public class Tavrzcms3Application {
     @Autowired
     private RepositoryPledgeSubject repositoryPledgeSubject;
 
+
     @PostConstruct
     public void init(){
 //        ClientIndividual clientList = repositoryClientIndividual.findByPasportNum("5532 123765");
@@ -55,6 +56,10 @@ public class Tavrzcms3Application {
 //
 //
 //        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + repositoryPledgeSubject.findById((long)234));
+
+
+
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + repositoryPledgeSubject.findByPledgeSubjectId(147));
 
     }
 }

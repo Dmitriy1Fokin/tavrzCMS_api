@@ -10,7 +10,7 @@
         .containerTable{
             width: 3000px;
         }
-        .pledgeEgreement, .pledgeEgreement td {
+        .PledgeSubjectTable, .PledgeSubjectTable td {
             border: 1px solid lightgray;
             padding: 5px;
             table-layout: fixed;
@@ -21,7 +21,7 @@
 
 <h1 th:text="'Предметы залога по договору залога №' + ${pledgeEgreement.getNumPE()}">Предметы залога</h1>
 <div class="containerTable">
-    <table class="pledgeEgreement">
+    <table class="PledgeSubjectTable">
         <thead>
         <tr>
             <th>Наименование</th>
