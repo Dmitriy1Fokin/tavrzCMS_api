@@ -29,29 +29,34 @@ public class EmployeeService {
     @Autowired
     RepositoryPledgeEgreement repositoryPledgeEgreement;
 
-    public Employee getEmployeeByAppUser(User user){
+    public synchronized Employee getEmployeeByAppUser(User user){
         AppUser appUser = repositoryAppUser.findByName(user.getUsername());
         return repositoryEmployee.findByAppUser(appUser);
     }
 
-    public int getCountOfAllPledgeEgreements(User user){
+    public synchronized int getCountOfAllPledgeEgreements(User user){
         List<Client> clients = repositoryClient.findByEmployee(getEmployeeByAppUser(user));
         return repositoryPledgeEgreement.countAllByPledgorIn(clients);
     }
 
-    public int getCountOfPervPledgeEgreements(User user){
+    public synchronized int getCountOfPervPledgeEgreements(User user){
         List<Client> clients = repositoryClient.findByEmployee(getEmployeeByAppUser(user));
         return repositoryPledgeEgreement.countAllByPledgorInAndPervPoslEquals(clients, "перв");
     }
 
-    public int getCountOfPoslPledgeEgreements(User user){
+    public synchronized int getCountOfPoslPledgeEgreements(User user){
         List<Client> clients = repositoryClient.findByEmployee(getEmployeeByAppUser(user));
         return repositoryPledgeEgreement.countAllByPledgorInAndPervPoslEquals(clients, "посл");
     }
 
-    public List<PledgeEgreement> getPledgeEgreementByEmployeeId(long employeeId){
+    public synchronized List<PledgeEgreement> getPledgeEgreementByEmployeeId(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> clients = repositoryClient.findByEmployee(employee);
         return repositoryPledgeEgreement.findByPledgorIn(clients);
+    }
+
+    public synchronized Employee getEmployeeById(long id){
+        Employee employee = repositoryEmployee.getOne(id);
+        return employee;
     }
 }

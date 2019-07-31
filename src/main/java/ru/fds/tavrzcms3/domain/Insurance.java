@@ -43,6 +43,9 @@ public class Insurance {
 	
 	@Column(name ="payment_of_insurance_premium")
 	private String paymentOfInsurancePremium;
+
+	@Column(name = "franchise_amount")
+    private String franchiseAmount;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pledgesubject_id")
@@ -104,6 +107,14 @@ public class Insurance {
         this.paymentOfInsurancePremium = paymentOfInsurancePremium;
     }
 
+    public String getFranchiseAmount() {
+        return franchiseAmount;
+    }
+
+    public void setFranchiseAmount(String franchiseAmount) {
+        this.franchiseAmount = franchiseAmount;
+    }
+
     public PledgeSubject getPledgeSubject() {
         return pledgeSubject;
     }
@@ -122,7 +133,7 @@ public class Insurance {
                 ", sumInsured=" + sumInsured +
                 ", dateInsuranceContract=" + dateInsuranceContract +
                 ", paymentOfInsurancePremium='" + paymentOfInsurancePremium + '\'' +
-                ", pledgeSubject=" + pledgeSubject +
+//                ", pledgeSubject=" + pledgeSubject +
                 '}';
     }
 }

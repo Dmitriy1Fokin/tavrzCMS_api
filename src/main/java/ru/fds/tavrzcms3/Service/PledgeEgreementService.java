@@ -20,7 +20,7 @@ public class PledgeEgreementService {
     @Autowired
     RepositoryPledgeSubject repositoryPledgeSubject;
 
-    public double getRsDz(long peId){
+    public synchronized double getRsDz(long peId){
         PledgeEgreement pledgeEgreement = repositoryPledgeEgreement.getOne(peId);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeEgreements(pledgeEgreement);
         double totalSum = 0;
@@ -30,7 +30,7 @@ public class PledgeEgreementService {
         return  totalSum;
     }
 
-    public double getRsZz(long id){
+    public synchronized double getRsZz(long id){
         PledgeEgreement pledgeEgreement = repositoryPledgeEgreement.getOne(id);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeEgreements(pledgeEgreement);
         double totalSum = 0;
@@ -40,7 +40,7 @@ public class PledgeEgreementService {
         return totalSum;
     }
 
-    public double getZsDz(long id){
+    public synchronized double getZsDz(long id){
         PledgeEgreement pledgeEgreement = repositoryPledgeEgreement.getOne(id);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeEgreements(pledgeEgreement);
         double totalSum = 0;
@@ -50,7 +50,7 @@ public class PledgeEgreementService {
         return totalSum;
     }
 
-    public double getZsZz(long id){
+    public synchronized double getZsZz(long id){
         PledgeEgreement pledgeEgreement = repositoryPledgeEgreement.getOne(id);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeEgreements(pledgeEgreement);
         double totalSum = 0;
@@ -60,7 +60,7 @@ public class PledgeEgreementService {
         return totalSum;
     }
 
-    public double getSs(long id){
+    public synchronized double getSs(long id){
         PledgeEgreement pledgeEgreement = repositoryPledgeEgreement.getOne(id);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeEgreements(pledgeEgreement);
         double totalSum = 0;
@@ -70,7 +70,7 @@ public class PledgeEgreementService {
         return totalSum;
     }
 
-    public List<Date> getDatesOfConclusion(long id){
+    public synchronized List<Date> getDatesOfConclusion(long id){
         PledgeEgreement pledgeEgreement = repositoryPledgeEgreement.getOne(id);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeEgreements(pledgeEgreement);
         List<Date> dates = new ArrayList<>();
@@ -83,7 +83,7 @@ public class PledgeEgreementService {
         return  dates;
     }
 
-    public List<Date> getDatesOfMonitoring(long id){
+    public synchronized List<Date> getDatesOfMonitoring(long id){
         PledgeEgreement pledgeEgreement = repositoryPledgeEgreement.getOne(id);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeEgreements(pledgeEgreement);
         List<Date> dates = new ArrayList<>();
@@ -96,7 +96,7 @@ public class PledgeEgreementService {
         return  dates;
     }
 
-    public List<String> getResultsOfMonitoring(long id){
+    public synchronized List<String> getResultsOfMonitoring(long id){
         PledgeEgreement pledgeEgreement = repositoryPledgeEgreement.getOne(id);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeEgreements(pledgeEgreement);
         List<String> results = new ArrayList<>();
@@ -107,6 +107,11 @@ public class PledgeEgreementService {
         }
 
         return  results;
+    }
+
+    public synchronized PledgeEgreement getPledgeEgreementById(long id){
+        PledgeEgreement pledgeEgreement = repositoryPledgeEgreement.getOne(id);
+        return pledgeEgreement;
     }
 
 }
