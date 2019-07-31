@@ -1,10 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Обременения</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        .containerTable{
+            width: 3000px;
+        }
+        .incumbranceTable, .incumbranceTable td {
+            border: 1px solid lightgray;
+            padding: 5px;
+            table-layout: fixed;
+        }
+    </style>
 </head>
 <body>
+<h1 th:text="'Обременения для предмета залога:' + ${pledgeSubjectName}">Обременения для предмета залога</h1>
+<div class="containerTable">
+    <table class="incumbranceTable">
+        <thead>
+        <tr>
+            <th>Наименование</th>
+            <th>Вид обременения</th>
+            <th>В пользу кого</th>
+            <th>Дата начала обременения</th>
+            <th>Дата окончания обременения</th>
+            <th>№ обременения</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:each="encumbrance : ${encumbranceList}">
+            <tr>
+                <td th:text="${encumbrance.getName()}">н/д</td>
+                <td th:text="${encumbrance.getTypeOfEncumbrance()}">н/д</td>
+                <td th:text="${encumbrance.getInFavorOfWhom()}">н/д</td>
+                <td th:text="${encumbrance.getDateBegin()}">н/д</td>
+                <td th:text="${encumbrance.getDateEnd()}">н/д</td>
+                <td th:text="${encumbrance.getNumOfEncumbrance()}">н/д</td>
+            </tr>
 
+        </div>
+
+
+
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

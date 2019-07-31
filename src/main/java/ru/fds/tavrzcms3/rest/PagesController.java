@@ -6,15 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.fds.tavrzcms3.Service.EmployeeService;
-import ru.fds.tavrzcms3.Service.InsuranceService;
-import ru.fds.tavrzcms3.Service.PledgeEgreementService;
-import ru.fds.tavrzcms3.Service.PledgeSubjectService;
-import ru.fds.tavrzcms3.domain.Employee;
-import ru.fds.tavrzcms3.domain.Insurance;
-import ru.fds.tavrzcms3.domain.PledgeEgreement;
-import ru.fds.tavrzcms3.domain.PledgeSubject;
-import ru.fds.tavrzcms3.repository.RepositoryInsurance;
+import ru.fds.tavrzcms3.Service.*;
+import ru.fds.tavrzcms3.domain.*;
 
 import java.util.List;
 
@@ -26,15 +19,18 @@ public class PagesController {
     private final PledgeEgreementService pledgeEgreementService;
     private final PledgeSubjectService pledgeSubjectService;
     private final InsuranceService insuranceService;
+    private final EncumbranceService encumbranceService;
 
     public PagesController(EmployeeService employeeService,
                            PledgeEgreementService pledgeEgreementService,
                            PledgeSubjectService pledgeSubjectService,
-                           InsuranceService insuranceService) {
+                           InsuranceService insuranceService,
+                           EncumbranceService encumbranceService) {
         this.employeeService = employeeService;
         this.pledgeEgreementService = pledgeEgreementService;
         this.pledgeSubjectService = pledgeSubjectService;
         this.insuranceService = insuranceService;
+        this.encumbranceService = encumbranceService;
     }
 
     @GetMapping("/")
@@ -78,6 +74,14 @@ public class PagesController {
         return "insurances";
     }
 
+    @GetMapping("/encumbrances")
+    public  String encumbrancePage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
+        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+        List<Encumbrance> encumbranceList = encumbranceService.getEncumbranceByPledgeSubject(pledgeSubject);
+        model.addAttribute("pledgeSubjectName", pledgeSubject.getName());
+        model.addAttribute("encumbranceList", encumbranceList);
+        return "encumbrances";
+    }
 
 
 
