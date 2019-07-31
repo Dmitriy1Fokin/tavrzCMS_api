@@ -3,6 +3,8 @@ package ru.fds.tavrzcms3;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import ru.fds.tavrzcms3.Service.InsuranceService;
+import ru.fds.tavrzcms3.Service.PledgeSubjectService;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
 
@@ -32,6 +34,12 @@ public class Tavrzcms3Application {
 
     @Autowired
     private RepositoryPledgeSubject repositoryPledgeSubject;
+
+    @Autowired
+    private InsuranceService insuranceService;
+
+    @Autowired
+    private PledgeSubjectService pledgeSubjectService;
 
 
     @PostConstruct

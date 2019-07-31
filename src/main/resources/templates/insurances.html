@@ -1,10 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Страхование</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        .containerTable{
+            width: 3000px;
+        }
+        .insuranceTable, .insuranceTable td {
+            border: 1px solid lightgray;
+            padding: 5px;
+            table-layout: fixed;
+        }
+    </style>
 </head>
 <body>
 
+<h1 th:text="'Страхование для предмета залога:' + ${pledgeSubjectName}">Страхование для предмета залога</h1>
+<!--<h1 th:text="'Предметы залога по договору за №' + ${pledgeEgreement.getNumPE()}">Предметы залога</h1>-->
+<div class="containerTable">
+    <table class="insuranceTable">
+        <thead>
+            <tr>
+                <th>№ договора страхования</th>
+                <th>Дата договора</th>
+                <th>Дата начала страхования</th>
+                <th>Дата окончания страхования</th>
+                <th>Страховая сумма</th>
+                <th>Оплата страховой премии</th>
+                <th>Сумма франшизы</th>
+            </tr>
+        </thead>
+        <tbody>
+            <div th:each="insurance : ${insuranceList}">
+                <tr>
+                    <td th:text="${insurance.getNumInsurance()}"></td>
+                    <td th:text="${insurance.getDateInsuranceContract()}"></td>
+                    <td th:text="${insurance.getDateBeginInsurance()}"></td>
+                    <td th:text="${insurance.getDateEndInsurance()}"></td>
+                    <td th:text="${insurance.getSumInsured()}"></td>
+                    <td th:text="${insurance.getPaymentOfInsurancePremium()}"></td>
+                    <td th:text="${insurance.getFranchiseAmount()}"></td>
+                </tr>
+
+            </div>
+
+
+
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
