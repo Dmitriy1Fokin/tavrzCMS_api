@@ -83,9 +83,32 @@ public class PagesController {
         return "encumbrances";
     }
 
+    @GetMapping("/pledge_subject_detail")
+    public String pledgeSubjectDetailPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
+        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+        model.addAttribute("pledgeSubject", pledgeSubject);
+        return "pledge_subject_detail";
+    }
 
+    @GetMapping("/pledgor")
+    public String pledgorPage(@RequestParam("pledgorId") long pledgorId, Model model){
+        return  "pledgor";
+    }
 
+    @GetMapping("/pledge_egreement_detail")
+    public String pledgeEgreementsDetailPage(@RequestParam("pledgeEgreementId") long pledgeEgreementId, Model model){
+        return "pledge_egreement_detail";
+    }
 
+    @GetMapping("/loan_egreement_detail")
+    public String loanEgreementDetailPage(@RequestParam("loanEgreementId") long loanEgreementId, Model model){
+        return "loan_egreement_detail";
+    }
+
+    @GetMapping("/loaner")
+    public String loanerPage(@RequestParam("loanerId") long loanerId, Model model){
+        return "loaner";
+    }
 
 
 

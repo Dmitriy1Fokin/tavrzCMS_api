@@ -76,8 +76,8 @@ public class ClientIndividual extends Client {
 				", name='" + name + '\'' +
 				", patronymic='" + patronymic + '\'' +
 				", pasportNum='" + pasportNum + '\'' +
-				", clientId=" + getClientId() +
-				", typeOfClient='" + getTypeOfClient() + '\'' +
+//				", clientId=" + getClientId() +
+//				", typeOfClient='" + getTypeOfClient() + '\'' +
 				"} ";
 	}
 }
