@@ -5,6 +5,121 @@
     <title>Договор залога</title>
 </head>
 <body>
-
+<h1 th:text="'Договор залога: №' + ${pledgeAgreement.getNumPE()} + ' от ' + ${pledgeAgreement.getDateBeginPE()}">Договор залога</h1>
 </body>
+    <label>Номер договора залога:</label>
+    <span th:text="${pledgeAgreement.getNumPE()}">н/д</span>
+    <br>
+    <br>
+    <label>Дата начала ДЗ:</label>
+    <span th:text="${pledgeAgreement.getDateBeginPE()}">н/д</span>
+    <br>
+    <br>
+    <label>Дата окончания ДЗ:</label>
+    <span th:text="${pledgeAgreement.getDateEndPE()}">н/д</span>
+    <br>
+    <br>
+    <label>Залогодатель:</label>
+    <div th:switch="${pledgeAgreement.getPledgor().getTypeOfClient()}">
+        <div th:case="юл">
+            <a th:href="@{/pledgor(pledgorId=${pledgeAgreement.getPledgor().getClientId()})}" href="pledgor.html"
+               th:text="${pledgeAgreement.getPledgor().getClientLegalEntity().getOrganizationalForm() + ' ' + pledgeAgreement.getPledgor().getClientLegalEntity().getName()}">Залогодатель ЮЛ</a>
+        </div>
+        <div th:case="фл">
+            <a th:href="@{/pledgor(pledgorId=${pledgeAgreement.getPledgor().getClientId()})}" href="pledgor.html"
+               th:text="${pledgeAgreement.getPledgor().getClientIndividual().getSurname() + ' ' + pledgeAgreement.getPledgor().getClientIndividual().getName()}">Залогодатель ФЛ</a>
+
+        </div>
+    </div>
+    <br>
+    <br>
+    <label>Тип договора:</label>
+    <div th:switch="${pledgeAgreement.getPervPosl()}">
+        <div th:case="перв">Первичный</div>
+        <div th:case="посл">Последующий</div>
+    </div>
+    <br>
+    <br>
+    <label>Кредитные договоры:</label>
+    <ol>
+        <div th:each="loanAgreement : ${pledgeAgreement.getLoanAgreements()}">
+            <li>
+                <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
+                       th:text="${loanAgreement.getNumLE() + ' от ' + loanAgreement.getDateBeginLE()}">№ КД</a>
+            </li>
+            <div th:switch="${loanAgreement.getLoaner().getTypeOfClient()}">
+                <div th:case="юл">
+                    <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+                           th:text="${loanAgreement.getLoaner().getClientLegalEntity().getOrganizationalForm() + ' ' + loanAgreement.getLoaner().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
+                </div>
+                <div th:case="фл">
+                    <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+                           th:text="${loanAgreement.getLoaner().getClientIndividual().getSurname() + ' ' + loanAgreement.getLoaner().getClientIndividual().getName()}">Заемщик ФЛ</a>
+                </div>
+            </div>
+        </div>
+    </ol>
+    <br>
+    <br>
+    <label>Вид залогового обеспечения:</label>
+    <div th:each="typeOfCollateral : ${@pledgeAgreementService.getTypeOfCollateral(pledgeAgreement.getPledgeAgreementId())}">
+        <ul>
+            <li th:text="${typeOfCollateral}">н/д</li>
+        </ul>
+    </div>
+    <br>
+    <br>
+    <label>Количество предметов залога:</label>
+    <a th:href="@{/pledge_subjects(pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}" href="pledge_subjects.html"
+       th:text="${pledgeAgreement.getPledgeSubjects().size()}">н/д</a>
+    <br>
+    <br><label>Залоговая стоимость:</label>
+    <span th:text="${@pledgeAgreementService.getZsDz(pledgeAgreement.getPledgeAgreementId())}">н/д</span>
+    <br>
+    <br><label>Справедливая стоимость:</label>
+    <span th:text="${@pledgeAgreementService.getSs(pledgeAgreement.getPledgeAgreementId())}">н/д</span>
+    <br>
+    <br>
+    <label>Статус:</label>
+    <span th:text="${pledgeAgreement.getStatusPE()}">н/д</span>
+    <br>
+    <br>
+    <label>Комментарии:</label>
+    <span th:text="${pledgeAgreement.getNoticePE()}">н/д</span>
+
+
+
+
+
+
+
+
+    <!--<br>-->
+    <!--<br>-->
+    <!--<label>:</label>-->
+    <!--<span th:text="${pledgeAgreement}">н/д</span>-->
+    <!--<br>-->
+    <!--<br>-->
+    <!--<label>:</label>-->
+    <!--<span th:text="${pledgeAgreement}">н/д</span>-->
+    <!--<br>-->
+    <!--<br>-->
+    <!--<label>:</label>-->
+    <!--<span th:text="${pledgeAgreement}">н/д</span>-->
+    <!--<br>-->
+    <!--<br>-->
+    <!--<label>:</label>-->
+    <!--<span th:text="${pledgeAgreement}">н/д</span>-->
+    <!--<br>-->
+    <!--<br><label>:</label>-->
+    <!--<span th:text="${pledgeAgreement}">н/д</span>-->
+    <!--<br>-->
+    <!--<br>-->
+    <!--<label>:</label>-->
+    <!--<span th:text="${pledgeAgreement}">н/д</span>-->
+    <!--<br>-->
+    <!--<br>-->
+
+
+
 </html>
