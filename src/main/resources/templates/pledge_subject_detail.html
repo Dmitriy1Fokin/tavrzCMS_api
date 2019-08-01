@@ -298,23 +298,23 @@
     <br>
     <br>
     <label>Рыночноя стоимость по ДЗ:</label>
-    <span th:text="${pledgeSubject.getRsDz()}">н/д</span>
+    <span th:text="${#numbers.formatCurrency(pledgeSubject.getRsDz())}">н/д</span>
     <br>
     <br>
     <label>Рыночная стоимость по ЗЗ:</label>
-    <span th:text="${pledgeSubject.getRsZz()}">н/д</span>
+    <span th:text="${#numbers.formatCurrency(pledgeSubject.getRsZz())}">н/д</span>
     <br>
     <br>
     <label>Залоговая стоимость по ДЗ:</label>
-    <span th:text="${pledgeSubject.getZsDz()}">н/д</span>
+    <span th:text="${#numbers.formatCurrency(pledgeSubject.getZsDz())}">н/д</span>
     <br>
     <br>
     <label>Залоговая стоимость по ЗЗ:</label>
-    <span th:text="${pledgeSubject.getZsZz()}">н/д</span>
+    <span th:text="${#numbers.formatCurrency(pledgeSubject.getZsZz())}">н/д</span>
     <br>
     <br>
     <label>Справедливая стоимость:</label>
-    <span th:text="${pledgeSubject.getSs()}">н/д</span>
+    <span th:text="${#numbers.formatCurrency(pledgeSubject.getSs())}">н/д</span>
     <br>
     <br>
     <label>Дата ЗЗ:</label>

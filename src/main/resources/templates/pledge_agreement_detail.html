@@ -74,10 +74,12 @@
        th:text="${pledgeAgreement.getPledgeSubjects().size()}">н/д</a>
     <br>
     <br><label>Залоговая стоимость:</label>
-    <span th:text="${@pledgeAgreementService.getZsDz(pledgeAgreement.getPledgeAgreementId())}">н/д</span>
+    <!--<span th:text="${@pledgeAgreementService.getZsDz(pledgeAgreement.getPledgeAgreementId())}">н/д</span>-->
+    <span th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsDz(pledgeAgreement.getPledgeAgreementId()))}">н/д</span>
     <br>
     <br><label>Справедливая стоимость:</label>
-    <span th:text="${@pledgeAgreementService.getSs(pledgeAgreement.getPledgeAgreementId())}">н/д</span>
+    <!--<span th:text="${@pledgeAgreementService.getSs(pledgeAgreement.getPledgeAgreementId())}">н/д</span>-->
+    <span th:text="${#numbers.formatCurrency(@pledgeAgreementService.getSs(pledgeAgreement.getPledgeAgreementId()))}">н/д</span>
     <br>
     <br>
     <label>Статус:</label>

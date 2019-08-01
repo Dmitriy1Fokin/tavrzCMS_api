@@ -40,9 +40,9 @@
                     <td th:text="${insurance.getDateInsuranceContract()}">н/д</td>
                     <td th:text="${insurance.getDateBeginInsurance()}">н/д</td>
                     <td th:text="${insurance.getDateEndInsurance()}">н/д</td>
-                    <td th:text="${insurance.getSumInsured()}">н/д</td>
+                    <td th:text="${#numbers.formatCurrency(insurance.getSumInsured())}">н/д</td>
                     <td th:text="${insurance.getPaymentOfInsurancePremium()}">н/д</td>
-                    <td th:text="${insurance.getFranchiseAmount()}">н/д</td>
+                    <td th:text="${#numbers.formatCurrency(insurance.getFranchiseAmount())}">н/д</td>
                 </tr>
 
             </div>
