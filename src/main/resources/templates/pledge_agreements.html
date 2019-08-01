@@ -138,10 +138,16 @@
 
                                     <div th:switch="${pledgor.getTypeOfClient()}">
                                         <div th:case="юл">
-                                            <td th:text="${pledgor.getClientLegalEntity().getOrganizationalForm() + ' ' + pledgor.getClientLegalEntity().getName()}"></td>
+                                            <td>
+                                                <a th:href="@{/pledgor(pledgorId=${pledgor.getClientId()})}" href="pledgor.html"
+                                                   th:text="${pledgor.getClientLegalEntity().getOrganizationalForm() + ' ' + pledgor.getClientLegalEntity().getName()}"></a>
+                                            </td>
                                         </div>
                                         <div th:case="фл">
-                                            <td th:text="${pledgor.getClientIndividual().getSurname() + ' ' + pledgor.getClientIndividual().getName()}"></td>
+                                            <td>
+                                                <a th:href="@{/pledgor(pledgorId=${pledgor.getClientId()})}" href="pledgor.html"
+                                                   th:text="${pledgor.getClientIndividual().getSurname() + ' ' + pledgor.getClientIndividual().getName()}"></a>
+                                            </td>
                                         </div>
                                     </div>
 
@@ -218,10 +224,16 @@
 
                                     <div th:switch="${pledgor.getTypeOfClient()}">
                                         <div th:case="юл">
-                                            <td th:text="${pledgor.getClientLegalEntity().getOrganizationalForm() + ' ' + pledgor.getClientLegalEntity().getName()}"></td>
+                                            <td>
+                                                <a th:href="@{/pledgor(pledgorId=${pledgor.getClientId()})}" href="pledgor.html"
+                                                   th:text="${pledgor.getClientLegalEntity().getOrganizationalForm() + ' ' + pledgor.getClientLegalEntity().getName()}"></a>
+                                            </td>
                                         </div>
                                         <div th:case="фл">
-                                            <td th:text="${pledgor.getClientIndividual().getSurname() + ' ' + pledgor.getClientIndividual().getName()}"></td>
+                                            <td>
+                                                <a th:href="@{/pledgor(pledgorId=${pledgor.getClientId()})}" href="pledgor.html"
+                                                   th:text="${pledgor.getClientIndividual().getSurname() + ' ' + pledgor.getClientIndividual().getName()}"></a>
+                                            </td>
                                         </div>
                                     </div>
 
