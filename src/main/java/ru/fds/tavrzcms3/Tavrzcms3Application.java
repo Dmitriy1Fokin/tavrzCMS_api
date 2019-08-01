@@ -5,12 +5,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ru.fds.tavrzcms3.Service.InsuranceService;
 import ru.fds.tavrzcms3.Service.PledgeSubjectService;
-import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
-import java.util.Optional;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @SpringBootApplication
@@ -30,7 +27,7 @@ public class Tavrzcms3Application {
     private RepositoryClient repositoryClient;
 
     @Autowired
-    private RepositoryPledgeEgreement repositoryPledgeEgreement;
+    private RepositoryPledgeAgreement repositoryPledgeAgreement;
 
     @Autowired
     private RepositoryPledgeSubject repositoryPledgeSubject;
@@ -58,7 +55,7 @@ public class Tavrzcms3Application {
 //        for(Client c : clients)
 //            System.out.println(c);
 //
-//        List<PledgeAgreement> pledgeEgreements = repositoryPledgeEgreement.findByPledgorIn(clients);
+//        List<PledgeAgreement> pledgeEgreements = repositoryPledgeAgreement.findByPledgorIn(clients);
 //        for(PledgeAgreement pe : pledgeEgreements)
 //            System.out.println(pe);
 //

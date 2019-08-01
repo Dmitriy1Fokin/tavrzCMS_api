@@ -12,5 +12,5 @@ public interface RepositoryClient extends JpaRepository<Client, Long> {
     List<Client> findByEmployee (Employee employee);
     List<Client> findByClientManager (ClientManager clientManager);
     List<Client> findByTypeOfClient (String typeOfClient);
-    List<Client> findByPledgeEgreements(PledgeAgreement pledgeAgreement);
+    List<Client> findByPledgeAgreements(PledgeAgreement pledgeAgreement);
 }

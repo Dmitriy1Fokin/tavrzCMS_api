@@ -24,7 +24,7 @@ public class PledgeAgreement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="dz_id")
-	private long pledgeEgreementId;
+	private long pledgeAgreementId;
 	
 	@Column(name ="num_dz")
 	private String numPE;
@@ -48,7 +48,7 @@ public class PledgeAgreement {
 	
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "kd_dz", joinColumns = @JoinColumn(name ="dz_id"), inverseJoinColumns = @JoinColumn(name ="kd_id"))
-	private List<LoanEgreement> loanEgreements;
+	private List<LoanAgreement> loanAgreements;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pledgor_id")
@@ -58,12 +58,12 @@ public class PledgeAgreement {
 	@JoinTable(name = "dz_ps", joinColumns = @JoinColumn(name ="dz_id"), inverseJoinColumns = @JoinColumn(name ="pledge_subject_id"))
 	private List<PledgeSubject> pledgeSubjects;
 
-	public long getPledgeEgreementId() {
-		return pledgeEgreementId;
+	public long getPledgeAgreementId() {
+		return pledgeAgreementId;
 	}
 
-	public void setPledgeEgreementId(long pledgeEgreementId) {
-		this.pledgeEgreementId = pledgeEgreementId;
+	public void setPledgeAgreementId(long pledgeAgreementId) {
+		this.pledgeAgreementId = pledgeAgreementId;
 	}
 
 	public String getNumPE() {
@@ -114,12 +114,12 @@ public class PledgeAgreement {
 		this.noticePE = noticePE;
 	}
 
-	public List<LoanEgreement> getLoanEgreements() {
-		return loanEgreements;
+	public List<LoanAgreement> getLoanAgreements() {
+		return loanAgreements;
 	}
 
-	public void setLoanEgreements(List<LoanEgreement> loanEgreements) {
-		this.loanEgreements = loanEgreements;
+	public void setLoanAgreements(List<LoanAgreement> loanAgreements) {
+		this.loanAgreements = loanAgreements;
 	}
 
 	public Client getPledgor() {
@@ -141,7 +141,7 @@ public class PledgeAgreement {
 	@Override
 	public String toString() {
 		return "PledgeAgreement{" +
-				"pledgeEgreementId=" + pledgeEgreementId +
+				"pledgeAgreementId=" + pledgeAgreementId +
 				", numPE='" + numPE + '\'' +
 				", dateBeginPE=" + dateBeginPE +
 				", dateEndPE=" + dateEndPE +

@@ -19,12 +19,12 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "kd")
-public class LoanEgreement {
+public class LoanAgreement {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="kd_id")
-	private long loanEgreementId;
+	private long loanAgreementId;
 	
 	@Column(name ="num_kd")
 	private String numLE;
@@ -63,12 +63,12 @@ public class LoanEgreement {
 	@JoinTable(name = "kd_dz", joinColumns = @JoinColumn(name ="kd_id"), inverseJoinColumns = @JoinColumn(name ="dz_id"))
 	private List<PledgeAgreement> pledgeAgreements;
 
-	public long getLoanEgreementId() {
-		return loanEgreementId;
+	public long getLoanAgreementId() {
+		return loanAgreementId;
 	}
 
-	public void setLoanEgreementId(long loanEgreementId) {
-		this.loanEgreementId = loanEgreementId;
+	public void setLoanAgreementId(long loanAgreementId) {
+		this.loanAgreementId = loanAgreementId;
 	}
 
 	public String getNumLE() {
@@ -161,8 +161,8 @@ public class LoanEgreement {
 
 	@Override
 	public String toString() {
-		return "LoanEgreement{" +
-				"loanEgreementId=" + loanEgreementId +
+		return "LoanAgreement{" +
+				"loanAgreementId=" + loanAgreementId +
 				", numLE='" + numLE + '\'' +
 				", dateBeginLE=" + dateBeginLE +
 				", dateEndLE=" + dateEndLE +

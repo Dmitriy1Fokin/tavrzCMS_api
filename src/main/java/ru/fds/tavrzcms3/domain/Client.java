@@ -46,7 +46,7 @@ public class Client {
 	private ClientLegalEntity ClientLegalEntity;
 	
 	@OneToMany(mappedBy = "loaner")
-	private List<LoanEgreement> loanEgreements;
+	private List<LoanAgreement> loanAgreements;
 
 	@OneToMany(mappedBy = "pledgor")
 	private List<PledgeAgreement> pledgeAgreements;
@@ -99,12 +99,12 @@ public class Client {
 		ClientLegalEntity = clientLegalEntity;
 	}
 
-	public List<LoanEgreement> getLoanEgreements() {
-		return loanEgreements;
+	public List<LoanAgreement> getLoanAgreements() {
+		return loanAgreements;
 	}
 
-	public void setLoanEgreements(List<LoanEgreement> loanEgreements) {
-		this.loanEgreements = loanEgreements;
+	public void setLoanAgreements(List<LoanAgreement> loanAgreements) {
+		this.loanAgreements = loanAgreements;
 	}
 
 	public List<PledgeAgreement> getPledgeAgreements() {

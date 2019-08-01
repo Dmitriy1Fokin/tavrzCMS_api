@@ -10,7 +10,7 @@ import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryAppUser;
 import ru.fds.tavrzcms3.repository.RepositoryClient;
 import ru.fds.tavrzcms3.repository.RepositoryEmployee;
-import ru.fds.tavrzcms3.repository.RepositoryPledgeEgreement;
+import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 
 import java.util.List;
 
@@ -27,32 +27,32 @@ public class EmployeeService {
     RepositoryClient repositoryClient;
 
     @Autowired
-    RepositoryPledgeEgreement repositoryPledgeEgreement;
+    RepositoryPledgeAgreement repositoryPledgeAgreement;
 
     public synchronized Employee getEmployeeByAppUser(User user){
         AppUser appUser = repositoryAppUser.findByName(user.getUsername());
         return repositoryEmployee.findByAppUser(appUser);
     }
 
-    public synchronized int getCountOfAllPledgeEgreements(User user){
+    public synchronized int getCountOfAllPledgeAgreements(User user){
         List<Client> clients = repositoryClient.findByEmployee(getEmployeeByAppUser(user));
-        return repositoryPledgeEgreement.countAllByPledgorIn(clients);
+        return repositoryPledgeAgreement.countAllByPledgorIn(clients);
     }
 
-    public synchronized int getCountOfPervPledgeEgreements(User user){
+    public synchronized int getCountOfPervPledgeAgreements(User user){
         List<Client> clients = repositoryClient.findByEmployee(getEmployeeByAppUser(user));
-        return repositoryPledgeEgreement.countAllByPledgorInAndPervPoslEquals(clients, "перв");
+        return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEquals(clients, "перв");
     }
 
-    public synchronized int getCountOfPoslPledgeEgreements(User user){
+    public synchronized int getCountOfPoslPledgeAgreements(User user){
         List<Client> clients = repositoryClient.findByEmployee(getEmployeeByAppUser(user));
-        return repositoryPledgeEgreement.countAllByPledgorInAndPervPoslEquals(clients, "посл");
+        return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEquals(clients, "посл");
     }
 
-    public synchronized List<PledgeAgreement> getPledgeEgreementByEmployeeId(long employeeId){
+    public synchronized List<PledgeAgreement> getPledgeAgreementByEmployeeId(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> clients = repositoryClient.findByEmployee(employee);
-        return repositoryPledgeEgreement.findByPledgorIn(clients);
+        return repositoryPledgeAgreement.findByPledgorIn(clients);
     }
 
     public synchronized Employee getEmployeeById(long id){

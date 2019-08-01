@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface RepositoryPledgeSubject extends JpaRepository<PledgeSubject, Long> {
     PledgeSubject findByPledgeSubjectId(long id);
-    List<PledgeSubject> findByPledgeEgreements(List<PledgeAgreement> pledgeAgreements);
-    List<PledgeSubject> findByPledgeEgreements(PledgeAgreement pledgeEgreements);
+    List<PledgeSubject> findByPledgeAgreements(List<PledgeAgreement> pledgeAgreements);
+    List<PledgeSubject> findByPledgeAgreements(PledgeAgreement pledgeEgreements);
 }

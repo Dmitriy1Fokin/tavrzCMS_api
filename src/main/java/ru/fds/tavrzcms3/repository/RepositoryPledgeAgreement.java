@@ -8,7 +8,7 @@ import ru.fds.tavrzcms3.domain.PledgeSubject;
 import java.util.Date;
 import java.util.List;
 
-public interface RepositoryPledgeEgreement extends JpaRepository<PledgeAgreement, Long> {
+public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement, Long> {
     List<PledgeAgreement> findByNumPE (String numPE);
     List<PledgeAgreement> findByDateBeginPE (Date dateBeginPE);
     List<PledgeAgreement> findByDateEndPE (Date dateEndPE);

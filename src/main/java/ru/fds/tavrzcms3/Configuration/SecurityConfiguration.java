@@ -22,7 +22,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 //.and()
-//                .authorizeRequests().antMatchers("/home", "/", "/pledge_egreements").hasRole("USER")
+//                .authorizeRequests().antMatchers("/home", "/", "/pledge_agreements").hasRole("USER")
 //                .and()
                 .authorizeRequests().antMatchers("/").hasRole("USER")
                 .and()

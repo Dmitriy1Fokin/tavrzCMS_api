@@ -16,18 +16,18 @@ import java.util.List;
 public class PagesController {
 
     private final EmployeeService employeeService;
-    private final PledgeEgreementService pledgeEgreementService;
+    private final PledgeAgreementService pledgeAgreementService;
     private final PledgeSubjectService pledgeSubjectService;
     private final InsuranceService insuranceService;
     private final EncumbranceService encumbranceService;
 
     public PagesController(EmployeeService employeeService,
-                           PledgeEgreementService pledgeEgreementService,
+                           PledgeAgreementService pledgeAgreementService,
                            PledgeSubjectService pledgeSubjectService,
                            InsuranceService insuranceService,
                            EncumbranceService encumbranceService) {
         this.employeeService = employeeService;
-        this.pledgeEgreementService = pledgeEgreementService;
+        this.pledgeAgreementService = pledgeAgreementService;
         this.pledgeSubjectService = pledgeSubjectService;
         this.insuranceService = insuranceService;
         this.encumbranceService = encumbranceService;
@@ -38,30 +38,30 @@ public class PagesController {
         Employee employee = employeeService.getEmployeeByAppUser(user);
         model.addAttribute("employee", employee);
 
-        int countOfPE = employeeService.getCountOfAllPledgeEgreements(user);
-        model.addAttribute("countOfAllPledgeEgreement", countOfPE);
+        int countOfPE = employeeService.getCountOfAllPledgeAgreements(user);
+        model.addAttribute("countOfAllPledgeAgreement", countOfPE);
 
-        int countOfPervPE = employeeService.getCountOfPervPledgeEgreements(user);
-        model.addAttribute("countOfPervPledgeEgreements", countOfPervPE);
+        int countOfPervPE = employeeService.getCountOfPervPledgeAgreements(user);
+        model.addAttribute("countOfPervPledgeAgreements", countOfPervPE);
 
-        int countOfPoslPE = employeeService.getCountOfPoslPledgeEgreements(user);
-        model.addAttribute("countOfPoslPledgeEgreements", countOfPoslPE);
+        int countOfPoslPE = employeeService.getCountOfPoslPledgeAgreements(user);
+        model.addAttribute("countOfPoslPledgeAgreements", countOfPoslPE);
 
         return "home";
     }
 
-    @GetMapping("/pledge_egreements")
+    @GetMapping("/pledge_agreements")
     public String pledgeEgreementPage(@RequestParam("employeeId") long employeeId, @RequestParam("pervPosl") String pervPosl, Model model) {
         Employee employee = employeeService.getEmployeeById(employeeId);
         model.addAttribute("employee", employee);
         model.addAttribute("pervPosl", pervPosl);
-        return "pledge_egreements";
+        return "pledge_agreements";
     }
 
     @GetMapping("/pledge_subjects")
-    public String pledgeSubjectsPage(@RequestParam("pledgeEgreementId") long pledgeEgreementId, Model model){
-        PledgeAgreement pledgeAgreement = pledgeEgreementService.getPledgeEgreementById(pledgeEgreementId);
-        model.addAttribute("pledgeEgreement", pledgeAgreement);
+    public String pledgeSubjectsPage(@RequestParam("pledgeAgreementId") long pledgeAgreementId, Model model){
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId);
+        model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
     }
 
@@ -95,14 +95,16 @@ public class PagesController {
         return  "pledgor";
     }
 
-    @GetMapping("/pledge_egreement_detail")
-    public String pledgeEgreementsDetailPage(@RequestParam("pledgeEgreementId") long pledgeEgreementId, Model model){
-        return "pledge_egreement_detail";
+    @GetMapping("/pledge_agreement_detail")
+    public String pledgeAgreementsDetailPage(@RequestParam("pledgeAgreementId") long pledgeAgreementId, Model model){
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId);
+        model.addAttribute("pledgeAgreement", pledgeAgreement);
+        return "pledge_agreement_detail";
     }
 
-    @GetMapping("/loan_egreement_detail")
-    public String loanEgreementDetailPage(@RequestParam("loanEgreementId") long loanEgreementId, Model model){
-        return "loan_egreement_detail";
+    @GetMapping("/loan_agreement_detail")
+    public String loanEgreementDetailPage(@RequestParam("loanAgreementId") long loanAgreementId, Model model){
+        return "loan_agreement_detail";
     }
 
     @GetMapping("/loaner")

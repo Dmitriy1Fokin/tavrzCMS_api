@@ -44,7 +44,11 @@
             <div th:case="all">
                 <div th:each="pledgor : ${employee.getClients()}">
                     <tr th:each="pe : ${pledgor.getPledgeAgreements()}">
-                        <td th:text="${pe.getNumPE()}"></td>
+                        <td>
+                            <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
+                               th:text="${pe.getNumPE()}">н/д</a>
+                        </td>
+                        <!--<td th:text="${pe.getNumPE()}"></td>-->
 
                         <td th:text="${pe.getDateBeginPE()}"></td>
 
@@ -75,36 +79,36 @@
                                     </div>
                                 </div>
                             </ol>
-                            <a th:href="@{/pledge_subjects(pledgeEgreementId=${pe.getPledgeEgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
+                            <a th:href="@{/pledge_subjects(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
                         </td>
 
                         <td th:text="${pe.getPledgeSubjects().size()}">0</td>
 
                         <!--<td th:text="${#numbers.formatDecimal(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()), 0, 'COMMA', 2, 'POINT')}">0.00</td>-->
-                        <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()))}">0.00</td>
+                        <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsDz(pe.getPledgeAgreementId()))}">0.00</td>
 
-                        <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsDz(pe.getPledgeEgreementId()))}">0.00</td>
+                        <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsDz(pe.getPledgeAgreementId()))}">0.00</td>
 
-                        <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsZz(pe.getPledgeEgreementId()))}">0.00</td>
+                        <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsZz(pe.getPledgeAgreementId()))}">0.00</td>
 
-                        <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsZz(pe.getPledgeEgreementId()))}">0.00</td>
+                        <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsZz(pe.getPledgeAgreementId()))}">0.00</td>
 
-                        <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getSs(pe.getPledgeEgreementId()))}">0.00</td>
+                        <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getSs(pe.getPledgeAgreementId()))}">0.00</td>
 
                         <td>
-                            <div th:each="dateOfConclusion : ${@pledgeEgreementService.getDatesOfConclusion(pe.getPledgeEgreementId())}">
+                            <div th:each="dateOfConclusion : ${@pledgeAgreementService.getDatesOfConclusion(pe.getPledgeAgreementId())}">
                                 <span th:text="${dateOfConclusion}">н/д</span>
                             </div>
                         </td>
 
                         <td>
-                            <div th:each="dateOfMonitoring : ${@pledgeEgreementService.getDatesOfMonitoring(pe.getPledgeEgreementId())}">
+                            <div th:each="dateOfMonitoring : ${@pledgeAgreementService.getDatesOfMonitoring(pe.getPledgeAgreementId())}">
                                 <span th:text="${dateOfMonitoring}">н/д</span>
                             </div>
                         </td>
 
                         <td>
-                            <div th:each="resultsOfMonitoring : ${@pledgeEgreementService.getResultsOfMonitoring(pe.getPledgeEgreementId())}">
+                            <div th:each="resultsOfMonitoring : ${@pledgeAgreementService.getResultsOfMonitoring(pe.getPledgeAgreementId())}">
                                 <span th:text="${resultsOfMonitoring}">н/д</span>
                             </div>
                         </td>
@@ -117,7 +121,11 @@
                         <div th:switch="${pe.getPervPosl()}">
                             <div th:case="перв">
                                 <tr>
-                                    <td th:text="${pe.getNumPE()}"></td>
+                                    <td>
+                                        <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
+                                           th:text="${pe.getNumPE()}">н/д</a>
+                                    </td>
+                                    <!--<td th:text="${pe.getNumPE()}"></td>-->
 
                                     <td th:text="${pe.getDateBeginPE()}"></td>
 
@@ -148,36 +156,36 @@
                                                 </div>
                                             </div>
                                         </ol>
-                                        <a th:href="@{/pledge_subjects(pledgeEgreementId=${pe.getPledgeEgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
+                                        <a th:href="@{/pledge_subjects(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
                                     </td>
 
                                     <td th:text="${pe.getPledgeSubjects().size()}">0</td>
 
-                                    <!--<td th:text="${#numbers.formatDecimal(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()), 0, 'COMMA', 2, 'POINT')}">0.00</td>-->
-                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()))}">0.00</td>
+                                    <!--<td th:text="${#numbers.formatDecimal(@pledgeAgreementService.getRsDz(pe.getPledgeAgreementId()), 0, 'COMMA', 2, 'POINT')}">0.00</td>-->
+                                    <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsDz(pe.getPledgeAgreementId()))}">0.00</td>
 
-                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsDz(pe.getPledgeEgreementId()))}">0.00</td>
+                                    <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsDz(pe.getPledgeAgreementId()))}">0.00</td>
 
-                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsZz(pe.getPledgeEgreementId()))}">0.00</td>
+                                    <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsZz(pe.getPledgeAgreementId()))}">0.00</td>
 
-                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsZz(pe.getPledgeEgreementId()))}">0.00</td>
+                                    <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsZz(pe.getPledgeAgreementId()))}">0.00</td>
 
-                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getSs(pe.getPledgeEgreementId()))}">0.00</td>
+                                    <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getSs(pe.getPledgeAgreementId()))}">0.00</td>
 
                                     <td>
-                                        <div th:each="dateOfConclusion : ${@pledgeEgreementService.getDatesOfConclusion(pe.getPledgeEgreementId())}">
+                                        <div th:each="dateOfConclusion : ${@pledgeAgreementService.getDatesOfConclusion(pe.getPledgeAgreementId())}">
                                             <span th:text="${dateOfConclusion}">н/д</span>
                                         </div>
                                     </td>
 
                                     <td>
-                                        <div th:each="dateOfMonitoring : ${@pledgeEgreementService.getDatesOfMonitoring(pe.getPledgeEgreementId())}">
+                                        <div th:each="dateOfMonitoring : ${@pledgeAgreementService.getDatesOfMonitoring(pe.getPledgeAgreementId())}">
                                             <span th:text="${dateOfMonitoring}">н/д</span>
                                         </div>
                                     </td>
 
                                     <td>
-                                        <div th:each="resultsOfMonitoring : ${@pledgeEgreementService.getResultsOfMonitoring(pe.getPledgeEgreementId())}">
+                                        <div th:each="resultsOfMonitoring : ${@pledgeAgreementService.getResultsOfMonitoring(pe.getPledgeAgreementId())}">
                                             <span th:text="${resultsOfMonitoring}">н/д</span>
                                         </div>
                                     </td>
@@ -193,7 +201,11 @@
                         <div th:switch="${pe.getPervPosl()}">
                             <div th:case="посл">
                                 <tr>
-                                    <td th:text="${pe.getNumPE()}"></td>
+                                    <td>
+                                        <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
+                                           th:text="${pe.getNumPE()}">н/д</a>
+                                    </td>
+                                    <!--<td th:text="${pe.getNumPE()}"></td>-->
 
                                     <td th:text="${pe.getDateBeginPE()}"></td>
 
@@ -224,36 +236,36 @@
                                                 </div>
                                             </div>
                                         </ol>
-                                        <a th:href="@{/pledge_subjects(pledgeEgreementId=${pe.getPledgeEgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
+                                        <a th:href="@{/pledge_subjects(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
                                     </td>
 
                                     <td th:text="${pe.getPledgeSubjects().size()}">0</td>
 
-                                    <!--<td th:text="${#numbers.formatDecimal(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()), 0, 'COMMA', 2, 'POINT')}">0.00</td>-->
-                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()))}">0.00</td>
+                                    <!--<td th:text="${#numbers.formatDecimal(@pledgeAgreementService.getRsDz(pe.getPledgeAgreementId()), 0, 'COMMA', 2, 'POINT')}">0.00</td>-->
+                                    <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsDz(pe.getPledgeAgreementId()))}">0.00</td>
 
-                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsDz(pe.getPledgeEgreementId()))}">0.00</td>
+                                    <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsDz(pe.getPledgeAgreementId()))}">0.00</td>
 
-                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getRsZz(pe.getPledgeEgreementId()))}">0.00</td>
+                                    <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsZz(pe.getPledgeAgreementId()))}">0.00</td>
 
-                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getZsZz(pe.getPledgeEgreementId()))}">0.00</td>
+                                    <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsZz(pe.getPledgeAgreementId()))}">0.00</td>
 
-                                    <td th:text="${#numbers.formatCurrency(@pledgeEgreementService.getSs(pe.getPledgeEgreementId()))}">0.00</td>
+                                    <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getSs(pe.getPledgeAgreementId()))}">0.00</td>
 
                                     <td>
-                                        <div th:each="dateOfConclusion : ${@pledgeEgreementService.getDatesOfConclusion(pe.getPledgeEgreementId())}">
+                                        <div th:each="dateOfConclusion : ${@pledgeAgreementService.getDatesOfConclusion(pe.getPledgeAgreementId())}">
                                             <span th:text="${dateOfConclusion}">н/д</span>
                                         </div>
                                     </td>
 
                                     <td>
-                                        <div th:each="dateOfMonitoring : ${@pledgeEgreementService.getDatesOfMonitoring(pe.getPledgeEgreementId())}">
+                                        <div th:each="dateOfMonitoring : ${@pledgeAgreementService.getDatesOfMonitoring(pe.getPledgeAgreementId())}">
                                             <span th:text="${dateOfMonitoring}">н/д</span>
                                         </div>
                                     </td>
 
                                     <td>
-                                        <div th:each="resultsOfMonitoring : ${@pledgeEgreementService.getResultsOfMonitoring(pe.getPledgeEgreementId())}">
+                                        <div th:each="resultsOfMonitoring : ${@pledgeAgreementService.getResultsOfMonitoring(pe.getPledgeAgreementId())}">
                                             <span th:text="${resultsOfMonitoring}">н/д</span>
                                         </div>
                                     </td>

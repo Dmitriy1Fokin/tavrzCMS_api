@@ -6,7 +6,7 @@ import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.repository.RepositoryClient;
-import ru.fds.tavrzcms3.repository.RepositoryPledgeEgreement;
+import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 
 import java.util.List;
 
@@ -17,13 +17,13 @@ public class ClientService {
     RepositoryClient repositoryClient;
 
     @Autowired
-    RepositoryPledgeEgreement repositoryPledgeEgreement;
+    RepositoryPledgeAgreement repositoryPledgeAgreement;
 
     public synchronized Client getPledgorByPledgeSubject(PledgeSubject pledgeSubject){
-        PledgeAgreement pledgeAgreement = repositoryPledgeEgreement.findByPledgeSubjects(pledgeSubject);
+        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findByPledgeSubjects(pledgeSubject);
         System.out.println(pledgeAgreement);
-        List<Client> clients = repositoryClient.findByPledgeEgreements(pledgeAgreement);
-//        Client client = repositoryClient.findByPledgeEgreements(pledgeAgreement);
+        List<Client> clients = repositoryClient.findByPledgeAgreements(pledgeAgreement);
+//        Client client = repositoryClient.findByPledgeAgreements(pledgeAgreement);
         return null;
     }
 }
