@@ -1,10 +1,183 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Заемщик</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        .containerTable{
+            width: 3000px;
+        }
+        .loanAgreement, .loanAgreement td {
+            border: 1px solid lightgray;
+            padding: 5px;
+            table-layout: fixed;
+        }
+    </style>
 </head>
 <body>
+<div th:switch="${loaner.getTypeOfClient()}">
+    <div th:case="юл">
+        <h1 th:text="'Заемщик:' + ${loaner.getClientLegalEntity().getOrganizationalForm() + ' ' + loaner.getClientLegalEntity().getName()}">Заемщик ЮЛ</h1>
+        <label>ИНН:</label>
+        <span th:text="${loaner.getClientLegalEntity().getInn()}"></span>
+    </div>
+    <div th:case="фл">
+        <h1 th:text="'Заемщик:' + ${loaner.getClientIndividual().getSurname() + ' '
+        + loaner.getClientIndividual().getName() + ' '
+        + loaner.getClientIndividual().getPatronymic()}">Заемщик ЮЛ</h1>
+        <label>Паспорт:</label>
+        <span th:text="${loaner.getClientIndividual().getPasportNum()}"></span>
+    </div>
+</div>
 
+<h2>Действующее кредитные договоры</h2>
+<div class="containerTable">
+    <table class="loanAgreement">
+        <thead>
+        <tr>
+            <th>№КД</th>
+            <th>Дата начала КД</th>
+            <th>Дата окончания КД</th>
+            <th>Сумма договора</th>
+            <th>%</th>
+            <th>Задолженность</th>
+            <th>ПФО</th>
+            <th>Кат.кач.</th>
+            <th>ДЗ / Залогодатель / вид обеспечения</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:each="loanAgreement : ${loaner.getLoanAgreements()}">
+            <div th:switch="${loanAgreement.getStatusLE()}">
+                <div th:case="открыт">
+                    <tr>
+                        <td>
+                            <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
+                               th:text="${loanAgreement.getNumLE()}">№ КД</a>
+                        </td>
+
+                        <td th:text="${loanAgreement.getDateBeginLE()}"></td>
+
+                        <td th:text="${loanAgreement.getDateEndLE()}"></td>
+
+                        <td th:text="${#numbers.formatCurrency(loanAgreement.getAmountLE())}"></td>
+
+                        <td th:text="${loanAgreement.getInterestRateLE() + '%'}"></td>
+
+                        <td th:text="${#numbers.formatCurrency(loanAgreement.getDebtLE())}"></td>
+
+                        <td th:text="${loanAgreement.getPfo()}"></td>
+
+                        <td th:text="${loanAgreement.getQualityCategory()}"></td>
+
+                       <td>
+                           <ul>
+                            <div th:each="pe : ${loanAgreement.getPledgeAgreements()}">
+                                <li>
+                                    <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
+                                       th:text="${pe.getNumPE()}">№ ДЗ</a>
+                                    <span th:text="' / '"></span>
+                                    <div th:switch="${pe.getPledgor().getTypeOfClient()}">
+                                        <div th:case="юл">
+                                            <a th:href="@{/pledgor(pledgorId=${pe.getPledgor().getClientId()})}" href="pledgor.html"
+                                               th:text="${pe.getPledgor().getClientLegalEntity().getOrganizationalForm() + ' '
+                                                + pe.getPledgor().getClientLegalEntity().getName()}">Залогодатель ЮЛ</a>
+                                        </div>
+                                        <div th:case="фл">
+                                            <a th:href="@{/pledgor(pledgorId=${pe.getPledgor().getClientId()})}" href="pledgor.html"
+                                               th:text="${pe.getPledgor().getClientIndividual().getSurname() + ' '
+                                                + pe.getPledgor().getClientIndividual().getName() + ' '
+                                                + pe.getPledgor().getClientIndividual().getPatronymic()}">Залогодатель ФЛ</a>
+                                        </div>
+                                    </div>
+                                    <span th:text="' / '"></span>
+                                    <span th:text="${@pledgeAgreementService.getTypeOfCollateral(pe.getPledgeAgreementId())}"></span>
+                                </li>
+                            </div>
+                           </ul>
+                        </td>
+                    </tr>
+                </div>
+            </div>
+        </div>
+        </tbody>
+    </table>
+</div>
+<h2>Закрытые кредитные договоры</h2>
+<div class="containerTable">
+    <table class="loanAgreement">
+        <thead>
+        <tr>
+            <th>№КД</th>
+            <th>Дата начала КД</th>
+            <th>Дата окончания КД</th>
+            <th>Сумма договора</th>
+            <th>%</th>
+            <th>Задолженность</th>
+            <th>ПФО</th>
+            <th>Кат.кач.</th>
+            <th>ДЗ / Залогодатель / вид обеспечения</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:each="loanAgreement : ${loaner.getLoanAgreements()}">
+            <div th:switch="${loanAgreement.getStatusLE()}">
+                <div th:case="закрыт">
+                    <tr>
+                        <td>
+                            <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
+                               th:text="${loanAgreement.getNumLE()}">№ КД</a>
+                        </td>
+
+                        <td th:text="${loanAgreement.getDateBeginLE()}"></td>
+
+                        <td th:text="${loanAgreement.getDateEndLE()}"></td>
+
+                        <td th:text="${#numbers.formatCurrency(loanAgreement.getAmountLE())}"></td>
+
+                        <td th:text="${loanAgreement.getInterestRateLE() + '%'}"></td>
+
+                        <td th:text="${#numbers.formatCurrency(loanAgreement.getDebtLE())}"></td>
+
+                        <td th:text="${loanAgreement.getPfo()}"></td>
+
+                        <td th:text="${loanAgreement.getQualityCategory()}"></td>
+
+                        <td>
+                            <ul>
+                                <div th:each="pe : ${loanAgreement.getPledgeAgreements()}">
+                                    <li>
+                                        <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
+                                           th:text="${pe.getNumPE()}">№ ДЗ</a>
+                                        <span th:text="' / '"></span>
+                                        <div th:switch="${pe.getPledgor().getTypeOfClient()}">
+                                            <div th:case="юл">
+                                                <a th:href="@{/pledgor(pledgorId=${pe.getPledgor().getClientId()})}" href="pledgor.html"
+                                                   th:text="${pe.getPledgor().getClientLegalEntity().getOrganizationalForm() + ' '
+                                                + pe.getPledgor().getClientLegalEntity().getName()}">Залогодатель ЮЛ</a>
+                                            </div>
+                                            <div th:case="фл">
+                                                <a th:href="@{/pledgor(pledgorId=${pe.getPledgor().getClientId()})}" href="pledgor.html"
+                                                   th:text="${pe.getPledgor().getClientIndividual().getSurname() + ' '
+                                                + pe.getPledgor().getClientIndividual().getName() + ' '
+                                                + pe.getPledgor().getClientIndividual().getPatronymic()}">Залогодатель ФЛ</a>
+                                            </div>
+                                        </div>
+                                        <span th:text="' / '"></span>
+                                        <span th:text="${@pledgeAgreementService.getTypeOfCollateral(pe.getPledgeAgreementId())}"></span>
+                                    </li>
+                                </div>
+                            </ul>
+                        </td>
+                    </tr>
+                </div>
+            </div>
+        </div>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

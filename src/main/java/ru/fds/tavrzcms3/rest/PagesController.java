@@ -114,6 +114,8 @@ public class PagesController {
 
     @GetMapping("/loaner")
     public String loanerPage(@RequestParam("loanerId") long loanerId, Model model){
+        Client loaner = clientService.getClientByClientId(loanerId);
+        model.addAttribute("loaner", loaner);
         return "loaner";
     }
 
