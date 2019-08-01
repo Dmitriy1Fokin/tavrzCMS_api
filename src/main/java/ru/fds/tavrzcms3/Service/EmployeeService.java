@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.fds.tavrzcms3.domain.AppUser;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.Employee;
-import ru.fds.tavrzcms3.domain.PledgeEgreement;
+import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryAppUser;
 import ru.fds.tavrzcms3.repository.RepositoryClient;
 import ru.fds.tavrzcms3.repository.RepositoryEmployee;
@@ -49,7 +49,7 @@ public class EmployeeService {
         return repositoryPledgeEgreement.countAllByPledgorInAndPervPoslEquals(clients, "посл");
     }
 
-    public synchronized List<PledgeEgreement> getPledgeEgreementByEmployeeId(long employeeId){
+    public synchronized List<PledgeAgreement> getPledgeEgreementByEmployeeId(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> clients = repositoryClient.findByEmployee(employee);
         return repositoryPledgeEgreement.findByPledgorIn(clients);

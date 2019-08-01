@@ -49,7 +49,7 @@ public class Client {
 	private List<LoanEgreement> loanEgreements;
 
 	@OneToMany(mappedBy = "pledgor")
-	private List<PledgeEgreement> pledgeEgreements;
+	private List<PledgeAgreement> pledgeAgreements;
 
 	public long getClientId() {
 		return clientId;
@@ -107,12 +107,12 @@ public class Client {
 		this.loanEgreements = loanEgreements;
 	}
 
-	public List<PledgeEgreement> getPledgeEgreements() {
-		return pledgeEgreements;
+	public List<PledgeAgreement> getPledgeAgreements() {
+		return pledgeAgreements;
 	}
 
-	public void setPledgeEgreements(List<PledgeEgreement> pledgeEgreements) {
-		this.pledgeEgreements = pledgeEgreements;
+	public void setPledgeAgreements(List<PledgeAgreement> pledgeAgreements) {
+		this.pledgeAgreements = pledgeAgreements;
 	}
 
 	@Override

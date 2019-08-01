@@ -10,7 +10,7 @@
         .containerTable{
             width: 3000px;
         }
-        .pledgeEgreement, .pledgeEgreement td {
+        .pledgeAgreement, .pledgeAgreement td {
             border: 1px solid lightgray;
             padding: 5px;
             table-layout: fixed;
@@ -20,7 +20,7 @@
 <body>
 <h1>Договоры залога:</h1>
 <div class="containerTable">
-    <table class="pledgeEgreement">
+    <table class="pledgeAgreement">
         <thead>
         <tr>
             <th>№ДЗ</th>
@@ -43,7 +43,7 @@
         <div th:switch="${pervPosl}">
             <div th:case="all">
                 <div th:each="pledgor : ${employee.getClients()}">
-                    <tr th:each="pe : ${pledgor.getPledgeEgreements()}">
+                    <tr th:each="pe : ${pledgor.getPledgeAgreements()}">
                         <td th:text="${pe.getNumPE()}"></td>
 
                         <td th:text="${pe.getDateBeginPE()}"></td>
@@ -113,7 +113,7 @@
             </div>
             <div th:case="perv">
                 <div th:each="pledgor : ${employee.getClients()}">
-                    <div th:each="pe : ${pledgor.getPledgeEgreements()}">
+                    <div th:each="pe : ${pledgor.getPledgeAgreements()}">
                         <div th:switch="${pe.getPervPosl()}">
                             <div th:case="перв">
                                 <tr>
@@ -189,7 +189,7 @@
             </div>
             <div th:case="posl">
                 <div th:each="pledgor : ${employee.getClients()}">
-                    <div th:each="pe : ${pledgor.getPledgeEgreements()}">
+                    <div th:each="pe : ${pledgor.getPledgeAgreements()}">
                         <div th:switch="${pe.getPervPosl()}">
                             <div th:case="посл">
                                 <tr>

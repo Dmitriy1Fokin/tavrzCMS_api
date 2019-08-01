@@ -3,7 +3,7 @@ package ru.fds.tavrzcms3.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.fds.tavrzcms3.domain.Client;
-import ru.fds.tavrzcms3.domain.PledgeEgreement;
+import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.repository.RepositoryClient;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeEgreement;
@@ -20,10 +20,10 @@ public class ClientService {
     RepositoryPledgeEgreement repositoryPledgeEgreement;
 
     public synchronized Client getPledgorByPledgeSubject(PledgeSubject pledgeSubject){
-        PledgeEgreement pledgeEgreement = repositoryPledgeEgreement.findByPledgeSubjects(pledgeSubject);
-        System.out.println(pledgeEgreement);
-        List<Client> clients = repositoryClient.findByPledgeEgreements(pledgeEgreement);
-//        Client client = repositoryClient.findByPledgeEgreements(pledgeEgreement);
+        PledgeAgreement pledgeAgreement = repositoryPledgeEgreement.findByPledgeSubjects(pledgeSubject);
+        System.out.println(pledgeAgreement);
+        List<Client> clients = repositoryClient.findByPledgeEgreements(pledgeAgreement);
+//        Client client = repositoryClient.findByPledgeEgreements(pledgeAgreement);
         return null;
     }
 }

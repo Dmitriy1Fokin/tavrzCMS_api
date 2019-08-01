@@ -93,7 +93,7 @@ public class PledgeSubject {
 	
 	@ManyToMany
 	@JoinTable(name = "dz_ps", joinColumns = @JoinColumn(name ="pledge_subject_id"), inverseJoinColumns = @JoinColumn(name ="dz_id"))
-	private List<PledgeEgreement> pledgeEgreements;
+	private List<PledgeAgreement> pledgeAgreements;
 	
 	@OneToMany(mappedBy = "pledgeSubject")
 	private List<CostHistory> costHistories;
@@ -299,12 +299,12 @@ public class PledgeSubject {
         this.insuranceObligation = insuranceObligation;
     }
 
-    public List<PledgeEgreement> getPledgeEgreements() {
-        return pledgeEgreements;
+    public List<PledgeAgreement> getPledgeAgreements() {
+        return pledgeAgreements;
     }
 
-    public void setPledgeEgreements(List<PledgeEgreement> pledgeEgreements) {
-        this.pledgeEgreements = pledgeEgreements;
+    public void setPledgeAgreements(List<PledgeAgreement> pledgeAgreements) {
+        this.pledgeAgreements = pledgeAgreements;
     }
 
     public List<CostHistory> getCostHistories() {

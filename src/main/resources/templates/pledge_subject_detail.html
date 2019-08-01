@@ -362,7 +362,7 @@
     <br>
     <label>Договора залога:</label>
     <ol>
-        <div th:each="pe: ${pledgeSubject.getPledgeEgreements()}">
+        <div th:each="pe: ${pledgeSubject.getPledgeAgreements()}">
             <li>
                 <a th:href="@{/pledge_egreement_detail(pledgeEgreementId=${pe.getPledgeEgreementId()})}" href="pledge_egreement_detail.html"
                    th:text="${pe.getNumPE() + ' от ' + pe.getDateBeginPE()}">№ ДЗ</a>
@@ -384,7 +384,7 @@
     <br>
     <label>Кредитные договоры:</label>
     <ol>
-        <div th:each="pe : ${pledgeSubject.getPledgeEgreements()}">
+        <div th:each="pe : ${pledgeSubject.getPledgeAgreements()}">
             <div th:each="loanEgreement : ${pe.getLoanEgreements()}">
                 <li>
                     <a th:href="@{/loan_egreement_detail(loanEgreementId=${loanEgreement.getLoanEgreementId()})}" href="loan_egreement_detail.html"

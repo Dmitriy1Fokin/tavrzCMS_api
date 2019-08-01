@@ -52,14 +52,14 @@ public class Tavrzcms3Application {
 //        for(Employee emp : employees)
 //            System.out.println(emp);
 //
-//        System.out.println("-------------FIND ALL PledgeEgreement------------");
+//        System.out.println("-------------FIND ALL PledgeAgreement------------");
 //        System.out.println(employees.get(1));
 //        List<Client> clients = repositoryClient.findByEmployee(employees.get(1));
 //        for(Client c : clients)
 //            System.out.println(c);
 //
-//        List<PledgeEgreement> pledgeEgreements = repositoryPledgeEgreement.findByPledgorIn(clients);
-//        for(PledgeEgreement pe : pledgeEgreements)
+//        List<PledgeAgreement> pledgeEgreements = repositoryPledgeEgreement.findByPledgorIn(clients);
+//        for(PledgeAgreement pe : pledgeEgreements)
 //            System.out.println(pe);
 //
 //

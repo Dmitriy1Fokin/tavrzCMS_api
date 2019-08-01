@@ -60,8 +60,8 @@ public class PagesController {
 
     @GetMapping("/pledge_subjects")
     public String pledgeSubjectsPage(@RequestParam("pledgeEgreementId") long pledgeEgreementId, Model model){
-        PledgeEgreement pledgeEgreement = pledgeEgreementService.getPledgeEgreementById(pledgeEgreementId);
-        model.addAttribute("pledgeEgreement", pledgeEgreement);
+        PledgeAgreement pledgeAgreement = pledgeEgreementService.getPledgeEgreementById(pledgeEgreementId);
+        model.addAttribute("pledgeEgreement", pledgeAgreement);
         return "pledge_subjects";
     }
 

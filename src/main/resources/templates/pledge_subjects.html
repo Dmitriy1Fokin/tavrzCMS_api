@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h1 th:text="'Предметы залога по договору залога №' + ${pledgeEgreement.getNumPE()}">Предметы залога</h1>
+<h1 th:text="'Предметы залога по договору залога №' + ${pledgeAgreement.getNumPE()}">Предметы залога</h1>
 <div class="containerTable">
     <table class="PledgeSubjectTable">
         <thead>
@@ -46,7 +46,7 @@
         </tr>
         </thead>
         <tbody>
-            <div th:each="ps : ${pledgeEgreement.getPledgeSubjects()}">
+            <div th:each="ps : ${pledgeAgreement.getPledgeSubjects()}">
                 <tr>
 
                     <td>

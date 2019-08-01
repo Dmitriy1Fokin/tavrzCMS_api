@@ -19,7 +19,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "dz")
-public class PledgeEgreement {
+public class PledgeAgreement {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -140,7 +140,7 @@ public class PledgeEgreement {
 
 	@Override
 	public String toString() {
-		return "PledgeEgreement{" +
+		return "PledgeAgreement{" +
 				"pledgeEgreementId=" + pledgeEgreementId +
 				", numPE='" + numPE + '\'' +
 				", dateBeginPE=" + dateBeginPE +

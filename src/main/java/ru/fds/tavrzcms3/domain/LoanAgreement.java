@@ -61,7 +61,7 @@ public class LoanEgreement {
 	
 	@ManyToMany
 	@JoinTable(name = "kd_dz", joinColumns = @JoinColumn(name ="kd_id"), inverseJoinColumns = @JoinColumn(name ="dz_id"))
-	private List<PledgeEgreement> pledgeEgreements;
+	private List<PledgeAgreement> pledgeAgreements;
 
 	public long getLoanEgreementId() {
 		return loanEgreementId;
@@ -151,12 +151,12 @@ public class LoanEgreement {
 		this.loaner = loaner;
 	}
 
-	public List<PledgeEgreement> getPledgeEgreements() {
-		return pledgeEgreements;
+	public List<PledgeAgreement> getPledgeAgreements() {
+		return pledgeAgreements;
 	}
 
-	public void setPledgeEgreements(List<PledgeEgreement> pledgeEgreements) {
-		this.pledgeEgreements = pledgeEgreements;
+	public void setPledgeAgreements(List<PledgeAgreement> pledgeAgreements) {
+		this.pledgeAgreements = pledgeAgreements;
 	}
 
 	@Override
