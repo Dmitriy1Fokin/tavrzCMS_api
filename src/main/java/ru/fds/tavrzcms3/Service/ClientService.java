@@ -26,4 +26,8 @@ public class ClientService {
 //        Client client = repositoryClient.findByPledgeAgreements(pledgeAgreement);
         return null;
     }
+
+    public synchronized Client getClientByClientId(long clientId){
+        return repositoryClient.getOne(clientId);
+    }
 }

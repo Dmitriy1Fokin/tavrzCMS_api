@@ -1,10 +1,281 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Залогодатель</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        .containerTable{
+            width: 3000px;
+        }
+        .pledgeAgreement, .pledgeAgreement td {
+            border: 1px solid lightgray;
+            padding: 5px;
+            table-layout: fixed;
+        }
+    </style>
 </head>
 <body>
+<div th:switch="${pledgor.getTypeOfClient()}">
+    <div th:case="юл">
+        <h1 th:text="'Залогодатель:' + ${pledgor.getClientLegalEntity().getOrganizationalForm() + ' ' + pledgor.getClientLegalEntity().getName()}">Залогодатель ЮЛ</h1>
+        <label>ИНН:</label>
+        <span th:text="${pledgor.getClientLegalEntity().getInn()}"></span>
+    </div>
+    <div th:case="фл">
+        <h1 th:text="'Залогодатель:' + ${pledgor.getClientIndividual().getSurname() + ' '
+        + pledgor.getClientIndividual().getName() + ' '
+        + pledgor.getClientIndividual().getPatronymic()}">Залогодатель ЮЛ</h1>
+        <label>Паспорт:</label>
+        <span th:text="${pledgor.getClientIndividual().getPasportNum()}"></span>
+    </div>
+</div>
 
+<h2>Действующее обеспечение</h2>
+<div class="containerTable">
+    <table class="pledgeAgreement">
+        <thead>
+        <tr>
+            <th>№ДЗ</th>
+            <th>Дата начала ДЗ</th>
+            <th>Дата окончания ДЗ</th>
+            <th>Тип ДЗ</th>
+            <th>Кредитный договор / Заемщик</th>
+            <th>Описание предметов залога</th>
+            <th>Количество предметов залога</th>
+            <th>РС ДЗ</th>
+            <th>ЗС ДЗ</th>
+            <th>РС ЗЗ</th>
+            <th>ЗС ЗЗ</th>
+            <th>СС</th>
+            <th>Дата ЗЗ</th>
+            <th>Дата мониторинга</th>
+            <th>Рузультат мониторинга</th>
+        </tr>
+        </thead>
+        <tbody>
+            <div th:each="pe : ${pledgor.getPledgeAgreements()}">
+                <div th:switch="${pe.getStatusPE()}">
+                    <div th:case="открыт">
+                        <tr>
+                            <td>
+                                <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
+                                   th:text="${pe.getNumPE()}">н/д</a>
+                            </td>
+
+                            <td th:text="${pe.getDateBeginPE()}"></td>
+
+                            <td th:text="${pe.getDateEndPE()}"></td>
+
+                            <td>
+                                <div th:switch="${pe.getPervPosl()}">
+                                    <div th:case="перв">Первичный</div>
+                                    <div th:case="посл">Последующий</div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div th:each="loanAgreement : ${pe.getLoanAgreements()}">
+                                    <!--<a th:text="${loanAgreement.getNumLE()}">н/д</a>-->
+                                    <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
+                                       th:text="${loanAgreement.getNumLE()}">№ КД</a>
+
+
+                                    <span th:text="' / '"></span>
+                                    <div th:switch="${loanAgreement.getLoaner().getTypeOfClient()}">
+                                        <div th:case="юл">
+                                            <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+                                               th:text="${loanAgreement.getLoaner().getClientLegalEntity().getOrganizationalForm() + ' '
+                                            + loanAgreement.getLoaner().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
+                                        </div>
+                                        <div th:case="фл">
+                                            <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+                                               th:text="${loanAgreement.getLoaner().getClientIndividual().getSurname() + ' '
+                                            + loanAgreement.getLoaner().getClientIndividual().getName() + ' '
+                                            + loanAgreement.getLoaner().getClientIndividual().getPatronymic()}">Заемщик ФЛ</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <ol>
+                                    <div th:if="${pe.getPledgeSubjects().size() &gt; 5}">
+                                        <div th:each="ps, countStat: ${pe.getPledgeSubjects()}">
+                                            <div th:if="${countStat.index &lt; 5}" th:remove="tag">
+                                                <li th:text="${ps.getName()}"></li>
+                                            </div>
+                                        </div>
+                                        <span>...</span>
+                                    </div>
+                                    <div th:unless="${pe.getPledgeSubjects().size() &gt; 5}">
+                                        <div th:each="ps : ${pe.getPledgeSubjects()}">
+                                            <li th:text="${ps.getName()}"></li>
+                                        </div>
+                                    </div>
+                                </ol>
+                                <a th:href="@{/pledge_subjects(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
+                            </td>
+
+                            <td th:text="${pe.getPledgeSubjects().size()}">0</td>
+
+                            <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsDz(pe.getPledgeAgreementId()))}">0.00</td>
+
+                            <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsDz(pe.getPledgeAgreementId()))}">0.00</td>
+
+                            <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsZz(pe.getPledgeAgreementId()))}">0.00</td>
+
+                            <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsZz(pe.getPledgeAgreementId()))}">0.00</td>
+
+                            <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getSs(pe.getPledgeAgreementId()))}">0.00</td>
+
+                            <td>
+                                <div th:each="dateOfConclusion : ${@pledgeAgreementService.getDatesOfConclusion(pe.getPledgeAgreementId())}">
+                                    <span th:text="${dateOfConclusion}">н/д</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div th:each="dateOfMonitoring : ${@pledgeAgreementService.getDatesOfMonitoring(pe.getPledgeAgreementId())}">
+                                    <span th:text="${dateOfMonitoring}">н/д</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div th:each="resultsOfMonitoring : ${@pledgeAgreementService.getResultsOfMonitoring(pe.getPledgeAgreementId())}">
+                                    <span th:text="${resultsOfMonitoring}">н/д</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </div>
+                </div>
+            </div>
+        </tbody>
+    </table>
+</div>
+<h2>Закрытые договоры залога</h2>
+<div class="containerTable">
+    <table class="pledgeAgreement">
+        <thead>
+        <tr>
+            <th>№ДЗ</th>
+            <th>Дата начала ДЗ</th>
+            <th>Дата окончания ДЗ</th>
+            <th>Тип ДЗ</th>
+            <th>Кредитный договор / Заемщик</th>
+            <th>Описание предметов залога</th>
+            <th>Количество предметов залога</th>
+            <th>РС ДЗ</th>
+            <th>ЗС ДЗ</th>
+            <th>РС ЗЗ</th>
+            <th>ЗС ЗЗ</th>
+            <th>СС</th>
+            <th>Дата ЗЗ</th>
+            <th>Дата мониторинга</th>
+            <th>Рузультат мониторинга</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:each="pe : ${pledgor.getPledgeAgreements()}">
+            <div th:switch="${pe.getStatusPE()}">
+                <div th:case="закрыт">
+                    <tr>
+                        <td>
+                            <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
+                               th:text="${pe.getNumPE()}">н/д</a>
+                        </td>
+
+                        <td th:text="${pe.getDateBeginPE()}"></td>
+
+                        <td th:text="${pe.getDateEndPE()}"></td>
+
+                        <td>
+                            <div th:switch="${pe.getPervPosl()}">
+                                <div th:case="перв">Первичный</div>
+                                <div th:case="посл">Последующий</div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div th:each="loanAgreement : ${pe.getLoanAgreements()}">
+                                <!--<a th:text="${loanAgreement.getNumLE()}">н/д</a>-->
+                                <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
+                                   th:text="${loanAgreement.getNumLE()}">№ КД</a>
+
+
+                                <span th:text="' / '"></span>
+                                <div th:switch="${loanAgreement.getLoaner().getTypeOfClient()}">
+                                    <div th:case="юл">
+                                        <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+                                           th:text="${loanAgreement.getLoaner().getClientLegalEntity().getOrganizationalForm() + ' '
+                                            + loanAgreement.getLoaner().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
+                                    </div>
+                                    <div th:case="фл">
+                                        <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+                                           th:text="${loanAgreement.getLoaner().getClientIndividual().getSurname() + ' '
+                                            + loanAgreement.getLoaner().getClientIndividual().getName() + ' '
+                                            + loanAgreement.getLoaner().getClientIndividual().getPatronymic()}">Заемщик ФЛ</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <ol>
+                                <div th:if="${pe.getPledgeSubjects().size() &gt; 5}">
+                                    <div th:each="ps, countStat: ${pe.getPledgeSubjects()}">
+                                        <div th:if="${countStat.index &lt; 5}" th:remove="tag">
+                                            <li th:text="${ps.getName()}"></li>
+                                        </div>
+                                    </div>
+                                    <span>...</span>
+                                </div>
+                                <div th:unless="${pe.getPledgeSubjects().size() &gt; 5}">
+                                    <div th:each="ps : ${pe.getPledgeSubjects()}">
+                                        <li th:text="${ps.getName()}"></li>
+                                    </div>
+                                </div>
+                            </ol>
+                            <a th:href="@{/pledge_subjects(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
+                        </td>
+
+                        <td th:text="${pe.getPledgeSubjects().size()}">0</td>
+
+                        <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsDz(pe.getPledgeAgreementId()))}">0.00</td>
+
+                        <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsDz(pe.getPledgeAgreementId()))}">0.00</td>
+
+                        <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsZz(pe.getPledgeAgreementId()))}">0.00</td>
+
+                        <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsZz(pe.getPledgeAgreementId()))}">0.00</td>
+
+                        <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getSs(pe.getPledgeAgreementId()))}">0.00</td>
+
+                        <td>
+                            <div th:each="dateOfConclusion : ${@pledgeAgreementService.getDatesOfConclusion(pe.getPledgeAgreementId())}">
+                                <span th:text="${dateOfConclusion}">н/д</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div th:each="dateOfMonitoring : ${@pledgeAgreementService.getDatesOfMonitoring(pe.getPledgeAgreementId())}">
+                                <span th:text="${dateOfMonitoring}">н/д</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div th:each="resultsOfMonitoring : ${@pledgeAgreementService.getResultsOfMonitoring(pe.getPledgeAgreementId())}">
+                                <span th:text="${resultsOfMonitoring}">н/д</span>
+                            </div>
+                        </td>
+                    </tr>
+                </div>
+            </div>
+        </div>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
