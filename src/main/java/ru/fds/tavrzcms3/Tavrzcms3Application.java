@@ -1,13 +1,18 @@
 package ru.fds.tavrzcms3;
 
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ru.fds.tavrzcms3.Service.InsuranceService;
+import ru.fds.tavrzcms3.Service.LoanAgreementService;
 import ru.fds.tavrzcms3.Service.PledgeSubjectService;
+import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.repository.*;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @SpringBootApplication
@@ -38,6 +43,12 @@ public class Tavrzcms3Application {
     @Autowired
     private PledgeSubjectService pledgeSubjectService;
 
+    @Autowired
+    private RepositoryLoanAgreement repositoryLoanAgreement;
+
+    @Autowired
+    private LoanAgreementService loanAgreementService;
+
 
     @PostConstruct
     public void init(){
@@ -63,8 +74,9 @@ public class Tavrzcms3Application {
 //        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + repositoryPledgeSubject.findById((long)234));
 
 
-
 //        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + repositoryPledgeSubject.findByPledgeSubjectId(147));
+
+        System.out.println("!!!!!!!!!!!!!!!!!!" + loanAgreementService.countOfCurrentPledgeAgreements(4));
 
     }
 }

@@ -1,6 +1,7 @@
 package ru.fds.tavrzcms3.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 
@@ -8,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Long> {
+    LoanAgreement findByLoanAgreementId(long loanAgreementId);
     LoanAgreement findByNumLE (String numLE);
     List<LoanAgreement> findByDateBeginLE (Date dateBeginLE);
     List<LoanAgreement> findByLoaner (Client loaner);

@@ -172,7 +172,7 @@ public class LoanAgreement {
 				", interestRateLE=" + interestRateLE +
 				", pfo=" + pfo +
 				", qualityCategory=" + qualityCategory +
-				", loaner=" + loaner +
+//				", loaner=" + loaner +
 				'}';
 	}
 }

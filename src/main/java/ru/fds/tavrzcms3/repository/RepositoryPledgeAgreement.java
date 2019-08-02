@@ -1,7 +1,10 @@
 package ru.fds.tavrzcms3.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.fds.tavrzcms3.domain.Client;
+import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 
@@ -19,4 +22,5 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     int countAllByPledgorIn(List<Client> pledgors);
     int countAllByPledgorInAndPervPoslEquals(List<Client> pledgors, String perv);
     PledgeAgreement findByPledgeSubjects(PledgeSubject pledgeSubject);
+    List<PledgeAgreement> findByLoanAgreements(LoanAgreement loanAgreement);
 }

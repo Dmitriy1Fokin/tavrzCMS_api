@@ -21,19 +21,22 @@ public class PagesController {
     private final InsuranceService insuranceService;
     private final EncumbranceService encumbranceService;
     private final ClientService clientService;
+    private final LoanAgreementService loanAgreementService;
 
     public PagesController(EmployeeService employeeService,
                            PledgeAgreementService pledgeAgreementService,
                            PledgeSubjectService pledgeSubjectService,
                            InsuranceService insuranceService,
                            EncumbranceService encumbranceService,
-                           ClientService clientService) {
+                           ClientService clientService,
+                           LoanAgreementService loanAgreementService) {
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.pledgeSubjectService = pledgeSubjectService;
         this.insuranceService = insuranceService;
         this.encumbranceService = encumbranceService;
         this.clientService = clientService;
+        this.loanAgreementService = loanAgreementService;
     }
 
     @GetMapping("/")
@@ -109,6 +112,8 @@ public class PagesController {
 
     @GetMapping("/loan_agreement_detail")
     public String loanEgreementDetailPage(@RequestParam("loanAgreementId") long loanAgreementId, Model model){
+        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId);
+        model.addAttribute("loanAgreement", loanAgreement);
         return "loan_agreement_detail";
     }
 
