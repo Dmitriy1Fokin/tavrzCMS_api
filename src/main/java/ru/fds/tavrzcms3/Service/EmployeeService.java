@@ -36,17 +36,17 @@ public class EmployeeService {
 
     public synchronized int getCountOfAllPledgeAgreements(User user){
         List<Client> clients = repositoryClient.findByEmployee(getEmployeeByAppUser(user));
-        return repositoryPledgeAgreement.countAllByPledgorIn(clients);
+        return repositoryPledgeAgreement.countAllByPledgorInAndStatusPEEquals(clients, "открыт");
     }
 
     public synchronized int getCountOfPervPledgeAgreements(User user){
         List<Client> clients = repositoryClient.findByEmployee(getEmployeeByAppUser(user));
-        return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEquals(clients, "перв");
+        return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEqualsAndStatusPEEquals(clients, "перв", "открыт");
     }
 
     public synchronized int getCountOfPoslPledgeAgreements(User user){
         List<Client> clients = repositoryClient.findByEmployee(getEmployeeByAppUser(user));
-        return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEquals(clients, "посл");
+        return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEqualsAndStatusPEEquals(clients, "посл", "открыт");
     }
 
 //    public synchronized List<PledgeAgreement> getPledgeAgreementByEmployeeId(long employeeId){
