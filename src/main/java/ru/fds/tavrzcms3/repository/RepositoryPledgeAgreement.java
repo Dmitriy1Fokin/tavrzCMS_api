@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement, Long> {
+    PledgeAgreement findByPledgeAgreementId(long pledgeAgreementId);
     List<PledgeAgreement> findByNumPE (String numPE);
     List<PledgeAgreement> findByDateBeginPE (Date dateBeginPE);
     List<PledgeAgreement> findByDateEndPE (Date dateEndPE);
@@ -21,6 +22,6 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     List<PledgeAgreement> findByPledgorIn (List<Client> pledgors);
     int countAllByPledgorIn(List<Client> pledgors);
     int countAllByPledgorInAndPervPoslEquals(List<Client> pledgors, String perv);
-    PledgeAgreement findByPledgeSubjects(PledgeSubject pledgeSubject);
+    List<PledgeAgreement> findByPledgeSubjects(PledgeSubject pledgeSubject);
     List<PledgeAgreement> findByLoanAgreements(LoanAgreement loanAgreement);
 }

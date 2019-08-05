@@ -19,13 +19,7 @@ public class ClientService {
     @Autowired
     RepositoryPledgeAgreement repositoryPledgeAgreement;
 
-    public synchronized Client getPledgorByPledgeSubject(PledgeSubject pledgeSubject){
-        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findByPledgeSubjects(pledgeSubject);
-        System.out.println(pledgeAgreement);
-        List<Client> clients = repositoryClient.findByPledgeAgreements(pledgeAgreement);
-//        Client client = repositoryClient.findByPledgeAgreements(pledgeAgreement);
-        return null;
-    }
+
 
     public synchronized Client getClientByClientId(long clientId){
         return repositoryClient.getOne(clientId);

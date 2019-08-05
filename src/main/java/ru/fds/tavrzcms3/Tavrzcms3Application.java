@@ -8,6 +8,7 @@ import ru.fds.tavrzcms3.Service.InsuranceService;
 import ru.fds.tavrzcms3.Service.LoanAgreementService;
 import ru.fds.tavrzcms3.Service.PledgeSubjectService;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
+import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.repository.*;
 
 import javax.annotation.PostConstruct;
@@ -76,7 +77,10 @@ public class Tavrzcms3Application {
 
 //        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + repositoryPledgeSubject.findByPledgeSubjectId(147));
 
-        System.out.println("!!!!!!!!!!!!!!!!!!" + loanAgreementService.countOfCurrentPledgeAgreements(4));
+//        System.out.println("!!!!!!!!!!!!!!!!!!" + loanAgreementService.countOfCurrentPledgeAgreements(4));
+
+        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findByPledgeAgreementId(3);
+        System.out.println("!!!!!!!!!!!!!!!" + pledgeAgreement);
 
     }
 }
