@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
+import ru.fds.tavrzcms3.domain.PledgeAgreement;
 
 import java.util.Date;
 import java.util.List;
@@ -31,4 +32,5 @@ public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Lo
     List<LoanAgreement> findByQualityCategory (byte qualityCategory);
     List<LoanAgreement> findByQualityCategoryBetween (byte x, byte y);
     List<LoanAgreement> findByDateEndLE (Date dateEndLE);
+    List<LoanAgreement> findByPledgeAgreementsAndStatusLEEquals(PledgeAgreement pledgeAgreement, String statusLA);
 }

@@ -2,11 +2,24 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Договор залога</title>
+    <title th:text="'Договор залога: №' + ${pledgeAgreement.getNumPE()}">Договор залога</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        .containerTable{
+            width: 3000px;
+        }
+        .loanAgreement, .loanAgreement td {
+            border: 1px solid lightgray;
+            padding: 5px;
+            table-layout: fixed;
+        }
+    </style>
 </head>
 <body>
 <h1 th:text="'Договор залога: №' + ${pledgeAgreement.getNumPE()} + ' от ' + ${pledgeAgreement.getDateBeginPE()}">Договор залога</h1>
-</body>
+
     <label>Номер договора залога:</label>
     <span th:text="${pledgeAgreement.getNumPE()}">н/д</span>
     <br>
@@ -40,27 +53,7 @@
     </div>
     <br>
     <br>
-    <label>Кредитные договоры:</label>
-    <ol>
-        <div th:each="loanAgreement : ${pledgeAgreement.getLoanAgreements()}">
-            <li>
-                <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
-                       th:text="${loanAgreement.getNumLE() + ' от ' + loanAgreement.getDateBeginLE()}">№ КД</a>
-            </li>
-            <div th:switch="${loanAgreement.getLoaner().getTypeOfClient()}">
-                <div th:case="юл">
-                    <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
-                           th:text="${loanAgreement.getLoaner().getClientLegalEntity().getOrganizationalForm() + ' ' + loanAgreement.getLoaner().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
-                </div>
-                <div th:case="фл">
-                    <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
-                           th:text="${loanAgreement.getLoaner().getClientIndividual().getSurname() + ' ' + loanAgreement.getLoaner().getClientIndividual().getName()}">Заемщик ФЛ</a>
-                </div>
-            </div>
-        </div>
-    </ol>
-    <br>
-    <br>
+
     <label>Вид залогового обеспечения:</label>
     <div th:each="typeOfCollateral : ${@pledgeAgreementService.getTypeOfCollateral(pledgeAgreement.getPledgeAgreementId())}">
         <ul>
@@ -100,40 +93,105 @@
     <br>
     <label>Комментарии:</label>
     <span th:text="${pledgeAgreement.getNoticePE()}">н/д</span>
+    <br>
+    <br>
+
+
+    <div th:if="${@pledgeAgreementService.countOfCurrentLoanAgreements(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
+        <label>Действующие кредитные договоры:</label>
+        <div class="containerTable">
+            <table class="loanAgreement">
+                <thead>
+                <tr>
+                    <th>№КД</th>
+                    <th>Дата начала КД</th>
+                    <th>Дата окончания КД</th>
+                    <th>Сумма договора</th>
+                    <th>%</th>
+                    <th>Задолженность</th>
+                    <th>ПФО</th>
+                    <th>Кат.кач.</th>
+                </tr>
+                </thead>
+                <tbody>
+                <div th:each="loanAgreement : ${@pledgeAgreementService.getCurrentLoanAgreements(pledgeAgreement.getPledgeAgreementId())}">
+                            <tr>
+                                <td>
+                                    <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
+                                       th:text="${loanAgreement.getNumLE()}">№ КД</a>
+                                </td>
+
+                                <td th:text="${loanAgreement.getDateBeginLE()}"></td>
+
+                                <td th:text="${loanAgreement.getDateEndLE()}"></td>
+
+                                <td th:text="${#numbers.formatCurrency(loanAgreement.getAmountLE())}"></td>
+
+                                <td th:text="${loanAgreement.getInterestRateLE() + '%'}"></td>
+
+                                <td th:text="${#numbers.formatCurrency(loanAgreement.getDebtLE())}"></td>
+
+                                <td th:text="${loanAgreement.getPfo()}"></td>
+
+                                <td th:text="${loanAgreement.getQualityCategory()}"></td>
+
+                            </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div th:if="${@pledgeAgreementService.countOfClosedLoanAgreements(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
+        <label>Закрытые кредитные договоры:</label>
+        <div class="containerTable">
+            <table class="loanAgreement">
+                <thead>
+                <tr>
+                    <th>№КД</th>
+                    <th>Дата начала КД</th>
+                    <th>Дата окончания КД</th>
+                    <th>Сумма договора</th>
+                    <th>%</th>
+                    <th>Задолженность</th>
+                    <th>ПФО</th>
+                    <th>Кат.кач.</th>
+                </tr>
+                </thead>
+                <tbody>
+                <div th:each="loanAgreement : ${@pledgeAgreementService.getClosedLoanAgreements(pledgeAgreement.getPledgeAgreementId())}">
+
+                            <tr>
+                                <td>
+                                    <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
+                                       th:text="${loanAgreement.getNumLE()}">№ КД</a>
+                                </td>
+
+                                <td th:text="${loanAgreement.getDateBeginLE()}"></td>
+
+                                <td th:text="${loanAgreement.getDateEndLE()}"></td>
+
+                                <td th:text="${#numbers.formatCurrency(loanAgreement.getAmountLE())}"></td>
+
+                                <td th:text="${loanAgreement.getInterestRateLE() + '%'}"></td>
+
+                                <td th:text="${#numbers.formatCurrency(loanAgreement.getDebtLE())}"></td>
+
+                                <td th:text="${loanAgreement.getPfo()}"></td>
+
+                                <td th:text="${loanAgreement.getQualityCategory()}"></td>
+
+                            </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
 
 
 
-
-
-
-    <!--<br>-->
-    <!--<br>-->
-    <!--<label>:</label>-->
-    <!--<span th:text="${pledgeAgreement}">н/д</span>-->
-    <!--<br>-->
-    <!--<br>-->
-    <!--<label>:</label>-->
-    <!--<span th:text="${pledgeAgreement}">н/д</span>-->
-    <!--<br>-->
-    <!--<br>-->
-    <!--<label>:</label>-->
-    <!--<span th:text="${pledgeAgreement}">н/д</span>-->
-    <!--<br>-->
-    <!--<br>-->
-    <!--<label>:</label>-->
-    <!--<span th:text="${pledgeAgreement}">н/д</span>-->
-    <!--<br>-->
-    <!--<br><label>:</label>-->
-    <!--<span th:text="${pledgeAgreement}">н/д</span>-->
-    <!--<br>-->
-    <!--<br>-->
-    <!--<label>:</label>-->
-    <!--<span th:text="${pledgeAgreement}">н/д</span>-->
-    <!--<br>-->
-    <!--<br>-->
-
-
+</body>
 
 </html>

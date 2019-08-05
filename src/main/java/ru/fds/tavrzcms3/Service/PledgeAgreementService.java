@@ -2,8 +2,10 @@ package ru.fds.tavrzcms3.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 
@@ -17,6 +19,9 @@ public class PledgeAgreementService {
 
     @Autowired
     RepositoryPledgeSubject repositoryPledgeSubject;
+
+    @Autowired
+    RepositoryLoanAgreement repositoryLoanAgreement;
 
     public synchronized double getRsDz(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
@@ -120,6 +125,26 @@ public class PledgeAgreementService {
             typeOfCollateralSet.add(ps.getTypeOfCollateral());
 
         return  typeOfCollateralSet;
+    }
+
+    public synchronized int countOfCurrentLoanAgreements(long pledgeAgreementId){
+        List<LoanAgreement> loanAgreementList =
+                repositoryLoanAgreement.findByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "открыт");
+        return loanAgreementList.size();
+    }
+
+    public synchronized List<LoanAgreement> getCurrentLoanAgreements(long pledgeAgreementId){
+        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "открыт");
+    }
+
+    public synchronized int countOfClosedLoanAgreements(long pledgeAgreementId){
+        List<LoanAgreement> loanAgreementList =
+                repositoryLoanAgreement.findByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
+        return loanAgreementList.size();
+    }
+
+    public synchronized List<LoanAgreement> getClosedLoanAgreements(long pledgeAgreementId){
+        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
     }
 
 }

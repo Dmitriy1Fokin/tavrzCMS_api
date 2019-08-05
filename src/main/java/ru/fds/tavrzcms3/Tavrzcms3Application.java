@@ -85,12 +85,17 @@ public class Tavrzcms3Application {
 
 //        System.out.println("!!!!!!!!!!!!!!!!!!" + loanAgreementService.countOfCurrentPledgeAgreements(4));
 
-        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findByPledgeAgreementId(6);
-        System.out.println("!!!!!!!!!!!!!!!" + pledgeAgreement);
+//        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findByPledgeAgreementId(6);
+//        System.out.println("!!!!!!!!!!!!!!!" + pledgeAgreement);
+//
+//        Set<String> stringSet =  pledgeAgreementService.getTypeOfCollateral(pledgeAgreement.getPledgeAgreementId());
+//        for(String str : stringSet)
+//            System.out.println(str);
 
-        Set<String> stringSet =  pledgeAgreementService.getTypeOfCollateral(pledgeAgreement.getPledgeAgreementId());
-        for(String str : stringSet)
-            System.out.println(str);
+
+        List<LoanAgreement> loanAgreements = pledgeAgreementService.getClosedLoanAgreements(126);
+        for(LoanAgreement la : loanAgreements)
+            System.out.println(la);
 
     }
 }
