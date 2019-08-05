@@ -49,11 +49,11 @@ public class EmployeeService {
         return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEquals(clients, "посл");
     }
 
-    public synchronized List<PledgeAgreement> getPledgeAgreementByEmployeeId(long employeeId){
-        Employee employee = repositoryEmployee.getOne(employeeId);
-        List<Client> clients = repositoryClient.findByEmployee(employee);
-        return repositoryPledgeAgreement.findByPledgorIn(clients);
-    }
+//    public synchronized List<PledgeAgreement> getPledgeAgreementByEmployeeId(long employeeId){
+//        Employee employee = repositoryEmployee.getOne(employeeId);
+//        List<Client> clients = repositoryClient.findByEmployee(employee);
+//        return repositoryPledgeAgreement.findByPledgorIn(clients);
+//    }
 
     public synchronized Employee getEmployeeById(long id){
         Employee employee = repositoryEmployee.getOne(id);

@@ -2,9 +2,11 @@ package ru.fds.tavrzcms3.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.repository.RepositoryClient;
 import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
@@ -22,6 +24,9 @@ public class PledgeAgreementService {
 
     @Autowired
     RepositoryLoanAgreement repositoryLoanAgreement;
+
+    @Autowired
+    RepositoryClient repositoryClient;
 
     public synchronized double getRsDz(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
@@ -145,6 +150,10 @@ public class PledgeAgreementService {
 
     public synchronized List<LoanAgreement> getClosedLoanAgreements(long pledgeAgreementId){
         return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
+    }
+
+    public synchronized List<PledgeAgreement> getPledgeEgreementsByPledgorIdAndPervPosl(long pledgorId, String pervPosl){
+        return repositoryPledgeAgreement.findByPledgorAndPervPoslEquals(repositoryClient.getOne(pledgorId), pervPosl);
     }
 
 }
