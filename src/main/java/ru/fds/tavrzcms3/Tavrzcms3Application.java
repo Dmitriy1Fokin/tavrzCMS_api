@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ru.fds.tavrzcms3.Service.InsuranceService;
 import ru.fds.tavrzcms3.Service.LoanAgreementService;
+import ru.fds.tavrzcms3.Service.PledgeAgreementService;
 import ru.fds.tavrzcms3.Service.PledgeSubjectService;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
@@ -14,6 +15,7 @@ import ru.fds.tavrzcms3.repository.*;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @SpringBootApplication
@@ -50,6 +52,10 @@ public class Tavrzcms3Application {
     @Autowired
     private LoanAgreementService loanAgreementService;
 
+    @Autowired
+    private PledgeAgreementService pledgeAgreementService;
+
+
 
     @PostConstruct
     public void init(){
@@ -79,8 +85,12 @@ public class Tavrzcms3Application {
 
 //        System.out.println("!!!!!!!!!!!!!!!!!!" + loanAgreementService.countOfCurrentPledgeAgreements(4));
 
-        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findByPledgeAgreementId(3);
+        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findByPledgeAgreementId(6);
         System.out.println("!!!!!!!!!!!!!!!" + pledgeAgreement);
+
+        Set<String> stringSet =  pledgeAgreementService.getTypeOfCollateral(pledgeAgreement.getPledgeAgreementId());
+        for(String str : stringSet)
+            System.out.println(str);
 
     }
 }

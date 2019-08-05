@@ -7,9 +7,7 @@ import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PledgeAgreementService {
@@ -114,17 +112,14 @@ public class PledgeAgreementService {
         return pledgeAgreement;
     }
 
-    public synchronized List<String> getTypeOfCollateral(long pledgeAgreementId){
+    public synchronized Set<String> getTypeOfCollateral(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-        List<String> typeOfCollateralList = new ArrayList<>();
-        for(PledgeSubject ps : pledgeSubjects){
-            String typeOfCollateral = ps.getTypeOfCollateral();
-            if(!typeOfCollateralList.contains(typeOfCollateral))
-                typeOfCollateralList.add(typeOfCollateral);
-        }
+        Set<String> typeOfCollateralSet = new LinkedHashSet<>();
+        for(PledgeSubject ps : pledgeSubjects)
+            typeOfCollateralSet.add(ps.getTypeOfCollateral());
 
-        return  typeOfCollateralList;
+        return  typeOfCollateralSet;
     }
 
 }
