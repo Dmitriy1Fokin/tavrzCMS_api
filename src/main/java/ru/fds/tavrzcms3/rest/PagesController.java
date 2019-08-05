@@ -22,6 +22,7 @@ public class PagesController {
     private final EncumbranceService encumbranceService;
     private final ClientService clientService;
     private final LoanAgreementService loanAgreementService;
+    private final CostHistoryService costHistoryService;
 
     public PagesController(EmployeeService employeeService,
                            PledgeAgreementService pledgeAgreementService,
@@ -29,7 +30,8 @@ public class PagesController {
                            InsuranceService insuranceService,
                            EncumbranceService encumbranceService,
                            ClientService clientService,
-                           LoanAgreementService loanAgreementService) {
+                           LoanAgreementService loanAgreementService,
+                           CostHistoryService costHistoryService) {
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.pledgeSubjectService = pledgeSubjectService;
@@ -37,6 +39,7 @@ public class PagesController {
         this.encumbranceService = encumbranceService;
         this.clientService = clientService;
         this.loanAgreementService = loanAgreementService;
+        this.costHistoryService = costHistoryService;
     }
 
     @GetMapping("/")
@@ -122,6 +125,15 @@ public class PagesController {
         Client loaner = clientService.getClientByClientId(loanerId);
         model.addAttribute("loaner", loaner);
         return "loaner";
+    }
+
+    @GetMapping("cost_history")
+    public String costHistoryPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
+        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryByPledgeSubjectId(pledgeSubjectId);
+        model.addAttribute("pledgeSubjectName", pledgeSubject.getName());
+        model.addAttribute("costHistoryList", costHistoryList);
+        return "cost_history";
     }
 
 

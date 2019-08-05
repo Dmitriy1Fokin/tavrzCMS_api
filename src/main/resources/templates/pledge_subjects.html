@@ -112,16 +112,32 @@
 
                     <td th:text="${ps.getAdressRegion() + ', ' + ps.getAdressDistrict() + ', ' + ps.getAdressCity() + ', ' + ps.getAdressStreet() + ', ' + ps.getAdressBuilbing() + ', ' + ps.getAdressPemises()}">н/д</td>
 
-                    <!--<td th:text="${ps.getRsDz()}">0.00</td>-->
-                    <td th:text="${#numbers.formatCurrency(ps.getRsDz())}">0.00</td>
-                    <!--<td th:text="${ps.getZsDz()}">0.00</td>-->
-                    <td th:text="${#numbers.formatCurrency(ps.getRsDz())}">0.00</td>
-                    <!--<td th:text="${ps.getRsZz()}">0.00</td>-->
-                    <td th:text="${#numbers.formatCurrency(ps.getRsZz())}">0.00</td>
-                    <!--<td th:text="${ps.getZsZz()}">0.00</td>-->
-                    <td th:text="${#numbers.formatCurrency(ps.getZsZz())}">0.00</td>
-                    <!--<td th:text="${ps.getSs()}">0.00</td>-->
-                    <td th:text="${#numbers.formatCurrency(ps.getSs())}">0.00</td>
+
+                    <td>
+                        <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                           th:text="${#numbers.formatCurrency(ps.getRsDz())}">н/д</a>
+                    </td>
+
+                    <td>
+                        <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                           th:text="${#numbers.formatCurrency(ps.getZsDz())}">н/д</a>
+                    </td>
+
+                    <td>
+                        <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                        th:text="${#numbers.formatCurrency(ps.getRsZz())}">н/д</a>
+                    </td>
+
+                    <td>
+                        <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                        th:text="${#numbers.formatCurrency(ps.getZsZz())}">н/д</a>
+                    </td>
+
+                    <td>
+                        <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                           th:text="${#numbers.formatCurrency(ps.getSs())}">н/д</a>
+                    </td>
+
                     <td th:text="${ps.getDateConclusion()}"></td>
 
                     <td th:text="${ps.getDateMonitoring()}"></td>

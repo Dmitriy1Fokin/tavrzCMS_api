@@ -27,19 +27,19 @@ public class CostHistory {
 	@Temporal(TemporalType.DATE)
 	private Date dateConclusion;
 	
-	@Column(name ="ZS_DZ")
+	@Column(name ="zs_dz")
 	private double zsDz;
 
-	@Column(name ="ZS_ZZ")
+	@Column(name ="zs_zz")
 	private double zsZz;
 
-	@Column(name ="RS_DZ")
+	@Column(name ="rs_dz")
 	private double rsDz;
 
-	@Column(name ="RS_ZZ")
+	@Column(name ="rs_zz")
 	private double rsZz;
 
-	@Column(name ="SS")
+	@Column(name ="ss")
 	private double ss;
 
 	@Column(name ="appraiser")
@@ -49,10 +49,11 @@ public class CostHistory {
 	private String appraisalReportNum;
 
 	@Column(name ="date_appraisal_report")
+	@Temporal(TemporalType.DATE)
 	private Date appraisalReportDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "pledgeSubject_id")
+	@JoinColumn(name = "pledge_subject_id")
 	private PledgeSubject pledgeSubject;
 
 	public long getCostHistoryId() {

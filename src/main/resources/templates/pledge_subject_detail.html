@@ -298,23 +298,28 @@
     <br>
     <br>
     <label>Рыночноя стоимость по ДЗ:</label>
-    <span th:text="${#numbers.formatCurrency(pledgeSubject.getRsDz())}">н/д</span>
+    <a th:href="@{/cost_history(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history.html"
+       th:text="${#numbers.formatCurrency(pledgeSubject.getRsDz())}">н/д</a>
     <br>
     <br>
     <label>Рыночная стоимость по ЗЗ:</label>
-    <span th:text="${#numbers.formatCurrency(pledgeSubject.getRsZz())}">н/д</span>
+    <a th:href="@{/cost_history(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history.html"
+       th:text="${#numbers.formatCurrency(pledgeSubject.getRsZz())}">н/д</a>
     <br>
     <br>
     <label>Залоговая стоимость по ДЗ:</label>
-    <span th:text="${#numbers.formatCurrency(pledgeSubject.getZsDz())}">н/д</span>
+    <a th:href="@{/cost_history(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history.html"
+       th:text="${#numbers.formatCurrency(pledgeSubject.getZsDz())}">н/д</a>
     <br>
     <br>
     <label>Залоговая стоимость по ЗЗ:</label>
-    <span th:text="${#numbers.formatCurrency(pledgeSubject.getZsZz())}">н/д</span>
+    <a th:href="@{/cost_history(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history.html"
+       th:text="${#numbers.formatCurrency(pledgeSubject.getZsZz())}">н/д</a>
     <br>
     <br>
     <label>Справедливая стоимость:</label>
-    <span th:text="${#numbers.formatCurrency(pledgeSubject.getSs())}">н/д</span>
+    <a th:href="@{/cost_history(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history.html"
+       th:text="${#numbers.formatCurrency(pledgeSubject.getSs())}">н/д</a>
     <br>
     <br>
     <label>Дата ЗЗ:</label>
