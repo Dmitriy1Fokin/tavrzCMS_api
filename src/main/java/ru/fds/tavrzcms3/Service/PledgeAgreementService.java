@@ -148,8 +148,8 @@ public class PledgeAgreementService {
         return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
     }
 
-    public synchronized List<PledgeAgreement> getPledgeEgreementsByPledgorIdAndPervPosl(long pledgorId, String pervPosl){
-        return repositoryPledgeAgreement.findByPledgorAndPervPoslEquals(repositoryClient.getOne(pledgorId), pervPosl);
+    public synchronized List<PledgeAgreement> getCurrentPledgeAgreements(long pledgorId, String pervPosl){
+        return repositoryPledgeAgreement.findByPledgorAndPervPoslEqualsAndStatusPEEquals(repositoryClient.getOne(pledgorId), pervPosl, "открыт");
     }
 
 }
