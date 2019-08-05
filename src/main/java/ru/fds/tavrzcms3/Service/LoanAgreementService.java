@@ -24,41 +24,26 @@ public class LoanAgreementService {
     }
 
     public synchronized int countOfCurrentPledgeAgreements(long loanAgreementId){
-        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement.findByLoanAgreements(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId));
-        int count = 0;
-        for (PledgeAgreement pa : pledgeAgreementList){
-            if(pa.getStatusPE().equals("открыт"))
-                count += 1;
-        }
-        return count;
+        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement.findByLoanAgreementsAndStatusPEEquals(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId),
+                                                                                                                    "открыт");
+        return pledgeAgreementList.size();
     }
 
     public synchronized List<PledgeAgreement> getCurrentPledgeAgreements(long loanAgreementId){
-        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement.findByLoanAgreements(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId));
-        List<PledgeAgreement> currentpledgeAgreementList = new ArrayList<>();
-        for (PledgeAgreement pa : pledgeAgreementList)
-            if(pa.getStatusPE().equals("открыт"))
-                currentpledgeAgreementList.add(pa);
-        return currentpledgeAgreementList;
+        return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPEEquals(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId),
+                                                                                 "открыт");
     }
 
     public synchronized int countOfClosedPledgeAgreements(long loanAgreementId){
-        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement.findByLoanAgreements(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId));
-        int count = 0;
-        for (PledgeAgreement pa : pledgeAgreementList){
-            if(pa.getStatusPE().equals("закрыт"))
-                count += 1;
-        }
-        return count;
+        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement.findByLoanAgreementsAndStatusPEEquals(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId),
+                                                                                                                      "закрыт");
+
+        return pledgeAgreementList.size();
     }
 
     public synchronized List<PledgeAgreement> getClosedPledgeAgreements(long loanAgreementId){
-        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement.findByLoanAgreements(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId));
-        List<PledgeAgreement> currentpledgeAgreementList = new ArrayList<>();
-        for (PledgeAgreement pa : pledgeAgreementList)
-            if(pa.getStatusPE().equals("закрыт"))
-                currentpledgeAgreementList.add(pa);
-        return currentpledgeAgreementList;
+        return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPEEquals(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId),
+                                                                                  "закрыт");
     }
 
 }
