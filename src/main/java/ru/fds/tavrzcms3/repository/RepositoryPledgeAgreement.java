@@ -23,6 +23,8 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     int countAllByPledgorIn(List<Client> pledgors);
     int countAllByPledgorInAndStatusPEEquals(List<Client> pledgors, String statusPE);
     int countAllByPledgorInAndPervPoslEqualsAndStatusPEEquals(List<Client> pledgors, String perv, String statusPE);
+    int countAllByPledgorAndStatusPEEquals(Client pledgor, String statusPE);
+    List<PledgeAgreement> findByPledgorAndStatusPE(Client pledgor, String statusPE);
     List<PledgeAgreement> findByPledgeSubjects(PledgeSubject pledgeSubject);
     List<PledgeAgreement> findByLoanAgreements(LoanAgreement loanAgreement);
     List<PledgeAgreement> findByLoanAgreementsAndStatusPEEquals(LoanAgreement loanAgreement, String statusPE);

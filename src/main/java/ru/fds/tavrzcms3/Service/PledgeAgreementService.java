@@ -133,9 +133,7 @@ public class PledgeAgreementService {
     }
 
     public synchronized int countOfCurrentLoanAgreements(long pledgeAgreementId){
-        List<LoanAgreement> loanAgreementList =
-                repositoryLoanAgreement.findByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "открыт");
-        return loanAgreementList.size();
+        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "открыт");
     }
 
     public synchronized List<LoanAgreement> getCurrentLoanAgreements(long pledgeAgreementId){
@@ -143,9 +141,7 @@ public class PledgeAgreementService {
     }
 
     public synchronized int countOfClosedLoanAgreements(long pledgeAgreementId){
-        List<LoanAgreement> loanAgreementList =
-                repositoryLoanAgreement.findByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
-        return loanAgreementList.size();
+        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
     }
 
     public synchronized List<LoanAgreement> getClosedLoanAgreements(long pledgeAgreementId){

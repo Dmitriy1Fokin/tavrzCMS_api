@@ -33,4 +33,5 @@ public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Lo
     List<LoanAgreement> findByQualityCategoryBetween (byte x, byte y);
     List<LoanAgreement> findByDateEndLE (Date dateEndLE);
     List<LoanAgreement> findByPledgeAgreementsAndStatusLEEquals(PledgeAgreement pledgeAgreement, String statusLA);
+    int countAllByPledgeAgreementsAndStatusLEEquals(PledgeAgreement pledgeAgreement, String statusLA);
 }
