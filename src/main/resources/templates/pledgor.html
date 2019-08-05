@@ -33,7 +33,7 @@
     </div>
 </div>
 
-<div th:if="${@clientService.countOfCurrentPledgeAgreements(pledgor.getClientId()) &gt; 0}">
+<div th:if="${@clientService.countOfCurrentPledgeAgreementsByPledgorId(pledgor.getClientId()) &gt; 0}">
     <h2>Действующее обеспечение</h2>
     <div class="containerTable">
         <table class="pledgeAgreement">
@@ -57,7 +57,7 @@
             </tr>
             </thead>
             <tbody>
-                <div th:each="pe : ${@clientService.getCurrentPledgeAgreements(pledgor.getClientId())}">
+                <div th:each="pe : ${@clientService.getCurrentPledgeAgreementsByPledgorId(pledgor.getClientId())}">
 
                             <tr>
                                 <td>
@@ -161,7 +161,7 @@
     </div>
 </div>
 
-<div th:if="${@clientService.countOfClosedPledgeAgreements(pledgor.getClientId()) &gt; 0}">
+<div th:if="${@clientService.countOfClosedPledgeAgreementsByPledgorId(pledgor.getClientId()) &gt; 0}">
     <h2>Закрытые договоры залога</h2>
     <div class="containerTable">
         <table class="pledgeAgreement">
@@ -185,7 +185,7 @@
             </tr>
             </thead>
             <tbody>
-            <div th:each="pe : ${@clientService.getClosedPledgeAgreements(pledgor.getClientId())}">
+            <div th:each="pe : ${@clientService.getClosedPledgeAgreementsByPledgorId(pledgor.getClientId())}">
                         <tr>
                             <td>
                                 <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
