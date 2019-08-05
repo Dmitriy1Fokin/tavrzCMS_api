@@ -140,7 +140,10 @@
 
                     <td th:text="${ps.getDateConclusion()}"></td>
 
-                    <td th:text="${ps.getDateMonitoring()}"></td>
+                    <td>
+                        <a th:href="@{/monitoring(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="monitoring.html"
+                           th:text="${ps.getDateMonitoring()}">н/д</a>
+                    </td>
 
                     <td th:text="${ps.getTypeOfMonitoring()}"></td>
 

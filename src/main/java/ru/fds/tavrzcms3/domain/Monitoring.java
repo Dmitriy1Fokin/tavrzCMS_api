@@ -43,8 +43,83 @@ public class Monitoring {
 	private Double collateralValue;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "pledgeSubject_id")
+	@JoinColumn(name = "pledge_subject_id")
 	private PledgeSubject pledgeSubject;
 
+	public long getMonitoringId() {
+		return monitoringId;
+	}
 
+	public void setMonitoringId(long monitoringId) {
+		this.monitoringId = monitoringId;
+	}
+
+	public Date getDateMonitoring() {
+		return dateMonitoring;
+	}
+
+	public void setDateMonitoring(Date dateMonitoring) {
+		this.dateMonitoring = dateMonitoring;
+	}
+
+	public String getStatusMonitoring() {
+		return statusMonitoring;
+	}
+
+	public void setStatusMonitoring(String statusMonitoring) {
+		this.statusMonitoring = statusMonitoring;
+	}
+
+	public String getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(String employee) {
+		this.employee = employee;
+	}
+
+	public String getTypeOfMonitoring() {
+		return typeOfMonitoring;
+	}
+
+	public void setTypeOfMonitoring(String typeOfMonitoring) {
+		this.typeOfMonitoring = typeOfMonitoring;
+	}
+
+	public String getNotice() {
+		return notice;
+	}
+
+	public void setNotice(String notice) {
+		this.notice = notice;
+	}
+
+	public Double getCollateralValue() {
+		return collateralValue;
+	}
+
+	public void setCollateralValue(Double collateralValue) {
+		this.collateralValue = collateralValue;
+	}
+
+	public PledgeSubject getPledgeSubject() {
+		return pledgeSubject;
+	}
+
+	public void setPledgeSubject(PledgeSubject pledgeSubject) {
+		this.pledgeSubject = pledgeSubject;
+	}
+
+	@Override
+	public String toString() {
+		return "Monitoring{" +
+				"monitoringId=" + monitoringId +
+				", dateMonitoring=" + dateMonitoring +
+				", statusMonitoring='" + statusMonitoring + '\'' +
+				", employee='" + employee + '\'' +
+				", typeOfMonitoring='" + typeOfMonitoring + '\'' +
+				", notice='" + notice + '\'' +
+				", collateralValue=" + collateralValue +
+				'}';
+	}
 }

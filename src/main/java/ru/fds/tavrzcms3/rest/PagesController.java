@@ -23,6 +23,7 @@ public class PagesController {
     private final ClientService clientService;
     private final LoanAgreementService loanAgreementService;
     private final CostHistoryService costHistoryService;
+    private final MonitoringService monitoringService;
 
     public PagesController(EmployeeService employeeService,
                            PledgeAgreementService pledgeAgreementService,
@@ -31,7 +32,8 @@ public class PagesController {
                            EncumbranceService encumbranceService,
                            ClientService clientService,
                            LoanAgreementService loanAgreementService,
-                           CostHistoryService costHistoryService) {
+                           CostHistoryService costHistoryService,
+                           MonitoringService monitoringService) {
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.pledgeSubjectService = pledgeSubjectService;
@@ -40,6 +42,7 @@ public class PagesController {
         this.clientService = clientService;
         this.loanAgreementService = loanAgreementService;
         this.costHistoryService = costHistoryService;
+        this.monitoringService = monitoringService;
     }
 
     @GetMapping("/")
@@ -135,6 +138,16 @@ public class PagesController {
         model.addAttribute("costHistoryList", costHistoryList);
         return "cost_history";
     }
+
+    @GetMapping("monitoring")
+    public String monitoringPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
+        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+        List<Monitoring> monitoringList = monitoringService.getMonitoringByPledgeSubjectId(pledgeSubjectId);
+        model.addAttribute("pledgeSubjectName", pledgeSubject.getName());
+        model.addAttribute("monitoringList", monitoringList);
+        return "monitoring";
+    }
+
 
 
 

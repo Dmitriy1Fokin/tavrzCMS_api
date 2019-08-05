@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'История мониторингов предмета залога:' + ${pledgeSubjectName}">История мониторингов предмета залога</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        .containerTable{
+            width: 3000px;
+        }
+        .MonitoringTable, .MonitoringTable td {
+            border: 1px solid lightgray;
+            padding: 5px;
+            table-layout: fixed;
+        }
+    </style>
+</head>
+<body>
+<h1 th:text="'История мониторингов предмета залога:' + ${pledgeSubjectName}">История мониторингов предмета залога</h1>
+<div class="containerTable">
+    <table class="MonitoringTable">
+        <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Ответственный сотрудник</th>
+            <th>Резульнат мониторинга</th>
+            <th>Вид монитоинга</th>
+            <th>Залоговая стоимость</th>
+            <th>Комментарии</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:each="monitoring : ${monitoringList}">
+            <tr>
+                <td th:text="${monitoring.getDateMonitoring()}">н/д</td>
+                <td th:text="${monitoring.getEmployee()}">н/д</td>
+                <td th:text="${monitoring.getStatusMonitoring()}">н/д</td>
+                <td th:text="${monitoring.getTypeOfMonitoring()}">н/д</td>
+                <td th:text="${#numbers.formatCurrency(monitoring.getCollateralValue())}">н/д</td>
+                <td th:text="${monitoring.getNotice()}">н/д</td>
+            </tr>
+        </div>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

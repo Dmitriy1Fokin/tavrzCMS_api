@@ -323,11 +323,13 @@
     <br>
     <br>
     <label>Дата ЗЗ:</label>
-    <span th:text="${pledgeSubject.getDateConclusion()}">н/д</span>
+    <a th:href="@{/cost_history(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history.html"
+       th:text="${pledgeSubject.getDateConclusion()}">н/д</a>
     <br>
     <br>
     <label>Дата мониторинга:</label>
-    <span th:text="${pledgeSubject.getDateMonitoring()}">н/д</span>
+    <a th:href="@{/monitoring(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="monitoring.html"
+       th:text="${pledgeSubject.getDateMonitoring()}">н/д</a>
     <br>
     <br>
     <label>Вид мониторинга:</label>
