@@ -29,6 +29,7 @@
             <th>Залогодатель</th>
             <th>Описание предметов залога</th>
             <th>Количество предметов залога</th>
+            <th>Вид обеспечения</th>
             <th>РС ДЗ</th>
             <th>ЗС ДЗ</th>
             <th>РС ЗЗ</th>
@@ -89,7 +90,8 @@
 
                         <td th:text="${pe.getPledgeSubjects().size()}">0</td>
 
-                        <!--<td th:text="${#numbers.formatDecimal(@pledgeEgreementService.getRsDz(pe.getPledgeEgreementId()), 0, 'COMMA', 2, 'POINT')}">0.00</td>-->
+                        <td th:text="${@pledgeAgreementService.getTypeOfCollateral(pe.getPledgeAgreementId())}">н/д</td>
+
                         <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsDz(pe.getPledgeAgreementId()))}">0.00</td>
 
                         <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsDz(pe.getPledgeAgreementId()))}">0.00</td>
@@ -172,7 +174,8 @@
 
                                     <td th:text="${pe.getPledgeSubjects().size()}">0</td>
 
-                                    <!--<td th:text="${#numbers.formatDecimal(@pledgeAgreementService.getRsDz(pe.getPledgeAgreementId()), 0, 'COMMA', 2, 'POINT')}">0.00</td>-->
+                                    <td th:text="${@pledgeAgreementService.getTypeOfCollateral(pe.getPledgeAgreementId())}">н/д</td>
+
                                     <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsDz(pe.getPledgeAgreementId()))}">0.00</td>
 
                                     <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsDz(pe.getPledgeAgreementId()))}">0.00</td>
@@ -258,7 +261,8 @@
 
                                     <td th:text="${pe.getPledgeSubjects().size()}">0</td>
 
-                                    <!--<td th:text="${#numbers.formatDecimal(@pledgeAgreementService.getRsDz(pe.getPledgeAgreementId()), 0, 'COMMA', 2, 'POINT')}">0.00</td>-->
+                                    <td th:text="${@pledgeAgreementService.getTypeOfCollateral(pe.getPledgeAgreementId())}">н/д</td>
+
                                     <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsDz(pe.getPledgeAgreementId()))}">0.00</td>
 
                                     <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsDz(pe.getPledgeAgreementId()))}">0.00</td>

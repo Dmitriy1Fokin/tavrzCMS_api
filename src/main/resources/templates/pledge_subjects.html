@@ -25,6 +25,7 @@
         <thead>
         <tr>
             <th>Наименование</th>
+            <th>Вид обеспечения</th>
             <th>ОХП</th>
             <th>Ед.изм</th>
             <th>ОИП</th>
@@ -53,6 +54,7 @@
                         <a th:href="@{/pledge_subject_detail(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="pledge_subject_detail.html" th:text="${ps.getName()}">наименование</a>
                     </td>
 
+                    <td th:text="${ps.getTypeOfCollateral()}">н/д</td>
 
                     <div th:switch="${ps.getTypeOfCollateral()}">
                         <div th:case="'Авто/спецтехника'">
