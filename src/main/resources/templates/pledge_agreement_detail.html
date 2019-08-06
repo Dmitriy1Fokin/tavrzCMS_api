@@ -15,9 +15,13 @@
             padding: 5px;
             table-layout: fixed;
         }
+        .nav-item{
+            display: inline;
+        }
     </style>
 </head>
 <body>
+<div th:replace="static/nav :: user_nav_bar"></div>
 <h1 th:text="'Договор залога: №' + ${pledgeAgreement.getNumPE()} + ' от ' + ${pledgeAgreement.getDateBeginPE()}">Договор залога</h1>
 
     <label>Номер договора залога:</label>

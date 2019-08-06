@@ -15,9 +15,13 @@
             padding: 5px;
             table-layout: fixed;
         }
+        .nav-item{
+            display: inline;
+        }
     </style>
 </head>
 <body>
+<div th:replace="static/nav :: user_nav_bar"></div>
 <h1 th:text="'История изменения стоимостей предмета залога:' + ${pledgeSubjectName}">История изменения стоимостей предмета залога</h1>
 <div class="containerTable">
     <table class="MonitoringTable">

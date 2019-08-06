@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Домашняя страница</title>
+    <style>
+        .nav-item{
+            display: inline;
+        }
+    </style>
 </head>
 <body>
-
+<div th:replace="static/nav :: user_nav_bar"></div>
 <div>Сотрудник</div>
 <div th:text="${employee.surname}"></div>
 <div th:text="${employee.name}"></div>

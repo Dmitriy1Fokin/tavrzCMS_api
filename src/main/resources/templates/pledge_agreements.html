@@ -25,9 +25,13 @@
             padding: 5px;
             table-layout: fixed;
         }
+        .nav-item{
+            display: inline;
+        }
     </style>
 </head>
 <body>
+<div th:include="static/nav :: user_nav_bar"></div>
 <div th:switch="${pervPosl}">
     <div th:case="all">
         <h1>Договоры залога на сопровождении (все):</h1>
