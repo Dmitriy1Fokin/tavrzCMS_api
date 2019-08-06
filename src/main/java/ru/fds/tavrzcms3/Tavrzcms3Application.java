@@ -1,6 +1,5 @@
 package ru.fds.tavrzcms3;
 
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,13 +8,10 @@ import ru.fds.tavrzcms3.Service.LoanAgreementService;
 import ru.fds.tavrzcms3.Service.PledgeAgreementService;
 import ru.fds.tavrzcms3.Service.PledgeSubjectService;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
-import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.repository.*;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @SpringBootApplication
@@ -93,7 +89,7 @@ public class Tavrzcms3Application {
 //            System.out.println(str);
 
 
-        List<LoanAgreement> loanAgreements = pledgeAgreementService.getClosedLoanAgreements(126);
+        List<LoanAgreement> loanAgreements = pledgeAgreementService.getClosedLoanAgreementsForPledgeAgreement(126);
         for(LoanAgreement la : loanAgreements)
             System.out.println(la);
 

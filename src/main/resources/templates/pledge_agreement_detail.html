@@ -97,7 +97,7 @@
     <br>
 
 
-    <div th:if="${@pledgeAgreementService.countOfCurrentLoanAgreements(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
+    <div th:if="${@pledgeAgreementService.countOfCurrentLoanAgreementsForPladgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
         <label>Действующие кредитные договоры:</label>
         <div class="containerTable">
             <table class="loanAgreement">
@@ -114,7 +114,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <div th:each="loanAgreement : ${@pledgeAgreementService.getCurrentLoanAgreements(pledgeAgreement.getPledgeAgreementId())}">
+                <div th:each="loanAgreement : ${@pledgeAgreementService.getCurrentLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId())}">
                             <tr>
                                 <td>
                                     <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
@@ -142,7 +142,7 @@
         </div>
     </div>
 
-    <div th:if="${@pledgeAgreementService.countOfClosedLoanAgreements(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
+    <div th:if="${@pledgeAgreementService.countOfClosedLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
         <label>Закрытые кредитные договоры:</label>
         <div class="containerTable">
             <table class="loanAgreement">
@@ -159,7 +159,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <div th:each="loanAgreement : ${@pledgeAgreementService.getClosedLoanAgreements(pledgeAgreement.getPledgeAgreementId())}">
+                <div th:each="loanAgreement : ${@pledgeAgreementService.getClosedLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId())}">
 
                             <tr>
                                 <td>

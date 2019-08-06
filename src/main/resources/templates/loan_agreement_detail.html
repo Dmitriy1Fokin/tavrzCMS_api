@@ -128,7 +128,7 @@
     <br>
     <br>
 </div>
-<div th:if="${@loanAgreementService.countOfClosedPledgeAgreements(loanAgreement.getLoanAgreementId()) &gt; 0}">
+    <div th:if="${@loanAgreementService.countOfClosedPledgeAgreements(loanAgreement.getLoanAgreementId()) &gt; 0}">
     <label>Закрытые договоры залога:</label>
     <div class="containerTable">
         <table class="loanAgreement">

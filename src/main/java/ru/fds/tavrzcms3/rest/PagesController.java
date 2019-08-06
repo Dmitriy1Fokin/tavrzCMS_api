@@ -47,19 +47,19 @@ public class PagesController {
 
     @GetMapping("/")
     public String homePage(@AuthenticationPrincipal User user, Model model) {
-        Employee employee = employeeService.getEmployeeByAppUser(user);
+        Employee employee = employeeService.getEmployee(user);
         model.addAttribute("employee", employee);
 
-        int countOfPE = employeeService.getCountOfAllPledgeAgreements(user);
+        int countOfPE = pledgeAgreementService.countOfCurrentPledgeAgreementsForEmployee(employee.getEmployeeId());
         model.addAttribute("countOfAllPledgeAgreement", countOfPE);
 
-        int countOfPervPE = employeeService.getCountOfPervPledgeAgreements(user);
+        int countOfPervPE = pledgeAgreementService.countOfPervCurrentPledgeAgreementsForEmployee(employee.getEmployeeId());
         model.addAttribute("countOfPervPledgeAgreements", countOfPervPE);
 
-        int countOfPoslPE = employeeService.getCountOfPoslPledgeAgreements(user);
+        int countOfPoslPE = pledgeAgreementService.countOfPoslCurrentPledgeAgreementsForEmployee(employee.getEmployeeId());
         model.addAttribute("countOfPoslPledgeAgreements", countOfPoslPE);
 
-        int countOfLoanAgreements = employeeService.getCountOfLoanAgreements(user);
+        int countOfLoanAgreements = pledgeAgreementService.countOfLoanAgreementsForEmployee(employee.getEmployeeId());
         model.addAttribute("countOfLoanAgreements", countOfLoanAgreements);
 
         return "home";
@@ -67,7 +67,7 @@ public class PagesController {
 
     @GetMapping("/pledge_agreements")
     public String pledgeEgreementPage(@RequestParam("employeeId") long employeeId, @RequestParam("pervPosl") String pervPosl, Model model) {
-        Employee employee = employeeService.getEmployeeById(employeeId);
+        Employee employee = employeeService.getEmployee(employeeId);
         model.addAttribute("employee", employee);
         model.addAttribute("pervPosl", pervPosl);
         return "pledge_agreements";
@@ -75,7 +75,7 @@ public class PagesController {
 
     @GetMapping("/pledge_subjects")
     public String pledgeSubjectsPage(@RequestParam("pledgeAgreementId") long pledgeAgreementId, Model model){
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
     }
@@ -114,7 +114,7 @@ public class PagesController {
 
     @GetMapping("/pledge_agreement_detail")
     public String pledgeAgreementsDetailPage(@RequestParam("pledgeAgreementId") long pledgeAgreementId, Model model){
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_agreement_detail";
     }
@@ -153,7 +153,7 @@ public class PagesController {
 
     @GetMapping("/loan_agreements")
     public String loanAgreementsPage(@RequestParam("employeeId") long employeeId, Model model) {
-        Employee employee = employeeService.getEmployeeById(employeeId);
+        Employee employee = employeeService.getEmployee(employeeId);
         model.addAttribute("employee", employee);
         return "loan_agreements";
     }

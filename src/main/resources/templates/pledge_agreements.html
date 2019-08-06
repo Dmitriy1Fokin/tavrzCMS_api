@@ -150,7 +150,7 @@
             </div>
             <div th:case="perv">
                 <div th:each="pledgor : ${employee.getClients()}">
-                    <div th:each="pe : ${@pledgeAgreementService.getCurrentPledgeAgreements(pledgor.getClientId(), 'перв')}">
+                    <div th:each="pe : ${@pledgeAgreementService.getCurrentPledgeAgreementsForPledgor(pledgor.getClientId(), 'перв')}">
                                 <tr>
                                     <td>
                                         <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
@@ -239,7 +239,7 @@
             </div>
             <div th:case="posl">
                 <div th:each="pledgor : ${employee.getClients()}">
-                    <div th:each="pe : ${@pledgeAgreementService.getCurrentPledgeAgreements(pledgor.getClientId(), 'посл')}">
+                    <div th:each="pe : ${@pledgeAgreementService.getCurrentPledgeAgreementsForPledgor(pledgor.getClientId(), 'посл')}">
                                 <tr>
                                     <td>
                                         <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
