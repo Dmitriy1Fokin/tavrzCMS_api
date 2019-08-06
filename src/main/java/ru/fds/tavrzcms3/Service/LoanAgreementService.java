@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
+import ru.fds.tavrzcms3.repository.RepositoryClient;
 import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 
@@ -17,6 +18,8 @@ public class LoanAgreementService {
     RepositoryLoanAgreement repositoryLoanAgreement;
     @Autowired
     RepositoryPledgeAgreement repositoryPledgeAgreement;
+    @Autowired
+    RepositoryClient repositoryClient;
 
     public synchronized LoanAgreement getLoanAgreementById(long loanAgreementId){
         LoanAgreement loanAgreement = repositoryLoanAgreement.getOne(loanAgreementId);
@@ -44,6 +47,10 @@ public class LoanAgreementService {
     public synchronized List<PledgeAgreement> getClosedPledgeAgreements(long loanAgreementId){
         return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPEEquals(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId),
                                                                                   "закрыт");
+    }
+
+    public synchronized List<LoanAgreement> getCurrentLoanAgreement(long loanerId){
+        return repositoryLoanAgreement.findByLoanerAndStatusLEEquals(repositoryClient.getOne(loanerId), "открыт");
     }
 
 }

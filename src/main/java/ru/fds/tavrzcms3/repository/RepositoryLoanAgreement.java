@@ -35,5 +35,6 @@ public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Lo
     List<LoanAgreement> findByPledgeAgreementsAndStatusLEEquals(PledgeAgreement pledgeAgreement, String statusLA);
     int countAllByPledgeAgreementsAndStatusLEEquals(PledgeAgreement pledgeAgreement, String statusLA);
     int countAllByLoanerAndStatusLEEquals(Client loaner, String statusLA);
+    int countAllByLoanerInAndStatusLEEquals(List<Client> clients, String statusLA);
     List<LoanAgreement> findByLoanerAndStatusLEEquals(Client loaner, String statusLA);
 }

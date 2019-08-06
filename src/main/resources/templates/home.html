@@ -22,7 +22,7 @@
 <a th:href="@{/pledge_agreements(employeeId=${employee.employeeId}, pervPosl='posl')}" href="pledge_agreements.html" th:text="${countOfPoslPledgeAgreements}">0</a>
 
 <p>Кредитных договоров на сопровождении:</p>
-<a th:href="@{/pledge_agreements(id=${employee.employeeId}, pervOrAll='all')}" href="pledge_agreements.html" th:text="${countOfAllPledgeAgreement}">0</a>
+<a th:href="@{/loan_agreements(employeeId=${employee.employeeId})}" href="loan_agreements.html" th:text="${countOfLoanAgreements}">0</a>
 
 
 </body>

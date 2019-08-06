@@ -59,6 +59,9 @@ public class PagesController {
         int countOfPoslPE = employeeService.getCountOfPoslPledgeAgreements(user);
         model.addAttribute("countOfPoslPledgeAgreements", countOfPoslPE);
 
+        int countOfLoanAgreements = employeeService.getCountOfLoanAgreements(user);
+        model.addAttribute("countOfLoanAgreements", countOfLoanAgreements);
+
         return "home";
     }
 
@@ -148,7 +151,12 @@ public class PagesController {
         return "monitoring";
     }
 
-
+    @GetMapping("/loan_agreements")
+    public String loanAgreementsPage(@RequestParam("employeeId") long employeeId, Model model) {
+        Employee employee = employeeService.getEmployeeById(employeeId);
+        model.addAttribute("employee", employee);
+        return "loan_agreements";
+    }
 
 
 

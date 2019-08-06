@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Кредитные договоры на сопровождении</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        .containerTable{
+            width: 3000px;
+        }
+        .loanAgreement, .loanAgreement td {
+            border: 1px solid lightgray;
+            padding: 5px;
+            table-layout: fixed;
+        }
+    </style>
+</head>
+<body>
+<h1>Кредитные договоры на сопровождении:</h1>
+<div class="containerTable">
+    <table class="loanAgreement">
+        <thead>
+        <tr>
+            <th>№КД</th>
+            <th>Заемщик</th>
+            <th>Дата начала КД</th>
+            <th>Дата окончания КД</th>
+            <th>Сумма договора</th>
+            <th>%</th>
+            <th>Задолженность</th>
+            <th>ПФО</th>
+            <th>Кат.кач.</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:each="loaner : ${employee.getClients()}">
+            <div th:each="la : ${@loanAgreementService.getCurrentLoanAgreement(loaner.getClientId())}">
+                <tr>
+                    <td>
+                        <a th:href="@{/loan_agreement_detail(loanAgreementId=${la.getLoanAgreementId()})}" href="loan_agreement_detail.html"
+                           th:text="${la.getNumLE()}">№ КД</a>
+                    </td>
+                    <td>
+                        <div th:switch="${la.getLoaner().getTypeOfClient()}">
+                            <div th:case="юл">
+                                <a th:href="@{/loaner(loanerId=${la.getLoaner().getClientId()})}" href="loaner.html"
+                                   th:text="${la.getLoaner().getClientLegalEntity().getOrganizationalForm() + ' ' + la.getLoaner().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
+                            </div>
+                            <div th:case="фл">
+                                <a th:href="@{/loaner(loanerId=${la.getLoaner().getClientId()})}" href="loaner.html"
+                                   th:text="${la.getLoaner().getClientIndividual().getSurname() + ' ' + la.getLoaner().getClientIndividual().getName()}">Заемщик ФЛ</a>
+
+                            </div>
+                        </div>
+                    </td>
+                    <td th:text="${la.getDateBeginLE()}">н/д</td>
+                    <td th:text="${la.getDateEndLE()}">н/д</td>
+                    <td th:text="${#numbers.formatCurrency(la.getAmountLE())}">н/д</td>
+                    <td th:text="${#numbers.formatPercent(la.getInterestRateLE(), 0, 1)}">н/д</td>
+                    <td th:text="${#numbers.formatCurrency(la.getDebtLE())}">н/д</td>
+                    <td th:text="${la.getPfo()}">н/д</td>
+                    <td th:text="${la.getQualityCategory()}">н/д</td>
+                </tr>
+            </div>
+        </div>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
