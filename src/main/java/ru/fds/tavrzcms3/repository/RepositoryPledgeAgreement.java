@@ -13,21 +13,21 @@ import java.util.List;
 
 public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement, Long> {
     PledgeAgreement findByPledgeAgreementId(long pledgeAgreementId);
-    List<PledgeAgreement> findByNumPE (String numPE);
-    List<PledgeAgreement> findByDateBeginPE (Date dateBeginPE);
-    List<PledgeAgreement> findByDateEndPE (Date dateEndPE);
+    List<PledgeAgreement> findByNumPA (String numPA);
+    List<PledgeAgreement> findByDateBeginPA (Date dateBeginPA);
+    List<PledgeAgreement> findByDateEndPA (Date dateEndPA);
     List<PledgeAgreement> findByPervPosl (String pervPosl);
     List<PledgeAgreement> findByPledgor (Client pledgor);
-    List<PledgeAgreement> findByStatusPE (String statusPE);
+    List<PledgeAgreement> findByStatusPA (String statusPA);
     List<PledgeAgreement> findByPledgorIn (List<Client> pledgors);
     int countAllByPledgorIn(List<Client> pledgors);
-    int countAllByPledgorInAndStatusPEEquals(List<Client> pledgors, String statusPE);
-    int countAllByPledgorInAndPervPoslEqualsAndStatusPEEquals(List<Client> pledgors, String perv, String statusPE);
-    int countAllByPledgorAndStatusPEEquals(Client pledgor, String statusPE);
-    List<PledgeAgreement> findByPledgorAndStatusPE(Client pledgor, String statusPE);
+    int countAllByPledgorInAndStatusPAEquals(List<Client> pledgors, String statusPA);
+    int countAllByPledgorInAndPervPoslEqualsAndStatusPAEquals(List<Client> pledgors, String perv, String statusPA);
+    int countAllByPledgorAndStatusPAEquals(Client pledgor, String statusPA);
+    List<PledgeAgreement> findByPledgorAndStatusPA(Client pledgor, String statusPA);
     List<PledgeAgreement> findByPledgeSubjects(PledgeSubject pledgeSubject);
     List<PledgeAgreement> findByLoanAgreements(LoanAgreement loanAgreement);
-    List<PledgeAgreement> findByLoanAgreementsAndStatusPEEquals(LoanAgreement loanAgreement, String statusPE);
-    List<PledgeAgreement> findByPledgorAndPervPoslEqualsAndStatusPEEquals(Client pledgor, String pervPosl, String statusPE);
-    List<PledgeAgreement> findByPledgorInAndPervPoslEqualsAndStatusPEEquals(List<Client> pledgors, String pervPosl, String statusPE);
+    List<PledgeAgreement> findByLoanAgreementsAndStatusPAEquals(LoanAgreement loanAgreement, String statusPA);
+    List<PledgeAgreement> findByPledgorAndPervPoslEqualsAndStatusPAEquals(Client pledgor, String pervPosl, String statusPA);
+    List<PledgeAgreement> findByPledgorInAndPervPoslEqualsAndStatusPAEquals(List<Client> pledgors, String pervPosl, String statusPA);
 }

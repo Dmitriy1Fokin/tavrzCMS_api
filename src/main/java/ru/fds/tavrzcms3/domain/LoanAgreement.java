@@ -27,27 +27,27 @@ public class LoanAgreement {
 	private long loanAgreementId;
 	
 	@Column(name ="num_kd")
-	private String numLE;
+	private String numLA;
 	
 	@Column(name ="date_begin_kd")
 	@Temporal(TemporalType.DATE)
-	private Date dateBeginLE;
+	private Date dateBeginLA;
 
 	@Column(name ="date_end_kd")
 	@Temporal(TemporalType.DATE)
-	private Date dateEndLE;
+	private Date dateEndLA;
 	
 	@Column(name ="status")
-	private String statusLE;
+	private String statusLA;
 	
 	@Column(name ="loan_amount")
-	private double amountLE;
+	private double amountLA;
 	
 	@Column(name ="loan_debt")
-	private double debtLE;
+	private double debtLA;
 	
 	@Column(name ="interest_rate")
-	private double interestRateLE;
+	private double interestRateLA;
 	
 	@Column(name ="pfo")
 	private byte pfo;
@@ -71,60 +71,60 @@ public class LoanAgreement {
 		this.loanAgreementId = loanAgreementId;
 	}
 
-	public String getNumLE() {
-		return numLE;
+	public String getNumLA() {
+		return numLA;
 	}
 
-	public void setNumLE(String numLE) {
-		this.numLE = numLE;
+	public void setNumLA(String numLA) {
+		this.numLA = numLA;
 	}
 
-	public Date getDateBeginLE() {
-		return dateBeginLE;
+	public Date getDateBeginLA() {
+		return dateBeginLA;
 	}
 
-	public void setDateBeginLE(Date dateBeginLE) {
-		this.dateBeginLE = dateBeginLE;
+	public void setDateBeginLA(Date dateBeginLA) {
+		this.dateBeginLA = dateBeginLA;
 	}
 
-	public Date getDateEndLE() {
-		return dateEndLE;
+	public Date getDateEndLA() {
+		return dateEndLA;
 	}
 
-	public void setDateEndLE(Date dateEndLE) {
-		this.dateEndLE = dateEndLE;
+	public void setDateEndLA(Date dateEndLA) {
+		this.dateEndLA = dateEndLA;
 	}
 
-	public String getStatusLE() {
-		return statusLE;
+	public String getStatusLA() {
+		return statusLA;
 	}
 
-	public void setStatusLE(String statusLE) {
-		this.statusLE = statusLE;
+	public void setStatusLA(String statusLA) {
+		this.statusLA = statusLA;
 	}
 
-	public double getAmountLE() {
-		return amountLE;
+	public double getAmountLA() {
+		return amountLA;
 	}
 
-	public void setAmountLE(double amountLE) {
-		this.amountLE = amountLE;
+	public void setAmountLA(double amountLA) {
+		this.amountLA = amountLA;
 	}
 
-	public double getDebtLE() {
-		return debtLE;
+	public double getDebtLA() {
+		return debtLA;
 	}
 
-	public void setDebtLE(double debtLE) {
-		this.debtLE = debtLE;
+	public void setDebtLA(double debtLA) {
+		this.debtLA = debtLA;
 	}
 
-	public double getInterestRateLE() {
-		return interestRateLE;
+	public double getInterestRateLA() {
+		return interestRateLA;
 	}
 
-	public void setInterestRateLE(double interestRateLE) {
-		this.interestRateLE = interestRateLE;
+	public void setInterestRateLA(double interestRateLA) {
+		this.interestRateLA = interestRateLA;
 	}
 
 	public byte getPfo() {
@@ -163,13 +163,13 @@ public class LoanAgreement {
 	public String toString() {
 		return "LoanAgreement{" +
 				"loanAgreementId=" + loanAgreementId +
-				", numLE='" + numLE + '\'' +
-				", dateBeginLE=" + dateBeginLE +
-				", dateEndLE=" + dateEndLE +
-				", statusLE='" + statusLE + '\'' +
-				", amountLE=" + amountLE +
-				", debtLE=" + debtLE +
-				", interestRateLE=" + interestRateLE +
+				", numLA='" + numLA + '\'' +
+				", dateBeginLA=" + dateBeginLA +
+				", dateEndLA=" + dateEndLA +
+				", statusLA='" + statusLA + '\'' +
+				", amountLA=" + amountLA +
+				", debtLA=" + debtLA +
+				", interestRateLA=" + interestRateLA +
 				", pfo=" + pfo +
 				", qualityCategory=" + qualityCategory +
 //				", loaner=" + loaner +

@@ -66,12 +66,12 @@
                             <tr>
                                 <td>
                                     <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
-                                       th:text="${pe.getNumPE()}">н/д</a>
+                                       th:text="${pe.getNumPA()}">н/д</a>
                                 </td>
 
-                                <td th:text="${pe.getDateBeginPE()}"></td>
+                                <td th:text="${pe.getDateBeginPA()}"></td>
 
-                                <td th:text="${pe.getDateEndPE()}"></td>
+                                <td th:text="${pe.getDateEndPA()}"></td>
 
                                 <td>
                                     <div th:switch="${pe.getPervPosl()}">
@@ -82,9 +82,9 @@
 
                                 <td>
                                     <div th:each="loanAgreement : ${pe.getLoanAgreements()}">
-                                        <!--<a th:text="${loanAgreement.getNumLE()}">н/д</a>-->
+                                        <!--<a th:text="${loanAgreement.getNumLA()}">н/д</a>-->
                                         <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
-                                           th:text="${loanAgreement.getNumLE()}">№ КД</a>
+                                           th:text="${loanAgreement.getNumLA()}">№ КД</a>
 
 
                                         <span th:text="' / '"></span>
@@ -193,12 +193,12 @@
                         <tr>
                             <td>
                                 <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
-                                   th:text="${pe.getNumPE()}">н/д</a>
+                                   th:text="${pe.getNumPA()}">н/д</a>
                             </td>
 
-                            <td th:text="${pe.getDateBeginPE()}"></td>
+                            <td th:text="${pe.getDateBeginPA()}"></td>
 
-                            <td th:text="${pe.getDateEndPE()}"></td>
+                            <td th:text="${pe.getDateEndPA()}"></td>
 
                             <td>
                                 <div th:switch="${pe.getPervPosl()}">
@@ -209,9 +209,9 @@
 
                             <td>
                                 <div th:each="loanAgreement : ${pe.getLoanAgreements()}">
-                                    <!--<a th:text="${loanAgreement.getNumLE()}">н/д</a>-->
+                                    <!--<a th:text="${loanAgreement.getNumLA()}">н/д</a>-->
                                     <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
-                                       th:text="${loanAgreement.getNumLE()}">№ КД</a>
+                                       th:text="${loanAgreement.getNumLA()}">№ КД</a>
 
 
                                     <span th:text="' / '"></span>

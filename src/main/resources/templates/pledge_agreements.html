@@ -71,12 +71,12 @@
                     <tr th:each="pe : ${pledgor.getPledgeAgreements()}">
                         <td>
                             <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
-                               th:text="${pe.getNumPE()}">н/д</a>
+                               th:text="${pe.getNumPA()}">н/д</a>
                         </td>
 
-                        <td th:text="${pe.getDateBeginPE()}"></td>
+                        <td th:text="${pe.getDateBeginPA()}"></td>
 
-                        <td th:text="${pe.getDateEndPE()}"></td>
+                        <td th:text="${pe.getDateEndPA()}"></td>
 
                         <div th:switch="${pledgor.getTypeOfClient()}">
                             <div th:case="юл">
@@ -158,13 +158,13 @@
                                 <tr>
                                     <td>
                                         <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
-                                           th:text="${pe.getNumPE()}">н/д</a>
+                                           th:text="${pe.getNumPA()}">н/д</a>
                                     </td>
-                                    <!--<td th:text="${pe.getNumPE()}"></td>-->
+                                    <!--<td th:text="${pe.getNumPA()}"></td>-->
 
-                                    <td th:text="${pe.getDateBeginPE()}"></td>
+                                    <td th:text="${pe.getDateBeginPA()}"></td>
 
-                                    <td th:text="${pe.getDateEndPE()}"></td>
+                                    <td th:text="${pe.getDateEndPA()}"></td>
 
                                     <div th:switch="${pledgor.getTypeOfClient()}">
                                         <div th:case="юл">
@@ -247,13 +247,13 @@
                                 <tr>
                                     <td>
                                         <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
-                                           th:text="${pe.getNumPE()}">н/д</a>
+                                           th:text="${pe.getNumPA()}">н/д</a>
                                     </td>
-                                    <!--<td th:text="${pe.getNumPE()}"></td>-->
+                                    <!--<td th:text="${pe.getNumPA()}"></td>-->
 
-                                    <td th:text="${pe.getDateBeginPE()}"></td>
+                                    <td th:text="${pe.getDateBeginPA()}"></td>
 
-                                    <td th:text="${pe.getDateEndPE()}"></td>
+                                    <td th:text="${pe.getDateEndPA()}"></td>
 
                                     <div th:switch="${pledgor.getTypeOfClient()}">
                                         <div th:case="юл">

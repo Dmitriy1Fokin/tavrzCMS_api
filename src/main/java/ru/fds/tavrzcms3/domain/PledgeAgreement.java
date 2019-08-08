@@ -27,24 +27,24 @@ public class PledgeAgreement {
 	private long pledgeAgreementId;
 	
 	@Column(name ="num_dz")
-	private String numPE;
+	private String numPA;
 	
 	@Column(name ="date_begin_dz")
 	@Temporal(TemporalType.DATE)
-	private Date dateBeginPE;
+	private Date dateBeginPA;
 	
 	@Column(name ="date_end_dz")
 	@Temporal(TemporalType.DATE)
-	private Date dateEndPE;
+	private Date dateEndPA;
 	
 	@Column(name ="perv_posl")
 	private String pervPosl;
 	
 	@Column(name ="status")
-	private String statusPE;
+	private String statusPA;
 	
 	@Column(name ="notice")
-	private String noticePE;
+	private String noticePA;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "kd_dz", joinColumns = @JoinColumn(name ="dz_id"), inverseJoinColumns = @JoinColumn(name ="kd_id"))
@@ -66,28 +66,28 @@ public class PledgeAgreement {
 		this.pledgeAgreementId = pledgeAgreementId;
 	}
 
-	public String getNumPE() {
-		return numPE;
+	public String getNumPA() {
+		return numPA;
 	}
 
-	public void setNumPE(String numPE) {
-		this.numPE = numPE;
+	public void setNumPA(String numPA) {
+		this.numPA = numPA;
 	}
 
-	public Date getDateBeginPE() {
-		return dateBeginPE;
+	public Date getDateBeginPA() {
+		return dateBeginPA;
 	}
 
-	public void setDateBeginPE(Date dateBeginPE) {
-		this.dateBeginPE = dateBeginPE;
+	public void setDateBeginPA(Date dateBeginPA) {
+		this.dateBeginPA = dateBeginPA;
 	}
 
-	public Date getDateEndPE() {
-		return dateEndPE;
+	public Date getDateEndPA() {
+		return dateEndPA;
 	}
 
-	public void setDateEndPE(Date dateEndPE) {
-		this.dateEndPE = dateEndPE;
+	public void setDateEndPA(Date dateEndPA) {
+		this.dateEndPA = dateEndPA;
 	}
 
 	public String getPervPosl() {
@@ -98,20 +98,20 @@ public class PledgeAgreement {
 		this.pervPosl = pervPosl;
 	}
 
-	public String getStatusPE() {
-		return statusPE;
+	public String getStatusPA() {
+		return statusPA;
 	}
 
-	public void setStatusPE(String statusPE) {
-		this.statusPE = statusPE;
+	public void setStatusPA(String statusPA) {
+		this.statusPA = statusPA;
 	}
 
-	public String getNoticePE() {
-		return noticePE;
+	public String getNoticePA() {
+		return noticePA;
 	}
 
-	public void setNoticePE(String noticePE) {
-		this.noticePE = noticePE;
+	public void setNoticePA(String noticePA) {
+		this.noticePA = noticePA;
 	}
 
 	public List<LoanAgreement> getLoanAgreements() {
@@ -142,12 +142,12 @@ public class PledgeAgreement {
 	public String toString() {
 		return "PledgeAgreement{" +
 				"pledgeAgreementId=" + pledgeAgreementId +
-				", numPE='" + numPE + '\'' +
-				", dateBeginPE=" + dateBeginPE +
-				", dateEndPE=" + dateEndPE +
+				", numPA='" + numPA + '\'' +
+				", dateBeginPA=" + dateBeginPA +
+				", dateEndPA=" + dateEndPA +
 				", pervPosl='" + pervPosl + '\'' +
-				", statusPE='" + statusPE + '\'' +
-				", noticePE='" + noticePE + '\'' +
+				", statusPA='" + statusPA + '\'' +
+				", noticePA='" + noticePA + '\'' +
 //				", pledgor=" + pledgor +
 				'}';
 	}

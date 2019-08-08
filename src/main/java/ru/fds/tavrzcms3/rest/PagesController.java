@@ -50,14 +50,14 @@ public class PagesController {
         Employee employee = employeeService.getEmployee(user);
         model.addAttribute("employee", employee);
 
-        int countOfPE = pledgeAgreementService.countOfCurrentPledgeAgreementsForEmployee(employee.getEmployeeId());
-        model.addAttribute("countOfAllPledgeAgreement", countOfPE);
+        int countOfPA = pledgeAgreementService.countOfCurrentPledgeAgreementsForEmployee(employee.getEmployeeId());
+        model.addAttribute("countOfAllPledgeAgreement", countOfPA);
 
-        int countOfPervPE = pledgeAgreementService.countOfPervCurrentPledgeAgreementsForEmployee(employee.getEmployeeId());
-        model.addAttribute("countOfPervPledgeAgreements", countOfPervPE);
+        int countOfPervPA = pledgeAgreementService.countOfPervCurrentPledgeAgreementsForEmployee(employee.getEmployeeId());
+        model.addAttribute("countOfPervPledgeAgreements", countOfPervPA);
 
-        int countOfPoslPE = pledgeAgreementService.countOfPoslCurrentPledgeAgreementsForEmployee(employee.getEmployeeId());
-        model.addAttribute("countOfPoslPledgeAgreements", countOfPoslPE);
+        int countOfPoslPA = pledgeAgreementService.countOfPoslCurrentPledgeAgreementsForEmployee(employee.getEmployeeId());
+        model.addAttribute("countOfPoslPledgeAgreements", countOfPoslPA);
 
         int countOfLoanAgreements = pledgeAgreementService.countOfLoanAgreementsForEmployee(employee.getEmployeeId());
         model.addAttribute("countOfLoanAgreements", countOfLoanAgreements);

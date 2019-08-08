@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Договор залога: №' + ${pledgeAgreement.getNumPE()}">Договор залога</title>
+    <title th:text="'Договор залога: №' + ${pledgeAgreement.getNumPA()}">Договор залога</title>
     <style type="text/css">
         body {
             padding: 50px;
@@ -22,18 +22,18 @@
 </head>
 <body>
 <div th:replace="static/nav :: user_nav_bar"></div>
-<h1 th:text="'Договор залога: №' + ${pledgeAgreement.getNumPE()} + ' от ' + ${pledgeAgreement.getDateBeginPE()}">Договор залога</h1>
+<h1 th:text="'Договор залога: №' + ${pledgeAgreement.getNumPA()} + ' от ' + ${pledgeAgreement.getDateBeginPA()}">Договор залога</h1>
 
     <label>Номер договора залога:</label>
-    <span th:text="${pledgeAgreement.getNumPE()}">н/д</span>
+    <span th:text="${pledgeAgreement.getNumPA()}">н/д</span>
     <br>
     <br>
     <label>Дата начала ДЗ:</label>
-    <span th:text="${pledgeAgreement.getDateBeginPE()}">н/д</span>
+    <span th:text="${pledgeAgreement.getDateBeginPA()}">н/д</span>
     <br>
     <br>
     <label>Дата окончания ДЗ:</label>
-    <span th:text="${pledgeAgreement.getDateEndPE()}">н/д</span>
+    <span th:text="${pledgeAgreement.getDateEndPA()}">н/д</span>
     <br>
     <br>
     <label>Залогодатель:</label>
@@ -92,11 +92,11 @@
     <br>
     <br>
     <label>Статус:</label>
-    <span th:text="${pledgeAgreement.getStatusPE()}">н/д</span>
+    <span th:text="${pledgeAgreement.getStatusPA()}">н/д</span>
     <br>
     <br>
     <label>Комментарии:</label>
-    <span th:text="${pledgeAgreement.getNoticePE()}">н/д</span>
+    <span th:text="${pledgeAgreement.getNoticePA()}">н/д</span>
     <br>
     <br>
 
@@ -122,18 +122,18 @@
                             <tr>
                                 <td>
                                     <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
-                                       th:text="${loanAgreement.getNumLE()}">№ КД</a>
+                                       th:text="${loanAgreement.getNumLA()}">№ КД</a>
                                 </td>
 
-                                <td th:text="${loanAgreement.getDateBeginLE()}"></td>
+                                <td th:text="${loanAgreement.getDateBeginLA()}"></td>
 
-                                <td th:text="${loanAgreement.getDateEndLE()}"></td>
+                                <td th:text="${loanAgreement.getDateEndLA()}"></td>
 
-                                <td th:text="${#numbers.formatCurrency(loanAgreement.getAmountLE())}"></td>
+                                <td th:text="${#numbers.formatCurrency(loanAgreement.getAmountLA())}"></td>
 
-                                <td th:text="${loanAgreement.getInterestRateLE() + '%'}"></td>
+                                <td th:text="${loanAgreement.getInterestRateLA() + '%'}"></td>
 
-                                <td th:text="${#numbers.formatCurrency(loanAgreement.getDebtLE())}"></td>
+                                <td th:text="${#numbers.formatCurrency(loanAgreement.getDebtLA())}"></td>
 
                                 <td th:text="${loanAgreement.getPfo()}"></td>
 
@@ -168,18 +168,18 @@
                             <tr>
                                 <td>
                                     <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
-                                       th:text="${loanAgreement.getNumLE()}">№ КД</a>
+                                       th:text="${loanAgreement.getNumLA()}">№ КД</a>
                                 </td>
 
-                                <td th:text="${loanAgreement.getDateBeginLE()}"></td>
+                                <td th:text="${loanAgreement.getDateBeginLA()}"></td>
 
-                                <td th:text="${loanAgreement.getDateEndLE()}"></td>
+                                <td th:text="${loanAgreement.getDateEndLA()}"></td>
 
-                                <td th:text="${#numbers.formatCurrency(loanAgreement.getAmountLE())}"></td>
+                                <td th:text="${#numbers.formatCurrency(loanAgreement.getAmountLA())}"></td>
 
-                                <td th:text="${loanAgreement.getInterestRateLE() + '%'}"></td>
+                                <td th:text="${loanAgreement.getInterestRateLA() + '%'}"></td>
 
-                                <td th:text="${#numbers.formatCurrency(loanAgreement.getDebtLE())}"></td>
+                                <td th:text="${#numbers.formatCurrency(loanAgreement.getDebtLA())}"></td>
 
                                 <td th:text="${loanAgreement.getPfo()}"></td>
 

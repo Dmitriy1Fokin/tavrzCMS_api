@@ -44,7 +44,7 @@
                 <tr>
                     <td>
                         <a th:href="@{/loan_agreement_detail(loanAgreementId=${la.getLoanAgreementId()})}" href="loan_agreement_detail.html"
-                           th:text="${la.getNumLE()}">№ КД</a>
+                           th:text="${la.getNumLA()}">№ КД</a>
                     </td>
                     <td>
                         <div th:switch="${la.getLoaner().getTypeOfClient()}">
@@ -59,11 +59,11 @@
                             </div>
                         </div>
                     </td>
-                    <td th:text="${la.getDateBeginLE()}">н/д</td>
-                    <td th:text="${la.getDateEndLE()}">н/д</td>
-                    <td th:text="${#numbers.formatCurrency(la.getAmountLE())}">н/д</td>
-                    <td th:text="${#numbers.formatPercent(la.getInterestRateLE(), 0, 1)}">н/д</td>
-                    <td th:text="${#numbers.formatCurrency(la.getDebtLE())}">н/д</td>
+                    <td th:text="${la.getDateBeginLA()}">н/д</td>
+                    <td th:text="${la.getDateEndLA()}">н/д</td>
+                    <td th:text="${#numbers.formatCurrency(la.getAmountLA())}">н/д</td>
+                    <td th:text="${#numbers.formatPercent(la.getInterestRateLA(), 0, 1)}">н/д</td>
+                    <td th:text="${#numbers.formatCurrency(la.getDebtLA())}">н/д</td>
                     <td th:text="${la.getPfo()}">н/д</td>
                     <td th:text="${la.getQualityCategory()}">н/д</td>
                 </tr>

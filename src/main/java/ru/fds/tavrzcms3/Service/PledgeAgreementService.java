@@ -120,53 +120,53 @@ public class PledgeAgreementService {
     }
 
     public synchronized int countOfCurrentLoanAgreementsForPladgeAgreement(long pledgeAgreementId){
-        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "открыт");
+        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "открыт");
     }
 
     public synchronized List<LoanAgreement> getCurrentLoanAgreementsForPledgeAgreement(long pledgeAgreementId){
-        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "открыт");
+        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "открыт");
     }
 
     public synchronized int countOfClosedLoanAgreementsForPledgeAgreement(long pledgeAgreementId){
-        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
+        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
     }
 
     public synchronized List<LoanAgreement> getClosedLoanAgreementsForPledgeAgreement(long pledgeAgreementId){
-        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLEEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
+        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
     }
 
     public synchronized List<PledgeAgreement> getCurrentPledgeAgreementsForPledgor(long pledgorId, String pervPosl){
-        return repositoryPledgeAgreement.findByPledgorAndPervPoslEqualsAndStatusPEEquals(repositoryClient.getOne(pledgorId), pervPosl, "открыт");
+        return repositoryPledgeAgreement.findByPledgorAndPervPoslEqualsAndStatusPAEquals(repositoryClient.getOne(pledgorId), pervPosl, "открыт");
     }
 
     public synchronized int countOfCurrentPledgeAgreementsForEmployee(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> pledgors = repositoryClient.findByEmployee(employee);
-        return repositoryPledgeAgreement.countAllByPledgorInAndStatusPEEquals(pledgors, "открыт");
+        return repositoryPledgeAgreement.countAllByPledgorInAndStatusPAEquals(pledgors, "открыт");
     }
 
     public synchronized int countOfPervCurrentPledgeAgreementsForEmployee(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> pledgors = repositoryClient.findByEmployee(employee);
-        return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEqualsAndStatusPEEquals(pledgors, "перв", "открыт");
+        return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors, "перв", "открыт");
     }
 
     public synchronized List<PledgeAgreement> getPervCurrentPledgeAgreementsForEmployeee(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> pledgors = repositoryClient.findByEmployee(employee);
-        return  repositoryPledgeAgreement.findByPledgorInAndPervPoslEqualsAndStatusPEEquals(pledgors,  "перв", "открыт");
+        return  repositoryPledgeAgreement.findByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors,  "перв", "открыт");
     }
 
     public synchronized int countOfPoslCurrentPledgeAgreementsForEmployee(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> pledgors = repositoryClient.findByEmployee(employee);
-        return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEqualsAndStatusPEEquals(pledgors, "посл", "открыт");
+        return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors, "посл", "открыт");
     }
 
     public synchronized int countOfLoanAgreementsForEmployee(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> loaners = repositoryClient.findByEmployee(employee);
-        return repositoryLoanAgreement.countAllByLoanerInAndStatusLEEquals(loaners, "открыт");
+        return repositoryLoanAgreement.countAllByLoanerInAndStatusLAEquals(loaners, "открыт");
     }
 
     public synchronized int countOfMonitoringNotDone(long employeeId){

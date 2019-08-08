@@ -111,9 +111,9 @@ public class Tavrzcms3Application {
 //
 //        System.out.println("!!!!!!!!");
 //        List<PledgeAgreement> pledgeAgreementList1 = repositoryPledgeAgreement.findByNumPE("415/1");
-//        List<LoanAgreement> loanAgreements = repositoryLoanAgreement.findByPledgeAgreementsAndStatusLEEquals(pledgeAgreementList1.get(0), "открыт");
+//        List<LoanAgreement> loanAgreements = repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreementList1.get(0), "открыт");
 //        for(LoanAgreement la : loanAgreements)
-//            System.out.println(la.getNumLE());
+//            System.out.println(la.getNumLA());
 //
 //        System.out.println("!!!!!!!!");
 //        Client client = repositoryClient.findByLoanAgreements(loanAgreements.get(0));

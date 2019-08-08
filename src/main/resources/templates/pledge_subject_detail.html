@@ -376,7 +376,7 @@
         <div th:each="pe: ${pledgeSubject.getPledgeAgreements()}">
             <li>
                 <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
-                   th:text="${pe.getNumPE() + ' от ' + pe.getDateBeginPE()}">№ ДЗ</a>
+                   th:text="${pe.getNumPA() + ' от ' + pe.getDateBeginPA()}">№ ДЗ</a>
             </li>
             <div th:switch="${pe.getPledgor().getTypeOfClient()}">
                 <div th:case="юл">
@@ -399,7 +399,7 @@
             <div th:each="loanAgreement : ${pe.getLoanAgreements()}">
                 <li>
                     <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
-                       th:text="${loanAgreement.getNumLE() + ' от ' + loanAgreement.getDateBeginLE()}">№ КД</a>
+                       th:text="${loanAgreement.getNumLA() + ' от ' + loanAgreement.getDateBeginLA()}">№ КД</a>
                 </li>
                 <div th:switch="${loanAgreement.getLoaner().getTypeOfClient()}">
                     <div th:case="юл">

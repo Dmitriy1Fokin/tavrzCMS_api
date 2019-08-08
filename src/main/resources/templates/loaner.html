@@ -59,18 +59,18 @@
                         <tr>
                             <td>
                                 <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
-                                   th:text="${loanAgreement.getNumLE()}">№ КД</a>
+                                   th:text="${loanAgreement.getNumLA()}">№ КД</a>
                             </td>
 
-                            <td th:text="${loanAgreement.getDateBeginLE()}"></td>
+                            <td th:text="${loanAgreement.getDateBeginLA()}"></td>
 
-                            <td th:text="${loanAgreement.getDateEndLE()}"></td>
+                            <td th:text="${loanAgreement.getDateEndLA()}"></td>
 
-                            <td th:text="${#numbers.formatCurrency(loanAgreement.getAmountLE())}"></td>
+                            <td th:text="${#numbers.formatCurrency(loanAgreement.getAmountLA())}"></td>
 
-                            <td th:text="${loanAgreement.getInterestRateLE() + '%'}"></td>
+                            <td th:text="${loanAgreement.getInterestRateLA() + '%'}"></td>
 
-                            <td th:text="${#numbers.formatCurrency(loanAgreement.getDebtLE())}"></td>
+                            <td th:text="${#numbers.formatCurrency(loanAgreement.getDebtLA())}"></td>
 
                             <td th:text="${loanAgreement.getPfo()}"></td>
 
@@ -81,7 +81,7 @@
                                 <div th:each="pe : ${loanAgreement.getPledgeAgreements()}">
                                     <li>
                                         <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
-                                           th:text="${pe.getNumPE()}">№ ДЗ</a>
+                                           th:text="${pe.getNumPA()}">№ ДЗ</a>
                                         <span th:text="' / '"></span>
                                         <div th:switch="${pe.getPledgor().getTypeOfClient()}">
                                             <div th:case="юл">
@@ -131,18 +131,18 @@
                         <tr>
                             <td>
                                 <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
-                                   th:text="${loanAgreement.getNumLE()}">№ КД</a>
+                                   th:text="${loanAgreement.getNumLA()}">№ КД</a>
                             </td>
 
-                            <td th:text="${loanAgreement.getDateBeginLE()}"></td>
+                            <td th:text="${loanAgreement.getDateBeginLA()}"></td>
 
-                            <td th:text="${loanAgreement.getDateEndLE()}"></td>
+                            <td th:text="${loanAgreement.getDateEndLA()}"></td>
 
-                            <td th:text="${#numbers.formatCurrency(loanAgreement.getAmountLE())}"></td>
+                            <td th:text="${#numbers.formatCurrency(loanAgreement.getAmountLA())}"></td>
 
-                            <td th:text="${loanAgreement.getInterestRateLE() + '%'}"></td>
+                            <td th:text="${loanAgreement.getInterestRateLA() + '%'}"></td>
 
-                            <td th:text="${#numbers.formatCurrency(loanAgreement.getDebtLE())}"></td>
+                            <td th:text="${#numbers.formatCurrency(loanAgreement.getDebtLA())}"></td>
 
                             <td th:text="${loanAgreement.getPfo()}"></td>
 
@@ -153,7 +153,7 @@
                                     <div th:each="pe : ${loanAgreement.getPledgeAgreements()}">
                                         <li>
                                             <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
-                                               th:text="${pe.getNumPE()}">№ ДЗ</a>
+                                               th:text="${pe.getNumPA()}">№ ДЗ</a>
                                             <span th:text="' / '"></span>
                                             <div th:switch="${pe.getPledgor().getTypeOfClient()}">
                                                 <div th:case="юл">

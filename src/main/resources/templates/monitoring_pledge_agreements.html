@@ -45,12 +45,12 @@
                     <tr>
                         <td>
                             <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pa.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
-                               th:text="${pa.getNumPE()}">н/д</a>
+                               th:text="${pa.getNumPA()}">н/д</a>
                         </td>
 
-                        <td th:text="${pa.getDateBeginPE()}"></td>
+                        <td th:text="${pa.getDateBeginPA()}"></td>
 
-                        <td th:text="${pa.getDateEndPE()}"></td>
+                        <td th:text="${pa.getDateEndPA()}"></td>
 
                         <div th:switch="${pa.getPledgor().getTypeOfClient()}">
                             <div th:case="юл">
@@ -136,12 +136,12 @@
                 <tr>
                     <td>
                         <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pa.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
-                           th:text="${pa.getNumPE()}">н/д</a>
+                           th:text="${pa.getNumPA()}">н/д</a>
                     </td>
 
-                    <td th:text="${pa.getDateBeginPE()}"></td>
+                    <td th:text="${pa.getDateBeginPA()}"></td>
 
-                    <td th:text="${pa.getDateEndPE()}"></td>
+                    <td th:text="${pa.getDateEndPA()}"></td>
 
                     <div th:switch="${pa.getPledgor().getTypeOfClient()}">
                         <div th:case="юл">
@@ -227,12 +227,12 @@
                 <tr>
                     <td>
                         <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pa.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
-                           th:text="${pa.getNumPE()}">н/д</a>
+                           th:text="${pa.getNumPA()}">н/д</a>
                     </td>
 
-                    <td th:text="${pa.getDateBeginPE()}"></td>
+                    <td th:text="${pa.getDateBeginPA()}"></td>
 
-                    <td th:text="${pa.getDateEndPE()}"></td>
+                    <td th:text="${pa.getDateEndPA()}"></td>
 
                     <div th:switch="${pa.getPledgor().getTypeOfClient()}">
                         <div th:case="юл">
