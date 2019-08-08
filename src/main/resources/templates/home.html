@@ -44,10 +44,16 @@
 
 <p th:text="'Заключения (' + ${#dates.monthName(#dates.createNow())} + ')'">Заключения</p>
 <ul>
-    <li>Предстоящие</li>
-    <li>Выполненые</li>
-    <li>Просроченные</li>
+    <li th:text="${'Предстоящие: ' + countOfConclusionNotDone}">Предстоящие</li>
+    <li th:text="${'Выполненые: ' + countOfConclusionIsDone}">Выполненые</li>
+    <li th:text="${'Просроченные: ' + countOfConclusionOverdue}">Просроченные</li>
 </ul>
+<a th:href="@{/conclusion_pledge_agreements(employeeId=${employee.employeeId},
+                countOfConclusionNotDone = ${countOfConclusionNotDone},
+                countOfConclusionIsDone = ${countOfConclusionIsDone},
+                countOfConclusionOverdue = ${countOfConclusionOverdue})}"
+   href="conclusion_pledge_agreements.html"
+   th:text="подробнее">подробнее</a>
 
 </body>
 </html>

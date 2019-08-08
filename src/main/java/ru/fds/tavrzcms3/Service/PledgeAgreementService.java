@@ -202,6 +202,7 @@ public class PledgeAgreementService {
 
         return countOfMonitoring;
     }
+
     public synchronized int countOfMonitoringOverdue(long employeeId){
         List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
         Calendar dateNow = new GregorianCalendar();
@@ -241,14 +242,14 @@ public class PledgeAgreementService {
         Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
         Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
         Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
-        List<PledgeAgreement> pledgeAgreementListWithMonitoringNotDone = new ArrayList<>();
+        List<PledgeAgreement> pledgeAgreementListWithMonitoringIsDone = new ArrayList<>();
         for (PledgeAgreement pa : pledgeAgreementList){
             int count = repositoryPledgeSubject.countByPledgeAgreementsAndDateMonitoringBetween(pa, firstDate, secondDate);
             if(count > 0)
-                pledgeAgreementListWithMonitoringNotDone.add(pa);
+                pledgeAgreementListWithMonitoringIsDone.add(pa);
         }
 
-        return pledgeAgreementListWithMonitoringNotDone;
+        return pledgeAgreementListWithMonitoringIsDone;
     }
 
     public synchronized List<PledgeAgreement> getPledgeAgreementWithMonitoringOverDue(long employeeId){
@@ -256,14 +257,112 @@ public class PledgeAgreementService {
         Calendar dateNow = new GregorianCalendar();
         Calendar beforeDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH) - 1, dateNow.getMaximum(Calendar.DAY_OF_MONTH));
         Date beforeDate = new Date(beforeDateCalendar.getTimeInMillis());
-        List<PledgeAgreement> pledgeAgreementListWithMonitoringNotDone = new ArrayList<>();
+        List<PledgeAgreement> pledgeAgreementListWithMonitoringOverdue = new ArrayList<>();
         for (PledgeAgreement pa : pledgeAgreementList){
             int count = repositoryPledgeSubject.countByPledgeAgreementsAndDateMonitoringBefore(pa, beforeDate);
             if(count > 0)
-                pledgeAgreementListWithMonitoringNotDone.add(pa);
+                pledgeAgreementListWithMonitoringOverdue.add(pa);
         }
 
-        return pledgeAgreementListWithMonitoringNotDone;
+        return pledgeAgreementListWithMonitoringOverdue;
+    }
+
+    public synchronized int countOfConclusionNotDone(long employeeId){
+        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        Calendar dateNow = new GregorianCalendar();
+        Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), 1);
+        Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
+        Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
+        Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
+        int countOfConclusion = 0;
+        for(PledgeAgreement pa : pledgeAgreementList){
+            int count = repositoryPledgeSubject.countByPledgeAgreementsAndDateConclusionBetween(pa, firstDate, secondDate);
+            if(count > 0)
+                countOfConclusion += 1;
+        }
+
+        return countOfConclusion;
+    }
+
+    public synchronized int countOfConclusionIsDone(long employeeId){
+        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        Calendar dateNow = new GregorianCalendar();
+        Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), 1);
+        Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
+        Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
+        Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
+        int countOfConclusion = 0;
+        for(PledgeAgreement pa : pledgeAgreementList){
+            int count = repositoryPledgeSubject.countByPledgeAgreementsAndDateConclusionBetween(pa, firstDate, secondDate);
+            if(count > 0)
+                countOfConclusion += 1;
+        }
+
+        return countOfConclusion;
+    }
+
+    public synchronized int countOfConclusionOverdue(long employeeId){
+        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        Calendar dateNow = new GregorianCalendar();
+        Calendar beforeDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH) - 1, dateNow.getMaximum(Calendar.DAY_OF_MONTH));
+        Date beforeDate = new Date(beforeDateCalendar.getTimeInMillis());
+        int countOfConclusion = 0;
+        for(PledgeAgreement pa : pledgeAgreementList){
+            int count = repositoryPledgeSubject.countByPledgeAgreementsAndDateConclusionBefore(pa, beforeDate);
+            if(count > 0)
+                countOfConclusion += 1;
+        }
+
+        return countOfConclusion;
+    }
+
+    public synchronized List<PledgeAgreement> getPledgeAgreementWithConclusionNotDone(long employeeId){
+        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        Calendar dateNow = new GregorianCalendar();
+        Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), 1);
+        Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
+        Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
+        Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
+        List<PledgeAgreement> pledgeAgreementListWithConclusionNotDone = new ArrayList<>();
+        for (PledgeAgreement pa : pledgeAgreementList){
+            int count = repositoryPledgeSubject.countByPledgeAgreementsAndDateConclusionBetween(pa, firstDate, secondDate);
+            if(count > 0)
+                pledgeAgreementListWithConclusionNotDone.add(pa);
+        }
+
+        return pledgeAgreementListWithConclusionNotDone;
+    }
+
+    public synchronized List<PledgeAgreement> getPledgeAgreementWithConclusionIsDone(long employeeId){
+        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        Calendar dateNow = new GregorianCalendar();
+        Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), 1);
+        Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
+        Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
+        Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
+        List<PledgeAgreement> pledgeAgreementListWithConclusionIsDone = new ArrayList<>();
+        for (PledgeAgreement pa : pledgeAgreementList){
+            int count = repositoryPledgeSubject.countByPledgeAgreementsAndDateConclusionBetween(pa, firstDate, secondDate);
+            if(count > 0)
+                pledgeAgreementListWithConclusionIsDone.add(pa);
+        }
+
+        return pledgeAgreementListWithConclusionIsDone;
+    }
+
+    public synchronized List<PledgeAgreement> getPledgeAgreementWithConclusionOverDue(long employeeId){
+        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        Calendar dateNow = new GregorianCalendar();
+        Calendar beforeDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH) - 1, dateNow.getMaximum(Calendar.DAY_OF_MONTH));
+        Date beforeDate = new Date(beforeDateCalendar.getTimeInMillis());
+        List<PledgeAgreement> pledgeAgreementListWithConclusionOverdue = new ArrayList<>();
+        for (PledgeAgreement pa : pledgeAgreementList){
+            int count = repositoryPledgeSubject.countByPledgeAgreementsAndDateConclusionBefore(pa, beforeDate);
+            if(count > 0)
+                pledgeAgreementListWithConclusionOverdue.add(pa);
+        }
+
+        return pledgeAgreementListWithConclusionOverdue;
     }
 
 }
