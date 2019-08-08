@@ -29,6 +29,25 @@
 <p>Кредитных договоров на сопровождении:</p>
 <a th:href="@{/loan_agreements(employeeId=${employee.employeeId})}" href="loan_agreements.html" th:text="${countOfLoanAgreements}">0</a>
 
+<p th:text="'Мониторинги (' + ${#dates.monthName(#dates.createNow())} + ')'">Мониторинги</p>
+<ul>
+    <li th:text="${'Предстоящие: ' + countOfMonitoringNotDone}">Предстоящие</li>
+    <li th:text="${'Выполненые: ' + countOfMonitoringIsDone}">Выполненые</li>
+    <li th:text="${'Просроченные: ' + countOfMonitoringOverdue}">Просроченные</li>
+</ul>
+<a th:href="@{/monitoring_pledge_agreements(employeeId=${employee.employeeId},
+                countOfMonitoringNotDone = ${countOfMonitoringNotDone},
+                countOfMonitoringIsDone = ${countOfMonitoringIsDone},
+                countOfMonitoringOverdue = ${countOfMonitoringOverdue})}"
+   href="monitoring_pledge_agreements.html"
+   th:text="подробнее">подробнее</a>
+
+<p th:text="'Заключения (' + ${#dates.monthName(#dates.createNow())} + ')'">Заключения</p>
+<ul>
+    <li>Предстоящие</li>
+    <li>Выполненые</li>
+    <li>Просроченные</li>
+</ul>
 
 </body>
 </html>

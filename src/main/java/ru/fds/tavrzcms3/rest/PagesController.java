@@ -62,6 +62,14 @@ public class PagesController {
         int countOfLoanAgreements = pledgeAgreementService.countOfLoanAgreementsForEmployee(employee.getEmployeeId());
         model.addAttribute("countOfLoanAgreements", countOfLoanAgreements);
 
+        int countOfMonitoringNotDone = pledgeAgreementService.countOfMonitoringNotDone(employee.getEmployeeId());
+        model.addAttribute("countOfMonitoringNotDone", countOfMonitoringNotDone);
+
+        int countOfMonitoringIsDone = pledgeAgreementService.countOfMonitoringIsDone(employee.getEmployeeId());
+        model.addAttribute("countOfMonitoringIsDone", countOfMonitoringIsDone);
+
+        int countOfMonitoringOverdue = pledgeAgreementService.countOfMonitoringOverdue(employee.getEmployeeId());
+        model.addAttribute("countOfMonitoringOverdue", countOfMonitoringOverdue);
         return "home";
     }
 
@@ -142,13 +150,13 @@ public class PagesController {
         return "cost_history";
     }
 
-    @GetMapping("monitoring")
+    @GetMapping("monitoring_pledge_subject")
     public String monitoringPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
         List<Monitoring> monitoringList = monitoringService.getMonitoringByPledgeSubjectId(pledgeSubjectId);
         model.addAttribute("pledgeSubjectName", pledgeSubject.getName());
         model.addAttribute("monitoringList", monitoringList);
-        return "monitoring";
+        return "monitoring_pledge_subject";
     }
 
     @GetMapping("/loan_agreements")
@@ -158,6 +166,25 @@ public class PagesController {
         return "loan_agreements";
     }
 
+    @GetMapping("monitoring_pledge_agreements")
+    public String monitoringPledgeAgreementsPage(@RequestParam("countOfMonitoringNotDone") int countOfMonitoringNotDone,
+                                                 @RequestParam("countOfMonitoringIsDone") int countOfMonitoringIsDone,
+                                                 @RequestParam("countOfMonitoringOverdue") int countOfMonitoringOverdue,
+                                                 @RequestParam("employeeId") long employeeId,
+                                                 Model model){
+
+        model.addAttribute("countOfMonitoringNotDone", countOfMonitoringNotDone);
+        model.addAttribute("countOfMonitoringIsDone", countOfMonitoringIsDone);
+        model.addAttribute("countOfMonitoringOverdue", countOfMonitoringOverdue);
+        List<PledgeAgreement> pledgeAgreementListWithMonitoringNotDone = pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(employeeId);
+        List<PledgeAgreement> pledgeAgreementListWithMonitoringIsDone = pledgeAgreementService.getPledgeAgreementWithMonitoringIsDone(employeeId);
+        List<PledgeAgreement> pledgeAgreementListWithMonitoringOverdue = pledgeAgreementService.getPledgeAgreementWithMonitoringOverDue(employeeId);
+        model.addAttribute("pledgeAgreementListWithMonitoringNotDone", pledgeAgreementListWithMonitoringNotDone);
+        model.addAttribute("pledgeAgreementListWithMonitoringIsDone", pledgeAgreementListWithMonitoringIsDone);
+        model.addAttribute("pledgeAgreementListWithMonitoringOverdue", pledgeAgreementListWithMonitoringOverdue);
+
+        return "monitoring_pledge_agreements";
+    }
 
 
 

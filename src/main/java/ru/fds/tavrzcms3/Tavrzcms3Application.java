@@ -7,7 +7,7 @@ import ru.fds.tavrzcms3.Service.InsuranceService;
 import ru.fds.tavrzcms3.Service.LoanAgreementService;
 import ru.fds.tavrzcms3.Service.PledgeAgreementService;
 import ru.fds.tavrzcms3.Service.PledgeSubjectService;
-import ru.fds.tavrzcms3.domain.LoanAgreement;
+import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
 
 import javax.annotation.PostConstruct;
@@ -88,10 +88,41 @@ public class Tavrzcms3Application {
 //        for(String str : stringSet)
 //            System.out.println(str);
 
+//
+//        List<LoanAgreement> loanAgreements = pledgeAgreementService.getClosedLoanAgreementsForPledgeAgreement(126);
+//        for(LoanAgreement la : loanAgreements)
+//            System.out.println(la);
 
-        List<LoanAgreement> loanAgreements = pledgeAgreementService.getClosedLoanAgreementsForPledgeAgreement(126);
-        for(LoanAgreement la : loanAgreements)
-            System.out.println(la);
 
+//        System.out.println(pledgeAgreementService.countOfMonitoringNotDone(1));
+//        System.out.println(pledgeAgreementService.countOfMonitoringIsDone(1));
+//        System.out.println(pledgeAgreementService.countOfMonitoringOverdue(1));
+//
+//        System.out.println("PledgeAgreementWithMonitoringNotDone:");
+//        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(1);
+//        for(int i = 0; i < pledgeAgreementList.size(); i++) {
+//            System.out.println(pledgeAgreementList.get(i).getPledgeAgreementId());
+////            System.out.println(i + 1 + ". \t" + pledgeAgreementList.get(i).getPledgeAgreementId());
+//            System.out.println("Plgedge Subjects of " + pledgeAgreementList.get(i).getPledgeAgreementId());
+//            List<PledgeSubject> pledgeSubjects = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementList.get(i).getPledgeAgreementId());
+//            for(PledgeSubject ps : pledgeSubjects)
+//                System.out.println(ps.getDateMonitoring());
+//        }
+//
+//        System.out.println("!!!!!!!!");
+//        List<PledgeAgreement> pledgeAgreementList1 = repositoryPledgeAgreement.findByNumPE("415/1");
+//        List<LoanAgreement> loanAgreements = repositoryLoanAgreement.findByPledgeAgreementsAndStatusLEEquals(pledgeAgreementList1.get(0), "открыт");
+//        for(LoanAgreement la : loanAgreements)
+//            System.out.println(la.getNumLE());
+//
+//        System.out.println("!!!!!!!!");
+//        Client client = repositoryClient.findByLoanAgreements(loanAgreements.get(0));
+//        System.out.println(client);
+//
+//        System.out.println("!!!!!!!!");
+//        Employee employee = repositoryEmployee.getOne((long)1);
+//        List<Client> clients = repositoryClient.findByEmployee(employee);
+//        for(Client c : clients)
+//            System.out.println(c.getClientId());
     }
 }
