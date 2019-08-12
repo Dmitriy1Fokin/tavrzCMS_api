@@ -5,11 +5,13 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.fds.tavrzcms3.Service.*;
 import ru.fds.tavrzcms3.domain.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -171,12 +173,12 @@ public class PagesController {
 
     @GetMapping("/loan_agreements")
     public String loanAgreementsPage(@RequestParam("employeeId") long employeeId, Model model) {
-        Employee employee = employeeService.getEmployee(employeeId);
-        model.addAttribute("employee", employee);
+        List<LoanAgreement> loanAgreementList = loanAgreementService.getCurrentLoanAgreementsForEmployee(employeeId);
+        model.addAttribute("loanAgreementList", loanAgreementList);
         return "loan_agreements";
     }
 
-    @GetMapping("monitoring_pledge_agreements")
+    @GetMapping("/monitoring_pledge_agreements")
     public String monitoringPledgeAgreementsPage(@RequestParam("countOfMonitoringNotDone") int countOfMonitoringNotDone,
                                                  @RequestParam("countOfMonitoringIsDone") int countOfMonitoringIsDone,
                                                  @RequestParam("countOfMonitoringOverdue") int countOfMonitoringOverdue,
@@ -196,7 +198,7 @@ public class PagesController {
         return "monitoring_pledge_agreements";
     }
 
-    @GetMapping("conclusion_pledge_agreements")
+    @GetMapping("/conclusion_pledge_agreements")
     public String conclusionPledgeAgreementsPage(@RequestParam("countOfConclusionNotDone") int countOfConclusionNotDone,
                                                  @RequestParam("countOfConclusionIsDone") int countOfConclusionIsDone,
                                                  @RequestParam("countOfConclusionOverdue") int countOfConclusionOverdue,
@@ -216,6 +218,47 @@ public class PagesController {
         return "conclusion_pledge_agreements";
     }
 
+    @GetMapping("/search")
+    public String searchPage(){
+        System.out.println("@GetMapping(\"/search\")!!!!!!!!!!!!!!!!!!!");
+        return "search";
+    }
+
+    @GetMapping("/search_results")
+    public String searchResultsPage(@RequestParam Map<String, String> reqParam, Model model){
+        reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
+        switch (reqParam.get("typeOfSearch")){
+            case "searchLA":
+                List<LoanAgreement> loanAgreements = loanAgreementService.getLoanAgreementFromSearch(reqParam);
+                model.addAttribute("loanAgreements", loanAgreements);
+                model.addAttribute("typeOfSearch", "loanAgreements");
+                return "search_results";
+            case "searchPA":
+                model.addAttribute("typeOfSearch", "pledgeAreements");
+                return "search_results";
+            case "searchPS":
+                model.addAttribute("typeOfSearch", "pledgeSubjects");
+                return "search_results";
+
+                default:
+                    return "search_results";
+
+        }
+
+
+    }
+
+
+
+//    @PostMapping("/search")
+//    public String searchActionPage(@RequestParam("numLA") String numLA, @RequestParam("pfo") Byte pfo, @RequestParam("loaner") String loaner, Model model){
+//        System.out.println("@PostMapping(\"/search\")!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//        System.out.println(numLA + pfo);
+//        Client client = clientService.getClientByClientId(2);
+//        List<LoanAgreement> loanAgreements = loanAgreementService.getLasdasd(numLA, pfo, client);
+//        model.addAttribute("loanAgreements", loanAgreements);
+//        return "search";
+//    }
 
 //    @GetMapping("/edit")
 //    public String editPage(@RequestParam("id") long id, Model model) {

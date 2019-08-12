@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск</title>
+    <style>
+        .nav-item{
+            display: inline;
+        }
+        .row{
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="static/nav :: user_nav_bar"></div>
+
+<h2>Поиск кредитного договора</h2>
+<form th:action="@{/search_results}" th:method="get" action="search_results.html">
+    <input type="hidden", name="typeOfSearch" value="searchLA">
+    <div class="row">
+        <label>№ КД</label>
+        <input name="numLA" type="text"/>
+    </div>
+    <br>
+    <div class="row">
+        <label>Заемщик</label>
+        <input name="loaner" type="text"/>
+        <select name="loanerOption">
+            <option selected value="юл">ЮЛ</option>
+            <option value="фл">ФЛ</option>
+        </select>
+    </div>
+    <br>
+    <div class="row">
+            <label>дата начала КД</label>
+            <input name="dateBeginLA" type="date"/>
+            <select name="dateBeginLAOption">
+                <option selected value=":">равно</option>
+                <option value=">">больше</option>
+                <option value="<">меньше</option>
+            </select>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дата окончания КД</label>
+        <input name="dateEndLA" type="date"/>
+        <select name="dateEndLAOption">
+            <option selected value=":">равно</option>
+            <option value=">">больше</option>
+            <option value="<">меньше</option>
+        </select>
+    </div>
+    <br>
+    <div class="row">
+        <label>ПФО</label>
+        <input name="pfo" type="text"/>
+        <select name="pfoOption">
+            <option selected value=":">равно</option>
+            <option value=">">больше</option>
+            <option value="<">меньше</option>
+        </select>
+    </div>
+    <br>
+    <div class="row">
+        <label>Кат.кач</label>
+        <input name="quality" type="text"/>
+        <select name="qualityOption">
+            <option selected value=":">равно</option>
+            <option value=">">больше</option>
+            <option value="<">меньше</option>
+        </select>
+    </div>
+    <br>
+    <div class="row">
+        <label>Сумма договора</label>
+        <input name="amaunt" type="text"/>
+        <select name="amauntOption">
+            <option selected value=":">равно</option>
+            <option value=">">больше</option>
+            <option value="<">меньше</option>
+        </select>
+    </div>
+    <br>
+    <div class="row">
+        <label>Ссудная задолженность</label>
+        <input name="debt" type="text"/>
+        <select name="debtOption">
+            <option selected value=":">равно</option>
+            <option value=">">больше</option>
+            <option value="<">меньше</option>
+        </select>
+    </div>
+    <br>
+    <div class="row">
+        <label>%</label>
+        <input name="interestRate" type="text"/>
+        <select name="interestRateOption">
+            <option selected value=":">равно</option>
+            <option value=">">больше</option>
+            <option value="<">меньше</option>
+        </select>
+    </div>
+    <br>
+    <div class="row">
+        <label>Статус КД</label>
+        <select name="statusLA">
+            <option selected value="открыт">открыт</option>
+            <option value="закрыт">закрыт</option>
+        </select>
+    </div>
+    <br>
+    <button type="submit">Найти</button>
+</form>
+<!--<div th:each="la : ${loanAgreements}">-->
+    <!--<div th:text="${la.getNumLA() + ' - ' + la.getPfo()}"></div>-->
+<!--</div>-->
+<!--<label>№ КД</label>-->
+<!--<label>ПФО</label>-->
+<h2>Поиск договора залога</h2>
+<h2>Поиск предмета залога</h2>
+
+</body>
+</html>
