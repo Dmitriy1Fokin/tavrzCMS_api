@@ -1,6 +1,7 @@
 package ru.fds.tavrzcms3.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
@@ -9,7 +10,7 @@ import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import java.util.Date;
 import java.util.List;
 
-public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Long> {
+public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Long>, JpaSpecificationExecutor<LoanAgreement> {
     LoanAgreement findByLoanAgreementId(long loanAgreementId);
     LoanAgreement findByNumLA (String numLA);
     List<LoanAgreement> findByDateBeginLA (Date dateBeginLA);
@@ -37,4 +38,7 @@ public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Lo
     int countAllByLoanerAndStatusLAEquals(Client loaner, String statusLA);
     int countAllByLoanerInAndStatusLAEquals(List<Client> clients, String statusLA);
     List<LoanAgreement> findByLoanerAndStatusLAEquals(Client loaner, String statusLA);
+    List<LoanAgreement> findByNumLAAndPfo(String numLA, byte pfo);
+    List<LoanAgreement> findByNumLAContainingIgnoreCase(String numLA);
+    List<LoanAgreement> findByLoanerInAndStatusLAEquals(List<Client> loaners, String statusLA);
 }

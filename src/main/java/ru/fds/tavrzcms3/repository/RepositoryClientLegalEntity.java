@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface RepositoryClientLegalEntity extends RepositoryClient {
     List<ClientLegalEntity> findByOrganizationalForm (String organizationalForm);
-    List<ClientLegalEntity> findByName (String name);
+    List<ClientLegalEntity> findByNameContainingIgnoreCase (String name);
     ClientLegalEntity findByInn (String inn);
 }
