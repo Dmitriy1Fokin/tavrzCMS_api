@@ -23,7 +23,10 @@
 <body>
 <div th:replace="static/nav :: user_nav_bar"></div>
 <h1 th:text="'Договор залога: №' + ${pledgeAgreement.getNumPA()} + ' от ' + ${pledgeAgreement.getDateBeginPA()}">Договор залога</h1>
-
+    <label>Ответственный сотрудник: </label>
+    <span th:text="${pledgeAgreement.getPledgor().getEmployee().getSurname()} + ' ' + ${pledgeAgreement.getPledgor().getEmployee().name}"></span>
+    <br>
+    <br>
     <label>Номер договора залога:</label>
     <span th:text="${pledgeAgreement.getNumPA()}">н/д</span>
     <br>
@@ -108,6 +111,7 @@
                 <thead>
                 <tr>
                     <th>№КД</th>
+                    <th>Заемщик</th>
                     <th>Дата начала КД</th>
                     <th>Дата окончания КД</th>
                     <th>Сумма договора</th>
@@ -123,6 +127,20 @@
                                 <td>
                                     <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
                                        th:text="${loanAgreement.getNumLA()}">№ КД</a>
+                                </td>
+
+                                <td>
+                                    <div th:switch="${loanAgreement.getLoaner().getTypeOfClient()}">
+                                        <div th:case="юл">
+                                            <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+                                               th:text="${loanAgreement.getLoaner().getClientLegalEntity().getOrganizationalForm() + ' ' + loanAgreement.getLoaner().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
+                                        </div>
+                                        <div th:case="фл">
+                                            <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+                                               th:text="${loanAgreement.getLoaner().getClientIndividual().getSurname() + ' ' + loanAgreement.getLoaner().getClientIndividual().getName()}">Заемщик ФЛ</a>
+
+                                        </div>
+                                    </div>
                                 </td>
 
                                 <td th:text="${loanAgreement.getDateBeginLA()}"></td>
@@ -153,6 +171,7 @@
                 <thead>
                 <tr>
                     <th>№КД</th>
+                    <th>Заемщик</th>
                     <th>Дата начала КД</th>
                     <th>Дата окончания КД</th>
                     <th>Сумма договора</th>
@@ -169,6 +188,20 @@
                                 <td>
                                     <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
                                        th:text="${loanAgreement.getNumLA()}">№ КД</a>
+                                </td>
+
+                                <td>
+                                    <div th:switch="${loanAgreement.getLoaner().getTypeOfClient()}">
+                                        <div th:case="юл">
+                                            <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+                                               th:text="${loanAgreement.getLoaner().getClientLegalEntity().getOrganizationalForm() + ' ' + loanAgreement.getLoaner().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
+                                        </div>
+                                        <div th:case="фл">
+                                            <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+                                               th:text="${loanAgreement.getLoaner().getClientIndividual().getSurname() + ' ' + loanAgreement.getLoaner().getClientIndividual().getName()}">Заемщик ФЛ</a>
+
+                                        </div>
+                                    </div>
                                 </td>
 
                                 <td th:text="${loanAgreement.getDateBeginLA()}"></td>

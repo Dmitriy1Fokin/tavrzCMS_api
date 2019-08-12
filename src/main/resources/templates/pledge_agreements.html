@@ -94,7 +94,7 @@
                         </div>
 
                         <td>
-                            <ol>
+                                <ol>
                                 <div th:if="${pe.getPledgeSubjects().size() &gt; 5}">
                                     <div th:each="ps, countStat: ${pe.getPledgeSubjects()}">
                                         <div th:if="${countStat.index &lt; 5}" th:remove="tag">

@@ -27,6 +27,7 @@
     <table class="loanAgreement">
         <thead>
         <tr>
+            <th>№п/п</th>
             <th>№КД</th>
             <th>Заемщик</th>
             <th>Дата начала КД</th>
@@ -39,9 +40,9 @@
         </tr>
         </thead>
         <tbody>
-        <div th:each="loaner : ${employee.getClients()}">
-            <div th:each="la : ${@loanAgreementService.getCurrentLoanAgreement(loaner.getClientId())}">
+            <div th:each="la, countStat: ${loanAgreementList}">
                 <tr>
+                    <td th:text="${countStat.index + 1}"></td>
                     <td>
                         <a th:href="@{/loan_agreement_detail(loanAgreementId=${la.getLoanAgreementId()})}" href="loan_agreement_detail.html"
                            th:text="${la.getNumLA()}">№ КД</a>
@@ -68,7 +69,6 @@
                     <td th:text="${la.getQualityCategory()}">н/д</td>
                 </tr>
             </div>
-        </div>
         </tbody>
     </table>
 </div>

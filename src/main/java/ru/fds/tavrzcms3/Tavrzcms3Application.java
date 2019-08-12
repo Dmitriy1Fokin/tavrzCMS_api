@@ -3,14 +3,21 @@ package ru.fds.tavrzcms3;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.domain.Specification;
 import ru.fds.tavrzcms3.Service.InsuranceService;
 import ru.fds.tavrzcms3.Service.LoanAgreementService;
 import ru.fds.tavrzcms3.Service.PledgeAgreementService;
 import ru.fds.tavrzcms3.Service.PledgeSubjectService;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
+import ru.fds.tavrzcms3.specification.LoanAgreementSpecification;
+import ru.fds.tavrzcms3.specification.LoanAgreementSpecificationsBuilder;
+import ru.fds.tavrzcms3.specification.SearchCriteria;
 
 import javax.annotation.PostConstruct;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
@@ -50,6 +57,9 @@ public class Tavrzcms3Application {
 
     @Autowired
     private PledgeAgreementService pledgeAgreementService;
+
+    @Autowired
+    private RepositoryClientLegalEntity repositoryClientLegalEntity;
 
 
 
@@ -124,5 +134,29 @@ public class Tavrzcms3Application {
 //        List<Client> clients = repositoryClient.findByEmployee(employee);
 //        for(Client c : clients)
 //            System.out.println(c.getClientId());
+
+//        LoanAgreementSpecification cpec1 = new LoanAgreementSpecification(new SearchCriteria("pfo", ">=", "4"));
+//        List<LoanAgreement> loanAgreements = repositoryLoanAgreement.findAll(cpec1);
+//        for(LoanAgreement la : loanAgreements)
+//            System.out.println(la.getNumLA());
+
+//        LoanAgreementSpecificationsBuilder builder = new LoanAgreementSpecificationsBuilder();
+//        builder.with("pfo", ">", "4");
+//        builder.with("amountLA", ">", "100000000");
+//        builder.with("debtLA", ">", "66000000");
+//        Calendar qwer = new GregorianCalendar(2017,8, 25);
+//        Date date = new Date(qwer.getTimeInMillis());
+//        builder.with("dateBeginLA", ">=", date);
+//        Specification<LoanAgreement> cpec = builder.build();
+//        List<LoanAgreement> loanAgreements = repositoryLoanAgreement.findAll(cpec);
+//        for(LoanAgreement la : loanAgreements)
+//            System.out.println(la.getNumLA() + " - " + la.getAmountLA() + " - " + la.getPfo() + " - " + la.getDebtLA() + " - " + la.getDateBeginLA());
+//            System.out.println(la.getNumLA());
+
+//        List<ClientLegalEntity> clientLegalEntities = repositoryClientLegalEntity.findByNameContainingIgnoreCase("ДИАБ");
+//        for(ClientLegalEntity c : clientLegalEntities)
+//            System.out.println(c);
+
+
     }
 }
