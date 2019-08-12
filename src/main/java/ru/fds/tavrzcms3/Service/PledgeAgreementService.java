@@ -1,10 +1,14 @@
 package ru.fds.tavrzcms3.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
+import ru.fds.tavrzcms3.specification.PledgeAgreementSpecificationsBuilder;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -12,16 +16,16 @@ public class PledgeAgreementService {
 
     @Autowired
     RepositoryPledgeAgreement repositoryPledgeAgreement;
-
     @Autowired
     RepositoryPledgeSubject repositoryPledgeSubject;
-
     @Autowired
     RepositoryLoanAgreement repositoryLoanAgreement;
-
     @Autowired
     RepositoryClient repositoryClient;
-
+    @Autowired
+    RepositoryClientLegalEntity repositoryClientLegalEntity;
+    @Autowired
+    RepositoryClientIndividual repositoryClientIndividual;
     @Autowired
     RepositoryEmployee repositoryEmployee;
 
@@ -363,6 +367,83 @@ public class PledgeAgreementService {
         }
 
         return pledgeAgreementListWithConclusionOverdue;
+    }
+
+    public synchronized List<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam){
+        PledgeAgreementSpecificationsBuilder builder = new PledgeAgreementSpecificationsBuilder();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
+
+        if(!searchParam.get("numPA").isEmpty())
+            builder.with("numPA", ":", searchParam.get("numPA"), false);
+
+
+        if(!searchParam.get("pledgor").isEmpty()) {
+            if (searchParam.get("pledgorOption").equals("юл")) {
+                List<ClientLegalEntity> pledgors = repositoryClientLegalEntity.findByNameContainingIgnoreCase(searchParam.get("pledgor"));
+                if(pledgors.size() == 1) {
+                    builder.with("pledgor", ":", pledgors.get(0), false);
+                }
+                else if(pledgors.size() > 1){
+                    for(ClientLegalEntity cle : pledgors) {
+                        builder.with("pledgor", ":", cle, true);
+                    }
+                }
+            }
+            else{
+                String[] words = searchParam.get("pledgor").split("\\s");
+                if(words.length == 1){
+                    List<ClientIndividual> pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCase(words[0]);
+
+                    if(pledgors.size() == 1)
+                        builder.with("pledgor", ":", pledgors.get(0), false);
+                    else if(pledgors.size() > 1){
+                        for(ClientIndividual ci : pledgors) {
+                            builder.with("pledgor", ":", ci, true);
+                        }
+                    }
+                }
+                else if(words.length == 2){
+                    List<ClientIndividual> pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(words[0], words[1]);
+
+                    if(pledgors.size() == 1)
+                        builder.with("pledgor", ":", pledgors.get(0), false);
+                    else if(pledgors.size() > 1){
+                        for(ClientIndividual ci : pledgors) {
+                            builder.with("pledgor", ":", ci, true);
+                        }
+                    }
+                }
+            }
+        }
+
+        if(!searchParam.get("dateBeginPA").isEmpty()){
+            try {
+                Date date = simpleDateFormat.parse(searchParam.get("dateBeginPA"));
+                builder.with("dateBeginPA", searchParam.get("dateBeginPAOption"), date, false);
+            }catch (ParseException e){
+                System.out.println("Не верный фортат dateBeginPA");
+            }
+        }
+
+        if(!searchParam.get("dateEndPA").isEmpty()){
+            try {
+                Date date = simpleDateFormat.parse(searchParam.get("dateEndPA"));
+                builder.with("dateEndPA", searchParam.get("dateEndPAOption"), date, false);
+            }catch (ParseException e){
+                System.out.println("Не верный фортат dateEndPA");
+            }
+        }
+
+        if(!searchParam.get("pervPslOption").equals("all"))
+            builder.with("pervPosl", ":", searchParam.get("pervPslOption"), false);
+
+        builder.with("statusPA", ":", searchParam.get("statusPA"), false);
+
+
+        Specification<PledgeAgreement> cpec = builder.build();
+
+        return repositoryPledgeAgreement.findAll(cpec);
+
     }
 
 }

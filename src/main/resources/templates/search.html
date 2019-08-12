@@ -112,12 +112,62 @@
     <br>
     <button type="submit">Найти</button>
 </form>
-<!--<div th:each="la : ${loanAgreements}">-->
-    <!--<div th:text="${la.getNumLA() + ' - ' + la.getPfo()}"></div>-->
-<!--</div>-->
-<!--<label>№ КД</label>-->
-<!--<label>ПФО</label>-->
 <h2>Поиск договора залога</h2>
+<form th:action="@{/search_results}" th:method="get" action="search_results.html">
+    <input type="hidden", name="typeOfSearch" value="searchPA">
+    <div class="row">
+        <label>№ ДЗ</label>
+        <input name="numPA" type="text"/>
+    </div>
+    <br>
+    <div class="row">
+        <label>Залогодатель</label>
+        <input name="pledgor" type="text"/>
+        <select name="pledgorOption">
+            <option selected value="юл">ЮЛ</option>
+            <option value="фл">ФЛ</option>
+        </select>
+    </div>
+    <br>
+    <div class="row">
+        <label>дата начала ДЗ</label>
+        <input name="dateBeginPA" type="date"/>
+        <select name="dateBeginPAOption">
+            <option selected value=":">равно</option>
+            <option value=">">больше</option>
+            <option value="<">меньше</option>
+        </select>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дата окончания ДЗ</label>
+        <input name="dateEndPA" type="date"/>
+        <select name="dateEndPAOption">
+            <option selected value=":">равно</option>
+            <option value=">">больше</option>
+            <option value="<">меньше</option>
+        </select>
+    </div>
+    <br>
+    <div class="row">
+        <label>Перв/посл</label>
+        <select name="pervPslOption">
+            <option selected value="all">Все</option>
+            <option value="перв">Первичный</option>
+            <option value="посл">Последующий</option>
+        </select>
+    </div>
+    <br>
+    <div class="row">
+        <label>Статус ДЗ</label>
+        <select name="statusPA">
+            <option selected value="открыт">открыт</option>
+            <option value="закрыт">закрыт</option>
+        </select>
+    </div>
+    <br>
+    <button type="submit">Найти</button>
+</form>
 <h2>Поиск предмета залога</h2>
 
 </body>

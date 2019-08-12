@@ -226,7 +226,6 @@ public class PagesController {
 
     @GetMapping("/search_results")
     public String searchResultsPage(@RequestParam Map<String, String> reqParam, Model model){
-        reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
         switch (reqParam.get("typeOfSearch")){
             case "searchLA":
                 List<LoanAgreement> loanAgreements = loanAgreementService.getLoanAgreementFromSearch(reqParam);
@@ -234,9 +233,12 @@ public class PagesController {
                 model.addAttribute("typeOfSearch", "loanAgreements");
                 return "search_results";
             case "searchPA":
+                List<PledgeAgreement> pledgeAgreements = pledgeAgreementService.getPledgeAgreementFromSearch(reqParam);
+                model.addAttribute("pledgeAgreements", pledgeAgreements);
                 model.addAttribute("typeOfSearch", "pledgeAreements");
                 return "search_results";
             case "searchPS":
+                reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
                 model.addAttribute("typeOfSearch", "pledgeSubjects");
                 return "search_results";
 
