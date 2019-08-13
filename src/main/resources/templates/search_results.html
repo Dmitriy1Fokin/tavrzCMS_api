@@ -80,6 +80,7 @@
             <table class="searchTable">
                 <thead>
                 <tr>
+                    <th>№п/п</th>
                     <th>№ДЗ</th>
                     <th>Дата начала ДЗ</th>
                     <th>Дата окончания ДЗ</th>
@@ -98,7 +99,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                            <tr th:each="pa : ${pledgeAgreements}">
+                            <tr th:each="pa, countStat : ${pledgeAgreements}">
+                                <td th:text="${countStat.index + 1}"></td>
+
                                 <td>
                                     <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pa.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
                                        th:text="${pa.getNumPA()}">н/д</a>
@@ -185,7 +188,157 @@
         </div>
     </div>
     <div th:case="pledgeSubjects">
+        <table class="searchTable">
+            <thead>
+            <tr>
+                <th>№п/п</th>
+                <th>Наименование</th>
+                <th>Вид обеспечения</th>
+                <th>ОХП</th>
+                <th>Ед.изм</th>
+                <th>ОИП</th>
+                <th>Вид ОИП</th>
+                <th>Адрес</th>
+                <th>РС ДЗ</th>
+                <th>ЗС ДЗ</th>
+                <th>РС ЗЗ</th>
+                <th>ЗС ЗЗ</th>
+                <th>СС</th>
+                <th>Дата ЗЗ</th>
+                <th>Дата Мониторинга</th>
+                <th>Вид мониторинга</th>
+                <th>Результат мониторинга</th>
+                <th>Ликвидность</th>
+                <th>Функция залога</th>
+                <th>Обязательство страхования</th>
+                <th>Наличие обременений</th>
+            </tr>
+            </thead>
+            <tbody>
+            <div th:each="ps, countStat : ${pledgeSubjects}">
+                <tr>
+                    <td th:text="${countStat.index + 1}"></td>
 
+                    <td>
+                        <a th:href="@{/pledge_subject_detail(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="pledge_subject_detail.html" th:text="${ps.getName()}">наименование</a>
+                    </td>
+
+                    <td th:text="${ps.getTypeOfCollateral()}">н/д</td>
+
+                    <div th:switch="${ps.getTypeOfCollateral()}">
+                        <div th:case="'Авто/спецтехника'">
+                            <td th:text="${ps.getPledgeSubjectAuto().getHorsepower()}">0.00</td>
+                            <td>л.с.</td>
+                        </div>
+                        <div th:case="Оборудование">
+                            <td th:text="${ps.getPledgeSubjectEquipment().getProductivity()}">0.00</td>
+                            <td th:text="${ps.getPledgeSubjectEquipment().getTypeOfProductivity()}">н/д</td>
+                        </div>
+                        <div th:case="ТМЦ">
+                            <td th:text="${ps.getPledgeSubjectTBO().getCountOfTBO()}">0.00</td>
+                            <td>Кол-во</td>
+                        </div>
+                        <div th:case="'Ценные бумаги'">
+                            <td>-</td>
+                            <td>-</td>
+                        </div>
+                        <div th:case="Судно">
+                            <td th:text="${ps.getPledgeSubjectVessel().getDeadweight()}">0.00</td>
+                            <td>дейдвейт</td>
+                        </div>
+                        <div th:case="*">
+                            <td th:text="${ps.getPledgeSubjectRealty().getArea()}">0.00</td>
+                            <td>кв.м.</td>
+                        </div>
+                    </div>
+
+                    <div th:switch="${ps.getTypeOfCollateral()}">
+                        <div th:case="'Авто/спецтехника'">
+                            <td th:text="${ps.getPledgeSubjectAuto().getVin()}">0.00</td>
+                            <td>VIN</td>
+                        </div>
+                        <div th:case="Оборудование">
+                            <td th:text="${ps.getPledgeSubjectEquipment().getSerialNum()}">0.00</td>
+                            <td>Завод№</td>
+                        </div>
+                        <div th:case="ТМЦ">
+                            <td>-</td>
+                            <td>-</td>
+                        </div>
+                        <div th:case="'Ценные бумаги'">
+                            <td>-</td>
+                            <td>-</td>
+                        </div>
+                        <div th:case="Судно">
+                            <td th:text="${ps.getPledgeSubjectVessel().getImo()}">0.00</td>
+                            <td>IMO</td>
+                        </div>
+                        <div th:case="*">
+                            <td th:text="${ps.getPledgeSubjectRealty().getCadastralNum()}">0.00</td>
+                            <td>Кад№</td>
+                        </div>
+                    </div>
+
+                    <td th:text="${ps.getAdressRegion() + ', ' + ps.getAdressDistrict() + ', ' + ps.getAdressCity() + ', ' + ps.getAdressStreet() + ', ' + ps.getAdressBuilbing() + ', ' + ps.getAdressPemises()}">н/д</td>
+
+
+                    <td>
+                        <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                           th:text="${#numbers.formatCurrency(ps.getRsDz())}">н/д</a>
+                    </td>
+
+                    <td>
+                        <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                           th:text="${#numbers.formatCurrency(ps.getZsDz())}">н/д</a>
+                    </td>
+
+                    <td>
+                        <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                           th:text="${#numbers.formatCurrency(ps.getRsZz())}">н/д</a>
+                    </td>
+
+                    <td>
+                        <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                           th:text="${#numbers.formatCurrency(ps.getZsZz())}">н/д</a>
+                    </td>
+
+                    <td>
+                        <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                           th:text="${#numbers.formatCurrency(ps.getSs())}">н/д</a>
+                    </td>
+
+                    <td th:text="${ps.getDateConclusion()}"></td>
+
+                    <td>
+                        <a th:href="@{/monitoring_pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="monitoring_pledge_subject.html"
+                           th:text="${ps.getDateMonitoring()}">н/д</a>
+                    </td>
+
+                    <td th:text="${ps.getTypeOfMonitoring()}"></td>
+
+                    <td th:text="${ps.getStatusMonitoring()}"></td>
+
+                    <td th:text="${ps.getLiquidity()}"></td>
+
+                    <td th:text="${ps.getTypeOfPledge()}"></td>
+
+                    <div th:switch="${ps.getInsuranceObligation()}">
+                        <div th:case="да">
+                            <td>
+                                <a th:href="@{/insurances(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="insurances.html" th:text="да">да</a>
+                            </td>
+                        </div>
+                        <div th:case="нет">
+                            <td>нет</td>
+                        </div>
+                    </div>
+                    <td>
+                        <a th:href="@{/encumbrances(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="encumbrances.html" th:text="подробнее">подробнее</a>
+                    </td>
+                </tr>
+            </div>
+            </tbody>
+        </table>
     </div>
 </div>
 

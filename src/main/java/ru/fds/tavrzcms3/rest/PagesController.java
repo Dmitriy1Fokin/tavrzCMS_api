@@ -239,6 +239,8 @@ public class PagesController {
                 return "search_results";
             case "searchPS":
                 reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
+                List<PledgeSubject> pledgeSubjects = pledgeSubjectService.getPledgeSubjectsFromSearch(reqParam);
+                model.addAttribute("pledgeSubjects", pledgeSubjects);
                 model.addAttribute("typeOfSearch", "pledgeSubjects");
                 return "search_results";
 
