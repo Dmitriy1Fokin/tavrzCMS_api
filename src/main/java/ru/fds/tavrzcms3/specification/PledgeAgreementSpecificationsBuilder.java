@@ -25,7 +25,7 @@ public class PledgeAgreementSpecificationsBuilder {
             return null;
         }
 
-        List<Specification> specs = params.stream().map(LoanAgreementSpecification::new)
+        List<Specification> specs = params.stream().map(PledgeAgreementSpecification::new)
                 .collect(Collectors.toList());
 
         Specification result = specs.get(0);

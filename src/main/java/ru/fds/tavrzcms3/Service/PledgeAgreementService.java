@@ -440,9 +440,9 @@ public class PledgeAgreementService {
         builder.with("statusPA", ":", searchParam.get("statusPA"), false);
 
 
-        Specification<PledgeAgreement> cpec = builder.build();
+        Specification<PledgeAgreement> spec = builder.build();
 
-        return repositoryPledgeAgreement.findAll(cpec);
+        return repositoryPledgeAgreement.findAll(spec);
 
     }
 
