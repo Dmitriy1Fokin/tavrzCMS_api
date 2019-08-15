@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.domain.Monitoring;
+import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.repository.RepositoryMonitoring;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
@@ -30,8 +31,8 @@ public class MonitoringService {
     }
 
     @Transactional
-    public synchronized List<Monitoring> updateMonitoringInPledgeAgreement(long pledgeAgreementId, Monitoring monitoring){
-        List<PledgeSubject> pledgeSubjectList = repositoryPledgeSubject.findByPledgeAgreements(repositoryPledgeAgreement.getOne(pledgeAgreementId));
+    public synchronized List<Monitoring> insertMonitoringInPledgeAgreement(PledgeAgreement pledgeAgreement, Monitoring monitoring){
+        List<PledgeSubject> pledgeSubjectList = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         List<Monitoring> monitoringList = new ArrayList<>();
         for (PledgeSubject ps : pledgeSubjectList){
             monitoring.setPledgeSubject(ps);
@@ -39,5 +40,11 @@ public class MonitoringService {
         }
 
         return monitoringList;
+    }
+
+    @Transactional
+    public Monitoring insertMonitoringInPedgeSubject(PledgeSubject pledgeSubject, Monitoring monitoring){
+        monitoring.setPledgeSubject(pledgeSubject);
+        return repositoryMonitoring.save(monitoring);
     }
 }

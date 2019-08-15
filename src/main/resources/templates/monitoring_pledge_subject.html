@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'История мониторингов предмета залога:' + ${pledgeSubjectName}">История мониторингов предмета залога</title>
+    <title th:text="'История мониторингов предмета залога:' + ${pledgeSubject.getName()}">История мониторингов предмета залога</title>
     <style type="text/css">
         body {
             padding: 50px;
@@ -22,7 +22,14 @@
 </head>
 <body>
 <div th:replace="static/nav :: user_nav_bar"></div>
-<h1 th:text="'История мониторингов предмета залога:' + ${pledgeSubjectName}">История мониторингов предмета залога</h1>
+<h1 th:text="'История мониторингов предмета залога:' + ${pledgeSubject.getName()}">История мониторингов предмета залога</h1>
+
+<a th:href="@{monitoring_card(whereUpdateMonitoring='ps', pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
+   href="monitoring_card.html"
+   th:text="'Добавить мониторинг'">Добавить мониторинг</a>
+<br>
+<br>
+
 <div class="containerTable">
     <table class="MonitoringTable">
         <thead>
