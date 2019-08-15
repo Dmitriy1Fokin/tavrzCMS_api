@@ -149,7 +149,7 @@
 
                                 <td th:text="${#numbers.formatCurrency(loanAgreement.getAmountLA())}"></td>
 
-                                <td th:text="${loanAgreement.getInterestRateLA() + '%'}"></td>
+                                <td th:text="${#numbers.formatPercent(loanAgreement.getInterestRateLA(), 0, 2)}"></td>
 
                                 <td th:text="${#numbers.formatCurrency(loanAgreement.getDebtLA())}"></td>
 

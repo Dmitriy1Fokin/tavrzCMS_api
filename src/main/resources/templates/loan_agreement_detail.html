@@ -59,7 +59,7 @@
 <br>
 <br>
 <label>%:</label>
-<span th:text="${loanAgreement.getInterestRateLA() + '%'}">н/д</span>
+<span th:text="${#numbers.formatPercent(loanAgreement.getInterestRateLA(), 0, 2)}">н/д</span>
 <br>
 <br>
 <label>Задолженность:</label>
