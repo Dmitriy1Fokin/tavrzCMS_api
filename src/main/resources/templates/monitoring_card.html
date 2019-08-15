@@ -7,17 +7,17 @@
             <title th:text="'Обновление мониторинга предметов в договоре залога №' + ${pledgeAgreement.getNumPA()}">Обновление мониторинга</title>
         </div>
         <div th:case="ps">
-            <title th:text="'Обновление мониторинга предмета залога:' + ${pledgeSubject.getName()}">Обновление мониторинга</title>
+            <title th:text="'Обновление мониторинга предмета залога: ' + ${pledgeSubject.getName()}">Обновление мониторинга</title>
         </div>
         <div th:case="pledgor">
             <div th:switch="${pledgor.getTypeOfClient()}">
                 <div th:case="юл">
-                    <title th:text="'Обновление мониторинга предмета залога по залогодателю:'
+                    <title th:text="'Обновление мониторинга предмета залога по залогодателю: '
                     + ${pledgor.getClientLegalEntity().getOrganizationalForm()} + ' '
                     + ${pledgor.getClientLegalEntity().getName()}">Обновление мониторинга предмета залога по залогодателю ЮЛ</title>
                 </div>
                 <div th:case="фл">
-                    <title th:text="'Обновление мониторинга предмета залога по залогодателю:'
+                    <title th:text="'Обновление мониторинга предмета залога по залогодателю: '
                      + ${pledgor.getClientIndividual().getSurname()} + ' '
                         + ${pledgor.getClientIndividual().getName()}">Обновление мониторинга предмета залога по залогодателю ФЛ</title>
                 </div>

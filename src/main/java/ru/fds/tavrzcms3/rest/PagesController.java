@@ -160,7 +160,7 @@ public class PagesController {
     public String costHistoryPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
         List<CostHistory> costHistoryList = costHistoryService.getCostHistoryByPledgeSubjectId(pledgeSubjectId);
-        model.addAttribute("pledgeSubjectName", pledgeSubject.getName());
+        model.addAttribute("pledgeSubject", pledgeSubject);
         model.addAttribute("costHistoryList", costHistoryList);
         return "cost_history";
     }
@@ -287,7 +287,7 @@ public class PagesController {
             Date dateMonitoring = simpleDateFormat.parse(reqParam.get("dateMonitoring"));
             monitoring.setDateMonitoring(dateMonitoring);
         }catch (ParseException e){
-            System.out.println("Не верный фортат dateEndPA");
+            System.out.println("Не верный формат даты");
             e.printStackTrace();
         }
 
@@ -330,6 +330,48 @@ public class PagesController {
         }
     }
 
+    @GetMapping("/cost_history_card")
+    public String costHistryCardGet(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
+        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+        model.addAttribute("pledgeSubject", pledgeSubject);
+        return "cost_history_card";
+    }
+
+    @PostMapping("/cost_history_card")
+    public String costHistryCardPost(@RequestParam Map<String, String> reqParam, Model model){
+        CostHistory costHistory = new CostHistory();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
+        try {
+            Date dateConclusion = simpleDateFormat.parse(reqParam.get("dateConclusion"));
+            costHistory.setDateConclusion(dateConclusion);
+            if(!reqParam.get("dateAppraiserReport").isEmpty()) {
+                Date dateAppraiserReport = simpleDateFormat.parse(reqParam.get("dateAppraiserReport"));
+                costHistory.setAppraisalReportDate(dateAppraiserReport);
+            }
+        }catch (ParseException e){
+            System.out.println("Не верный формат даты");
+            e.printStackTrace();
+        }
+        costHistory.setRsDz(Double.parseDouble(reqParam.get("rsDz")));
+        costHistory.setZsDz(Double.parseDouble(reqParam.get("zsDz")));
+        costHistory.setRsZz(Double.parseDouble(reqParam.get("rzZz")));
+        costHistory.setZsZz(Double.parseDouble(reqParam.get("zsZz")));
+        costHistory.setSs(Double.parseDouble(reqParam.get("ss")));
+
+        if(!reqParam.get("appraiser").isEmpty())
+            costHistory.setAppraiser(reqParam.get("appraiser"));
+        if(!reqParam.get("numAppraiserReport").isEmpty())
+            costHistory.setAppraisalReportNum(reqParam.get("numAppraiserReport"));
+
+
+        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(Long.parseLong(reqParam.get("pledgeSubjectId")));
+        CostHistory costHistoryForPS = costHistoryService.insertCostHistoryInPledgeSubject(pledgeSubject, costHistory);
+        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryByPledgeSubjectId(pledgeSubject.getPledgeSubjectId());
+        model.addAttribute("pledgeSubject", pledgeSubject);
+        model.addAttribute("costHistoryList", costHistoryList);
+        return "cost_history";
+    }
 
 
 //    @PostMapping("/search")
