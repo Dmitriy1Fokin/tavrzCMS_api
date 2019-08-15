@@ -31,11 +31,15 @@
     <div th:case="фл">
         <h1 th:text="'Залогодатель:' + ${pledgor.getClientIndividual().getSurname() + ' '
         + pledgor.getClientIndividual().getName() + ' '
-        + pledgor.getClientIndividual().getPatronymic()}">Залогодатель ЮЛ</h1>
+        + pledgor.getClientIndividual().getPatronymic()}">Залогодатель ФЛ</h1>
         <label>Паспорт:</label>
         <span th:text="${pledgor.getClientIndividual().getPasportNum()}"></span>
     </div>
 </div>
+<br>
+<a th:href="@{monitoring_card(whereUpdateMonitoring='pledgor', pledgorId=${pledgor.getClientId()})}"
+   href="monitoring_card.html"
+   th:text="'Обновить мониторинг предметов залога по всем договорам залога залогодателя'">Обновить мониторинг предметов залога по всем договорам залога залогодателя</a>
 
 <div th:if="${@clientService.countOfCurrentPledgeAgreementsByPledgorId(pledgor.getClientId()) &gt; 0}">
     <h2>Действующее обеспечение</h2>

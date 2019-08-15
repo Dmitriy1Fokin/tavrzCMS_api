@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.Monitoring;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
@@ -46,5 +47,18 @@ public class MonitoringService {
     public Monitoring insertMonitoringInPedgeSubject(PledgeSubject pledgeSubject, Monitoring monitoring){
         monitoring.setPledgeSubject(pledgeSubject);
         return repositoryMonitoring.save(monitoring);
+    }
+
+    @Transactional
+    public List<Monitoring> insertMonitoringInPledgor(Client pledgor, Monitoring monitoring){
+        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement.findByPledgor(pledgor);
+        List<PledgeSubject> pledgeSubjectList = repositoryPledgeSubject.findByPledgeAgreementsIn(pledgeAgreementList);
+        List<Monitoring> monitoringList = new ArrayList<>();
+        for(PledgeSubject ps : pledgeSubjectList){
+            monitoring.setPledgeSubject(ps);
+            monitoringList.add(repositoryMonitoring.save(new Monitoring(monitoring)));
+        }
+
+        return monitoringList;
     }
 }

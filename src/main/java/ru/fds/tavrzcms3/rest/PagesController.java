@@ -266,6 +266,11 @@ public class PagesController {
                 model.addAttribute("whereUpdateMonitoring", reqParam.get("whereUpdateMonitoring"));
                 model.addAttribute("pledgeSubject", pledgeSubject);
                 return "monitoring_card";
+            case "pledgor":
+                Client pledgor = clientService.getClientByClientId(Long.parseLong(reqParam.get("pledgorId")));
+                model.addAttribute("whereUpdateMonitoring", reqParam.get("whereUpdateMonitoring"));
+                model.addAttribute("pledgor", pledgor);
+                return "monitoring_card";
 
                 default:
                     return "monitoring_card";
@@ -297,13 +302,13 @@ public class PagesController {
         switch (reqParam.get("whereUpdateMonitoring")) {
             case "pa":
                 PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(Long.parseLong(reqParam.get("pledgeAgreementId")));
-                List<Monitoring> monitoringList = monitoringService.insertMonitoringInPledgeAgreement(pledgeAgreement, monitoring);
-
+                List<Monitoring> monitoringListForPA = monitoringService.insertMonitoringInPledgeAgreement(pledgeAgreement, monitoring);
 
                 model.addAttribute("whereUpdateMonitoring", "responseSuccess");
                 model.addAttribute("pledgeAgreement", pledgeAgreement);
-                model.addAttribute("monitoringList" , monitoringList);
+                model.addAttribute("monitoringList" , monitoringListForPA);
                 return "monitoring_card";
+
             case "ps":
                 PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(Long.parseLong(reqParam.get("pledgeSubjectId")));
                 Monitoring monitoringForPS = monitoringService.insertMonitoringInPedgeSubject(pledgeSubject, monitoring);
@@ -312,6 +317,13 @@ public class PagesController {
                 model.addAttribute("pledgeSubject", pledgeSubject);
                 model.addAttribute("monitoringList", monitoringListForPS);
                 return "monitoring_pledge_subject";
+            case "pledgor":
+                Client pledgor = clientService.getClientByClientId(Long.parseLong(reqParam.get("pledgorId")));
+                List<Monitoring> monitoringListForPledgor = monitoringService.insertMonitoringInPledgor(pledgor, monitoring);
+                model.addAttribute("whereUpdateMonitoring", "responseSuccess");
+                model.addAttribute("pledgor", pledgor);
+                model.addAttribute("monitoringList" , monitoringListForPledgor);
+                return "monitoring_card";
 
             default:
                 return "monitoring_card";
