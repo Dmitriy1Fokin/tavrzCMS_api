@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.fds.tavrzcms3.Service.*;
 import ru.fds.tavrzcms3.domain.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -238,7 +241,7 @@ public class PagesController {
                 model.addAttribute("typeOfSearch", "pledgeAreements");
                 return "search_results";
             case "searchPS":
-                reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
+//                reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
                 List<PledgeSubject> pledgeSubjects = pledgeSubjectService.getPledgeSubjectsFromSearch(reqParam);
                 model.addAttribute("pledgeSubjects", pledgeSubjects);
                 model.addAttribute("typeOfSearch", "pledgeSubjects");
@@ -248,8 +251,57 @@ public class PagesController {
                     return "search_results";
 
         }
+    }
 
+    @GetMapping("/monitoring_card")
+    public String monitoringCardPageGet(@RequestParam Map<String, String> reqParam, Model model){
+        switch (reqParam.get("whereUpdateMonitoring")) {
+            case "pa":
+                PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(Long.parseLong(reqParam.get("pledgeAgreementId")));
+                model.addAttribute("whereUpdateMonitoring", reqParam.get("whereUpdateMonitoring"));
+                model.addAttribute("pledgeAgreement", pledgeAgreement);
+                return "monitoring_card";
 
+                default:
+                    return "monitoring_card";
+        }
+    }
+
+    @PostMapping("/monitoring_card")
+    public String monitoringCardPagePost(@RequestParam Map<String, String> reqParam, Model model){
+        reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
+        Monitoring monitoring = new Monitoring();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
+        try {
+            Date dateMonitoring = simpleDateFormat.parse(reqParam.get("dateMonitoring"));
+            monitoring.setDateMonitoring(dateMonitoring);
+        }catch (ParseException e){
+            System.out.println("Не верный фортат dateEndPA");
+            e.printStackTrace();
+        }
+
+        monitoring.setTypeOfMonitoring(reqParam.get("typeOfMonitoring"));
+        monitoring.setStatusMonitoring(reqParam.get("statusMonitoring"));
+        monitoring.setEmployee(reqParam.get("employee"));
+        if(!reqParam.get("collateralValue").isEmpty())
+            monitoring.setCollateralValue(Double.parseDouble(reqParam.get("collateralValue")));
+        if(!reqParam.get("notice").isEmpty())
+            monitoring.setNotice(reqParam.get("notice"));
+
+        switch (reqParam.get("whereUpdateMonitoring")) {
+            case "pa":
+                List<Monitoring> monitoringList = monitoringService.updateMonitoringInPledgeAgreement(Long.parseLong(reqParam.get("pledgeAgreementId")), monitoring);
+                PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(Long.parseLong(reqParam.get("pledgeAgreementId")));
+
+                model.addAttribute("whereUpdateMonitoring", "responseSuccess");
+                model.addAttribute("pledgeAgreement", pledgeAgreement);
+                model.addAttribute("monitoringList" , monitoringList);
+                return "monitoring_card";
+
+            default:
+                return "monitoring_card";
+        }
     }
 
 

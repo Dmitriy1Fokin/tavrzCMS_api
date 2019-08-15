@@ -3,10 +3,14 @@ package ru.fds.tavrzcms3.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.domain.Monitoring;
+import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.repository.RepositoryMonitoring;
+import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,12 +18,26 @@ public class MonitoringService {
 
     @Autowired
     RepositoryMonitoring repositoryMonitoring;
-
     @Autowired
     RepositoryPledgeSubject repositoryPledgeSubject;
+    @Autowired
+    RepositoryPledgeAgreement repositoryPledgeAgreement;
+
 
     public synchronized List<Monitoring> getMonitoringByPledgeSubjectId(long pledgeSubjectId){
         Sort sortByDateMonitoring = new Sort(Sort.Direction.DESC, "dateMonitoring");
         return repositoryMonitoring.findByPledgeSubject(repositoryPledgeSubject.findByPledgeSubjectId(pledgeSubjectId), sortByDateMonitoring);
+    }
+
+    @Transactional
+    public synchronized List<Monitoring> updateMonitoringInPledgeAgreement(long pledgeAgreementId, Monitoring monitoring){
+        List<PledgeSubject> pledgeSubjectList = repositoryPledgeSubject.findByPledgeAgreements(repositoryPledgeAgreement.getOne(pledgeAgreementId));
+        List<Monitoring> monitoringList = new ArrayList<>();
+        for (PledgeSubject ps : pledgeSubjectList){
+            monitoring.setPledgeSubject(ps);
+            monitoringList.add(repositoryMonitoring.save(new Monitoring(monitoring)));
+        }
+
+        return monitoringList;
     }
 }

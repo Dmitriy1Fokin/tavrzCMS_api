@@ -46,6 +46,21 @@ public class Monitoring {
 	@JoinColumn(name = "pledge_subject_id")
 	private PledgeSubject pledgeSubject;
 
+	public Monitoring(){
+
+	}
+
+	public Monitoring(Monitoring monitoring){
+		this.monitoringId = monitoring.monitoringId;
+		this.dateMonitoring = monitoring.dateMonitoring;
+		this.statusMonitoring = monitoring.statusMonitoring;
+		this.employee = monitoring.employee;
+		this.typeOfMonitoring = monitoring.typeOfMonitoring;
+		this.notice = monitoring.notice;
+		this.collateralValue = monitoring.collateralValue;
+		this.pledgeSubject = monitoring.pledgeSubject;
+	}
+
 	public long getMonitoringId() {
 		return monitoringId;
 	}
