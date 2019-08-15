@@ -18,4 +18,8 @@ public interface RepositoryPledgeSubject extends JpaRepository<PledgeSubject, Lo
     int countByPledgeAgreementsAndDateMonitoringBefore(PledgeAgreement pledgeAgreement, Date beforeDate);
     int countByPledgeAgreementsAndDateConclusionBetween(PledgeAgreement pledgeAgreement, Date firstDate, Date secondDate);
     int countByPledgeAgreementsAndDateConclusionBefore(PledgeAgreement pledgeAgreement, Date beforeDate);
+    boolean existsByPledgeAgreementsAndDateMonitoringBetween(PledgeAgreement pledgeAgreement, Date firstDate, Date secondDate);
+    boolean existsByPledgeAgreementsAndDateMonitoringBefore(PledgeAgreement pledgeAgreement, Date beforeDate);
+    boolean existsByPledgeAgreementsAndDateConclusionBetween(PledgeAgreement pledgeAgreement, Date firstDate, Date secondDate);
+    boolean existsByPledgeAgreementsAndDateConclusionBefore(PledgeAgreement pledgeAgreement, Date beforeDate);
 }

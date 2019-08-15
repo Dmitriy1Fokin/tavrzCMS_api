@@ -63,6 +63,8 @@ public class Tavrzcms3Application {
 
 
 
+
+
     @PostConstruct
     public void init(){
 //        ClientIndividual clientList = repositoryClientIndividual.findByPasportNum("5532 123765");
@@ -157,6 +159,20 @@ public class Tavrzcms3Application {
 //        for(ClientLegalEntity c : clientLegalEntities)
 //            System.out.println(c);
 
+        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPervCurrentPledgeAgreementsForEmployeee(1);
+        Calendar dateNow = new GregorianCalendar();
+        Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), 1);
+        Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
+        Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
+        Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
+        int countOfMonitoring = 0;
+        for(PledgeAgreement pa : pledgeAgreementList){
+//            int count = repositoryPledgeSubject.existsByPledgeAgreementsAndDateMonitoringBetween(pa, firstDate, secondDate);
+            if(repositoryPledgeSubject.existsByPledgeAgreementsAndDateMonitoringBetween(pa, firstDate, secondDate))
+                countOfMonitoring += 1;
+        }
+
+        System.out.println("countOfMonitoringNotDone:" + countOfMonitoring);
 
     }
 }
