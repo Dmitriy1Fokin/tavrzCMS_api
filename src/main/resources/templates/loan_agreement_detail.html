@@ -81,6 +81,7 @@
         <table class="loanAgreement">
             <thead>
             <tr>
+                <th>№ п/п</th>
                 <th>№ДЗ</th>
                 <th>Дата начала ДЗ</th>
                 <th>Дата окончания ДЗ</th>
@@ -91,8 +92,9 @@
             </tr>
             </thead>
             <tbody>
-            <div th:each="pe : ${@loanAgreementService.getCurrentPledgeAgreements(loanAgreement.getLoanAgreementId())}">
+            <div th:each="pe, stat : ${@loanAgreementService.getCurrentPledgeAgreements(loanAgreement.getLoanAgreementId())}">
                         <tr>
+                            <td th:text="${stat.index + 1}"></td>
                             <td>
                                 <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
                                    th:text="${pe.getNumPA()}">н/д</a>
@@ -142,6 +144,7 @@
         <table class="loanAgreement">
             <thead>
             <tr>
+                <th>№ п/п</th>
                 <th>№ДЗ</th>
                 <th>Дата начала ДЗ</th>
                 <th>Дата окончания ДЗ</th>
@@ -152,8 +155,9 @@
             </tr>
             </thead>
             <tbody>
-            <div th:each="pe : ${@loanAgreementService.getClosedPledgeAgreements(loanAgreement.getLoanAgreementId())}">
+            <div th:each="pe, stat : ${@loanAgreementService.getClosedPledgeAgreements(loanAgreement.getLoanAgreementId())}">
                 <tr>
+                    <td th:text="${stat.index + 1}"></td>
                     <td>
                         <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
                            th:text="${pe.getNumPA()}">н/д</a>

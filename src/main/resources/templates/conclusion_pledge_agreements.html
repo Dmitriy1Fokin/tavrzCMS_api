@@ -29,6 +29,7 @@
         <table class="pledgeAgreement">
             <thead>
             <tr>
+                <th>№ п/п</th>
                 <th>№ДЗ</th>
                 <th>Дата начала ДЗ</th>
                 <th>Дата окончания ДЗ</th>
@@ -45,8 +46,9 @@
             </tr>
             </thead>
             <tbody>
-            <div th:each="pa : ${pledgeAgreementListWithConclusionNotDone}">
+            <div th:each="pa, stat : ${pledgeAgreementListWithConclusionNotDone}">
                 <tr>
+                    <td th:text="${stat.index + 1}"></td>
                     <td>
                         <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pa.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
                            th:text="${pa.getNumPA()}">н/д</a>
@@ -128,6 +130,7 @@
     <table class="pledgeAgreement">
         <thead>
         <tr>
+            <th>№ п/п</th>
             <th>№ДЗ</th>
             <th>Дата начала ДЗ</th>
             <th>Дата окончания ДЗ</th>
@@ -144,8 +147,9 @@
         </tr>
         </thead>
         <tbody>
-        <div th:each="pa : ${pledgeAgreementListWithConclusionIsDone}">
+        <div th:each="pa, stat : ${pledgeAgreementListWithConclusionIsDone}">
             <tr>
+                <td th:text="${stat.index + 1}"></td>
                 <td>
                     <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pa.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
                        th:text="${pa.getNumPA()}">н/д</a>
@@ -227,6 +231,7 @@
         <table class="pledgeAgreement">
             <thead>
             <tr>
+                <th>№ п/п</th>
                 <th>№ДЗ</th>
                 <th>Дата начала ДЗ</th>
                 <th>Дата окончания ДЗ</th>
@@ -243,8 +248,9 @@
             </tr>
             </thead>
             <tbody>
-            <div th:each="pa : ${pledgeAgreementListWithConclusionOverdue}">
+            <div th:each="pa, stat : ${pledgeAgreementListWithConclusionOverdue}">
                 <tr>
+                    <td th:text="${stat.index + 1}"></td>
                     <td>
                         <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pa.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
                            th:text="${pa.getNumPA()}">н/д</a>

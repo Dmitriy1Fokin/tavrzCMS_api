@@ -32,6 +32,7 @@
     <table class="PledgeSubjectTable">
         <thead>
         <tr>
+            <th>№ п/п</th>
             <th>Наименование</th>
             <th>Вид обеспечения</th>
             <th>ОХП</th>
@@ -55,9 +56,9 @@
         </tr>
         </thead>
         <tbody>
-            <div th:each="ps : ${pledgeAgreement.getPledgeSubjects()}">
+            <div th:each="ps, stat : ${pledgeAgreement.getPledgeSubjects()}">
                 <tr>
-
+                    <td th:text="${stat.index + 1}"></td>
                     <td>
                         <a th:href="@{/pledge_subject_detail(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="pledge_subject_detail.html" th:text="${ps.getName()}">наименование</a>
                     </td>
