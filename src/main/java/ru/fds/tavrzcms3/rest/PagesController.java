@@ -261,16 +261,19 @@ public class PagesController {
                 PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(Long.parseLong(reqParam.get("pledgeAgreementId")));
                 model.addAttribute("whereUpdateMonitoring", reqParam.get("whereUpdateMonitoring"));
                 model.addAttribute("pledgeAgreement", pledgeAgreement);
+                model.addAttribute("monitoring", new Monitoring());
                 return "monitoring_card";
             case "ps":
                 PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(Long.parseLong(reqParam.get("pledgeSubjectId")));
                 model.addAttribute("whereUpdateMonitoring", reqParam.get("whereUpdateMonitoring"));
                 model.addAttribute("pledgeSubject", pledgeSubject);
+                model.addAttribute("monitoring", new Monitoring());
                 return "monitoring_card";
             case "pledgor":
                 Client pledgor = clientService.getClientByClientId(Long.parseLong(reqParam.get("pledgorId")));
                 model.addAttribute("whereUpdateMonitoring", reqParam.get("whereUpdateMonitoring"));
                 model.addAttribute("pledgor", pledgor);
+                model.addAttribute("monitoring", new Monitoring());
                 return "monitoring_card";
 
                 default:
@@ -279,26 +282,9 @@ public class PagesController {
     }
 
     @PostMapping("/monitoring_card")
-    public String monitoringCardPagePost(@RequestParam Map<String, String> reqParam, Model model){
-        reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
-        Monitoring monitoring = new Monitoring();
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
-        try {
-            Date dateMonitoring = simpleDateFormat.parse(reqParam.get("dateMonitoring"));
-            monitoring.setDateMonitoring(dateMonitoring);
-        }catch (ParseException e){
-            System.out.println("Не верный формат даты");
-            e.printStackTrace();
-        }
-
-        monitoring.setTypeOfMonitoring(reqParam.get("typeOfMonitoring"));
-        monitoring.setStatusMonitoring(reqParam.get("statusMonitoring"));
-        monitoring.setEmployee(reqParam.get("employee"));
-        if(!reqParam.get("collateralValue").isEmpty())
-            monitoring.setCollateralValue(Double.parseDouble(reqParam.get("collateralValue")));
-        if(!reqParam.get("notice").isEmpty())
-            monitoring.setNotice(reqParam.get("notice"));
+    public String monitoringCardPagePost(@ModelAttribute Monitoring monitoring,
+                                         @RequestParam Map<String, String> reqParam,
+                                         Model model){
 
         switch (reqParam.get("whereUpdateMonitoring")) {
             case "pa":
