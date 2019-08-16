@@ -9,52 +9,52 @@
 
 <h1 th:text="'Обновление cтоимостей предмета залога:' + ${pledgeSubject.getName()}">Обновление cтоимостей</h1>
 
-<form th:action="@{/cost_history_card}" th:method="post" action="cost_history_card.html">
+<form th:action="@{/cost_history_card}" th:method="post" th:object="${costHistory}" action="cost_history_card.html">
     <input type="hidden", name="pledgeSubjectId" th:value="${pledgeSubject.getPledgeSubjectId()}" value="0">
 
     <div class="row">
         <label>Дата заключения</label>
-        <input required name="dateConclusion" type="date"/>
+        <input required th:field="*{dateConclusion}" type="date"/>
     </div>
     <br>
     <div class="row">
         <label>РС по ДЗ</label>
-        <input required name="rsDz" type="text"/>
+        <input required th:field="*{rsDz}" type="text"/>
     </div>
     <br>
     <div class="row">
         <label>ЗС по ДЗ</label>
-        <input required name="zsDz" type="text"/>
+        <input required th:field="*{zsDz}" type="text"/>
     </div>
     <br>
     <div class="row">
         <label>РС по ЗЗ</label>
-        <input required name="rzZz" type="text"/>
+        <input required th:field="*{rsZz}" type="text"/>
     </div>
     <br>
     <div class="row">
         <label>ЗС по ЗЗ</label>
-        <input required name="zsZz" type="text"/>
+        <input required th:field="*{zsZz}" type="text"/>
     </div>
     <br>
     <div class="row">
         <label>СС</label>
-        <input required name="ss" type="text"/>
+        <input required th:field="*{ss}" type="text"/>
     </div>
     <br>
     <div class="row">
         <label>Оценщик</label>
-        <input name="appraiser" type="text"/>
+        <input th:field="*{appraiser}" type="text"/>
     </div>
     <br>
     <div class="row">
         <label>№ отчета об оценке</label>
-        <input name="numAppraiserReport" type="text"/>
+        <input th:field="*{appraisalReportNum}" type="text"/>
     </div>
     <br>
     <div class="row">
         <label>Дата отчета об оценке</label>
-        <input name="dateAppraiserReport" type="date"/>
+        <input th:field="*{appraisalReportDate}" type="date"/>
     </div>
     <br>
     <button type="submit">Обновить</button>

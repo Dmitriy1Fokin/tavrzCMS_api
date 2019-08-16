@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -25,6 +27,7 @@ public class CostHistory {
 	
 	@Column(name ="date")
 	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateConclusion;
 	
 	@Column(name ="zs_dz")
@@ -50,6 +53,7 @@ public class CostHistory {
 
 	@Column(name ="date_appraisal_report")
 	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date appraisalReportDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
