@@ -27,6 +27,7 @@
             <input type="hidden", name="whatDo" value="changeLA">
             <input type="hidden", th:field="*{loanAgreementId}" th:value="${loanAgreement.getLoanAgreementId()}">
             <input type="hidden", th:field="*{loaner}" th:value="${loanAgreement.getLoaner()}">
+            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${loanAgreement.getPledgeAgreements()}">
 
             <div class="row">
                 <label>№ КД:</label>
