@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <div th:switch="${whatDo}">
+        <div th:case="changePA">
+            <title th:text="'Обновление данных ДЗ№' + ${pledgeAgreement.getNumPA()}">Обновление данных</title>
+        </div>
+        <div th:case="newPA">
+            <title th:text="'Создание нового ДЗ'">Создание нового ДЗ</title>
+        </div>
+    </div>
+    <style type="text/css">
+        .nav-item{
+            display: inline;
+        }
+        .row{
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="static/nav :: user_nav_bar"></div>
+
+<div th:switch="${whatDo}">
+    <div th:case="changePA">
+        <form th:action="@{/pledge_agreement_card}" th:method="post" th:object="${pledgeAgreement}" action="pledge_agreement_card.html">
+            <input type="hidden", name="whatDo" value="changePA">
+            <input type="hidden", th:field="*{pledgeAgreementId}" th:value="${pledgeAgreement.getPledgeAgreementId()}">
+            <input type="hidden", th:field="*{pledgor}" th:value="${pledgeAgreement.getPledgor()}">
+            <input type="hidden", th:field="*{loanAgreements}" th:value="${pledgeAgreement.getLoanAgreements()}">
+            <input type="hidden", th:field="*{pledgeSubjects}" th:value="${pledgeAgreement.getPledgeSubjects()}">
+
+            <div class="row">
+                <label>№ ДЗ:</label>
+                <input required th:field="*{numPA}" type="text" th:value="${pledgeAgreement.getNumPA()}"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>Дата начала ДЗ</label>
+                <input required th:field="*{dateBeginPA}" type="date" th:value="${pledgeAgreement.getDateBeginPA()}"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>Дата окончания ДЗ</label>
+                <input required th:field="*{dateEndPA}" type="date" th:value="${pledgeAgreement.getDateEndPA()}"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>Тип договора</label>
+                <select required th:field="*{pervPosl}">
+                    <option value="перв">Первичный</option>
+                    <option value="посл">Последующий</option>
+                </select>
+            </div>
+            <div class="row">
+                <label>Статус</label>
+                <select required th:field="*{statusPA}">
+                    <option value="открыт">открыт</option>
+                    <option value="закрыт">закрыт</option>
+
+                </select>
+            </div>
+            <div class="row">
+                <label>Комментарии:</label>
+                <input th:field="*{noticePA}" type="text" th:value="${pledgeAgreement.getNoticePA()}"/>
+            </div>
+            <br>
+            <button type="submit">Обновить</button>
+        </form>
+    </div>
+    <div th:case="newPA">
+    </div>
+</div>
+</body>
+</html>
+
+
+
+

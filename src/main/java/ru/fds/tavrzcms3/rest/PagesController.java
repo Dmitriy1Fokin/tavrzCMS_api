@@ -360,13 +360,36 @@ public class PagesController {
                 return "loan_agreement_detail";
             case "newLA":
         }
-        System.out.println(loanAgreement);
-        System.out.println(whatDo);
-//        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId);
-//        model.addAttribute("la", loanAgreement);
-        model.addAttribute("whatDo", whatDo);
-        return "loan_agreement_card";
+
+        return null;
     }
+
+    @GetMapping("pledge_agreement_card")
+    public String pledgeAgreementCardGet(@RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                         @RequestParam("whatDo") String whatDo,
+                                         Model model){
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        model.addAttribute("pledgeAgreement", pledgeAgreement);
+        model.addAttribute("whatDo", whatDo);
+        return "pledge_agreement_card";
+    }
+
+    @PostMapping("pledge_agreement_card")
+    public String pledgeAgreementCardPost(@ModelAttribute PledgeAgreement pledgeAgreement,
+                                          @RequestParam("whatDo") String whatDo,
+                                          Model model){
+
+        switch (whatDo){
+            case "changePA":
+                PledgeAgreement pa = pledgeAgreementService.updatePledgeAgreement(pledgeAgreement);
+                model.addAttribute("pledgeAgreement", pa);
+                return "pledge_agreement_detail";
+            case "newPA":
+        }
+        return null;
+    }
+
+
 
 //    @PostMapping("/search")
 //    public String searchActionPage(@RequestParam("numLA") String numLA, @RequestParam("pfo") Byte pfo, @RequestParam("loaner") String loaner, Model model){

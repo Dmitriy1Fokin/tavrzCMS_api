@@ -3,6 +3,7 @@ package ru.fds.tavrzcms3.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
 import ru.fds.tavrzcms3.specification.PledgeAgreementSpecificationsBuilder;
@@ -420,6 +421,11 @@ public class PledgeAgreementService {
 
         return repositoryPledgeAgreement.findAll(spec);
 
+    }
+
+    @Transactional
+    public PledgeAgreement updatePledgeAgreement(PledgeAgreement pledgeAgreement){
+        return repositoryPledgeAgreement.save(pledgeAgreement);
     }
 
 }

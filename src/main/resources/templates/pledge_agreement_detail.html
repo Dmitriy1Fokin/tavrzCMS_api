@@ -102,7 +102,11 @@
     <span th:text="${pledgeAgreement.getNoticePA()}">н/д</span>
     <br>
     <br>
-
+    <a th:href="@{pledge_agreement_card(whatDo='changePA', pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}"
+       href="pledge_agreement_card.html.html"
+       th:text="'Изменить данные'">Изменить данные</a>
+    <br>
+    <br>
 
     <div th:if="${@pledgeAgreementService.countOfCurrentLoanAgreementsForPladgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
         <label>Действующие кредитные договоры:</label>
