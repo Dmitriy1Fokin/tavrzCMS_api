@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -31,10 +33,12 @@ public class LoanAgreement {
 	
 	@Column(name ="date_begin_kd")
 	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateBeginLA;
 
 	@Column(name ="date_end_kd")
 	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateEndLA;
 	
 	@Column(name ="status")

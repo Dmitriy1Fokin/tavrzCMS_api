@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <div th:switch="${whatDo}">
+        <div th:case="changeLA">
+            <title th:text="'Обновление данных КД№' + ${loanAgreement.getNumLA()}">Обновление данных</title>
+        </div>
+        <div th:case="newLA">
+            <title th:text="'Создание нового КД'">Создание нового КД</title>
+        </div>
+    </div>
+    <style type="text/css">
+        .nav-item{
+            display: inline;
+        }
+        .row{
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="static/nav :: user_nav_bar"></div>
+<div th:switch="${whatDo}">
+    <div th:case="changeLA">
+        <form th:action="@{/loan_agreement_card}" th:method="post" th:object="${loanAgreement}" action="loan_agreement_card.html">
+            <input type="hidden", name="whatDo" value="changeLA">
+            <input type="hidden", th:field="*{loanAgreementId}" th:value="${loanAgreement.getLoanAgreementId()}">
+            <input type="hidden", th:field="*{loaner}" th:value="${loanAgreement.getLoaner()}">
+
+            <div class="row">
+                <label>№ КД:</label>
+                <input required th:field="*{numLA}" type="text" th:value="${loanAgreement.getNumLA()}"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>Дата начала КД</label>
+                <input required th:field="*{dateBeginLA}" type="date" th:value="${loanAgreement.getDateBeginLA()}"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>Дата окончания КД</label>
+                <input required th:field="*{dateEndLA}" type="date" th:value="${loanAgreement.getDateEndLA()}"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>Сумма договора:</label>
+                <input required th:field="*{amountLA}" type="text" th:value="${loanAgreement.getAmountLA()}"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>Задолженность:</label>
+                <input required th:field="*{debtLA}" type="text" th:value="${loanAgreement.getDebtLA()}"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>%:</label>
+                <input required th:field="*{interestRateLA}" type="text" th:value="${loanAgreement.getInterestRateLA()}"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>%:</label>
+                <input required th:field="*{interestRateLA}" type="text" th:value="${loanAgreement.getInterestRateLA()}"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>ПФО</label>
+                <select id="pfoSelection" required th:field="*{pfo}">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="row">
+                <label>Кат.кач.</label>
+                <select id="qualitySelection" required th:field="*{qualityCategory}">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="row">
+                <label>Кат.кач.</label>
+                <select id="statusSelection" required th:field="*{statusLA}">
+                    <option value="открыт">открыт</option>
+                    <option value="закрыт">закрыт</option>
+                </select>
+            </div>
+            <button type="submit">Обновить</button>
+        </form>
+    </div>
+    <div th:case="newLA">
+    </div>
+</div>
+
+
+
+</body>
+</html>

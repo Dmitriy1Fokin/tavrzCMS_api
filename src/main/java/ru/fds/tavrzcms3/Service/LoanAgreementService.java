@@ -3,6 +3,7 @@ package ru.fds.tavrzcms3.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
 import ru.fds.tavrzcms3.specification.LoanAgreementSpecificationsBuilder;
@@ -163,6 +164,11 @@ public class LoanAgreementService {
         Specification<LoanAgreement> cpec = builder.build();
 
         return repositoryLoanAgreement.findAll(cpec);
+    }
+
+    @Transactional
+    public LoanAgreement updateLoanAgreement(LoanAgreement loanAgreement){
+        return repositoryLoanAgreement.save(loanAgreement);
     }
 
 }

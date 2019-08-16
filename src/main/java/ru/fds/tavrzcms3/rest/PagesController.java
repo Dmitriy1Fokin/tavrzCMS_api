@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.fds.tavrzcms3.Service.*;
@@ -143,7 +144,7 @@ public class PagesController {
     }
 
     @GetMapping("/loan_agreement_detail")
-    public String loanEgreementDetailPage(@RequestParam("loanAgreementId") long loanAgreementId, Model model){
+    public String loanAgreementDetailPage(@RequestParam("loanAgreementId") long loanAgreementId, Model model){
         LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId);
         model.addAttribute("loanAgreement", loanAgreement);
         return "loan_agreement_detail";
@@ -373,6 +374,35 @@ public class PagesController {
         return "cost_history";
     }
 
+    @GetMapping("loan_agreement_card")
+    public String loanAgreementCardPageGet(@RequestParam("loanAgreementId") long loanAgreementId,
+                                        @RequestParam("whatDo") String whatDo,
+                                        Model model){
+        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId);
+        model.addAttribute("loanAgreement", loanAgreement);
+        model.addAttribute("whatDo", whatDo);
+        return "loan_agreement_card";
+    }
+
+    @PostMapping("loan_agreement_card")
+    public String loanAgreementCardPagePost(@ModelAttribute LoanAgreement loanAgreement,
+                                        @RequestParam("whatDo") String whatDo,
+                                        Model model){
+
+        switch (whatDo){
+            case "changeLA":
+                LoanAgreement la = loanAgreementService.updateLoanAgreement(loanAgreement);
+                model.addAttribute("loanAgreement", la);
+                return "loan_agreement_detail";
+            case "newLA":
+        }
+        System.out.println(loanAgreement);
+        System.out.println(whatDo);
+//        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId);
+//        model.addAttribute("la", loanAgreement);
+        model.addAttribute("whatDo", whatDo);
+        return "loan_agreement_card";
+    }
 
 //    @PostMapping("/search")
 //    public String searchActionPage(@RequestParam("numLA") String numLA, @RequestParam("pfo") Byte pfo, @RequestParam("loaner") String loaner, Model model){

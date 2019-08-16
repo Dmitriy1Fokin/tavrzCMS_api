@@ -74,6 +74,15 @@
 <span th:text="${loanAgreement.getQualityCategory()}">н/д</span>
 <br>
 <br>
+<label>Статус договора:</label>
+<span th:text="${loanAgreement.getStatusLA()}">н/д</span>
+<br>
+<br>
+<a th:href="@{loan_agreement_card(whatDo='changeLA', loanAgreementId=${loanAgreement.getLoanAgreementId()})}"
+   href="loan_agreement_card.html"
+   th:text="'Изменить данные'">Изменить данные</a>
+<br>
+<br>
 
 <div th:if="${@loanAgreementService.countOfCurrentPledgeAgreements(loanAgreement.getLoanAgreementId()) &gt; 0}">
     <label>Действующее обеспечение:</label>
