@@ -53,6 +53,7 @@
                     <option value="посл">Последующий</option>
                 </select>
             </div>
+            <br>
             <div class="row">
                 <label>Статус</label>
                 <select required th:field="*{statusPA}">
@@ -61,6 +62,7 @@
 
                 </select>
             </div>
+            <br>
             <div class="row">
                 <label>Комментарии:</label>
                 <input th:field="*{noticePA}" type="text" th:value="${pledgeAgreement.getNoticePA()}"/>

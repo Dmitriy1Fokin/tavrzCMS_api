@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -52,10 +54,12 @@ public class PledgeSubject {
 
 	@Column(name ="date_monitoring")
 	@Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateMonitoring;
 
 	@Column(name ="date_conclusion")
 	@Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateConclusion;
 
 	@Column(name ="status_monitoring")

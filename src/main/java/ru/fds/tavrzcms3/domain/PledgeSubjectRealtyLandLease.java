@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -27,10 +29,12 @@ public class PledgeSubjectRealtyLandLease extends PledgeSubjectRealty {
 	
 	@Column(name ="begin_date_lease")
 	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateBeginLease;
 	
 	@Column(name ="end_date_lease")
 	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateEndLease;
 	
 	@OneToOne(mappedBy = "pledgeSubjectRealtyLandLease")
