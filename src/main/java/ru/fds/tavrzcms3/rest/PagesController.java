@@ -138,7 +138,7 @@ public class PagesController {
     public String insurancesPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
         List<Insurance> insuranceList = insuranceService.getInsurancesByPledgeSubject(pledgeSubject);
-        model.addAttribute("pledgeSubjectName", pledgeSubject.getName());
+        model.addAttribute("pledgeSubject", pledgeSubject);
         model.addAttribute("insuranceList", insuranceList);
         return "insurances";
     }
@@ -147,7 +147,30 @@ public class PagesController {
     public  String encumbrancePage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
         List<Encumbrance> encumbranceList = encumbranceService.getEncumbranceByPledgeSubject(pledgeSubject);
-        model.addAttribute("pledgeSubjectName", pledgeSubject.getName());
+        model.addAttribute("pledgeSubject", pledgeSubject);
+        model.addAttribute("encumbranceList", encumbranceList);
+        return "encumbrances";
+    }
+
+    @GetMapping("/encumbrance_card")
+    public String encumbranceCardPageGet(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+                                         Model model){
+
+        Encumbrance encumbrance = new Encumbrance();
+        model.addAttribute("encumbrance", encumbrance);
+        model.addAttribute("pledgeSubjectId", pledgeSubjectId);
+        return "encumbrance_card";
+    }
+
+    @PostMapping("/encumbrance_card")
+    public String encumbranceCardPagePost(@ModelAttribute Encumbrance encumbrance,
+                                          @RequestParam("pledgeSubjectId") long pledgeSubjectId,
+                                          Model model){
+
+        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+        Encumbrance encumbranceInserted = encumbranceService.insertEncumbranceInPledgeSubject(pledgeSubject, encumbrance);
+        List<Encumbrance> encumbranceList = encumbranceService.getEncumbranceByPledgeSubject(encumbranceInserted.getPledgeSubject());
+        model.addAttribute("pledgeSubject", encumbranceInserted.getPledgeSubject());
         model.addAttribute("encumbranceList", encumbranceList);
         return "encumbrances";
     }
@@ -368,7 +391,7 @@ public class PagesController {
         return "cost_history";
     }
 
-    @GetMapping("loan_agreement_card")
+    @GetMapping("/loan_agreement_card")
     public String loanAgreementCardPageGet(@RequestParam("loanAgreementId") long loanAgreementId,
                                         @RequestParam("whatDo") String whatDo,
                                         Model model){
@@ -378,7 +401,7 @@ public class PagesController {
         return "loan_agreement_card";
     }
 
-    @PostMapping("loan_agreement_card")
+    @PostMapping("/loan_agreement_card")
     public String loanAgreementCardPagePost(@ModelAttribute LoanAgreement loanAgreement,
                                         @RequestParam("whatDo") String whatDo,
                                         Model model){
@@ -394,7 +417,7 @@ public class PagesController {
         return null;
     }
 
-    @GetMapping("pledge_agreement_card")
+    @GetMapping("/pledge_agreement_card")
     public String pledgeAgreementCardGet(@RequestParam("pledgeAgreementId") long pledgeAgreementId,
                                          @RequestParam("whatDo") String whatDo,
                                          Model model){
@@ -404,7 +427,7 @@ public class PagesController {
         return "pledge_agreement_card";
     }
 
-    @PostMapping("pledge_agreement_card")
+    @PostMapping("/pledge_agreement_card")
     public String pledgeAgreementCardPost(@ModelAttribute PledgeAgreement pledgeAgreement,
                                           @RequestParam("whatDo") String whatDo,
                                           Model model){
@@ -419,7 +442,7 @@ public class PagesController {
         return null;
     }
 
-    @GetMapping("pledge_subject_card")
+    @GetMapping("/pledge_subject_card")
     public String pledgeSubjectCardGet(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
                                        @RequestParam("whatDo") String whatDo,
                                        Model model){
@@ -506,7 +529,7 @@ public class PagesController {
         return null;
     }
 
-    @PostMapping("pledge_subject_card")
+    @PostMapping("/pledge_subject_card")
     public String pledgeSubjectCardPagePost(@ModelAttribute PledgeSubject pledgeSubject,
                                             @ModelAttribute PledgeSubjectAuto pledgeSubjectAuto,
                                             @ModelAttribute PledgeSubjectEquipment pledgeSubjectEquipment,

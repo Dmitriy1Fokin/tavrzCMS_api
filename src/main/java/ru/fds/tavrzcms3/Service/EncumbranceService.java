@@ -17,4 +17,9 @@ public class EncumbranceService {
     public List<Encumbrance> getEncumbranceByPledgeSubject(PledgeSubject pledgeSubject){
         return repositoryEncumbrance.findAllByPledgeSubject(pledgeSubject);
     }
+
+    public Encumbrance insertEncumbranceInPledgeSubject(PledgeSubject pledgeSubject, Encumbrance encumbrance){
+        encumbrance.setPledgeSubject(pledgeSubject);
+        return repositoryEncumbrance.save(encumbrance);
+    }
 }

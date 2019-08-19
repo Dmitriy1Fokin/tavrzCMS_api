@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Добавить обременение'">Добавить обременение</title>
+    <style type="text/css">
+        .nav-item{
+            display: inline;
+        }
+        .row{
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="static/nav :: user_nav_bar"></div>
+
+<h1 th:text="'Добавить обременение'">Добавить обременение</h1>
+
+<form th:action="@{/encumbrance_card}" th:method="post" th:object="${encumbrance}" action="encumbrance_card.html">
+    <input type="hidden", name="pledgeSubjectId" th:value="${pledgeSubjectId}">
+
+    <div class="row">
+        <label>Наименование</label>
+        <input required th:field="*{name}" type="text"/>
+    </div>
+    <br>
+    <div class="row">
+        <label>Вид обременения</label>
+        <select required th:field="*{typeOfEncumbrance}">
+            <option value="залог">залог</option>
+            <option value="арест">арест</option>
+            <option value="аренда">аренда</option>
+            <option value="сервитут">сервитут</option>
+            <option value="доверительное управление">доверительное управление</option>
+        </select>
+    </div>
+    <br>
+    <div class="row">
+        <label>В пользу кого</label>
+        <input required th:field="*{inFavorOfWhom}" type="text"/>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дата начала обременения</label>
+        <input required th:field="*{dateBegin}" type="date"/>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дата окончания обременения</label>
+        <input required th:field="*{dateEnd}" type="date"/>
+    </div>
+    <br>
+    <div class="row">
+        <label>№ обременения</label>
+        <input required th:field="*{numOfEncumbrance}" type="text"/>
+    </div>
+    <br>
+
+    <button type="submit">Обновить</button>
+
+</form>
+</body>
+</html>

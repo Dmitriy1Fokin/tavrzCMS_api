@@ -22,7 +22,14 @@
 </head>
 <body>
 <div th:replace="static/nav :: user_nav_bar"></div>
-<h1 th:text="'Обременения для предмета залога:' + ${pledgeSubjectName}">Обременения для предмета залога</h1>
+<h1 th:text="'Обременения для предмета залога:' + ${pledgeSubject.getName()}">Обременения для предмета залога</h1>
+
+<a th:href="@{encumbrance_card(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
+   href="encumbrance_card.html"
+   th:text="'Добавить обременение'">Добавить обременение</a>
+<br>
+<br>
+
 <div class="containerTable">
     <table class="incumbranceTable">
         <thead>

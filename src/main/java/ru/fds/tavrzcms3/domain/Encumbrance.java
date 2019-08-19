@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -23,10 +25,12 @@ public class Encumbrance {
 
     @Column(name ="date_begin")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateBegin;
 
     @Column(name ="date_end")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateEnd;
 
     @Column(name = "num_of_encumbrance")
@@ -110,7 +114,7 @@ public class Encumbrance {
                 ", dateBegin=" + dateBegin +
                 ", dateEnd=" + dateEnd +
                 ", numOfEncumbrance='" + numOfEncumbrance + '\'' +
-                ", pledgeSubject=" + pledgeSubject +
+//                ", pledgeSubject=" + pledgeSubject +
                 '}';
     }
 }
