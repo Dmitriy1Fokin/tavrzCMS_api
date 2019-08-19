@@ -44,17 +44,17 @@ public class PledgeSubjectService {
     @Autowired
     RepositoryPledgeAgreement repositoryPledgeAgreement;
 
-    public synchronized PledgeSubject getPledgeSubjectById(long id){
+    public PledgeSubject getPledgeSubjectById(long id){
         PledgeSubject pledgeSubject = repositoryPledgeSubject.findByPledgeSubjectId(id);
         return  pledgeSubject;
     }
 
-    public synchronized List<PledgeSubject> getPledgeSubjectsForPledgeAgreement(long pledgeAgreementId){
+    public List<PledgeSubject> getPledgeSubjectsForPledgeAgreement(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
         return repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
     }
 
-    public synchronized List<PledgeSubject> getPledgeSubjectsFromSearch(Map<String, String> searchParam){
+    public List<PledgeSubject> getPledgeSubjectsFromSearch(Map<String, String> searchParam){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
 
         if(searchParam.get("typeOfCollateral").isEmpty()){

@@ -30,7 +30,7 @@ public class PledgeAgreementService {
     @Autowired
     RepositoryEmployee repositoryEmployee;
 
-    public synchronized double getRsDz(long pledgeAgreementId){
+    public double getRsDz(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         double totalSum = 0;
@@ -40,7 +40,7 @@ public class PledgeAgreementService {
         return  totalSum;
     }
 
-    public synchronized double getRsZz(long pledgeAgreementId){
+    public double getRsZz(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         double totalSum = 0;
@@ -50,7 +50,7 @@ public class PledgeAgreementService {
         return totalSum;
     }
 
-    public synchronized double getZsDz(long pledgeAgreementId){
+    public double getZsDz(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         double totalSum = 0;
@@ -60,7 +60,7 @@ public class PledgeAgreementService {
         return totalSum;
     }
 
-    public synchronized double getZsZz(long pledgeAgreementId){
+    public double getZsZz(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         double totalSum = 0;
@@ -70,7 +70,7 @@ public class PledgeAgreementService {
         return totalSum;
     }
 
-    public synchronized double getSs(long pledgeAgreementId){
+    public double getSs(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         double totalSum = 0;
@@ -80,7 +80,7 @@ public class PledgeAgreementService {
         return totalSum;
     }
 
-    public synchronized Set<Date> getDatesOfConclusion(long pledgeAgreementId){
+    public Set<Date> getDatesOfConclusion(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         Set<Date> dates = new LinkedHashSet<>();
@@ -90,7 +90,7 @@ public class PledgeAgreementService {
         return  dates;
     }
 
-    public synchronized Set<Date> getDatesOfMonitoring(long pledgeAgreementId){
+    public Set<Date> getDatesOfMonitoring(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         Set<Date> dates = new LinkedHashSet<>();
@@ -100,7 +100,7 @@ public class PledgeAgreementService {
         return  dates;
     }
 
-    public synchronized Set<String> getResultsOfMonitoring(long pledgeAgreementId){
+    public Set<String> getResultsOfMonitoring(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         Set<String> results = new LinkedHashSet<>();
@@ -110,11 +110,11 @@ public class PledgeAgreementService {
         return  results;
     }
 
-    public synchronized PledgeAgreement getPledgeAgreement(long pledgeAgreementId){
+    public PledgeAgreement getPledgeAgreement(long pledgeAgreementId){
         return repositoryPledgeAgreement.getOne(pledgeAgreementId);
     }
 
-    public synchronized Set<String> getTypeOfCollateral(long pledgeAgreementId){
+    public Set<String> getTypeOfCollateral(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         Set<String> typeOfCollateralSet = new LinkedHashSet<>();
@@ -124,57 +124,57 @@ public class PledgeAgreementService {
         return  typeOfCollateralSet;
     }
 
-    public synchronized int countOfCurrentLoanAgreementsForPladgeAgreement(long pledgeAgreementId){
+    public int countOfCurrentLoanAgreementsForPladgeAgreement(long pledgeAgreementId){
         return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "открыт");
     }
 
-    public synchronized List<LoanAgreement> getCurrentLoanAgreementsForPledgeAgreement(long pledgeAgreementId){
+    public List<LoanAgreement> getCurrentLoanAgreementsForPledgeAgreement(long pledgeAgreementId){
         return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "открыт");
     }
 
-    public synchronized int countOfClosedLoanAgreementsForPledgeAgreement(long pledgeAgreementId){
+    public int countOfClosedLoanAgreementsForPledgeAgreement(long pledgeAgreementId){
         return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
     }
 
-    public synchronized List<LoanAgreement> getClosedLoanAgreementsForPledgeAgreement(long pledgeAgreementId){
+    public List<LoanAgreement> getClosedLoanAgreementsForPledgeAgreement(long pledgeAgreementId){
         return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
     }
 
-    public synchronized List<PledgeAgreement> getCurrentPledgeAgreementsForPledgor(long pledgorId, String pervPosl){
+    public  List<PledgeAgreement> getCurrentPledgeAgreementsForPledgor(long pledgorId, String pervPosl){
         return repositoryPledgeAgreement.findByPledgorAndPervPoslEqualsAndStatusPAEquals(repositoryClient.getOne(pledgorId), pervPosl, "открыт");
     }
 
-    public synchronized int countOfCurrentPledgeAgreementsForEmployee(long employeeId){
+    public int countOfCurrentPledgeAgreementsForEmployee(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> pledgors = repositoryClient.findByEmployee(employee);
         return repositoryPledgeAgreement.countAllByPledgorInAndStatusPAEquals(pledgors, "открыт");
     }
 
-    public synchronized int countOfPervCurrentPledgeAgreementsForEmployee(long employeeId){
+    public int countOfPervCurrentPledgeAgreementsForEmployee(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> pledgors = repositoryClient.findByEmployee(employee);
         return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors, "перв", "открыт");
     }
 
-    public synchronized List<PledgeAgreement> getPervCurrentPledgeAgreementsForEmployeee(long employeeId){
+    public List<PledgeAgreement> getPervCurrentPledgeAgreementsForEmployeee(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> pledgors = repositoryClient.findByEmployee(employee);
         return  repositoryPledgeAgreement.findByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors,  "перв", "открыт");
     }
 
-    public synchronized int countOfPoslCurrentPledgeAgreementsForEmployee(long employeeId){
+    public int countOfPoslCurrentPledgeAgreementsForEmployee(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> pledgors = repositoryClient.findByEmployee(employee);
         return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors, "посл", "открыт");
     }
 
-    public synchronized int countOfLoanAgreementsForEmployee(long employeeId){
+    public int countOfLoanAgreementsForEmployee(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> loaners = repositoryClient.findByEmployee(employee);
         return repositoryLoanAgreement.countAllByLoanerInAndStatusLAEquals(loaners, "открыт");
     }
 
-    public synchronized int countOfMonitoringNotDone(long employeeId){
+    public int countOfMonitoringNotDone(long employeeId){
         List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
         Calendar dateNow = new GregorianCalendar();
         Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), 1);
@@ -189,7 +189,7 @@ public class PledgeAgreementService {
         return countOfMonitoring;
     }
 
-    public synchronized int countOfMonitoringIsDone(long employeeId){
+    public int countOfMonitoringIsDone(long employeeId){
         List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
         Calendar dateNow = new GregorianCalendar();
         Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), 1);
@@ -204,7 +204,7 @@ public class PledgeAgreementService {
         return countOfMonitoring;
     }
 
-    public synchronized int countOfMonitoringOverdue(long employeeId){
+    public int countOfMonitoringOverdue(long employeeId){
         List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
         Calendar dateNow = new GregorianCalendar();
         Calendar beforeDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH) - 1, dateNow.getMaximum(Calendar.DAY_OF_MONTH));
@@ -217,7 +217,7 @@ public class PledgeAgreementService {
         return countOfMonitoring;
     }
 
-    public synchronized List<PledgeAgreement> getPledgeAgreementWithMonitoringNotDone(long employeeId){
+    public List<PledgeAgreement> getPledgeAgreementWithMonitoringNotDone(long employeeId){
         List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
         Calendar dateNow = new GregorianCalendar();
         Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), 1);
@@ -232,7 +232,7 @@ public class PledgeAgreementService {
         return pledgeAgreementListWithMonitoringNotDone;
     }
 
-    public synchronized List<PledgeAgreement> getPledgeAgreementWithMonitoringIsDone(long employeeId){
+    public List<PledgeAgreement> getPledgeAgreementWithMonitoringIsDone(long employeeId){
         List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
         Calendar dateNow = new GregorianCalendar();
         Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), 1);
@@ -247,7 +247,7 @@ public class PledgeAgreementService {
         return pledgeAgreementListWithMonitoringIsDone;
     }
 
-    public synchronized List<PledgeAgreement> getPledgeAgreementWithMonitoringOverDue(long employeeId){
+    public List<PledgeAgreement> getPledgeAgreementWithMonitoringOverDue(long employeeId){
         List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
         Calendar dateNow = new GregorianCalendar();
         Calendar beforeDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH) - 1, dateNow.getMaximum(Calendar.DAY_OF_MONTH));
