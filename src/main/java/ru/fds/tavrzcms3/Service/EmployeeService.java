@@ -17,12 +17,12 @@ public class EmployeeService {
     @Autowired
     RepositoryAppUser repositoryAppUser;
 
-    public synchronized Employee getEmployee(User user){
+    public Employee getEmployee(User user){
         AppUser appUser = repositoryAppUser.findByName(user.getUsername());
         return repositoryEmployee.findByAppUser(appUser);
     }
 
-    public synchronized Employee getEmployee(long employeeId){
+    public Employee getEmployee(long employeeId){
         return repositoryEmployee.getOne(employeeId);
     }
 }

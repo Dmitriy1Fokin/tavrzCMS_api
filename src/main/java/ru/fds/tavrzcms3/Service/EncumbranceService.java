@@ -14,7 +14,7 @@ public class EncumbranceService {
     @Autowired
     RepositoryEncumbrance repositoryEncumbrance;
 
-    public synchronized List<Encumbrance> getEncumbranceByPledgeSubject(PledgeSubject pledgeSubject){
+    public List<Encumbrance> getEncumbranceByPledgeSubject(PledgeSubject pledgeSubject){
         return repositoryEncumbrance.findAllByPledgeSubject(pledgeSubject);
     }
 }

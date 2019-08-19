@@ -15,7 +15,7 @@ public class InsuranceService {
     @Autowired
     RepositoryInsurance repositoryInsurance;
 
-    public synchronized List<Insurance> getInsurancesByPledgeSubject(PledgeSubject pledgeSubject){
+    public List<Insurance> getInsurancesByPledgeSubject(PledgeSubject pledgeSubject){
         Sort sortByDateEnd = new Sort(Sort.Direction.DESC, "dateEndInsurance");
         List<Insurance> insuranceList = repositoryInsurance.findAllByPledgeSubject(pledgeSubject, sortByDateEnd);
         return insuranceList;

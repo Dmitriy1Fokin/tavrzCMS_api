@@ -26,13 +26,13 @@ public class MonitoringService {
     RepositoryPledgeAgreement repositoryPledgeAgreement;
 
 
-    public synchronized List<Monitoring> getMonitoringByPledgeSubjectId(long pledgeSubjectId){
+    public List<Monitoring> getMonitoringByPledgeSubjectId(long pledgeSubjectId){
         Sort sortByDateMonitoring = new Sort(Sort.Direction.DESC, "dateMonitoring");
         return repositoryMonitoring.findByPledgeSubject(repositoryPledgeSubject.findByPledgeSubjectId(pledgeSubjectId), sortByDateMonitoring);
     }
 
     @Transactional
-    public synchronized List<Monitoring> insertMonitoringInPledgeAgreement(PledgeAgreement pledgeAgreement, Monitoring monitoring){
+    public List<Monitoring> insertMonitoringInPledgeAgreement(PledgeAgreement pledgeAgreement, Monitoring monitoring){
         List<PledgeSubject> pledgeSubjectList = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         List<Monitoring> monitoringList = new ArrayList<>();
         for (PledgeSubject ps : pledgeSubjectList){

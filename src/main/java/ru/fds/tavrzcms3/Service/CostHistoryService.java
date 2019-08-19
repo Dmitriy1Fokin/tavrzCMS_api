@@ -20,7 +20,7 @@ public class CostHistoryService {
     @Autowired
     RepositoryPledgeSubject repositoryPledgeSubject;
 
-    public synchronized List<CostHistory> getCostHistoryByPledgeSubjectId(long pledgeSubjectId){
+    public List<CostHistory> getCostHistoryByPledgeSubjectId(long pledgeSubjectId){
         Sort sortByDateConclusion = new Sort(Sort.Direction.DESC, "dateConclusion");
         return repositoryCostHistory.findByPledgeSubject(repositoryPledgeSubject.findByPledgeSubjectId(pledgeSubjectId), sortByDateConclusion);
     }

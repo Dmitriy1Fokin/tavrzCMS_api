@@ -25,39 +25,39 @@ public class ClientService {
 
 
 
-    public synchronized Client getClientByClientId(long clientId){
+    public Client getClientByClientId(long clientId){
         return repositoryClient.getOne(clientId);
     }
 
-    public synchronized int countOfCurrentPledgeAgreementsByPledgorId(long pledgorId){
+    public int countOfCurrentPledgeAgreementsByPledgorId(long pledgorId){
         return repositoryPledgeAgreement.countAllByPledgorAndStatusPAEquals(repositoryClient.getOne(pledgorId), "открыт");
     }
 
-    public synchronized List<PledgeAgreement> getCurrentPledgeAgreementsByPledgorId(long pledgorId){
+    public List<PledgeAgreement> getCurrentPledgeAgreementsByPledgorId(long pledgorId){
         return repositoryPledgeAgreement.findByPledgorAndStatusPA(repositoryClient.getOne(pledgorId), "открыт");
     }
 
-    public synchronized int countOfClosedPledgeAgreementsByPledgorId(long pledgorId){
+    public int countOfClosedPledgeAgreementsByPledgorId(long pledgorId){
         return repositoryPledgeAgreement.countAllByPledgorAndStatusPAEquals(repositoryClient.getOne(pledgorId), "закрыт");
     }
 
-    public synchronized List<PledgeAgreement> getClosedPledgeAgreementsByPledgorId(long pledgorId){
+    public List<PledgeAgreement> getClosedPledgeAgreementsByPledgorId(long pledgorId){
         return repositoryPledgeAgreement.findByPledgorAndStatusPA(repositoryClient.getOne(pledgorId), "закрыт");
     }
 
-    public synchronized int countOfCurrentLoanEgreementsByLoanerId(long loanerId){
+    public int countOfCurrentLoanEgreementsByLoanerId(long loanerId){
         return repositoryLoanAgreement.countAllByLoanerAndStatusLAEquals(repositoryClient.getOne(loanerId), "открыт");
     }
 
-    public synchronized List<LoanAgreement> getCurrentLoanAgreementsByLoanerId(long loanerId){
+    public List<LoanAgreement> getCurrentLoanAgreementsByLoanerId(long loanerId){
         return repositoryLoanAgreement.findByLoanerAndStatusLAEquals(repositoryClient.getOne(loanerId), "открыт");
     }
 
-    public synchronized int countOfClosedLoanEgreementsByLoanerId(long loanerId){
+    public int countOfClosedLoanEgreementsByLoanerId(long loanerId){
         return repositoryLoanAgreement.countAllByLoanerAndStatusLAEquals(repositoryClient.getOne(loanerId), "закрыт");
     }
 
-    public synchronized List<LoanAgreement> getClosedLoanAgreementsByLoanerId(long loanerId){
+    public List<LoanAgreement> getClosedLoanAgreementsByLoanerId(long loanerId){
         return repositoryLoanAgreement.findByLoanerAndStatusLAEquals(repositoryClient.getOne(loanerId), "закрыт");
     }
 }

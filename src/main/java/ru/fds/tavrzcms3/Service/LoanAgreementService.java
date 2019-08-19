@@ -30,45 +30,46 @@ public class LoanAgreementService {
     @Autowired
     RepositoryEmployee repositoryEmployee;
 
-    public synchronized LoanAgreement getLoanAgreementById(long loanAgreementId){
+    public LoanAgreement getLoanAgreementById(long loanAgreementId){
         LoanAgreement loanAgreement = repositoryLoanAgreement.getOne(loanAgreementId);
         return loanAgreement;
     }
 
-    public synchronized int countOfCurrentPledgeAgreements(long loanAgreementId){
-        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement.findByLoanAgreementsAndStatusPAEquals(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId),
-                                                                                                                    "открыт");
+    public int countOfCurrentPledgeAgreements(long loanAgreementId){
+        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement
+                .findByLoanAgreementsAndStatusPAEquals(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId),"открыт");
         return pledgeAgreementList.size();
     }
 
-    public synchronized List<PledgeAgreement> getCurrentPledgeAgreements(long loanAgreementId){
+    public List<PledgeAgreement> getCurrentPledgeAgreements(long loanAgreementId){
         return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPAEquals(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId),
                                                                                  "открыт");
     }
 
-    public synchronized int countOfClosedPledgeAgreements(long loanAgreementId){
-        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement.findByLoanAgreementsAndStatusPAEquals(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId),
-                                                                                                                      "закрыт");
+    public int countOfClosedPledgeAgreements(long loanAgreementId){
+        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement
+                .findByLoanAgreementsAndStatusPAEquals(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId),"закрыт");
 
         return pledgeAgreementList.size();
     }
 
-    public synchronized List<PledgeAgreement> getClosedPledgeAgreements(long loanAgreementId){
-        return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPAEquals(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId),
-                                                                                  "закрыт");
+    public List<PledgeAgreement> getClosedPledgeAgreements(long loanAgreementId){
+        return repositoryPledgeAgreement
+                .findByLoanAgreementsAndStatusPAEquals(repositoryLoanAgreement
+                                .findByLoanAgreementId(loanAgreementId),"закрыт");
     }
 
-    public synchronized List<LoanAgreement> getCurrentLoanAgreement(long loanerId){
+    public List<LoanAgreement> getCurrentLoanAgreement(long loanerId){
         return repositoryLoanAgreement.findByLoanerAndStatusLAEquals(repositoryClient.getOne(loanerId), "открыт");
     }
 
-    public synchronized List<LoanAgreement> getCurrentLoanAgreementsForEmployee(long employeeId){
+    public List<LoanAgreement> getCurrentLoanAgreementsForEmployee(long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> clientList = repositoryClient.findByEmployee(employee);
         return repositoryLoanAgreement.findByLoanerInAndStatusLAEquals(clientList, "открыт");
     }
 
-    public synchronized List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){
+    public List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){
         LoanAgreementSpecificationsBuilder builder = new LoanAgreementSpecificationsBuilder();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
         if(!searchParam.get("numLA").isEmpty())
