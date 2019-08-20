@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -28,10 +30,12 @@ public class Insurance {
 	
 	@Column(name ="date_begin")
 	@Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateBeginInsurance;
 	
 	@Column(name ="date_end")
 	@Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateEndInsurance;
 
 	@Column(name ="sum_insured")
@@ -39,13 +43,14 @@ public class Insurance {
 
     @Column(name ="date_insurance_contract")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateInsuranceContract;
 	
 	@Column(name ="payment_of_insurance_premium")
 	private String paymentOfInsurancePremium;
 
 	@Column(name = "franchise_amount")
-    private String franchiseAmount;
+    private Double franchiseAmount;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pledgesubject_id")
@@ -107,11 +112,11 @@ public class Insurance {
         this.paymentOfInsurancePremium = paymentOfInsurancePremium;
     }
 
-    public String getFranchiseAmount() {
+    public Double getFranchiseAmount() {
         return franchiseAmount;
     }
 
-    public void setFranchiseAmount(String franchiseAmount) {
+    public void setFranchiseAmount(Double franchiseAmount) {
         this.franchiseAmount = franchiseAmount;
     }
 

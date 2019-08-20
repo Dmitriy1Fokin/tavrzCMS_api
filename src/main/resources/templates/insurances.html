@@ -22,7 +22,15 @@
 </head>
 <body>
 <div th:replace="static/nav :: user_nav_bar"></div>
-<h1 th:text="'Страхование для предмета залога:' + ${pledgeSubjectName}">Страхование для предмета залога</h1>
+
+<h1 th:text="'Страхование для предмета залога:' + ${pledgeSubject.getName()}">Страхование для предмета залога</h1>
+
+<a th:href="@{insurance_card(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
+   href="insurance_card.html"
+   th:text="'Добавить договор страхования'">Добавить договор страхования</a>
+<br>
+<br>
+
 <div class="containerTable">
     <table class="insuranceTable">
         <thead>

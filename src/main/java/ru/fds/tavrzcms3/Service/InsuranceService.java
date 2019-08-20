@@ -3,6 +3,7 @@ package ru.fds.tavrzcms3.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.domain.Insurance;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.repository.RepositoryInsurance;
@@ -19,5 +20,11 @@ public class InsuranceService {
         Sort sortByDateEnd = new Sort(Sort.Direction.DESC, "dateEndInsurance");
         List<Insurance> insuranceList = repositoryInsurance.findAllByPledgeSubject(pledgeSubject, sortByDateEnd);
         return insuranceList;
+    }
+
+    @Transactional
+    public Insurance insertInsuranceInPledgeSubject(PledgeSubject pledgeSubject, Insurance insurance){
+        insurance.setPledgeSubject(pledgeSubject);
+        return repositoryInsurance.save(insurance);
     }
 }

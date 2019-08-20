@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Добавить договор страхования'">Добавить договор страхования</title>
+    <style type="text/css">
+        .nav-item{
+            display: inline;
+        }
+        .row{
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="static/nav :: user_nav_bar"></div>
+
+<h1 th:text="'Добавить договор страхования'">Добавить договор страхования</h1>
+
+<form th:action="@{/insurances}" th:method="post" th:object="${insurance}" action="insurances.html">
+    <input type="hidden", name="pledgeSubjectId" th:value="${pledgeSubjectId}">
+
+    <div class="row">
+        <label>№ договора страхования</label>
+        <input required th:field="*{numInsurance}" type="text"/>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дата договора страхования</label>
+        <input required th:field="*{dateInsuranceContract}" type="date"/>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дата начала страхования</label>
+        <input required th:field="*{dateBeginInsurance}" type="date"/>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дата окончания страхования</label>
+        <input required th:field="*{dateEndInsurance}" type="date"/>
+    </div>
+    <br>
+    <div class="row">
+        <label>Страховая сумма</label>
+        <input required th:field="*{sumInsured}" type="text"/>
+    </div>
+    <br>
+    <div class="row">
+        <label>Оплата страховой премии</label>
+        <select required th:field="*{paymentOfInsurancePremium}">
+            <option value="да">да</option>
+            <option value="нет">нет</option>
+        </select>
+    </div>
+    <br>
+    <div class="row">
+        <label>Размер франшизы</label>
+        <input required th:field="*{franchiseAmount}" type="text"/>
+    </div>
+    <br>
+
+    <button type="submit">Обновить</button>
+</form>
+
+</body>
+</html>

@@ -143,6 +143,28 @@ public class PagesController {
         return "insurances";
     }
 
+    @PostMapping("/insurances")
+    public String insurenceInsert(@ModelAttribute Insurance insurance,
+                                  @RequestParam("pledgeSubjectId") long pledgeSubjectId,
+                                  Model model){
+
+        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+        Insurance insuranceInserted = insuranceService.insertInsuranceInPledgeSubject(pledgeSubject, insurance);
+        List <Insurance> insuranceList = insuranceService.getInsurancesByPledgeSubject(pledgeSubject);
+        model.addAttribute("pledgeSubject", pledgeSubject);
+        model.addAttribute("insuranceList", insuranceList);
+        return "insurances";
+    }
+
+    @GetMapping("/insurance_card")
+    public String insuranceCardGet(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+                                   Model model){
+        Insurance insurance = new Insurance();
+        model.addAttribute("insurance", insurance);
+        model.addAttribute("pledgeSubjectId", pledgeSubjectId);
+        return "insurance_card";
+    }
+
     @GetMapping("/encumbrances")
     public  String encumbrancePage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
