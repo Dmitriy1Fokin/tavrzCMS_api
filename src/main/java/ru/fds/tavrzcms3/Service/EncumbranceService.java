@@ -2,6 +2,7 @@ package ru.fds.tavrzcms3.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.domain.Encumbrance;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.repository.RepositoryEncumbrance;
@@ -18,6 +19,7 @@ public class EncumbranceService {
         return repositoryEncumbrance.findAllByPledgeSubject(pledgeSubject);
     }
 
+    @Transactional
     public Encumbrance insertEncumbranceInPledgeSubject(PledgeSubject pledgeSubject, Encumbrance encumbrance){
         encumbrance.setPledgeSubject(pledgeSubject);
         return repositoryEncumbrance.save(encumbrance);
