@@ -10,7 +10,7 @@
         .containerTable{
             width: 3000px;
         }
-        .loanAgreement, .loanAgreement td {
+        .customTable, .customTable td {
             border: 1px solid lightgray;
             padding: 5px;
             table-layout: fixed;
@@ -26,53 +26,7 @@
 
 <h1>Кредитные договоры на сопровождении:</h1>
 <div class="containerTable">
-    <table class="loanAgreement">
-        <thead>
-        <tr>
-            <th>№п/п</th>
-            <th>№КД</th>
-            <th>Заемщик</th>
-            <th>Дата начала КД</th>
-            <th>Дата окончания КД</th>
-            <th>Сумма договора</th>
-            <th>%</th>
-            <th>Задолженность</th>
-            <th>ПФО</th>
-            <th>Кат.кач.</th>
-        </tr>
-        </thead>
-        <tbody>
-            <div th:each="la, countStat: ${loanAgreementList}">
-                <tr>
-                    <td th:text="${countStat.index + 1}"></td>
-                    <td>
-                        <a th:href="@{/loan_agreement_detail(loanAgreementId=${la.getLoanAgreementId()})}" href="loan_agreement_detail.html"
-                           th:text="${la.getNumLA()}">№ КД</a>
-                    </td>
-                    <td>
-                        <div th:switch="${la.getLoaner().getTypeOfClient()}">
-                            <div th:case="юл">
-                                <a th:href="@{/loaner(loanerId=${la.getLoaner().getClientId()})}" href="loaner.html"
-                                   th:text="${la.getLoaner().getClientLegalEntity().getOrganizationalForm() + ' ' + la.getLoaner().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
-                            </div>
-                            <div th:case="фл">
-                                <a th:href="@{/loaner(loanerId=${la.getLoaner().getClientId()})}" href="loaner.html"
-                                   th:text="${la.getLoaner().getClientIndividual().getSurname() + ' ' + la.getLoaner().getClientIndividual().getName()}">Заемщик ФЛ</a>
-
-                            </div>
-                        </div>
-                    </td>
-                    <td th:text="${la.getDateBeginLA()}">н/д</td>
-                    <td th:text="${la.getDateEndLA()}">н/д</td>
-                    <td th:text="${#numbers.formatCurrency(la.getAmountLA())}">н/д</td>
-                    <td th:text="${#numbers.formatPercent(la.getInterestRateLA(), 0, 1)}">н/д</td>
-                    <td th:text="${#numbers.formatCurrency(la.getDebtLA())}">н/д</td>
-                    <td th:text="${la.getPfo()}">н/д</td>
-                    <td th:text="${la.getQualityCategory()}">н/д</td>
-                </tr>
-            </div>
-        </tbody>
-    </table>
+    <div th:replace="static/table_loan_agreements :: loanAgreementTable(${loanAgreementList})"></div>
 </div>
 </body>
 </html>

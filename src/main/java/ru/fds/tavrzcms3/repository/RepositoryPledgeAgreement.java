@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -30,5 +31,6 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     List<PledgeAgreement> findByLoanAgreements(LoanAgreement loanAgreement);
     List<PledgeAgreement> findByLoanAgreementsAndStatusPAEquals(LoanAgreement loanAgreement, String statusPA);
     List<PledgeAgreement> findByPledgorAndPervPoslEqualsAndStatusPAEquals(Client pledgor, String pervPosl, String statusPA);
-    List<PledgeAgreement> findByPledgorInAndPervPoslEqualsAndStatusPAEquals(List<Client> pledgors, String pervPosl, String statusPA);
+    List<PledgeAgreement> findByPledgorInAndPervPoslEqualsAndStatusPAEquals(List<Client> pledgors, String pervPosl, String statusPA, Sort sort);
+    List<PledgeAgreement> findByPledgorInAndStatusPAEquals(List<Client> pledgors, String statusPA, Sort sort);
 }

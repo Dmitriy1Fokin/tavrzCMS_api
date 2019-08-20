@@ -86,13 +86,13 @@ public class PagesController {
         Employee employee = employeeService.getEmployee(user);
         model.addAttribute("employee", employee);
 
-        int countOfPA = pledgeAgreementService.countOfCurrentPledgeAgreementsForEmployee(employee.getEmployeeId());
+        int countOfPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee.getEmployeeId(), "");
         model.addAttribute("countOfAllPledgeAgreement", countOfPA);
 
-        int countOfPervPA = pledgeAgreementService.countOfPervCurrentPledgeAgreementsForEmployee(employee.getEmployeeId());
+        int countOfPervPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee.getEmployeeId(), "перв");
         model.addAttribute("countOfPervPledgeAgreements", countOfPervPA);
 
-        int countOfPoslPA = pledgeAgreementService.countOfPoslCurrentPledgeAgreementsForEmployee(employee.getEmployeeId());
+        int countOfPoslPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee.getEmployeeId(), "посл");
         model.addAttribute("countOfPoslPledgeAgreements", countOfPoslPA);
 
         int countOfLoanAgreements = pledgeAgreementService.countOfLoanAgreementsForEmployee(employee.getEmployeeId());
@@ -121,8 +121,8 @@ public class PagesController {
 
     @GetMapping("/pledge_agreements")
     public String pledgeEgreementPage(@RequestParam("employeeId") long employeeId, @RequestParam("pervPosl") String pervPosl, Model model) {
-        Employee employee = employeeService.getEmployee(employeeId);
-        model.addAttribute("employee", employee);
+        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsForEmployee(employeeId, pervPosl);
+        model.addAttribute("pledgeAgreementList", pledgeAgreementList);
         model.addAttribute("pervPosl", pervPosl);
         return "pledge_agreements";
     }
@@ -306,19 +306,19 @@ public class PagesController {
     public String searchResultsPage(@RequestParam Map<String, String> reqParam, Model model){
         switch (reqParam.get("typeOfSearch")){
             case "searchLA":
-                List<LoanAgreement> loanAgreements = loanAgreementService.getLoanAgreementFromSearch(reqParam);
-                model.addAttribute("loanAgreements", loanAgreements);
+                List<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementFromSearch(reqParam);
+                model.addAttribute("loanAgreementList", loanAgreementList);
                 model.addAttribute("typeOfSearch", "loanAgreements");
                 return "search_results";
             case "searchPA":
-                List<PledgeAgreement> pledgeAgreements = pledgeAgreementService.getPledgeAgreementFromSearch(reqParam);
-                model.addAttribute("pledgeAgreements", pledgeAgreements);
+                List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementFromSearch(reqParam);
+                model.addAttribute("pledgeAgreementList", pledgeAgreementList);
                 model.addAttribute("typeOfSearch", "pledgeAreements");
                 return "search_results";
             case "searchPS":
 //                reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
-                List<PledgeSubject> pledgeSubjects = pledgeSubjectService.getPledgeSubjectsFromSearch(reqParam);
-                model.addAttribute("pledgeSubjects", pledgeSubjects);
+                List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsFromSearch(reqParam);
+                model.addAttribute("pledgeSubjectList", pledgeSubjectList);
                 model.addAttribute("typeOfSearch", "pledgeSubjects");
                 return "search_results";
 

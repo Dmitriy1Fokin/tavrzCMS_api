@@ -1,6 +1,7 @@
 package ru.fds.tavrzcms3.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -144,28 +145,23 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.findByPledgorAndPervPoslEqualsAndStatusPAEquals(repositoryClient.getOne(pledgorId), pervPosl, "открыт");
     }
 
-    public int countOfCurrentPledgeAgreementsForEmployee(long employeeId){
+    public List<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(long employeeId, String pervPosl){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> pledgors = repositoryClient.findByEmployee(employee);
-        return repositoryPledgeAgreement.countAllByPledgorInAndStatusPAEquals(pledgors, "открыт");
+        Sort sort = new Sort(Sort.Direction.ASC,"pledgor");
+        if(!pervPosl.isEmpty())
+            return repositoryPledgeAgreement.findByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors,  pervPosl, "открыт", sort);
+        else
+            return repositoryPledgeAgreement.findByPledgorInAndStatusPAEquals(pledgors, "открыт", sort);
     }
 
-    public int countOfPervCurrentPledgeAgreementsForEmployee(long employeeId){
+    public int countOfCurrentPledgeAgreementForEmployee(long employeeId, String pervPosl){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> pledgors = repositoryClient.findByEmployee(employee);
-        return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors, "перв", "открыт");
-    }
-
-    public List<PledgeAgreement> getPervCurrentPledgeAgreementsForEmployeee(long employeeId){
-        Employee employee = repositoryEmployee.getOne(employeeId);
-        List<Client> pledgors = repositoryClient.findByEmployee(employee);
-        return  repositoryPledgeAgreement.findByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors,  "перв", "открыт");
-    }
-
-    public int countOfPoslCurrentPledgeAgreementsForEmployee(long employeeId){
-        Employee employee = repositoryEmployee.getOne(employeeId);
-        List<Client> pledgors = repositoryClient.findByEmployee(employee);
-        return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors, "посл", "открыт");
+        if(!pervPosl.isEmpty())
+            return repositoryPledgeAgreement.countAllByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors, pervPosl, "открыт");
+        else
+            return repositoryPledgeAgreement.countAllByPledgorInAndStatusPAEquals(pledgors, "открыт");
     }
 
     public int countOfLoanAgreementsForEmployee(long employeeId){
@@ -175,7 +171,7 @@ public class PledgeAgreementService {
     }
 
     public int countOfMonitoringNotDone(long employeeId){
-        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsForEmployee(employeeId, "перв");
         Calendar dateNow = new GregorianCalendar();
         Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), 1);
         Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
@@ -190,7 +186,7 @@ public class PledgeAgreementService {
     }
 
     public int countOfMonitoringIsDone(long employeeId){
-        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsForEmployee(employeeId, "перв");
         Calendar dateNow = new GregorianCalendar();
         Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), 1);
         Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
@@ -205,7 +201,7 @@ public class PledgeAgreementService {
     }
 
     public int countOfMonitoringOverdue(long employeeId){
-        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsForEmployee(employeeId, "перв");
         Calendar dateNow = new GregorianCalendar();
         Calendar beforeDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH) - 1, dateNow.getMaximum(Calendar.DAY_OF_MONTH));
         Date beforeDate = new Date(beforeDateCalendar.getTimeInMillis());
@@ -218,7 +214,7 @@ public class PledgeAgreementService {
     }
 
     public List<PledgeAgreement> getPledgeAgreementWithMonitoringNotDone(long employeeId){
-        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsForEmployee(employeeId, "перв");
         Calendar dateNow = new GregorianCalendar();
         Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), 1);
         Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
@@ -233,7 +229,7 @@ public class PledgeAgreementService {
     }
 
     public List<PledgeAgreement> getPledgeAgreementWithMonitoringIsDone(long employeeId){
-        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsForEmployee(employeeId, "перв");
         Calendar dateNow = new GregorianCalendar();
         Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), 1);
         Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
@@ -248,7 +244,7 @@ public class PledgeAgreementService {
     }
 
     public List<PledgeAgreement> getPledgeAgreementWithMonitoringOverDue(long employeeId){
-        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsForEmployee(employeeId, "перв");
         Calendar dateNow = new GregorianCalendar();
         Calendar beforeDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH) - 1, dateNow.getMaximum(Calendar.DAY_OF_MONTH));
         Date beforeDate = new Date(beforeDateCalendar.getTimeInMillis());
@@ -261,7 +257,7 @@ public class PledgeAgreementService {
     }
 
     public int countOfConclusionNotDone(long employeeId){
-        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsForEmployee(employeeId, "перв");
         Calendar dateNow = new GregorianCalendar();
         Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), 1);
         Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
@@ -276,7 +272,7 @@ public class PledgeAgreementService {
     }
 
     public int countOfConclusionIsDone(long employeeId){
-        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsForEmployee(employeeId, "перв");
         Calendar dateNow = new GregorianCalendar();
         Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), 1);
         Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
@@ -291,7 +287,7 @@ public class PledgeAgreementService {
     }
 
     public int countOfConclusionOverdue(long employeeId){
-        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsForEmployee(employeeId, "перв");
         Calendar dateNow = new GregorianCalendar();
         Calendar beforeDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH) - 1, dateNow.getMaximum(Calendar.DAY_OF_MONTH));
         Date beforeDate = new Date(beforeDateCalendar.getTimeInMillis());
@@ -304,7 +300,7 @@ public class PledgeAgreementService {
     }
 
     public List<PledgeAgreement> getPledgeAgreementWithConclusionNotDone(long employeeId){
-        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsForEmployee(employeeId, "перв");
         Calendar dateNow = new GregorianCalendar();
         Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), 1);
         Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
@@ -319,7 +315,7 @@ public class PledgeAgreementService {
     }
 
     public List<PledgeAgreement> getPledgeAgreementWithConclusionIsDone(long employeeId){
-        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsForEmployee(employeeId, "перв");
         Calendar dateNow = new GregorianCalendar();
         Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), 1);
         Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
@@ -334,7 +330,7 @@ public class PledgeAgreementService {
     }
 
     public List<PledgeAgreement> getPledgeAgreementWithConclusionOverDue(long employeeId){
-        List<PledgeAgreement> pledgeAgreementList = getPervCurrentPledgeAgreementsForEmployeee(employeeId);
+        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsForEmployee(employeeId, "перв");
         Calendar dateNow = new GregorianCalendar();
         Calendar beforeDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH) - 1, dateNow.getMaximum(Calendar.DAY_OF_MONTH));
         Date beforeDate = new Date(beforeDateCalendar.getTimeInMillis());
