@@ -29,6 +29,10 @@
     <span th:text="${pledgeAgreement.getPledgor().getEmployee().getSurname()} + ' ' + ${pledgeAgreement.getPledgor().getEmployee().name}"></span>
     <br>
     <br>
+    <label>Id договора залога:</label>
+    <span th:text="${pledgeAgreement.getPledgeAgreementId()}"></span>
+    <br>
+    <br>
     <label>Номер договора залога:</label>
     <span th:text="${pledgeAgreement.getNumPA()}">н/д</span>
     <br>
