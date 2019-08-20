@@ -21,7 +21,9 @@
     </style>
 </head>
 <body>
+
 <div th:replace="static/nav :: user_nav_bar"></div>
+
 <h1 th:text="'Предметы залога по договору залога №' + ${pledgeAgreement.getNumPA()}">Предметы залога</h1>
 <a th:href="@{monitoring_card(whereUpdateMonitoring='pa', pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}"
    href="monitoring_card.html"

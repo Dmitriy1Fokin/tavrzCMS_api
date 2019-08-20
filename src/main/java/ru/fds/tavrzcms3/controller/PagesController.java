@@ -1,4 +1,4 @@
-package ru.fds.tavrzcms3.rest;
+package ru.fds.tavrzcms3.controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -299,7 +299,6 @@ public class PagesController {
 
     @GetMapping("/search")
     public String searchPage(){
-        System.out.println("@GetMapping(\"/search\")!!!!!!!!!!!!!!!!!!!");
         return "search";
     }
 
@@ -632,6 +631,11 @@ public class PagesController {
         }
 
         return null;
+    }
+
+    @GetMapping("/update")
+    public String updatePage(){
+        return "update";
     }
 
 

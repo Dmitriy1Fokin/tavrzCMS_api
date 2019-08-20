@@ -21,7 +21,9 @@
     </style>
 </head>
 <body>
+
 <div th:replace="static/nav :: user_nav_bar"></div>
+
 <div th:switch="${loaner.getTypeOfClient()}">
     <div th:case="юл">
         <h1 th:text="'Заемщик:' + ${loaner.getClientLegalEntity().getOrganizationalForm() + ' ' + loaner.getClientLegalEntity().getName()}">Заемщик ЮЛ</h1>

@@ -31,7 +31,10 @@
     </style>
 </head>
 <body>
-<div th:include="static/nav :: user_nav_bar"></div>
+
+<div th:replace="static/nav :: user_nav_bar"></div>
+
+
 <div th:switch="${pervPosl}">
     <div th:case="all">
         <h1>Договоры залога на сопровождении (все):</h1>
@@ -115,7 +118,9 @@
                                     </div>
                                 </div>
                             </ol>
-                            <a th:href="@{/pledge_subjects(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
+                            <a th:href="@{/pledge_subjects(pledgeAgreementId=${pe.getPledgeAgreementId()})}"
+                               th:unless="${#lists.isEmpty(pe.getPledgeSubjects())}"
+                               href="pledge_subjects.html">подробнее</a>
                         </td>
 
                         <td th:text="${pe.getPledgeSubjects().size()}">0</td>
@@ -203,7 +208,9 @@
                                                 </div>
                                             </div>
                                         </ol>
-                                        <a th:href="@{/pledge_subjects(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
+                                        <a th:href="@{/pledge_subjects(pledgeAgreementId=${pe.getPledgeAgreementId()})}"
+                                           th:unless="${#lists.isEmpty(pe.getPledgeSubjects())}"
+                                           href="pledge_subjects.html">подробнее</a>
                                     </td>
 
                                     <td th:text="${pe.getPledgeSubjects().size()}">0</td>
@@ -292,7 +299,9 @@
                                                 </div>
                                             </div>
                                         </ol>
-                                        <a th:href="@{/pledge_subjects(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_subjects.html" th:text="подробнее">подробнее</a>
+                                        <a th:href="@{/pledge_subjects(pledgeAgreementId=${pe.getPledgeAgreementId()})}"
+                                           th:unless="${#lists.isEmpty(pe.getPledgeSubjects())}"
+                                           href="pledge_subjects.html">подробнее</a>
                                     </td>
 
                                     <td th:text="${pe.getPledgeSubjects().size()}">0</td>

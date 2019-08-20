@@ -21,7 +21,9 @@
     </style>
 </head>
 <body>
+
 <div th:replace="static/nav :: user_nav_bar"></div>
+
 <div th:switch="${pledgor.getTypeOfClient()}">
     <div th:case="юл">
         <h1 th:text="'Залогодатель:' + ${pledgor.getClientLegalEntity().getOrganizationalForm() + ' ' + pledgor.getClientLegalEntity().getName()}">Залогодатель ЮЛ</h1>

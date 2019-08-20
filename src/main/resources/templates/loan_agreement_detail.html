@@ -21,7 +21,9 @@
     </style>
 </head>
 <body>
+
 <div th:replace="static/nav :: user_nav_bar"></div>
+
 <h1 th:text="'Кредитный договор: №' + ${loanAgreement.getNumLA()} + ' от ' + ${loanAgreement.getDateBeginLA()}">Кредитный договор</h1>
 <label>Ответственный сотрудник: </label>
 <span th:text="${loanAgreement.getLoaner().getEmployee().getSurname()} + ' ' + ${loanAgreement.getLoaner().getEmployee().name}"></span>

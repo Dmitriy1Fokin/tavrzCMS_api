@@ -21,7 +21,7 @@
     </style>
 </head>
 <body>
-<div th:include="static/nav :: user_nav_bar"></div>
+<div th:replace="static/nav :: user_nav_bar"></div>
 
 <div th:if="${countOfConclusionNotDone &gt; 0}">
     <h1>Предстоящие заключения</h1>

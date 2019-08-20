@@ -20,7 +20,9 @@
     </style>
 </head>
 <body>
+
 <div th:replace="static/nav :: user_nav_bar"></div>
+
 <div th:switch="${whatDo}">
     <div th:case="changeLA">
         <form th:action="@{/loan_agreement_card}" th:method="post" th:object="${loanAgreement}" action="loan_agreement_card.html">

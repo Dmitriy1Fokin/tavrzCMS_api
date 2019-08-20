@@ -21,7 +21,8 @@
 </style>
 </head>
 <body>
-<div th:include="static/nav :: user_nav_bar"></div>
+
+<div th:replace="static/nav :: user_nav_bar"></div>
 
 <div th:if="${countOfMonitoringNotDone &gt; 0}">
     <h1>Предстоящие мониторинги</h1>
