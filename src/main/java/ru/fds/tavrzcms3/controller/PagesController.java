@@ -1,5 +1,8 @@
 package ru.fds.tavrzcms3.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,9 @@ import ru.fds.tavrzcms3.domain.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 @Controller
@@ -120,10 +126,26 @@ public class PagesController {
     }
 
     @GetMapping("/pledge_agreements")
-    public String pledgeEgreementPage(@RequestParam("employeeId") long employeeId, @RequestParam("pervPosl") String pervPosl, Model model) {
-        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsForEmployee(employeeId, pervPosl);
+    public String pledgeEgreementPage(@RequestParam("employeeId") long employeeId,
+                                      @RequestParam("pervPosl") String pervPosl,
+                                      @RequestParam("page") Optional<Integer> page,
+                                      @RequestParam("size") Optional<Integer> size,
+                                      Model model) {
+        int currentPage = page.orElse(0);
+        int pageSize = size.orElse(50);
+        Pageable pageable = PageRequest.of(currentPage, pageSize);
+        Page<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsForEmployee(employeeId, pervPosl, pageable);
+
         model.addAttribute("pledgeAgreementList", pledgeAgreementList);
         model.addAttribute("pervPosl", pervPosl);
+        model.addAttribute("employeeId", employeeId);
+
+        int totalPages = pledgeAgreementList.getTotalPages();
+        if(totalPages > 0){
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
         return "pledge_agreements";
     }
 
@@ -251,9 +273,25 @@ public class PagesController {
     }
 
     @GetMapping("/loan_agreements")
-    public String loanAgreementsPage(@RequestParam("employeeId") long employeeId, Model model) {
-        List<LoanAgreement> loanAgreementList = loanAgreementService.getCurrentLoanAgreementsForEmployee(employeeId);
+    public String loanAgreementsPage(@RequestParam("employeeId") long employeeId,
+                                     @RequestParam("page") Optional<Integer> page,
+                                     @RequestParam("size") Optional<Integer> size,
+                                     Model model) {
+
+        int currentPage = page.orElse(0);
+        int pageSize = size.orElse(50);
+        Pageable pageable = PageRequest.of(currentPage, pageSize);
+        Page<LoanAgreement> loanAgreementList = loanAgreementService.getCurrentLoanAgreementsForEmployee(pageable, employeeId);
+
         model.addAttribute("loanAgreementList", loanAgreementList);
+        model.addAttribute("employeeId", employeeId);
+
+        int totalPages = loanAgreementList.getTotalPages();
+        if(totalPages > 0){
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
         return "loan_agreements";
     }
 

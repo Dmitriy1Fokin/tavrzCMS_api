@@ -1,6 +1,9 @@
 package ru.fds.tavrzcms3.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -153,6 +156,16 @@ public class PledgeAgreementService {
             return repositoryPledgeAgreement.findByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors,  pervPosl, "открыт", sort);
         else
             return repositoryPledgeAgreement.findByPledgorInAndStatusPAEquals(pledgors, "открыт", sort);
+    }
+
+    public Page<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(long employeeId, String pervPosl, Pageable pageable){
+        Employee employee = repositoryEmployee.getOne(employeeId);
+        List<Client> pledgors = repositoryClient.findByEmployee(employee);
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC,"pledgor");
+        if(!pervPosl.isEmpty())
+            return repositoryPledgeAgreement.findByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors,  pervPosl, "открыт", pageable);
+        else
+            return repositoryPledgeAgreement.findByPledgorInAndStatusPAEquals(pledgors, "открыт", pageable);
     }
 
     public int countOfCurrentPledgeAgreementForEmployee(long employeeId, String pervPosl){

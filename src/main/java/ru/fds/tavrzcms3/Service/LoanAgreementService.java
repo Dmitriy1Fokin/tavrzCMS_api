@@ -1,6 +1,9 @@
 package ru.fds.tavrzcms3.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,12 +64,6 @@ public class LoanAgreementService {
 
     public List<LoanAgreement> getCurrentLoanAgreement(long loanerId){
         return repositoryLoanAgreement.findByLoanerAndStatusLAEquals(repositoryClient.getOne(loanerId), "открыт");
-    }
-
-    public List<LoanAgreement> getCurrentLoanAgreementsForEmployee(long employeeId){
-        Employee employee = repositoryEmployee.getOne(employeeId);
-        List<Client> clientList = repositoryClient.findByEmployee(employee);
-        return repositoryLoanAgreement.findByLoanerInAndStatusLAEquals(clientList, "открыт");
     }
 
     public List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){
@@ -170,6 +167,13 @@ public class LoanAgreementService {
     @Transactional
     public LoanAgreement updateLoanAgreement(LoanAgreement loanAgreement){
         return repositoryLoanAgreement.save(loanAgreement);
+    }
+
+    public Page<LoanAgreement> getCurrentLoanAgreementsForEmployee(Pageable pageable, long employeeId){
+        Employee employee = repositoryEmployee.getOne(employeeId);
+        List<Client> clientList = repositoryClient.findByEmployee(employee);
+        return repositoryLoanAgreement.findByLoanerInAndStatusLAEquals(clientList, "открыт", pageable);
+
     }
 
 }
