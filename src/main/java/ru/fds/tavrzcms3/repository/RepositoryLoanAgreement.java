@@ -2,6 +2,7 @@ package ru.fds.tavrzcms3.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -44,5 +45,6 @@ public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Lo
     List<LoanAgreement> findByNumLAContainingIgnoreCase(String numLA);
     List<LoanAgreement> findByLoanerInAndStatusLAEquals(List<Client> loaners, String statusLA);
     Page<LoanAgreement> findByLoanerInAndStatusLAEquals(List<Client> loaners, String statusLA, Pageable pageable);
+    Page<LoanAgreement> findAll(Specification specification, Pageable pageable);
 
 }

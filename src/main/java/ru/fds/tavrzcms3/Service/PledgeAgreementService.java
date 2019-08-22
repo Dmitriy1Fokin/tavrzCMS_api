@@ -355,7 +355,7 @@ public class PledgeAgreementService {
         return pledgeAgreementListWithConclusionOverdue;
     }
 
-    public List<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam){
+    public Page<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam){
         PledgeAgreementSpecificationsBuilder builder = new PledgeAgreementSpecificationsBuilder();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
 
@@ -428,7 +428,11 @@ public class PledgeAgreementService {
 
         Specification<PledgeAgreement> spec = builder.build();
 
-        return repositoryPledgeAgreement.findAll(spec);
+        int currentPage = Integer.parseInt(searchParam.get("page"));
+        int pageSize = Integer.parseInt(searchParam.get("size"));
+        Pageable pageable = PageRequest.of(currentPage, pageSize);
+
+        return repositoryPledgeAgreement.findAll(spec, pageable);
 
     }
 

@@ -33,6 +33,9 @@
 <h2>Поиск кредитного договора</h2>
 <form th:action="@{/search_results}" th:method="get" action="search_results.html">
     <input type="hidden", name="typeOfSearch" value="searchLA">
+    <input type="hidden", name="size" value='50'>
+    <input type="hidden", name="page" value='0'>
+
     <div class="row">
         <label>№ КД</label>
         <input name="numLA" type="text"/>
@@ -146,6 +149,9 @@
 <h2>Поиск договора залога</h2>
 <form th:action="@{/search_results}" th:method="get" action="search_results.html">
     <input type="hidden", name="typeOfSearch" value="searchPA">
+    <input type="hidden", name="size" value='50'>
+    <input type="hidden", name="page" value='0'>
+
     <div class="row">
         <label>№ ДЗ</label>
         <input name="numPA" type="text"/>
@@ -210,6 +216,9 @@
 
 <form th:action="@{/search_results}" th:method="get" action="search_results.html">
     <input type="hidden", name="typeOfSearch" value="searchPS">
+    <input type="hidden", name="size" value='50'>
+    <input type="hidden", name="page" value='0'>
+
     <div class="row">
         <label>Наименование</label>
         <input name="namePS" type="text"/>
@@ -320,22 +329,6 @@
         </select>
     </div>
     <br>
-    <!--<div class="row">-->
-        <!--<label>Вид обеспечения</label>-->
-        <!--<select name="typeOfCollateral">-->
-            <!--<option selected value="">не выбрано</option>-->
-            <!--<option value="Авто/спецтехника">Авто/спецтехника</option>-->
-            <!--<option value="Оборудование">Оборудование</option>-->
-            <!--<option value="ТМЦ">ТМЦ</option>-->
-            <!--<option value="Ценные бумаги">Ценные бумаги</option>-->
-            <!--<option value="Недвижимость - ЗУ - собственность">Недвижимость - ЗУ - собственность</option>-->
-            <!--<option value="Недвижимость - ЗУ - право аренды">Недвижимость - ЗУ - право аренды</option>-->
-            <!--<option value="Недвижимость - здание/сооружение">Недвижимость - здание/сооружение</option>-->
-            <!--<option value="Недвижимость - помещение">Недвижимость - помещение</option>-->
-            <!--<option value="Судно">Судно</option>-->
-        <!--</select>-->
-    <!--</div>-->
-    <!--<br>-->
     <div class="row">
         <label>Функция залога</label>
         <select name="typeOfPledge">
@@ -356,10 +349,11 @@
         <label>Адрес(Район)</label>
         <input name="adressDistrict" type="text"/>
     </div>
-    <br><div class="row">
-    <label>Адрес(Город)</label>
-    <input name="adressCity" type="text"/>
-</div>
+    <br>
+    <div class="row">
+        <label>Адрес(Город)</label>
+        <input name="adressCity" type="text"/>
+    </div>
     <br>
     <div class="row">
         <label>Адрес(Улица)</label>

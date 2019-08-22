@@ -1,9 +1,10 @@
 package ru.fds.tavrzcms3.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 
@@ -26,4 +27,5 @@ public interface RepositoryPledgeSubject extends JpaRepository<PledgeSubject, Lo
     boolean existsByPledgeAgreementsAndDateConclusionBefore(PledgeAgreement pledgeAgreement, Date beforeDate);
 //    @Query("select ps from PledgeSubject ps where ps.pledgeAgreements.pledgor.clientId = :pledgorId")
 //    List<PledgeSubject> findAll(@Param("pledgorId") long pledgorId);
+    Page<PledgeSubject> findAll(Specification specification, Pageable pageable);
 }

@@ -25,24 +25,32 @@
 <div th:replace="static/nav :: user_nav_bar"></div>
 
 <h1>Результы поиска:</h1>
-<div th:switch="${typeOfSearch}">
-    <div th:case="loanAgreements">
+<div th:switch="${reqParam.get('typeOfSearch')}">
+    <div th:case="searchLA">
         <div class="containerTable">
-            <div th:replace="static/table_loan_agreements :: loanAgreementTable(${loanAgreementList})"></div>
+            <div th:replace="static/table_loan_agreements :: loanAgreementTable(${resultList})"></div>
         </div>
     </div>
-    <div th:case="pledgeAreements">
+    <div th:case="searchPA">
         <div class="containerTable">
-            <div th:replace="static/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementList})"></div>
+            <div th:replace="static/table_pledge_agreements :: pledgeAgreementTable(${resultList})"></div>
         </div>
     </div>
-    <div th:case="pledgeSubjects">
-        <div th:replace="static/table_pledge_subjects :: pledgeSubjectTable(${pledgeSubjectList})"></div>
+    <div th:case="searchPS">
+        <div th:replace="static/table_pledge_subjects :: pledgeSubjectTable(${resultList})"></div>
     </div>
 </div>
 
-
-
-
+<div th:if="${resultList.totalPages > 1}" >
+    <form th:action="@{/search_results}" th:method="get" action="search_results.html">
+        <th:block th:each="elem : ${reqParam}">
+            <input type="hidden", th:name="${elem.key}" th:value="${elem.value}">
+        </th:block>
+        <span th:text="'Страница: '"></span>
+        <div th:each="pageNumber : ${pageNumbers}" style="display: inline">
+            <button th:text="${pageNumber}" type="submit" th:name="page" th:value="${pageNumber - 1}"></button>
+        </div>
+    </form>
+</div>
 </body>
 </html>

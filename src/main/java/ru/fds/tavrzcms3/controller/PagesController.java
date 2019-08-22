@@ -342,22 +342,53 @@ public class PagesController {
 
     @GetMapping("/search_results")
     public String searchResultsPage(@RequestParam Map<String, String> reqParam, Model model){
+        reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
         switch (reqParam.get("typeOfSearch")){
+
             case "searchLA":
-                List<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementFromSearch(reqParam);
-                model.addAttribute("loanAgreementList", loanAgreementList);
-                model.addAttribute("typeOfSearch", "loanAgreements");
+                Page<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementFromSearch(reqParam);
+                model.addAttribute("resultList", loanAgreementList);
+
+                int totalPagesLA = loanAgreementList.getTotalPages();
+                if(totalPagesLA > 0){
+                    List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPagesLA).boxed().collect(Collectors.toList());
+                    model.addAttribute("pageNumbers", pageNumbers);
+                }
+
+                reqParam.remove("page");
+                model.addAttribute("reqParam", reqParam);
+
                 return "search_results";
+
             case "searchPA":
-                List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementFromSearch(reqParam);
-                model.addAttribute("pledgeAgreementList", pledgeAgreementList);
-                model.addAttribute("typeOfSearch", "pledgeAreements");
+                Page<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementFromSearch(reqParam);
+                model.addAttribute("resultList", pledgeAgreementList);
+
+                int totalPagesPA = pledgeAgreementList.getTotalPages();
+                if(totalPagesPA > 0){
+                    List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPagesPA).boxed().collect(Collectors.toList());
+                    model.addAttribute("pageNumbers", pageNumbers);
+                }
+
+                reqParam.remove("page");
+                model.addAttribute("reqParam", reqParam);
+
                 return "search_results";
+
             case "searchPS":
-//                reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
-                List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsFromSearch(reqParam);
-                model.addAttribute("pledgeSubjectList", pledgeSubjectList);
-                model.addAttribute("typeOfSearch", "pledgeSubjects");
+
+                Page<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsFromSearch(reqParam);
+                model.addAttribute("resultList", pledgeSubjectList);
+
+                int totalPagesPS = pledgeSubjectList.getTotalPages();
+                if(totalPagesPS > 0){
+                    List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPagesPS).boxed().collect(Collectors.toList());
+                    model.addAttribute("pageNumbers", pageNumbers);
+                }
+
+                reqParam.remove("page");
+                model.addAttribute("reqParam", reqParam);
+
                 return "search_results";
 
                 default:

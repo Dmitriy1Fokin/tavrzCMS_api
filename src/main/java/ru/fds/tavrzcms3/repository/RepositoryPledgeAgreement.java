@@ -3,6 +3,7 @@ package ru.fds.tavrzcms3.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -37,4 +38,5 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     Page<PledgeAgreement> findByPledgorInAndPervPoslEqualsAndStatusPAEquals(List<Client> pledgors, String pervPosl, String statusPA, Pageable pageable);
     List<PledgeAgreement> findByPledgorInAndStatusPAEquals(List<Client> pledgors, String statusPA, Sort sort);
     Page<PledgeAgreement> findByPledgorInAndStatusPAEquals(List<Client> pledgors, String statusPA, Pageable pageable);
+    Page<PledgeAgreement> findAll(Specification specification, Pageable pageable);
 }

@@ -1,6 +1,9 @@
 package ru.fds.tavrzcms3.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.fds.tavrzcms3.domain.*;
@@ -54,10 +57,16 @@ public class PledgeSubjectService {
         return repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
     }
 
-    public List<PledgeSubject> getPledgeSubjectsFromSearch(Map<String, String> searchParam){
+    public Page<PledgeSubject> getPledgeSubjectsFromSearch(Map<String, String> searchParam){
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
 
+        int currentPage = Integer.parseInt(searchParam.get("page"));
+        int pageSize = Integer.parseInt(searchParam.get("size"));
+        Pageable pageable = PageRequest.of(currentPage, pageSize);
+
         if(searchParam.get("typeOfCollateral").isEmpty()){
+
             PledgeSubjectSpecificationsBuilder builder = new PledgeSubjectSpecificationsBuilder();
             if(!searchParam.get("namePS").isEmpty())
                 builder.with("name", ":", searchParam.get("namePS"), false);
@@ -108,11 +117,13 @@ public class PledgeSubjectService {
 
             Specification<PledgeSubject> spec = builder.build();
 
-            return repositoryPledgeSubject.findAll(spec);
+            return repositoryPledgeSubject.findAll(spec, pageable);
 
         }else {
             switch (searchParam.get("typeOfCollateral")){
+
                 case "auto":
+
                     PledgeSubjectAutoSpecificationBuilder builderAuto = new PledgeSubjectAutoSpecificationBuilder();
                     if(!searchParam.get("namePS").isEmpty())
                         builderAuto.with("name", ":", searchParam.get("namePS"), false);
@@ -180,9 +191,10 @@ public class PledgeSubjectService {
 
                     Specification<PledgeSubjectAuto> spec = builderAuto.build();
 
+                    return repositoryPledgeSubjectAuto.findAll(spec, pageable);
 
-                    return new ArrayList<>(repositoryPledgeSubjectAuto.findAll(spec));
                 case "equip":
+
                     PledgeSubjectEquipmentSpecificationBuilder builderEquip = new PledgeSubjectEquipmentSpecificationBuilder();
                     if(!searchParam.get("namePS").isEmpty())
                         builderEquip.with("name", ":", searchParam.get("namePS"), false);
@@ -245,10 +257,10 @@ public class PledgeSubjectService {
 
                     Specification<PledgeSubjectEquipment> specEquip = builderEquip.build();
 
-
-                    return new ArrayList<>(repositoryPledgeSubjectEquipment.findAll(specEquip));
+                    return repositoryPledgeSubjectEquipment.findAll(specEquip, pageable);
 
                 case "tbo":
+
                     PledgeSubjectTBOSpecificationBuilder builderTbo = new PledgeSubjectTBOSpecificationBuilder();
                     if(!searchParam.get("namePS").isEmpty())
                         builderTbo.with("name", ":", searchParam.get("namePS"), false);
@@ -304,9 +316,11 @@ public class PledgeSubjectService {
 
                     Specification<PledgeSubjectTBO> specTbo = builderTbo.build();
 
-                    return new ArrayList<>(repositoryPledgeSubjectTBO.findAll(specTbo));
+                    return repositoryPledgeSubjectTBO.findAll(specTbo, pageable);
+
 
                 case "securities":
+
                     PledgeSubjectSecuritiesSpecificationBuilder builderSecurities = new PledgeSubjectSecuritiesSpecificationBuilder();
                     if(!searchParam.get("namePS").isEmpty())
                         builderSecurities.with("name", ":", searchParam.get("namePS"), false);
@@ -363,8 +377,10 @@ public class PledgeSubjectService {
 
                     Specification<PledgeSubjectSecurities> securitiesSpecification = builderSecurities.build();
 
-                    return new ArrayList<>(repositoryPledgeSubjectSecurities.findAll(securitiesSpecification));
+                    return repositoryPledgeSubjectSecurities.findAll(securitiesSpecification, pageable);
+
                 case "landOwn":
+
                     PledgeSubjectRealtyLandOwnershipSpecificationBuilder builderLandOwn = new PledgeSubjectRealtyLandOwnershipSpecificationBuilder();
                     if(!searchParam.get("namePS").isEmpty())
                         builderLandOwn.with("name", ":", searchParam.get("namePS"), false);
@@ -431,8 +447,10 @@ public class PledgeSubjectService {
 
                     Specification<PledgeSubjectRealtyLandOwnership> landOwnershipSpecification = builderLandOwn.build();
 
-                    return new ArrayList<>(repositoryPledgeSubjectRealtyLandOwnership.findAll(landOwnershipSpecification));
+                    return repositoryPledgeSubjectRealtyLandOwnership.findAll(landOwnershipSpecification, pageable);
+
                 case "landLease":
+
                     PledgeSubjectRealtyLandLeaseSpecificationBuilder builderLandLease = new PledgeSubjectRealtyLandLeaseSpecificationBuilder();
                     if(!searchParam.get("namePS").isEmpty())
                         builderLandLease.with("name", ":", searchParam.get("namePS"), false);
@@ -518,8 +536,10 @@ public class PledgeSubjectService {
 
                     Specification<PledgeSubjectRealtyLandLease> landLeaseSpecification = builderLandLease.build();
 
-                    return new ArrayList<>(repositoryPledgeSubjectRealtyLandLease.findAll(landLeaseSpecification));
+                    return repositoryPledgeSubjectRealtyLandLease.findAll(landLeaseSpecification, pageable);
+
                 case "build":
+
                     PledgeSubjectRealtyBuildingSpecificationBuilder builderBuild = new PledgeSubjectRealtyBuildingSpecificationBuilder();
                     if(!searchParam.get("namePS").isEmpty())
                         builderBuild.with("name", ":", searchParam.get("namePS"), false);
@@ -585,8 +605,10 @@ public class PledgeSubjectService {
 
                     Specification<PledgeSubjectRealtyBuilding> buildingSpecification = builderBuild.build();
 
-                    return new ArrayList<>(repositoryPledgeSubjectRealtyBuilding.findAll(buildingSpecification));
+                    return repositoryPledgeSubjectRealtyBuilding.findAll(buildingSpecification, pageable);
+
                 case "room":
+
                     PledgeSubjectRealtyRoomSpecificationBuilder builderRoom = new PledgeSubjectRealtyRoomSpecificationBuilder();
                     if(!searchParam.get("namePS").isEmpty())
                         builderRoom.with("name", ":", searchParam.get("namePS"), false);
@@ -654,8 +676,10 @@ public class PledgeSubjectService {
 
                     Specification<PledgeSubjectRealtyRoom> roomSpecification = builderRoom.build();
 
-                    return new ArrayList<>(repositoryPledgeSubjectRealtyRoom.findAll(roomSpecification));
+                    return repositoryPledgeSubjectRealtyRoom.findAll(roomSpecification, pageable);
+
                 case "vessel":
+
                     PledgeSubjectVesselSpecificationBuilder builderVessel = new PledgeSubjectVesselSpecificationBuilder();
                     if(!searchParam.get("namePS").isEmpty())
                         builderVessel.with("name", ":", searchParam.get("namePS"), false);
@@ -719,7 +743,7 @@ public class PledgeSubjectService {
 
                     Specification<PledgeSubjectVessel> vesselSpecification = builderVessel.build();
 
-                    return new ArrayList<>(repositoryPledgeSubjectVessel.findAll(vesselSpecification));
+                    return repositoryPledgeSubjectVessel.findAll(vesselSpecification, pageable);
 
                 default:
                     return null;

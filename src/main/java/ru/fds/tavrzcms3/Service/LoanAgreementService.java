@@ -66,7 +66,7 @@ public class LoanAgreementService {
         return repositoryLoanAgreement.findByLoanerAndStatusLAEquals(repositoryClient.getOne(loanerId), "открыт");
     }
 
-    public List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){
+    public Page<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){
         LoanAgreementSpecificationsBuilder builder = new LoanAgreementSpecificationsBuilder();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
         if(!searchParam.get("numLA").isEmpty())
@@ -141,27 +141,32 @@ public class LoanAgreementService {
         }
 
         if(!searchParam.get("quality").isEmpty()){
-            builder.with("quality", searchParam.get("qualityOption"), searchParam.get("quality"), false);
+            builder.with("qualityCategory", searchParam.get("qualityOption"), searchParam.get("quality"), false);
         }
 
         if(!searchParam.get("amaunt").isEmpty()){
-            builder.with("amaunt", searchParam.get("amauntOption"), searchParam.get("amaunt"), false);
+            builder.with("amountLA", searchParam.get("amauntOption"), searchParam.get("amaunt"), false);
         }
 
         if(!searchParam.get("debt").isEmpty()){
-            builder.with("debt", searchParam.get("debtOption"), searchParam.get("debt"), false);
+            builder.with("debtLA", searchParam.get("debtOption"), searchParam.get("debt"), false);
         }
 
         if(!searchParam.get("interestRate").isEmpty()){
-            builder.with("interestRate", searchParam.get("interestRateOption"), searchParam.get("interestRate"), false);
+            builder.with("interestRateLA", searchParam.get("interestRateOption"), searchParam.get("interestRate"), false);
         }
 
         builder.with("statusLA", ":", searchParam.get("statusLA"), false);
 
 
-        Specification<LoanAgreement> cpec = builder.build();
+        Specification<LoanAgreement> spec = builder.build();
 
-        return repositoryLoanAgreement.findAll(cpec);
+        int currentPage = Integer.parseInt(searchParam.get("page"));
+        int pageSize = Integer.parseInt(searchParam.get("size"));
+        Pageable pageable = PageRequest.of(currentPage, pageSize);
+
+        return repositoryLoanAgreement.findAll(spec, pageable);
+//        return repositoryLoanAgreement.findAll(cpec);
     }
 
     @Transactional
