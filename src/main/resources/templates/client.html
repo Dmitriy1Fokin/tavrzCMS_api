@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Клиент</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        .containerTable{
+            width: 3000px;
+        }
+        .customTable, .customTable td {
+            border: 1px solid lightgray;
+            padding: 5px;
+            table-layout: fixed;
+        }
+        .nav-item{
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="static/nav :: user_nav_bar"></div>
+
+<div th:switch="${client.getTypeOfClient()}">
+    <div th:case="юл">
+        <h1 th:text="'Клиент:' + ${client.getClientLegalEntity().getOrganizationalForm() + ' ' + client.getClientLegalEntity().getName()}">Клиент ЮЛ</h1>
+        <label>ИНН:</label>
+        <span th:text="${client.getClientLegalEntity().getInn()}"></span>
+    </div>
+    <div th:case="фл">
+        <h1 th:text="'Клиент:' + ${client.getClientIndividual().getSurname() + ' '
+        + client.getClientIndividual().getName() + ' '
+        + client.getClientIndividual().getPatronymic()}">Клиент ФЛ</h1>
+        <label>Паспорт:</label>
+        <span th:text="${client.getClientIndividual().getPasportNum()}"></span>
+    </div>
+</div>
+<br>
+
+<label>Ответственный сотрудник: </label>
+<span th:text="${client.getEmployee().getSurname()} + ' ' + ${client.getEmployee().name}"></span>
+<br>
+<br>
+<label>Id клиента:</label>
+<span th:text="${client.getClientId()}"></span>
+<br>
+<br>
+
+
+
+
+<div th:if="${@clientService.countOfCurrentPledgeAgreementsByPledgorId(client.getClientId()) &gt; 0}">
+    <a th:href="@{monitoring_card(whereUpdateMonitoring='pledgor', pledgorId=${client.getClientId()})}"
+       href="monitoring_card.html"
+       th:text="'Обновить мониторинг предметов залога по всем договорам залога залогодателя'">Обновить мониторинг предметов залога по всем договорам залога залогодателя</a>
+    <br>
+    <br>
+
+    <h2>Действующее договоры залога</h2>
+    <div class="containerTable">
+        <div th:replace="static/table_pledge_agreements :: pledgeAgreementTable(${@clientService.getCurrentPledgeAgreementsByPledgorId(client.getClientId())})"></div>
+    </div>
+    <br>
+    <br>
+</div>
+
+<div th:if="${@clientService.countOfClosedPledgeAgreementsByPledgorId(client.getClientId()) &gt; 0}">
+    <h2>Закрытые договоры залога</h2>
+    <div class="containerTable">
+        <div th:replace="static/table_pledge_agreements :: pledgeAgreementTable(${@clientService.getClosedPledgeAgreementsByPledgorId(client.getClientId())})"></div>
+    </div>
+    <br>
+    <br>
+</div>
+
+
+<div th:if="${@clientService.countOfCurrentLoanEgreementsByLoanerId(client.getClientId()) &gt; 0}">
+    <h2>Действующее кредитные договоры</h2>
+    <div class="containerTable">
+        <div th:replace="static/table_loan_agreements :: loanAgreementTable(${@clientService.getCurrentLoanAgreementsByLoanerId(client.getClientId())})"></div>
+    </div>
+    <br>
+    <br>
+</div>
+<div th:if="${@clientService.countOfClosedLoanEgreementsByLoanerId(client.getClientId()) &gt; 0}">
+    <h2>Закрытые кредитные договоры</h2>
+    <div class="containerTable">
+        <div th:replace="static/table_loan_agreements :: loanAgreementTable(${@clientService.getClosedLoanAgreementsByLoanerId(client.getClientId())})"></div>
+    </div>
+    <br>
+    <br>
+</div>
+
+</body>
+</html>

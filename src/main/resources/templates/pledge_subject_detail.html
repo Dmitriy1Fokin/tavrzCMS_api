@@ -379,6 +379,7 @@
     <br>
     <br>
 
+
     <label>Договора залога:</label>
     <ol>
         <div th:each="pe: ${pledgeSubject.getPledgeAgreements()}">
@@ -388,11 +389,11 @@
             </li>
             <div th:switch="${pe.getPledgor().getTypeOfClient()}">
                 <div th:case="юл">
-                    <a th:href="@{/pledgor(pledgorId=${pe.getPledgor().getClientId()})}" href="pledgor.html"
+                    <a th:href="@{/client(clientId=${pe.getPledgor().getClientId()})}" href="pledgor.html"
                        th:text="${pe.getPledgor().getClientLegalEntity().getOrganizationalForm() + ' ' + pe.getPledgor().getClientLegalEntity().getName()}">Залогодатель ЮЛ</a>
                 </div>
                 <div th:case="фл">
-                    <a th:href="@{/pledgor(pledgorId=${pe.getPledgor().getClientId()})}" href="pledgor.html"
+                    <a th:href="@{/client(clientId=${pe.getPledgor().getClientId()})}" href="pledgor.html"
                        th:text="${pe.getPledgor().getClientIndividual().getSurname() + ' ' + pe.getPledgor().getClientIndividual().getName()}">Залогодатель ФЛ</a>
 
                 </div>
@@ -401,6 +402,8 @@
     </ol>
     <br>
     <br>
+
+
     <label>Кредитные договоры:</label>
     <ol>
         <div th:each="pe : ${pledgeSubject.getPledgeAgreements()}">
@@ -411,22 +414,17 @@
                 </li>
                 <div th:switch="${loanAgreement.getLoaner().getTypeOfClient()}">
                     <div th:case="юл">
-                        <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+                        <a th:href="@{/client(clientId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
                            th:text="${loanAgreement.getLoaner().getClientLegalEntity().getOrganizationalForm() + ' ' + loanAgreement.getLoaner().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
                     </div>
                     <div th:case="фл">
-                        <a th:href="@{/loaner(loanerId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+                        <a th:href="@{/client(clientId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
                            th:text="${loanAgreement.getLoaner().getClientIndividual().getSurname() + ' ' + loanAgreement.getLoaner().getClientIndividual().getName()}">Заемщик ФЛ</a>
                     </div>
                 </div>
             </div>
         </div>
     </ol>
-    <!--<span th:text="${pledgeSubject}">н/д</span>-->
-
-
-
-
 
 </div>
 </body>

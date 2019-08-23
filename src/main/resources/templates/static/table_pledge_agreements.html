@@ -43,13 +43,13 @@
             <div th:switch="${pa.getPledgor().getTypeOfClient()}">
                 <div th:case="юл">
                     <td>
-                        <a th:href="@{/pledgor(pledgorId=${pa.getPledgor().getClientId()})}" href="pledgor.html"
+                        <a th:href="@{/client(clientId=${pa.getPledgor().getClientId()})}" href="client.html"
                            th:text="${pa.getPledgor().getClientLegalEntity().getOrganizationalForm() + ' ' + pa.getPledgor().getClientLegalEntity().getName()}"></a>
                     </td>
                 </div>
                 <div th:case="фл">
                     <td>
-                        <a th:href="@{/pledgor(pledgorId=${pa.getPledgor().getClientId()})}" href="pledgor.html"
+                        <a th:href="@{/client(clientId=${pa.getPledgor().getClientId()})}" href="client.html"
                            th:text="${pa.getPledgor().getClientIndividual().getSurname() + ' ' + pa.getPledgor().getClientIndividual().getName()}"></a>
                     </td>
                 </div>

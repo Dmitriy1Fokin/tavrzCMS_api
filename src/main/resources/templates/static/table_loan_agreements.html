@@ -32,11 +32,11 @@
                 <td>
                     <div th:switch="${la.getLoaner().getTypeOfClient()}">
                         <div th:case="юл">
-                            <a th:href="@{/loaner(loanerId=${la.getLoaner().getClientId()})}" href="loaner.html"
+                            <a th:href="@{/client(clientId=${la.getLoaner().getClientId()})}" href="loaner.html"
                                th:text="${la.getLoaner().getClientLegalEntity().getOrganizationalForm() + ' ' + la.getLoaner().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
                         </div>
                         <div th:case="фл">
-                            <a th:href="@{/loaner(loanerId=${la.getLoaner().getClientId()})}" href="loaner.html"
+                            <a th:href="@{/client(clientId=${la.getLoaner().getClientId()})}" href="loaner.html"
                                th:text="${la.getLoaner().getClientIndividual().getSurname() + ' ' + la.getLoaner().getClientIndividual().getName()}">Заемщик ФЛ</a>
 
                         </div>

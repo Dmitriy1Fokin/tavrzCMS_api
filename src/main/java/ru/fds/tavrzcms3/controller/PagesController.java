@@ -226,11 +226,12 @@ public class PagesController {
         return "pledge_subject_detail";
     }
 
-    @GetMapping("/pledgor")
-    public String pledgorPage(@RequestParam("pledgorId") long pledgorId, Model model){
-        Client pledgor = clientService.getClientByClientId(pledgorId);
-        model.addAttribute("pledgor", pledgor);
-        return  "pledgor";
+    @GetMapping("/client")
+    public String clientPage(@RequestParam("clientId") long pledgorId, Model model){
+        Client client = clientService.getClientByClientId(pledgorId);
+        model.addAttribute("client", client);
+
+        return "client";
     }
 
     @GetMapping("/pledge_agreement_detail")
@@ -245,13 +246,6 @@ public class PagesController {
         LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId);
         model.addAttribute("loanAgreement", loanAgreement);
         return "loan_agreement_detail";
-    }
-
-    @GetMapping("/loaner")
-    public String loanerPage(@RequestParam("loanerId") long loanerId, Model model){
-        Client loaner = clientService.getClientByClientId(loanerId);
-        model.addAttribute("loaner", loaner);
-        return "loaner";
     }
 
     @GetMapping("cost_history")
@@ -540,11 +534,6 @@ public class PagesController {
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
         switch (whatDo){
             case "changePS":
-//                PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
-//                model.addAttribute("pledgeSubject", pledgeSubject);
-//                model.addAttribute("whatDo", whatDo);
-//                return "pledge_subject_card";
-
 
                 switch (pledgeSubject.getTypeOfCollateral()){
                     case "Авто/спецтехника":
@@ -683,8 +672,10 @@ public class PagesController {
                         default:
                             return null;
                 }
+
                 return "pledge_subject_detail";
             case "newPS":
+
                 switch (pledgeSubject.getTypeOfCollateral()){
                     case "Авто/спецтехника":
                     case "Оборудование":
@@ -697,13 +688,19 @@ public class PagesController {
                     case "Недвижимость - помещение":
 
                 }
+
+                return "update";
+
         }
 
         return null;
     }
 
     @GetMapping("/update")
-    public String updatePage(){
+    public String updatePage(Model model){
+
+        List<Client> clientList = clientService.getAll();
+        model.addAttribute("clientList", clientList);
         return "update";
     }
 
