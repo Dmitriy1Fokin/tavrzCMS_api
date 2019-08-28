@@ -1,22 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous">
+    </script>
     <meta charset="UTF-8">
     <title>Поиск</title>
-    <!--<script>-->
-        <!--$(function () {-->
-            <!--$('#whatSearchPS').chahge(function () {-->
-                <!--var choise = $(this).find(':selected').val();-->
-                <!--if(choise == 'auto'){-->
-                    <!--$('.element').text('qwerty');-->
-                <!--}else if(choise == 'equip'){-->
-                    <!--$('.element').text('asdfg');-->
-                <!--}-->
-
-            <!--});-->
-
-        <!--})-->
-    <!--</script>-->
     <style>
         .nav-item{
             display: inline;
@@ -210,6 +201,25 @@
     <button type="submit">Найти</button>
 </form>
 
+<h2>Поиск клиента</h2>
+<form th:action="@{/search_results}" th:method="get" action="search_results.html">
+    <input type="hidden", name="typeOfSearch" value="searchClient">
+    <input type="hidden", name="size" value='50'>
+    <input type="hidden", name="page" value='0'>
+
+    <div class="row">
+        <label>Клиент</label>
+        <input name="clientName" type="text"/>
+        <select id="whatSearchClient" onchange="choiseClient()" name="clientOption">
+            <option selected value="юл">ЮЛ</option>
+            <option value="фл">ФЛ</option>
+        </select>
+    </div>
+    <br>
+    <div id="elementClient"></div>
+
+    <button type="submit">Найти</button>
+</form>
 
 <h2>Поиск предмета залога</h2>
 <h3><u>Общие признаки</u>(поиск по всем видам имущества)</h3>
@@ -401,10 +411,40 @@
 
 
 <script>
+    $(document).ready(choiseClient());
+    $(document).ready(choisePS());
+
+
+
+    function choiseClient() {
+        var n = document.getElementById("whatSearchClient").options.selectedIndex;
+        var choise = document.getElementById("whatSearchClient").options[n].value;
+        if(choise == 'юл'){
+            var codeInner = '<div class="row">\n' +
+                '        <label>ИНН</label>\n' +
+                '        <input name="inn" type="text"/>\n' +
+                '    </div>\n' +
+                '    <br>';
+            elementClient.innerHTML = '';
+            elementClient.insertAdjacentHTML('afterbegin', codeInner);
+        }else if(choise == 'фл'){
+            var codeInner = '<div class="row">\n' +
+                '        <label>№ паспорта</label>\n' +
+                '        <input name="pasportNum" type="text"/>\n' +
+                '    </div>\n' +
+                '    <br>';
+            elementClient.innerHTML = '';
+            elementClient.insertAdjacentHTML('afterbegin', codeInner);
+        }
+    }
+
+
     function choisePS () {
         var n = document.getElementById("whatSearchPS").options.selectedIndex;
         var choise = document.getElementById("whatSearchPS").options[n].value;
-        if(choise == 'auto'){
+        if(choise == ''){
+            elementPS.innerHTML = '';
+        }else if(choise == 'auto'){
             var codeInner = '<div class="row">\n' +
                 '<label>Марка</label>\n' +
                 '<input name="brandAuto" type="text"/>\n' +

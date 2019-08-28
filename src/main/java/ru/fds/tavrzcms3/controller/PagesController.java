@@ -336,7 +336,7 @@ public class PagesController {
 
     @GetMapping("/search_results")
     public String searchResultsPage(@RequestParam Map<String, String> reqParam, Model model){
-        reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
+//        reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
         switch (reqParam.get("typeOfSearch")){
 
             case "searchLA":
@@ -385,8 +385,25 @@ public class PagesController {
 
                 return "search_results";
 
+            case "searchClient":
+
+                Page<Client> clientPage = clientService.getClientFromSearch(reqParam);
+                model.addAttribute("resultList", clientPage);
+
+                int totalPagesClient = clientPage.getTotalPages();
+                if(totalPagesClient > 0){
+                    List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPagesClient).boxed().collect(Collectors.toList());
+                    model.addAttribute("pageNumbers", pageNumbers);
+                }
+
+                reqParam.remove("page");
+                model.addAttribute("reqParam", reqParam);
+
+                return "search_results";
+
+
                 default:
-                    return "search_results";
+                    return null;
 
         }
     }
@@ -699,8 +716,8 @@ public class PagesController {
     @GetMapping("/update")
     public String updatePage(Model model){
 
-        List<Client> clientList = clientService.getAll();
-        model.addAttribute("clientList", clientList);
+//        List<Client> clientList = clientService.getAll();
+//        model.addAttribute("clientList", clientList);
         return "update";
     }
 

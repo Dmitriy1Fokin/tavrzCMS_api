@@ -39,6 +39,9 @@
     <div th:case="searchPS">
         <div th:replace="static/table_pledge_subjects :: pledgeSubjectTable(${resultList})"></div>
     </div>
+    <div th:case="searchClient">
+        <div th:replace="static/table_client :: clietTable(${resultList})"></div>
+    </div>
 </div>
 
 <div th:if="${resultList.totalPages > 1}" >
