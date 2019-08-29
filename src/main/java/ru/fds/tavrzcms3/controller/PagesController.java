@@ -497,38 +497,73 @@ public class PagesController {
 
     @GetMapping("/loan_agreement_card")
     public String loanAgreementCardPageGet(@RequestParam("loanAgreementId") long loanAgreementId,
-                                        @RequestParam("whatDo") String whatDo,
-                                        Model model){
-        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId);
-        model.addAttribute("loanAgreement", loanAgreement);
-        model.addAttribute("whatDo", whatDo);
-        return "loan_agreement_card";
+                                           @RequestParam("clientId") Optional<Long> clientId,
+                                           @RequestParam("whatDo") String whatDo,
+                                           Model model){
+        if(whatDo.equals("changeLA")){
+            LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId);
+
+            model.addAttribute("loanAgreement", loanAgreement);
+            model.addAttribute("whatDo", whatDo);
+
+            return "loan_agreement_card";
+        }else {
+            LoanAgreement loanAgreement = new LoanAgreement();
+            Client client = clientService.getClientByClientId(clientId.orElse((long)0));
+            loanAgreement.setLoaner(client);
+
+            model.addAttribute("loanAgreement", loanAgreement);
+            model.addAttribute("whatDo", whatDo);
+
+            return "loan_agreement_card";
+        }
+
     }
 
     @PostMapping("/loan_agreement_card")
     public String loanAgreementCardPagePost(@ModelAttribute LoanAgreement loanAgreement,
-                                        @RequestParam("whatDo") String whatDo,
-                                        Model model){
+                                            @RequestParam("whatDo") String whatDo,
+                                            Model model){
 
-        switch (whatDo){
-            case "changeLA":
-                LoanAgreement la = loanAgreementService.updateLoanAgreement(loanAgreement);
-                model.addAttribute("loanAgreement", la);
-                return "loan_agreement_detail";
-            case "newLA":
+        if(whatDo.equals("changeLA")){
+            LoanAgreement la = loanAgreementService.updateInsertLoanAgreement(loanAgreement);
+
+            model.addAttribute("loanAgreement", la);
+
+            return "loan_agreement_detail";
+        }else {
+            LoanAgreement la = loanAgreementService.updateInsertLoanAgreement(loanAgreement);
+
+            model.addAttribute("loanAgreement", la);
+            model.addAttribute("whatDo", "responseSuccess");
+
+            return "loan_agreement_card";
         }
-
-        return null;
     }
 
     @GetMapping("/pledge_agreement_card")
     public String pledgeAgreementCardGet(@RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                         @RequestParam("clientId") Optional<Long> clientId,
                                          @RequestParam("whatDo") String whatDo,
                                          Model model){
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
-        model.addAttribute("pledgeAgreement", pledgeAgreement);
-        model.addAttribute("whatDo", whatDo);
-        return "pledge_agreement_card";
+        if(whatDo.equals("changePA")){
+            PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+
+            model.addAttribute("pledgeAgreement", pledgeAgreement);
+            model.addAttribute("whatDo", whatDo);
+
+            return "pledge_agreement_card";
+        }else {
+            PledgeAgreement pledgeAgreement = new PledgeAgreement();
+            Client client = clientService.getClientByClientId(clientId.orElse((long)0));
+            pledgeAgreement.setPledgor(client);
+
+            model.addAttribute("pledgeAgreement", pledgeAgreement);
+            model.addAttribute("whatDo", whatDo);
+
+            return "pledge_agreement_card";
+        }
+
     }
 
     @PostMapping("/pledge_agreement_card")
@@ -536,14 +571,22 @@ public class PagesController {
                                           @RequestParam("whatDo") String whatDo,
                                           Model model){
 
-        switch (whatDo){
-            case "changePA":
-                PledgeAgreement pa = pledgeAgreementService.updatePledgeAgreement(pledgeAgreement);
-                model.addAttribute("pledgeAgreement", pa);
-                return "pledge_agreement_detail";
-            case "newPA":
+        if(whatDo.equals("changePA")){
+            PledgeAgreement pa = pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
+
+            model.addAttribute("pledgeAgreement", pa);
+
+            return "pledge_agreement_detail";
+        }else {
+            PledgeAgreement pa = pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
+
+            model.addAttribute("pledgeAgreement", pa);
+            model.addAttribute("whatDo", "responseSuccess");
+
+            return "pledge_agreement_card";
         }
-        return null;
+
+
     }
 
     @GetMapping("/pledge_subject_card")

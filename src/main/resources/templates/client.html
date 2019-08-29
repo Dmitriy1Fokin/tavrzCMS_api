@@ -60,6 +60,32 @@
 
 
 
+
+<a th:href="@{client_card(whatDo='changeClient', clientId=${client.getClientId()})}"
+   href="client_card.html"
+   th:text="'Добавить существующий договор залога'">Добавить существующий договор залога</a>
+<br>
+<br>
+<a th:href="@{pledge_agreement_card(whatDo='newPA', pledgeAgreementId='0', clientId=${client.getClientId()})}"
+   href="pledge_agreement_card.html"
+   th:text="'Добавить новый договор залога'">Добавить новый договор залога</a>
+<br>
+<br>
+<a th:href="@{client_card(whatDo='changeClient', clientId=${client.getClientId()})}"
+   href="client_card.html"
+   th:text="'Добавить существующий кредитный договор'">Добавить существующий кредитный договор</a>
+<br>
+<br>
+<a th:href="@{loan_agreement_card(whatDo='newLA', loanAgreementId='0', clientId=${client.getClientId()})}"
+   href="loan_agreement_card.html"
+   th:text="'Добавить новый кредитный договор'">Добавить новый кредитный договор</a>
+<br>
+<br>
+
+
+
+
+
 <div th:if="${@clientService.countOfCurrentPledgeAgreementsByPledgorId(client.getClientId()) &gt; 0}">
     <a th:href="@{monitoring_card(whereUpdateMonitoring='pledgor', pledgorId=${client.getClientId()})}"
        href="monitoring_card.html"

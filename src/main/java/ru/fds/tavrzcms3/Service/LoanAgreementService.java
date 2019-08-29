@@ -170,7 +170,7 @@ public class LoanAgreementService {
     }
 
     @Transactional
-    public LoanAgreement updateLoanAgreement(LoanAgreement loanAgreement){
+    public LoanAgreement updateInsertLoanAgreement(LoanAgreement loanAgreement){
         return repositoryLoanAgreement.save(loanAgreement);
     }
 

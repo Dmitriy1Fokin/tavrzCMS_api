@@ -62,11 +62,6 @@
             </div>
             <br>
             <div class="row">
-                <label>%:</label>
-                <input required th:field="*{interestRateLA}" type="text" th:value="${loanAgreement.getInterestRateLA()}"/>
-            </div>
-            <br>
-            <div class="row">
                 <label>ПФО</label>
                 <select id="pfoSelection" required th:field="*{pfo}">
                     <option value="1">1</option>
@@ -76,6 +71,7 @@
                     <option value="5">5</option>
                 </select>
             </div>
+            <br>
             <div class="row">
                 <label>Кат.кач.</label>
                 <select id="qualitySelection" required th:field="*{qualityCategory}">
@@ -86,6 +82,7 @@
                     <option value="5">5</option>
                 </select>
             </div>
+            <br>
             <div class="row">
                 <label>Кат.кач.</label>
                 <select id="statusSelection" required th:field="*{statusLA}">
@@ -93,10 +90,84 @@
                     <option value="закрыт">закрыт</option>
                 </select>
             </div>
+            <br>
             <button type="submit">Обновить</button>
         </form>
     </div>
     <div th:case="newLA">
+        <form th:action="@{/loan_agreement_card}" th:method="post" th:object="${loanAgreement}" action="loan_agreement_card.html">
+            <input type="hidden", name="whatDo" value="newLA">
+            <input type="hidden", th:field="*{loaner}" th:value="${loanAgreement.getLoaner()}">
+
+            <div class="row">
+                <label>№ КД:</label>
+                <input required th:field="*{numLA}" type="text"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>Дата начала КД</label>
+                <input required th:field="*{dateBeginLA}" type="date"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>Дата окончания КД</label>
+                <input required th:field="*{dateEndLA}" type="date"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>Сумма договора:</label>
+                <input required th:field="*{amountLA}" type="text"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>Задолженность:</label>
+                <input required th:field="*{debtLA}" type="text"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>%:</label>
+                <input required th:field="*{interestRateLA}" type="text"/>
+            </div>
+            <br>
+            <div class="row">
+                <label>ПФО</label>
+                <select required th:field="*{pfo}">
+                    <!--<option selected >не выбрано</option>-->
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <br>
+            <div class="row">
+                <label>Кат.кач.</label>
+                <select required th:field="*{qualityCategory}">
+                    <!--<option selected value="">не выбрано</option>-->
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <br>
+            <div class="row">
+                <label>Кат.кач.</label>
+                <select required th:field="*{statusLA}">
+                    <option selected value="открыт">открыт</option>
+                    <option value="закрыт">закрыт</option>
+                </select>
+            </div>
+            <br>
+            <button type="submit">Добавить</button>
+        </form>
+    </div>
+    <div th:case="responseSuccess">
+        <h3>Успешно добавлен новый кредитный договор</h3>
+        <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
+           th:text="'подробрее'">н/д</a>
     </div>
 </div>
 

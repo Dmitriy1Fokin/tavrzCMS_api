@@ -437,7 +437,7 @@ public class PledgeAgreementService {
     }
 
     @Transactional
-    public PledgeAgreement updatePledgeAgreement(PledgeAgreement pledgeAgreement){
+    public PledgeAgreement updateInsertPledgeAgreement(PledgeAgreement pledgeAgreement){
         return repositoryPledgeAgreement.save(pledgeAgreement);
     }
 
