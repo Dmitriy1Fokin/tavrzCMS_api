@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
 import ru.fds.tavrzcms3.specification.ClientIndividualSpecificationBuilder;
@@ -110,4 +111,25 @@ public class ClientService {
         }
 
     }
+
+    @Transactional
+    public ClientIndividual updateClientIndividual(ClientIndividual clientIndividual){
+        return repositoryClientIndividual.save(clientIndividual);
+    }
+
+    @Transactional
+    public ClientLegalEntity updateClientLegalEntity(ClientLegalEntity clientLegalEntity){
+        return repositoryClientLegalEntity.save(clientLegalEntity);
+    }
+
+    @Transactional
+    public Client saveClientLegalEntity(ClientLegalEntity clientLegalEntity){
+        return repositoryClientLegalEntity.save(clientLegalEntity);
+    }
+
+    @Transactional
+    public Client saveClientIndividual(ClientIndividual clientIndividual){
+        return repositoryClientIndividual.save(clientIndividual);
+    }
+
 }

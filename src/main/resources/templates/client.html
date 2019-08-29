@@ -26,7 +26,7 @@
 
 <div th:switch="${client.getTypeOfClient()}">
     <div th:case="юл">
-        <h1 th:text="'Клиент:' + ${client.getClientLegalEntity().getOrganizationalForm() + ' ' + client.getClientLegalEntity().getName()}">Клиент ЮЛ</h1>
+        <h1 th:text="'Клиент: ' + ${client.getClientLegalEntity().getOrganizationalForm()} + ' ' + ${client.getClientLegalEntity().getName()}">Клиент ЮЛ</h1>
         <label>ИНН:</label>
         <span th:text="${client.getClientLegalEntity().getInn()}"></span>
     </div>

@@ -49,11 +49,11 @@
 <label>Заемщик:</label>
 <div th:switch="${loanAgreement.getLoaner().getTypeOfClient()}">
     <div th:case="юл">
-        <a th:href="@{/client(clientId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+        <a th:href="@{/client(clientId=${loanAgreement.getLoaner().getClientId()})}" href="client.html"
            th:text="${loanAgreement.getLoaner().getClientLegalEntity().getOrganizationalForm() + ' ' + loanAgreement.getLoaner().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
     </div>
     <div th:case="фл">
-        <a th:href="@{/client(clientId=${loanAgreement.getLoaner().getClientId()})}" href="loaner.html"
+        <a th:href="@{/client(clientId=${loanAgreement.getLoaner().getClientId()})}" href="client.html"
            th:text="${loanAgreement.getLoaner().getClientIndividual().getSurname() + ' ' + loanAgreement.getLoaner().getClientIndividual().getName()}">Заемщик ФЛ</a>
 
     </div>

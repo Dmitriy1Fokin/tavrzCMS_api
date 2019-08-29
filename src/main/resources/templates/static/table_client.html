@@ -14,6 +14,7 @@
             <th>Тип клиента</th>
             <th>ИНН/Паспорт</th>
             <th>Ответственный сотрудник</th>
+            <th>Клиентский менеджер</th>
         </tr>
         </thead>
         <tbody>
@@ -24,11 +25,11 @@
                 <td>
                     <div th:switch="${client.getTypeOfClient()}">
                         <div th:case="юл">
-                            <a th:href="@{/client(clientId=${client.getClientId()})}" href="loaner.html"
+                            <a th:href="@{/client(clientId=${client.getClientId()})}" href="client.html"
                                th:text="${client.getClientLegalEntity().getOrganizationalForm() + ' ' + client.getClientLegalEntity().getName()}">Клиент ЮЛ</a>
                         </div>
                         <div th:case="фл">
-                            <a th:href="@{/client(clientId=${client.getClientId()})}" href="loaner.html"
+                            <a th:href="@{/client(clientId=${client.getClientId()})}" href="client.html"
                                th:text="${client.getClientIndividual().getSurname() + ' ' + client.getClientIndividual().getName()}">Клиент ФЛ</a>
 
                         </div>
@@ -48,6 +49,8 @@
                     </div>
                 </td>
                 <td th:text="${client.getEmployee().getSurname()} + ' ' + ${client.getEmployee().name}">н/д</td>
+
+                <td th:text="${client.getClientManager().getSurname() + ' ' + client.getClientManager().getName()}">н/д</td>
             </tr>
         </div>
         </tbody>

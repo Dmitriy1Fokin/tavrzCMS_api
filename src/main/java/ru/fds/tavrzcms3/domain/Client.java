@@ -2,19 +2,7 @@ package ru.fds.tavrzcms3.domain;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "client_prime")
@@ -43,7 +31,7 @@ public class Client {
 	
 	@OneToOne
 	@JoinColumn(name = "client_id")
-	private ClientLegalEntity ClientLegalEntity;
+	private ClientLegalEntity clientLegalEntity;
 	
 	@OneToMany(mappedBy = "loaner")
 	private List<LoanAgreement> loanAgreements;
@@ -92,11 +80,11 @@ public class Client {
 	}
 
 	public ClientLegalEntity getClientLegalEntity() {
-		return ClientLegalEntity;
+		return clientLegalEntity;
 	}
 
 	public void setClientLegalEntity(ClientLegalEntity clientLegalEntity) {
-		ClientLegalEntity = clientLegalEntity;
+		this.clientLegalEntity = clientLegalEntity;
 	}
 
 	public List<LoanAgreement> getLoanAgreements() {

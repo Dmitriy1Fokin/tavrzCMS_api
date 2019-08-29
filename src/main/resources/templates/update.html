@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Обновление/добавление данных</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        .containerTable{
+            width: 3000px;
+        }
+        .customTable, .customTable td {
+            border: 1px solid lightgray;
+            padding: 5px;
+            table-layout: fixed;
+        }
+        .nav-item{
+            display: inline;
+        }
+    </style>
 </head>
 <body>
+
+<div th:replace="static/nav :: user_nav_bar"></div>
+
+<a th:href="@{client_card(whatDo='newClientLE', clientId='0')}"
+   href="client_card.html"
+   th:text="'Добавить нового клиента (ЮЛ)'">Добавить нового клиента (ЮЛ)</a>
+<br>
+<br>
+<a th:href="@{client_card(whatDo='newClientInd', clientId='0')}"
+   href="client_card.html"
+   th:text="'Добавить нового клиента (ФЛ)'">Добавить нового клиента (ФЛ)</a>
+<br>
+<br>
 
 </body>
 </html>

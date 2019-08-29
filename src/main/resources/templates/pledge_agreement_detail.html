@@ -48,11 +48,11 @@
     <label>Залогодатель:</label>
     <div th:switch="${pledgeAgreement.getPledgor().getTypeOfClient()}">
         <div th:case="юл">
-            <a th:href="@{/client(clientId=${pledgeAgreement.getPledgor().getClientId()})}" href="pledgor.html"
+            <a th:href="@{/client(clientId=${pledgeAgreement.getPledgor().getClientId()})}" href="client.html"
                th:text="${pledgeAgreement.getPledgor().getClientLegalEntity().getOrganizationalForm() + ' ' + pledgeAgreement.getPledgor().getClientLegalEntity().getName()}">Залогодатель ЮЛ</a>
         </div>
         <div th:case="фл">
-            <a th:href="@{/client(clientId=${pledgeAgreement.getPledgor().getClientId()})}" href="pledgor.html"
+            <a th:href="@{/client(clientId=${pledgeAgreement.getPledgor().getClientId()})}" href="client.html"
                th:text="${pledgeAgreement.getPledgor().getClientIndividual().getSurname() + ' ' + pledgeAgreement.getPledgor().getClientIndividual().getName()}">Залогодатель ФЛ</a>
 
         </div>

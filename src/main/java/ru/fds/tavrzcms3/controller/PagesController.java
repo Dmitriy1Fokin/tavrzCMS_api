@@ -44,6 +44,7 @@ public class PagesController {
     private final PledgeSubjectVesselService pledgeSubjectVesselService;
     private final LandCategoryService landCategoryService;
     private final MarketSegmentService marketSegmentService;
+    private final ClientManagerService clientManagerService;
 
     public PagesController(EmployeeService employeeService,
                            PledgeAgreementService pledgeAgreementService,
@@ -64,7 +65,8 @@ public class PagesController {
                            PledgeSubjectTBOService pledgeSubjectTBOService,
                            PledgeSubjectVesselService pledgeSubjectVesselService,
                            LandCategoryService landCategoryService,
-                           MarketSegmentService marketSegmentService) {
+                           MarketSegmentService marketSegmentService,
+                           ClientManagerService clientManagerService) {
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.pledgeSubjectService = pledgeSubjectService;
@@ -85,6 +87,7 @@ public class PagesController {
         this.pledgeSubjectVesselService = pledgeSubjectVesselService;
         this.landCategoryService = landCategoryService;
         this.marketSegmentService = marketSegmentService;
+        this.clientManagerService = clientManagerService;
     }
 
     @GetMapping("/")
@@ -714,13 +717,84 @@ public class PagesController {
     }
 
     @GetMapping("/update")
-    public String updatePage(Model model){
-
-//        List<Client> clientList = clientService.getAll();
-//        model.addAttribute("clientList", clientList);
+    public String updatePage(){
         return "update";
     }
 
+    @GetMapping("/client_card")
+    public String clientCardGet(@RequestParam("clientId") long clientId,
+                                @RequestParam("whatDo") String whatDo,
+                                Model model){
+
+        List<ClientManager> clientManagerList = clientManagerService.getAllClientManager();
+        List<Employee> employeeList = employeeService.getAllEmployee();
+
+        if(whatDo.equals("newClientLE")){
+            ClientLegalEntity clientLegalEntity = new ClientLegalEntity();
+
+            model.addAttribute("whatDo", whatDo);
+            model.addAttribute("clientManagerList", clientManagerList);
+            model.addAttribute("employeeList", employeeList);
+            model.addAttribute("clientLegalEntity", clientLegalEntity);
+
+            return "client_card";
+        }else if(whatDo.equals("newClientInd")){
+            ClientIndividual clientIndividual = new ClientIndividual();
+
+            model.addAttribute("whatDo", whatDo);
+            model.addAttribute("clientManagerList", clientManagerList);
+            model.addAttribute("employeeList", employeeList);
+            model.addAttribute("clientIndividual", clientIndividual);
+
+            return "client_card";
+        }else {
+            Client client = clientService.getClientByClientId(clientId);
+
+            model.addAttribute("whatDo", whatDo);
+            model.addAttribute("clientManagerList", clientManagerList);
+            model.addAttribute("employeeList", employeeList);
+            model.addAttribute("client", client);
+
+            return "client_card";
+        }
+    }
+
+    @PostMapping("/client_card")
+    public String clientCardPost(@ModelAttribute Client client,
+                                 @ModelAttribute ClientIndividual clientIndividual,
+                                 @ModelAttribute ClientLegalEntity clientLegalEntity,
+                                 @RequestParam("whatDo") String whatDo,
+                                 Model model){
+
+        if(whatDo.equals("newClientLE")){
+            Client clientLegalEntityNew = clientService.saveClientLegalEntity(clientLegalEntity);
+
+            model.addAttribute("client", clientLegalEntityNew);
+            model.addAttribute("whatDo", "responseSuccess");
+
+            return "client_card";
+
+        }else if(whatDo.equals("newClientInd")){
+            Client clientIndividualNew = clientService.saveClientIndividual(clientIndividual);
+
+            model.addAttribute("client", clientIndividualNew);
+            model.addAttribute("whatDo", "responseSuccess");
+
+            return "client_card";
+        }
+//        else {
+//            if(client.getTypeOfClient().equals("юл")){
+//                ClientLegalEntity clientLegalEntityUpdated = clientService.updateClientLegalEntity(clientLegalEntity);
+//                model.addAttribute("client", clientLegalEntityUpdated);
+//            }else {
+//                ClientIndividual clientIndividualUpdated = clientService.updateClientIndividual(clientIndividual);
+//                model.addAttribute("client", clientIndividualUpdated);
+//            }
+//
+//            return "client";
+//        }
+        return null;
+    }
 
 
 //    @PostMapping("/search")
