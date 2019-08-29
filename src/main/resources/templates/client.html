@@ -44,11 +44,19 @@
 <span th:text="${client.getEmployee().getSurname()} + ' ' + ${client.getEmployee().name}"></span>
 <br>
 <br>
+<label>Клиентский менеджер: </label>
+<span th:text="${client.getClientManager().getSurname()} + ' ' + ${client.getClientManager().getName()}"></span>
+<br>
+<br>
 <label>Id клиента:</label>
 <span th:text="${client.getClientId()}"></span>
 <br>
 <br>
-
+<a th:href="@{client_card(whatDo='changeClient', clientId=${client.getClientId()})}"
+   href="client_card.html"
+   th:text="'Изменить данные клиента'">Изменить данные клиента</a>
+<br>
+<br>
 
 
 

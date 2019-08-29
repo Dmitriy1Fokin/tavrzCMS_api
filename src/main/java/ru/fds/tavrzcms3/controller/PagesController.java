@@ -781,19 +781,17 @@ public class PagesController {
             model.addAttribute("whatDo", "responseSuccess");
 
             return "client_card";
+        }else {
+            if(client.getTypeOfClient().equals("юл")){
+                ClientLegalEntity clientLegalEntityUpdated = clientService.updateClientLegalEntity(clientLegalEntity);
+                model.addAttribute("client", clientLegalEntityUpdated);
+            }else {
+                ClientIndividual clientIndividualUpdated = clientService.updateClientIndividual(clientIndividual);
+                model.addAttribute("client", clientIndividualUpdated);
+            }
+
+            return "client";
         }
-//        else {
-//            if(client.getTypeOfClient().equals("юл")){
-//                ClientLegalEntity clientLegalEntityUpdated = clientService.updateClientLegalEntity(clientLegalEntity);
-//                model.addAttribute("client", clientLegalEntityUpdated);
-//            }else {
-//                ClientIndividual clientIndividualUpdated = clientService.updateClientIndividual(clientIndividual);
-//                model.addAttribute("client", clientIndividualUpdated);
-//            }
-//
-//            return "client";
-//        }
-        return null;
     }
 
 

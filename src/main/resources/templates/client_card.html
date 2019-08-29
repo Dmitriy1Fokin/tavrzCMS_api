@@ -9,7 +9,7 @@
                     <title th:text="'Изменить данные ' + ${client.getClientLegalEntity().getOrganizationalForm() + ' ' + client.getClientLegalEntity().getName()}">Изменить данные</title>
                 </div>
                 <div th:case="фл">
-                    <title th:text="'Изменить данные' + ${client.getClientIndividual().getSurname() + ' ' + client.getClientIndividual().getName()}">Изменить данные</title>
+                    <title th:text="'Изменить данные ' + ${client.getClientIndividual().getSurname() + ' ' + client.getClientIndividual().getName()}">Изменить данные</title>
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@
                     </div>
                 </select>
             </div>
-
+            <br>
             <div class="row">
                 <label>Клиентский менеджер</label>
                 <select required th:field="*{clientManager}">
