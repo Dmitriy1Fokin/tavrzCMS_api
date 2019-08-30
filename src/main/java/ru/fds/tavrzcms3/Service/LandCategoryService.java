@@ -13,10 +13,6 @@ public class LandCategoryService {
     @Autowired
     RepositoryLandCategory repositoryLandCategory;
 
-    public LandCategory getLandCategory(int landCategoryId){
-        return repositoryLandCategory.getOne(landCategoryId);
-    }
-
     public List<LandCategory> getAllLandCategory(){
         return repositoryLandCategory.findAll();
     }

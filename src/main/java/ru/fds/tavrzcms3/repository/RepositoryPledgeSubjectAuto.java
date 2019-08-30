@@ -8,10 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.domain.PledgeSubjectAuto;
 
-import java.util.List;
-
 public interface RepositoryPledgeSubjectAuto extends JpaRepository<PledgeSubjectAuto, Long>, JpaSpecificationExecutor<PledgeSubjectAuto> {
-//    List<PledgeSubject> findAll(Specification spec);
     Page<PledgeSubject> findAll(Specification specification, Pageable pageable);
 
 }

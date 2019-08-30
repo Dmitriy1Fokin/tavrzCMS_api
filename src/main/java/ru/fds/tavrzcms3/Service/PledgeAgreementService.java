@@ -144,10 +144,6 @@ public class PledgeAgreementService {
         return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
     }
 
-    public  List<PledgeAgreement> getCurrentPledgeAgreementsForPledgor(long pledgorId, String pervPosl){
-        return repositoryPledgeAgreement.findByPledgorAndPervPoslEqualsAndStatusPAEquals(repositoryClient.getOne(pledgorId), pervPosl, "открыт");
-    }
-
     public List<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(long employeeId, String pervPosl){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> pledgors = repositoryClient.findByEmployee(employee);

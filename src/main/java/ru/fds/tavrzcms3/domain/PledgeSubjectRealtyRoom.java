@@ -62,9 +62,6 @@ public class PledgeSubjectRealtyRoom extends PledgeSubjectRealty {
 	public String toString() {
 		return "PledgeSubjectRealtyRoom{" +
 				"floorLocation='" + floorLocation + '\'' +
-//				", pledgeSubjectRealty=" + pledgeSubjectRealty +
-//				", marketSegmentRoom=" + marketSegmentRoom +
-//				", marketSegmentBuilding=" + marketSegmentBuilding +
 				'}';
 	}
 }

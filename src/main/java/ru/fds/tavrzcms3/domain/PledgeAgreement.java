@@ -152,7 +152,6 @@ public class PledgeAgreement {
 				", pervPosl='" + pervPosl + '\'' +
 				", statusPA='" + statusPA + '\'' +
 				", noticePA='" + noticePA + '\'' +
-//				", pledgor=" + pledgor +
 				'}';
 	}
 }

@@ -13,6 +13,5 @@ import java.util.List;
 public interface RepositoryClientIndividual extends JpaRepository<ClientIndividual, Long>, JpaSpecificationExecutor<ClientIndividual> {
     List<ClientIndividual> findBySurnameContainingIgnoreCase(String surname);
     List<ClientIndividual> findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(String surname, String name);
-    ClientIndividual findByPasportNum (String pasportNum);
     Page<Client> findAll(Specification specification, Pageable pageable);
 }

@@ -44,7 +44,7 @@ public class MonitoringService {
     }
 
     @Transactional
-    public Monitoring insertMonitoringInPedgeSubject(PledgeSubject pledgeSubject, Monitoring monitoring){
+    public Monitoring insertMonitoringInPledgeSubject(PledgeSubject pledgeSubject, Monitoring monitoring){
         monitoring.setPledgeSubject(pledgeSubject);
         return repositoryMonitoring.save(monitoring);
     }

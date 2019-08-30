@@ -130,7 +130,6 @@ public class PledgeSubjectAuto extends PledgeSubject {
 				", yearOfManufacture=" + yearOfManufacture +
 				", inventoryNum='" + inventoryNum + '\'' +
 				", typeOfAuto='" + typeOfAuto + '\'' +
-//				", pledgeSubject=" + pledgeSubject +
 				'}';
 	}
 }

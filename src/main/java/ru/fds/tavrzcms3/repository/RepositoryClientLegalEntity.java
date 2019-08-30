@@ -11,8 +11,6 @@ import ru.fds.tavrzcms3.domain.ClientLegalEntity;
 import java.util.List;
 
 public interface RepositoryClientLegalEntity extends JpaRepository<ClientLegalEntity, Long>, JpaSpecificationExecutor<ClientLegalEntity> {
-    List<ClientLegalEntity> findByOrganizationalForm (String organizationalForm);
     List<ClientLegalEntity> findByNameContainingIgnoreCase (String name);
-    ClientLegalEntity findByInn (String inn);
     Page<Client> findAll(Specification specification, Pageable pageable);
 }

@@ -119,7 +119,6 @@ public class PledgeSubjectVessel extends PledgeSubject {
 				", deadweight=" + deadweight +
 				", yearBuilt=" + yearBuilt +
 				", statusVessel='" + statusVessel + '\'' +
-//				", pledgeSubject=" + pledgeSubject +
 				'}';
 	}
 }

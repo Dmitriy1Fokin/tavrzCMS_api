@@ -108,8 +108,6 @@ public class Client {
 		return "Client{" +
 				"clientId=" + clientId +
 				", typeOfClient='" + typeOfClient + '\'' +
-//				", clientManager=" + clientManager +
-//				", employee=" + employee +
 				'}';
 	}
 }

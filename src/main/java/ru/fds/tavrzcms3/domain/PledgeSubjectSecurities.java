@@ -59,7 +59,6 @@ public class PledgeSubjectSecurities extends PledgeSubject{
 				"nominalValue=" + nominalValue +
 				", actualValue=" + actualValue +
 				", typeOfSecurities='" + typeOfSecurities + '\'' +
-//				", pledgeSubject=" + pledgeSubject +
 				'}';
 	}
 }

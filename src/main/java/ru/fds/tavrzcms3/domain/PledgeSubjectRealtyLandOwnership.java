@@ -74,8 +74,6 @@ public class PledgeSubjectRealtyLandOwnership extends PledgeSubjectRealty {
 				"permittedUse='" + permittedUse + '\'' +
 				", builtUp='" + builtUp + '\'' +
 				", cadastralNumOfBuilding='" + cadastralNumOfBuilding + '\'' +
-//				", pledgeSubjectRealty=" + pledgeSubjectRealty +
-//				", landCategory=" + landCategory +
 				'}';
 	}
 }

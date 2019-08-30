@@ -62,10 +62,6 @@ public class LoanAgreementService {
                                 .findByLoanAgreementId(loanAgreementId),"закрыт");
     }
 
-    public List<LoanAgreement> getCurrentLoanAgreement(long loanerId){
-        return repositoryLoanAgreement.findByLoanerAndStatusLAEquals(repositoryClient.getOne(loanerId), "открыт");
-    }
-
     public Page<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){
         LoanAgreementSpecificationsBuilder builder = new LoanAgreementSpecificationsBuilder();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
@@ -166,7 +162,6 @@ public class LoanAgreementService {
         Pageable pageable = PageRequest.of(currentPage, pageSize);
 
         return repositoryLoanAgreement.findAll(spec, pageable);
-//        return repositoryLoanAgreement.findAll(cpec);
     }
 
     @Transactional

@@ -114,7 +114,6 @@ public class Encumbrance {
                 ", dateBegin=" + dateBegin +
                 ", dateEnd=" + dateEnd +
                 ", numOfEncumbrance='" + numOfEncumbrance + '\'' +
-//                ", pledgeSubject=" + pledgeSubject +
                 '}';
     }
 }

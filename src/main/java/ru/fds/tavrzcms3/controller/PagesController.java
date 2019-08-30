@@ -455,7 +455,7 @@ public class PagesController {
 
             case "ps":
                 PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(Long.parseLong(reqParam.get("pledgeSubjectId")));
-                Monitoring monitoringForPS = monitoringService.insertMonitoringInPedgeSubject(pledgeSubject, monitoring);
+                Monitoring monitoringForPS = monitoringService.insertMonitoringInPledgeSubject(pledgeSubject, monitoring);
                 List<Monitoring> monitoringListForPS = monitoringService.getMonitoringByPledgeSubjectId(pledgeSubject.getPledgeSubjectId());
 
                 model.addAttribute("pledgeSubject", pledgeSubject);
@@ -836,60 +836,4 @@ public class PagesController {
             return "client";
         }
     }
-
-
-//    @PostMapping("/search")
-//    public String searchActionPage(@RequestParam("numLA") String numLA, @RequestParam("pfo") Byte pfo, @RequestParam("loaner") String loaner, Model model){
-//        System.out.println("@PostMapping(\"/search\")!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//        System.out.println(numLA + pfo);
-//        Client client = clientService.getClientByClientId(2);
-//        List<LoanAgreement> loanAgreements = loanAgreementService.getLasdasd(numLA, pfo, client);
-//        model.addAttribute("loanAgreements", loanAgreements);
-//        return "search";
-//    }
-
-//    @GetMapping("/edit")
-//    public String editPage(@RequestParam("id") long id, Model model) {
-//        Employee employee = repositoryEmployee.findById(id).orElseThrow(NotFoundException::new);
-//        model.addAttribute("employee", employee);
-//        return "edit";
-//    }
-//
-//    @PostMapping("/edit")
-//    public String changeEmployee(@RequestParam("id") long id, @RequestParam("surname") String suname, @RequestParam("name") String name, Model model){
-//        Employee emp = repositoryEmployee.findById(id).get();
-//        emp.setSurname(suname);
-//        emp.setName(name);
-//        repositoryEmployee.save(emp);
-//        System.out.println("Cool!!!!!!!!!!!!!!!!!!!!!!");
-//        model.addAttribute("employee", emp);
-//        return "edit";
-//    }
-//
-//    @GetMapping("/user")
-//    public String userPage() {
-//        //myService.onlyUser();
-//        return "user";
-//    }
-//
-//    @GetMapping("/admin")
-//    public String adminPage() {
-//        //myService.onlyAdmin();
-//        return "admin";
-//    }
-//
-//    @GetMapping("/authenticated")
-//    public String authenticatedPage() {
-//        UserDetails userDetails = (UserDetails) SecurityContextHolder
-//                .getContext().getAuthentication().getPrincipal();
-//        System.out.println(userDetails.getUsername());
-//        return "authenticated";
-//    }
-//
-//    @GetMapping("/success")
-//    public String successPage() {
-//        return "success";
-//    }
-
-
 }

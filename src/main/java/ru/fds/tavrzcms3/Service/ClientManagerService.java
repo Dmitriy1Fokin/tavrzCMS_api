@@ -15,7 +15,7 @@ public class ClientManagerService {
     RepositoryClientManager repositoryClientManager;
 
     public List<ClientManager> getAllClientManager(){
-        Sort sortByDateSuname = new Sort(Sort.Direction.ASC, "surname");
-        return repositoryClientManager.findAll(sortByDateSuname);
+        Sort sortByDateSurname = new Sort(Sort.Direction.ASC, "surname");
+        return repositoryClientManager.findAll(sortByDateSurname);
     }
 }
