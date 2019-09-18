@@ -1,32 +1,37 @@
 package ru.fds.tavrzcms3.specification;
 
 import org.springframework.data.jpa.domain.Specification;
-import ru.fds.tavrzcms3.domain.PledgeSubjectSecurities;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PledgeSubjectSecuritiesSpecificationBuilder {
+public class SpecificationBuilderImpl implements SpecificationBuilder {
 
     private final List<SearchCriteria> params;
+    private SearchCriteria criteria;
 
-    public PledgeSubjectSecuritiesSpecificationBuilder(){
-        params = new ArrayList<SearchCriteria>();
+    public SpecificationBuilderImpl(){
+        params = new ArrayList<>();
     }
 
-    public PledgeSubjectSecuritiesSpecificationBuilder with(String key, String operation, Object value, boolean predicate){
+    @Override
+    public void with(String key, String operation, Object value, boolean predicate) {
         params.add(new SearchCriteria(key, operation, value, predicate));
-        return this;
     }
 
-    public Specification<PledgeSubjectSecurities> build(){
+    @Override
+    public Specification build() {
         if(params.size() == 0){
             return null;
         }
 
-        List<Specification> specs = params.stream().map(PledgeSubjectSecuritiesSpecification::new)
-                .collect(Collectors.toList());
+        List<Specification> specs = params.stream().map(SpecificationImpl::new).collect(Collectors.toList());
 
         Specification result = specs.get(0);
 
@@ -36,5 +41,6 @@ public class PledgeSubjectSecuritiesSpecificationBuilder {
 
         return result;
     }
+
 
 }

@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
-import ru.fds.tavrzcms3.specification.PledgeAgreementSpecificationsBuilder;
+import ru.fds.tavrzcms3.specification.SpecificationBuilder;
+import ru.fds.tavrzcms3.specification.SpecificationBuilderImpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -352,52 +353,40 @@ public class PledgeAgreementService {
     }
 
     public Page<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam){
-        PledgeAgreementSpecificationsBuilder builder = new PledgeAgreementSpecificationsBuilder();
+        SpecificationBuilder builder = new SpecificationBuilderImpl();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
 
         if(!searchParam.get("numPA").isEmpty())
             builder.with("numPA", ":", searchParam.get("numPA"), false);
-
-
         if(!searchParam.get("pledgor").isEmpty()) {
             if (searchParam.get("pledgorOption").equals("юл")) {
                 List<ClientLegalEntity> pledgors = repositoryClientLegalEntity.findByNameContainingIgnoreCase(searchParam.get("pledgor"));
-                if(pledgors.size() == 1) {
+                if(pledgors.isEmpty())
+                    builder.with("pledgor", ":", null, false);
+                else if(pledgors.size() == 1)
                     builder.with("pledgor", ":", pledgors.get(0), false);
-                }
-                else if(pledgors.size() > 1){
-                    for(ClientLegalEntity cle : pledgors) {
+                else if(pledgors.size() > 1)
+                    for(ClientLegalEntity cle : pledgors)
                         builder.with("pledgor", ":", cle, true);
-                    }
-                }
             }
             else{
                 String[] words = searchParam.get("pledgor").split("\\s");
-                if(words.length == 1){
-                    List<ClientIndividual> pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCase(words[0]);
+                List<ClientIndividual> pledgors = new ArrayList<>();
 
-                    if(pledgors.size() == 1)
-                        builder.with("pledgor", ":", pledgors.get(0), false);
-                    else if(pledgors.size() > 1){
-                        for(ClientIndividual ci : pledgors) {
-                            builder.with("pledgor", ":", ci, true);
-                        }
-                    }
-                }
-                else if(words.length == 2){
-                    List<ClientIndividual> pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(words[0], words[1]);
+                if(words.length == 1)
+                    pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCase(words[0]);
+                else if(words.length > 1)
+                    pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(words[0], words[1]);
 
-                    if(pledgors.size() == 1)
-                        builder.with("pledgor", ":", pledgors.get(0), false);
-                    else if(pledgors.size() > 1){
-                        for(ClientIndividual ci : pledgors) {
-                            builder.with("pledgor", ":", ci, true);
-                        }
-                    }
-                }
+                if(pledgors.isEmpty())
+                    builder.with("pledgor", ":", null, false);
+                else if(pledgors.size() == 1)
+                    builder.with("pledgor", ":", pledgors.get(0), false);
+                else if(pledgors.size() > 1)
+                    for(ClientIndividual ci : pledgors)
+                        builder.with("pledgor", ":", ci, true);
             }
         }
-
         if(!searchParam.get("dateBeginPA").isEmpty()){
             try {
                 Date date = simpleDateFormat.parse(searchParam.get("dateBeginPA"));
@@ -406,7 +395,6 @@ public class PledgeAgreementService {
                 System.out.println("Не верный фортат dateBeginPA");
             }
         }
-
         if(!searchParam.get("dateEndPA").isEmpty()){
             try {
                 Date date = simpleDateFormat.parse(searchParam.get("dateEndPA"));
@@ -415,12 +403,9 @@ public class PledgeAgreementService {
                 System.out.println("Не верный фортат dateEndPA");
             }
         }
-
         if(!searchParam.get("pervPslOption").equals("all"))
             builder.with("pervPosl", ":", searchParam.get("pervPslOption"), false);
-
         builder.with("statusPA", ":", searchParam.get("statusPA"), false);
-
 
         Specification<PledgeAgreement> spec = builder.build();
 

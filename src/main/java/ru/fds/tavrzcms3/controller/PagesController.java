@@ -404,9 +404,8 @@ public class PagesController {
 
                 return "search_results";
 
-
-                default:
-                    return null;
+            default:
+                return null;
 
         }
     }

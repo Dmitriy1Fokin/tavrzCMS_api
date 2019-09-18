@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
-import ru.fds.tavrzcms3.specification.LoanAgreementSpecificationsBuilder;
+import ru.fds.tavrzcms3.specification.SpecificationBuilder;
+import ru.fds.tavrzcms3.specification.SpecificationBuilderImpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -63,57 +65,42 @@ public class LoanAgreementService {
     }
 
     public Page<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){
-        LoanAgreementSpecificationsBuilder builder = new LoanAgreementSpecificationsBuilder();
+
+        SpecificationBuilder builder = new SpecificationBuilderImpl();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
+
         if(!searchParam.get("numLA").isEmpty())
             builder.with("numLA", ":", searchParam.get("numLA"), false);
-
-
         if(!searchParam.get("loaner").isEmpty()) {
             if (searchParam.get("loanerOption").equals("юл")) {
-                List<ClientLegalEntity> clientLegalEntityList = repositoryClientLegalEntity.findByNameContainingIgnoreCase(searchParam.get("loaner"));
-                if(clientLegalEntityList.size() == 1) {
-                    builder.with("loaner", ":", clientLegalEntityList.get(0), false);
-                }
-                else if(clientLegalEntityList.size() > 1){
-                    for(ClientLegalEntity cle : clientLegalEntityList) {
+                List<ClientLegalEntity> loaners = repositoryClientLegalEntity.findByNameContainingIgnoreCase(searchParam.get("loaner"));
+
+                if(loaners.isEmpty())
+                    builder.with("loaner", ":", null, false);
+                else if(loaners.size() == 1)
+                    builder.with("loaner", ":", loaners.get(0), false);
+                else if(loaners.size() > 1)
+                    for(ClientLegalEntity cle : loaners)
                         builder.with("loaner", ":", cle, true);
-                    }
-                }
             }
             else{
                 String[] words = searchParam.get("loaner").split("\\s");
-                for(String str : words)
-                    System.out.println("WORDS:" + str + ", lenght:" + words.length);
-                if(words.length == 1){
-                    List<ClientIndividual> loaners = repositoryClientIndividual.findBySurnameContainingIgnoreCase(words[0]);
-                    for (ClientIndividual qwe : loaners){
-                        System.out.println("Loaner: " + qwe.getSurname() + ", id:" + qwe.getClientId());
-                    }
-                    if(loaners.size() == 1)
-                        builder.with("loaner", ":", loaners.get(0), false);
-                    else if(loaners.size() > 1){
-                        for(ClientIndividual ci : loaners) {
-                            builder.with("loaner", ":", ci, true);
-                        }
-                    }
-                }
-                else if(words.length == 2){
-                    List<ClientIndividual> loaners = repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(words[0], words[1]);
-                    for (ClientIndividual qwe : loaners) {
-                        System.out.println("Loaner: " + qwe.getSurname() + ", id:" + qwe.getClientId());
-                    }
-                    if(loaners.size() == 1)
-                        builder.with("loaner", ":", loaners.get(0), false);
-                    else if(loaners.size() > 1){
-                        for(ClientIndividual ci : loaners) {
-                            builder.with("loaner", ":", ci, true);
-                        }
-                    }
-                }
+                List<ClientIndividual> loaners = new ArrayList<>();
+
+                if(words.length == 1)
+                    loaners = repositoryClientIndividual.findBySurnameContainingIgnoreCase(words[0]);
+                else if(words.length > 1)
+                    loaners = repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(words[0], words[1]);
+
+                if(loaners.isEmpty())
+                    builder.with("loaner", ":", null, false);
+                else if(loaners.size() == 1)
+                    builder.with("loaner", ":", loaners.get(0), false);
+                else if(loaners.size() > 1)
+                    for(ClientIndividual ci : loaners)
+                        builder.with("loaner", ":", ci, true);
             }
         }
-
         if(!searchParam.get("dateBeginLA").isEmpty()){
             try {
                 Date date = simpleDateFormat.parse(searchParam.get("dateBeginLA"));
@@ -122,7 +109,6 @@ public class LoanAgreementService {
                 System.out.println("Не верный фортат dateBeginLA");
             }
         }
-
         if(!searchParam.get("dateEndLA").isEmpty()){
             try {
                 Date date = simpleDateFormat.parse(searchParam.get("dateEndLA"));
@@ -131,29 +117,17 @@ public class LoanAgreementService {
                 System.out.println("Не верный фортат dateEndLA");
             }
         }
-
-        if(!searchParam.get("pfo").isEmpty()){
+        if(!searchParam.get("pfo").isEmpty())
             builder.with("pfo", searchParam.get("pfoOption"), searchParam.get("pfo"), false);
-        }
-
-        if(!searchParam.get("quality").isEmpty()){
+        if(!searchParam.get("quality").isEmpty())
             builder.with("qualityCategory", searchParam.get("qualityOption"), searchParam.get("quality"), false);
-        }
-
-        if(!searchParam.get("amaunt").isEmpty()){
+        if(!searchParam.get("amaunt").isEmpty())
             builder.with("amountLA", searchParam.get("amauntOption"), searchParam.get("amaunt"), false);
-        }
-
-        if(!searchParam.get("debt").isEmpty()){
+        if(!searchParam.get("debt").isEmpty())
             builder.with("debtLA", searchParam.get("debtOption"), searchParam.get("debt"), false);
-        }
-
-        if(!searchParam.get("interestRate").isEmpty()){
+        if(!searchParam.get("interestRate").isEmpty())
             builder.with("interestRateLA", searchParam.get("interestRateOption"), searchParam.get("interestRate"), false);
-        }
-
         builder.with("statusLA", ":", searchParam.get("statusLA"), false);
-
 
         Specification<LoanAgreement> spec = builder.build();
 

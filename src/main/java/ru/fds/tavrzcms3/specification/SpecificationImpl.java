@@ -1,7 +1,6 @@
 package ru.fds.tavrzcms3.specification;
 
 import org.springframework.data.jpa.domain.Specification;
-import ru.fds.tavrzcms3.domain.PledgeSubjectSecurities;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -9,17 +8,16 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Date;
 
-public class PledgeSubjectSecuritiesSpecification implements Specification<PledgeSubjectSecurities> {
-
+public class SpecificationImpl implements Specification {
 
     private SearchCriteria criteria;
 
-    public PledgeSubjectSecuritiesSpecification(SearchCriteria searchCriteria){
+    public SpecificationImpl(SearchCriteria searchCriteria){
         criteria = searchCriteria;
     }
 
     @Override
-    public Predicate toPredicate(Root<PledgeSubjectSecurities> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+    public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder criteriaBuilder) {
         if(criteria.getOperation().equalsIgnoreCase(">")){
             if(criteria.getValue().getClass() == String.class) {
                 return criteriaBuilder.greaterThan(root.<String>get(criteria.getKey()), criteria.getValue().toString());
@@ -75,5 +73,4 @@ public class PledgeSubjectSecuritiesSpecification implements Specification<Pledg
         }
         return null;
     }
-
 }

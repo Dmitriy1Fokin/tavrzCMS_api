@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
-import ru.fds.tavrzcms3.specification.ClientIndividualSpecificationBuilder;
-import ru.fds.tavrzcms3.specification.ClientLegalEntitySpecificationBuilder;
+import ru.fds.tavrzcms3.specification.SpecificationBuilder;
+import ru.fds.tavrzcms3.specification.SpecificationBuilderImpl;
 
 import java.util.List;
 import java.util.Map;
@@ -66,14 +66,14 @@ public class ClientService {
     }
 
     public Page<Client> getClientFromSearch(Map<String, String> searchParam){
-        searchParam.forEach((k, v) -> System.out.println(k + " : " + v));
 
         int currentPage = Integer.parseInt(searchParam.get("page"));
         int pageSize = Integer.parseInt(searchParam.get("size"));
         Pageable pageable = PageRequest.of(currentPage, pageSize);
 
+        SpecificationBuilder builder = new SpecificationBuilderImpl();
+
         if(searchParam.get("clientOption").equals("юл")){
-            ClientLegalEntitySpecificationBuilder builder = new ClientLegalEntitySpecificationBuilder();
             if(!searchParam.get("clientName").isEmpty())
                 builder.with("name", ":", searchParam.get("clientName"), false);
             if(!searchParam.get("inn").isEmpty())
@@ -85,8 +85,6 @@ public class ClientService {
 
 
         }else{
-            ClientIndividualSpecificationBuilder builder = new ClientIndividualSpecificationBuilder();
-
             if(!searchParam.get("clientName").isEmpty()){
                 String[] words = searchParam.get("clientName").split("\\s");
 
