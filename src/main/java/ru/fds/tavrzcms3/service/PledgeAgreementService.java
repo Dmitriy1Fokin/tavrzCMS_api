@@ -1,4 +1,4 @@
-package ru.fds.tavrzcms3.Service;
+package ru.fds.tavrzcms3.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
