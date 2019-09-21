@@ -317,4 +317,28 @@ public class PledgeSubjectService {
             return  null;
         }
     }
+
+    public PledgeSubject updateOrInsertPledgeSubject(PledgeSubject pledgeSubject) {
+
+        if (pledgeSubject.getClass() == PledgeSubjectAuto.class)
+            return repositoryPledgeSubjectAuto.save((PledgeSubjectAuto) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectEquipment.class)
+            return repositoryPledgeSubjectEquipment.save((PledgeSubjectEquipment) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectRealtyBuilding.class)
+            return repositoryPledgeSubjectRealtyBuilding.save((PledgeSubjectRealtyBuilding) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectRealtyLandLease.class)
+            return repositoryPledgeSubjectRealtyLandLease.save((PledgeSubjectRealtyLandLease) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectRealtyLandOwnership.class)
+            return repositoryPledgeSubjectRealtyLandOwnership.save((PledgeSubjectRealtyLandOwnership) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectRealtyRoom.class)
+            return repositoryPledgeSubjectRealtyRoom.save((PledgeSubjectRealtyRoom) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectSecurities.class)
+            return repositoryPledgeSubjectSecurities.save((PledgeSubjectSecurities) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectTBO.class)
+            return repositoryPledgeSubjectTBO.save((PledgeSubjectTBO) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectVessel.class)
+            return repositoryPledgeSubjectVessel.save((PledgeSubjectVessel) pledgeSubject);
+        else
+            return null;
+    }
 }
