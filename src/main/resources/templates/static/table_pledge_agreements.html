@@ -86,15 +86,15 @@
 
             <td th:text="${@pledgeAgreementService.getTypeOfCollateral(pa.getPledgeAgreementId())}">н/д</td>
 
-            <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsDz(pa.getPledgeAgreementId()))}">0.00</td>
+            <td th:text="${#numbers.formatCurrency(pa.getRsDz())}">0.00</td>
 
-            <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsDz(pa.getPledgeAgreementId()))}">0.00</td>
+            <td th:text="${#numbers.formatCurrency(pa.getZsDz())}">0.00</td>
 
-            <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsZz(pa.getPledgeAgreementId()))}">0.00</td>
+            <td th:text="${#numbers.formatCurrency(pa.getRsZz())}">0.00</td>
 
-            <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsZz(pa.getPledgeAgreementId()))}">0.00</td>
+            <td th:text="${#numbers.formatCurrency(pa.getZsZz())}">0.00</td>
 
-            <td th:text="${#numbers.formatCurrency(@pledgeAgreementService.getSs(pa.getPledgeAgreementId()))}">0.00</td>
+            <td th:text="${#numbers.formatCurrency(pa.getSs())}">0.00</td>
 
             <td>
                 <div th:each="dateOfConclusion : ${@pledgeAgreementService.getDatesOfConclusion(pa.getPledgeAgreementId())}">

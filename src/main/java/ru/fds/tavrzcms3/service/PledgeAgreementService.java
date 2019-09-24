@@ -35,55 +35,6 @@ public class PledgeAgreementService {
     @Autowired
     RepositoryEmployee repositoryEmployee;
 
-    public double getRsDz(long pledgeAgreementId){
-        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
-        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-        double totalSum = 0;
-        for (PledgeSubject ps : pledgeSubjects)
-            totalSum += ps.getRsDz();
-
-        return  totalSum;
-    }
-
-    public double getRsZz(long pledgeAgreementId){
-        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
-        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-        double totalSum = 0;
-        for(PledgeSubject ps : pledgeSubjects)
-            totalSum += ps.getRsZz();
-
-        return totalSum;
-    }
-
-    public double getZsDz(long pledgeAgreementId){
-        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
-        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-        double totalSum = 0;
-        for(PledgeSubject ps : pledgeSubjects)
-            totalSum += ps.getZsDz();
-
-        return totalSum;
-    }
-
-    public double getZsZz(long pledgeAgreementId){
-        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
-        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-        double totalSum = 0;
-        for(PledgeSubject ps : pledgeSubjects)
-            totalSum += ps.getZsZz();
-
-        return totalSum;
-    }
-
-    public double getSs(long pledgeAgreementId){
-        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
-        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-        double totalSum = 0;
-        for(PledgeSubject ps : pledgeSubjects)
-            totalSum += ps.getSs();
-
-        return totalSum;
-    }
 
     public Set<Date> getDatesOfConclusion(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
@@ -405,6 +356,34 @@ public class PledgeAgreementService {
         }
         if(!searchParam.get("pervPslOption").equals("all"))
             builder.with("pervPosl", ":", searchParam.get("pervPslOption"), false);
+
+
+
+        if(!searchParam.get("rsDZ").isEmpty())
+            builder.with("rsDz", searchParam.get("rsDZOption"), searchParam.get("rsDZ"), false);
+
+
+
+        if(!searchParam.get("rsZZ").isEmpty())
+            builder.with("rsZz", searchParam.get("rsZZOption"), searchParam.get("rsZZ"), false);
+
+
+
+        if(!searchParam.get("zsDZ").isEmpty())
+            builder.with("zsDz", searchParam.get("zsDZOption"), searchParam.get("zsDZ"), false);
+
+
+
+        if(!searchParam.get("zsZZ").isEmpty())
+            builder.with("zsZz", searchParam.get("zsZZOption"), searchParam.get("zsZZ"), false);
+
+
+
+        if(!searchParam.get("ss").isEmpty())
+            builder.with("ss", searchParam.get("ssOption"), searchParam.get("ss"), false);
+
+
+
         builder.with("statusPA", ":", searchParam.get("statusPA"), false);
 
         Specification<PledgeAgreement> spec = builder.build();

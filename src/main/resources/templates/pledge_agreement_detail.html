@@ -81,23 +81,23 @@
     <br>
     <br>
     <label>Рыночная стоимость по ДЗ:</label>
-    <span th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsDz(pledgeAgreement.getPledgeAgreementId()))}">0.00</span>
+    <span th:text="${#numbers.formatCurrency(pledgeAgreement.getRsDz())}">0.00</span>
     <br>
     <br>
     <label>Залоговая стоимость:</label>
-    <span th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsDz(pledgeAgreement.getPledgeAgreementId()))}">0.00</span>
+    <span th:text="${#numbers.formatCurrency(pledgeAgreement.getZsDz())}">0.00</span>
     <br>
     <br>
     <label>Рыночная стоимость по ЗЗ:</label>
-    <span th:text="${#numbers.formatCurrency(@pledgeAgreementService.getRsZz(pledgeAgreement.getPledgeAgreementId()))}">0.00</span>
+    <span th:text="${#numbers.formatCurrency(pledgeAgreement.getRsZz())}">0.00</span>
     <br>
     <br>
     <label>Залоговая стоимость по ЗЗ:</label>
-    <span th:text="${#numbers.formatCurrency(@pledgeAgreementService.getZsZz(pledgeAgreement.getPledgeAgreementId()))}">0.00</span>
+    <span th:text="${#numbers.formatCurrency(pledgeAgreement.getZsZz())}">0.00</span>
     <br>
     <br>
     <label>Справедливая стоимость:</label>
-    <span th:text="${#numbers.formatCurrency(@pledgeAgreementService.getSs(pledgeAgreement.getPledgeAgreementId()))}">0.00</span>
+    <span th:text="${#numbers.formatCurrency(pledgeAgreement.getSs())}">0.00</span>
     <br>
     <br>
     <label>Статус:</label>

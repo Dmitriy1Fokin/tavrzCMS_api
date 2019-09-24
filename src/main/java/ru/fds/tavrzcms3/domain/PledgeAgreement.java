@@ -49,6 +49,21 @@ public class PledgeAgreement {
 	
 	@Column(name ="notice")
 	private String noticePA;
+
+	@Column(name ="zs_dz")
+	private double zsDz;
+
+	@Column(name ="zs_zz")
+	private double zsZz;
+
+	@Column(name ="rs_dz")
+	private double rsDz;
+
+	@Column(name ="rs_zz")
+	private double rsZz;
+
+	@Column(name ="ss")
+	private double ss;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "kd_dz", joinColumns = @JoinColumn(name ="dz_id"), inverseJoinColumns = @JoinColumn(name ="kd_id"))
@@ -118,6 +133,26 @@ public class PledgeAgreement {
 		this.noticePA = noticePA;
 	}
 
+	public double getZsDz() {
+		return zsDz;
+	}
+
+	public double getZsZz() {
+		return zsZz;
+	}
+
+	public double getRsDz() {
+		return rsDz;
+	}
+
+	public double getRsZz() {
+		return rsZz;
+	}
+
+	public double getSs() {
+		return ss;
+	}
+
 	public List<LoanAgreement> getLoanAgreements() {
 		return loanAgreements;
 	}
@@ -152,6 +187,11 @@ public class PledgeAgreement {
 				", pervPosl='" + pervPosl + '\'' +
 				", statusPA='" + statusPA + '\'' +
 				", noticePA='" + noticePA + '\'' +
+				", zsDz=" + zsDz +
+				", zsZz=" + zsZz +
+				", rsDz=" + rsDz +
+				", rsZz=" + rsZz +
+				", ss=" + ss +
 				'}';
 	}
 }
