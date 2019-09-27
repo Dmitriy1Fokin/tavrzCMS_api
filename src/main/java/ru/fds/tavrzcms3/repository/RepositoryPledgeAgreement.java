@@ -19,10 +19,12 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     int countAllByPledgorInAndPervPoslEqualsAndStatusPAEquals(List<Client> pledgors, String perv, String statusPA);
     int countAllByPledgorAndStatusPAEquals(Client pledgor, String statusPA);
     List<PledgeAgreement> findByPledgorAndStatusPA(Client pledgor, String statusPA);
+    List<PledgeAgreement> findByLoanAgreements(LoanAgreement loanAgreement);
     List<PledgeAgreement> findByLoanAgreementsAndStatusPAEquals(LoanAgreement loanAgreement, String statusPA);
     List<PledgeAgreement> findByPledgorInAndPervPoslEqualsAndStatusPAEquals(List<Client> pledgors, String pervPosl, String statusPA, Sort sort);
     Page<PledgeAgreement> findByPledgorInAndPervPoslEqualsAndStatusPAEquals(List<Client> pledgors, String pervPosl, String statusPA, Pageable pageable);
     List<PledgeAgreement> findByPledgorInAndStatusPAEquals(List<Client> pledgors, String statusPA, Sort sort);
     Page<PledgeAgreement> findByPledgorInAndStatusPAEquals(List<Client> pledgors, String statusPA, Pageable pageable);
     Page<PledgeAgreement> findAll(Specification specification, Pageable pageable);
+    List<PledgeAgreement> findAllByNumPAContainingIgnoreCase(String numPA);
 }

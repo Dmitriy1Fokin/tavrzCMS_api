@@ -35,6 +35,9 @@ public class PledgeAgreementService {
     @Autowired
     RepositoryEmployee repositoryEmployee;
 
+    public List<PledgeAgreement> getPledgeAgreementsBynumPA(String numPA){
+        return repositoryPledgeAgreement.findAllByNumPAContainingIgnoreCase(numPA);
+    }
 
     public Set<Date> getDatesOfConclusion(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);

@@ -7,13 +7,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.fds.tavrzcms3.service.*;
 import ru.fds.tavrzcms3.domain.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -737,5 +735,34 @@ public class PagesController {
 
             return "client";
         }
+    }
+
+    @PostMapping("searchPA")
+    public @ResponseBody List<PledgeAgreement> searchPA(@RequestParam("numPA") String numPA){
+        List<PledgeAgreement> pledgeAgreements = pledgeAgreementService.getPledgeAgreementsBynumPA(numPA);
+        if(!pledgeAgreements.isEmpty())
+            return pledgeAgreements;
+        else
+            return null;
+    }
+
+    @PostMapping("insertPA")
+    public @ResponseBody int insertPA(@RequestParam("pledgeAgreementIdArray[]") long[] pledgeAgreementIdArray,
+                                      @RequestParam("loanAgreementId") long loanAgreementId){
+
+        List<PledgeAgreement> pledgeAgreementList = loanAgreementService.getAllPledgeAgreements(loanAgreementId);
+        int countPABeforeUpdate = pledgeAgreementList.size();
+        for(int i = 0; i < pledgeAgreementIdArray.length; i++){
+            pledgeAgreementList.add(pledgeAgreementService.getPledgeAgreement(pledgeAgreementIdArray[i]));
+        }
+
+        int countPAAfterUpdate = pledgeAgreementList.size();
+        System.out.println(countPAAfterUpdate - countPABeforeUpdate);
+
+        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId);
+        loanAgreement.setPledgeAgreements(pledgeAgreementList);
+        loanAgreementService.updateInsertLoanAgreement(loanAgreement);
+
+        return countPAAfterUpdate - countPABeforeUpdate;
     }
 }

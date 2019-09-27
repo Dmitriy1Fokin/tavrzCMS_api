@@ -2,6 +2,85 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
+    <script th:src="@{/js/jquery-3.4.1.min.js}" src="/js/jquery-3.4.1.min.js"></script>
+    <script th:src="@{/js/scripts.js}" src="/js/testScript.js"></script>
+    <!--<script>-->
+        <!--function setVisible(data) {-->
+            <!--el=document.getElementById(data);-->
+            <!--if(el.style.display=="none"){-->
+                <!--el.style.display="block";-->
+            <!--}else {-->
+                <!--el.style.display="none";-->
+            <!--}-->
+        <!--}-->
+    <!--</script>-->
+    <!--<script>-->
+        <!--$(document).ready(function () {-->
+            <!--$("#inputSearchNum").submit(function (e) {-->
+                <!--e.preventDefault();-->
+                <!--var num = $("#numPA").val();-->
+                <!--$('#tBodyPA').html('');-->
+
+                <!--$.ajax({-->
+                    <!--url : 'searchPA',-->
+                    <!--type: 'POST',-->
+                    <!--dataType: 'json',-->
+                    <!--data : ({-->
+                        <!--numPA: num-->
+                    <!--}),-->
+                    <!--success: function (pledgeAgreementList) {-->
+                        <!--el=document.getElementById("searchResultPA");-->
+                        <!--el.style.display="block";-->
+                        <!--for (var index in pledgeAgreementList) {-->
+                            <!--var pa = pledgeAgreementList[index];-->
+                            <!--$('#tBodyPA').append("<tr><td><input type=\"checkbox\" onclick='choise()' name=\"checkPA\" value='"+ pa['pledgeAgreementId']+ "'></td><td>" + pa['numPA'] + "</td><td>" + pa['dateBeginPA'] + "</td></tr>");-->
+                        <!--}-->
+                    <!--}-->
+                <!--});-->
+            <!--});-->
+        <!--});-->
+    <!--</script>-->
+    <!--<script>-->
+       <!--function choise() {-->
+           <!--var checkBoxArray = document.getElementsByName('checkPA'),-->
+               <!--count = checkBoxArray.length-1,-->
+               <!--isDisabled=true;-->
+           <!--for(;count>=0;count&#45;&#45;){-->
+               <!--if (checkBoxArray[count]['checked']==true){-->
+                   <!--isDisabled=!isDisabled;-->
+                   <!--break;-->
+               <!--}-->
+           <!--}-->
+           <!--document.getElementById('buttonInsert').disabled = isDisabled;-->
+
+        <!--}-->
+
+    <!--</script>-->
+    <!--<script>-->
+        <!--function insertPA() {-->
+            <!--var pledgeAgreementIdArray = [];-->
+            <!--$('#tBodyPA input:checkbox:checked').each(function () {-->
+                <!--pledgeAgreementIdArray.push($(this).val());-->
+            <!--});-->
+            <!--var loanAgreementId = $("#loanAgreementId").text();-->
+
+            <!--$.ajax({-->
+                <!--url: 'insertPA',-->
+                <!--type: 'POST',-->
+                <!--dataType: 'json',-->
+                <!--data: {-->
+                    <!--pledgeAgreementIdArray: pledgeAgreementIdArray,-->
+                    <!--loanAgreementId: loanAgreementId-->
+                <!--},-->
+                <!--success: function () {-->
+                    <!--location.reload();-->
+                <!--},-->
+                <!--error: function () {-->
+                    <!--alert("!!!!!!!!!!!!!!!!!");-->
+                <!--}-->
+            <!--});-->
+        <!--}-->
+    <!--</script>-->
     <title>Кредитный договор</title>
     <style type="text/css">
         body {
@@ -31,7 +110,7 @@
 <br>
 
 <label>Id кредитного договора:</label>
-<span th:text="${loanAgreement.getLoanAgreementId()}"></span>
+<span th:text="${loanAgreement.getLoanAgreementId()}" id="loanAgreementId"></span>
 <br>
 <br>
 <label>Номер кредитного договора:</label>
@@ -90,6 +169,36 @@
 <br>
 <br>
 
+<a href="javascript:setVisible('searchBar');">Добавить договор залога</a>
+<div id="searchBar" style="display:none">
+    <br>
+    <form action="" id="inputSearchNumPA" role="form">
+        <div class="form-group">
+            <label>№ договора залога</label>
+            <input required id="numPA" type="text"/>
+            <button type="submit">Найти</button>
+        </div>
+    </form>
+    <div id="searchResultPA" style="display:none">
+        <br>
+        <table class="customTable">
+            <thead>
+            <tr>
+                <th>check</th>
+                <th>№ ДЗ</th>
+                <th>дата</th>
+            </tr>
+            </thead>
+            <tbody id="tBodyPA">
+            </tbody>
+        </table>
+        <br>
+        <input type="button" id="buttonInsert" value="добавить" onclick="insertPA()" disabled="disabled">
+    </div>
+</div>
+
+<br>
+<br>
 <div th:if="${@loanAgreementService.countOfCurrentPledgeAgreements(loanAgreement.getLoanAgreementId()) &gt; 0}">
     <label>Действующее обеспечение:</label>
     <div class="containerTable">

@@ -64,6 +64,11 @@ public class LoanAgreementService {
                                 .findByLoanAgreementId(loanAgreementId),"закрыт");
     }
 
+    public List<PledgeAgreement> getAllPledgeAgreements(long loanAgreementId){
+        return repositoryPledgeAgreement
+                .findByLoanAgreements(repositoryLoanAgreement.findByLoanAgreementId(loanAgreementId));
+    }
+
     public Page<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){
 
         SpecificationBuilder builder = new SpecificationBuilderImpl();
