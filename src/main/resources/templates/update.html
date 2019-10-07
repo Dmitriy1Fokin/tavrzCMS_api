@@ -24,12 +24,12 @@
 
 <div th:replace="static/nav :: user_nav_bar"></div>
 
-<a th:href="@{client_card(whatDo='newClientLE', clientId='0')}"
+<a th:href="@{client_card(whatDo='newClientLE')}"
    href="client_card.html"
    th:text="'Добавить нового клиента (ЮЛ)'">Добавить нового клиента (ЮЛ)</a>
 <br>
 <br>
-<a th:href="@{client_card(whatDo='newClientInd', clientId='0')}"
+<a th:href="@{client_card(whatDo='newClientInd')}"
    href="client_card.html"
    th:text="'Добавить нового клиента (ФЛ)'">Добавить нового клиента (ФЛ)</a>
 <br>

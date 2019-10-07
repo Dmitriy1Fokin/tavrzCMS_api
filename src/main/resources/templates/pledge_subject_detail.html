@@ -27,6 +27,10 @@
 <h1 th:text="'Предмет залога:' + ${pledgeSubject.getName()}">Предмет залога</h1>
 <div class="containerTable">
 
+    <label>id предмета залога</label>
+    <span th:text="${pledgeSubject.getPledgeSubjectId()}">н/д</span>
+    <br>
+    <br>
     <label>Наименование:</label>
     <span th:text="${pledgeSubject.getName()}">н/д</span>
     <br>

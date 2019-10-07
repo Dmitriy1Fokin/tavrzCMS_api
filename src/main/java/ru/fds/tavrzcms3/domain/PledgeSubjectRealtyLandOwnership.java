@@ -28,6 +28,10 @@ public class PledgeSubjectRealtyLandOwnership extends PledgeSubjectRealty {
 	@JoinColumn(name = "land_category_id")
 	private LandCategory landCategory;
 
+	public PledgeSubjectRealtyLandOwnership(){
+		super.setTypeOfCollateral("Недвижимость - ЗУ - собственность");
+	}
+
 	public String getPermittedUse() {
 		return permittedUse;
 	}

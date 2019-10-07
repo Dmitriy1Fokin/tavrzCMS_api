@@ -21,6 +21,10 @@ public class PledgeSubjectTBO extends PledgeSubject {
 	@OneToOne(mappedBy = "pledgeSubjectTBO")
 	private PledgeSubject pledgeSubject;
 
+	public PledgeSubjectTBO(){
+		super.setTypeOfCollateral("ТМЦ");
+	}
+
 	public int getCountOfTBO() {
 		return countOfTBO;
 	}

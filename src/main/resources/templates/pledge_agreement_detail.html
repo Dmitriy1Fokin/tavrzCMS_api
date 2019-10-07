@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
+    <script th:src="@{/js/jquery-3.4.1.min.js}" src="/js/jquery-3.4.1.min.js"></script>
+    <script th:src="@{/js/scripts.js}" src="/js/testScript.js"></script>
     <meta charset="UTF-8">
     <title th:text="'Договор залога: №' + ${pledgeAgreement.getNumPA()}">Договор залога</title>
     <style type="text/css">
@@ -76,8 +78,9 @@
     <br>
     <br>
     <label>Количество предметов залога:</label>
+    <span th:text="${pledgeAgreement.getPledgeSubjects().size()}">н/д</span>
     <a th:href="@{/pledge_subjects(pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}" href="pledge_subjects.html"
-       th:text="${pledgeAgreement.getPledgeSubjects().size()}">н/д</a>
+       th:text="подробнее">подробнее</a>
     <br>
     <br>
     <label>Рыночная стоимость по ДЗ:</label>
@@ -113,7 +116,6 @@
        th:text="'Изменить данные'">Изменить данные</a>
     <br>
     <br>
-
     <div th:if="${@pledgeAgreementService.countOfCurrentLoanAgreementsForPladgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
         <label>Действующие кредитные договоры:</label>
         <div class="containerTable">

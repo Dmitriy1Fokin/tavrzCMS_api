@@ -39,6 +39,10 @@ public class PledgeSubjectAuto extends PledgeSubject {
 	@OneToOne(mappedBy = "pledgeSubjectAuto")
 	private PledgeSubject pledgeSubject;
 
+	public PledgeSubjectAuto(){
+		super.setTypeOfCollateral("Авто/спецтехника");
+	}
+
 	public String getBrand() {
 		return brand;
 	}

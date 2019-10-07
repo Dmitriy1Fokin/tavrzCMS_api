@@ -21,6 +21,10 @@ public class PledgeSubjectSecurities extends PledgeSubject{
 	@OneToOne(mappedBy = "pledgeSubjectSecurities")
 	private PledgeSubject pledgeSubject;
 
+	public PledgeSubjectSecurities(){
+		super.setTypeOfCollateral("Ценные бумаги");
+	}
+
 	public double getNominalValue() {
 		return nominalValue;
 	}

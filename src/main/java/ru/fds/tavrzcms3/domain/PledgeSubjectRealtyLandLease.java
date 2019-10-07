@@ -44,6 +44,10 @@ public class PledgeSubjectRealtyLandLease extends PledgeSubjectRealty {
 	@JoinColumn(name = "land_category_id")
 	private LandCategory landCategory;
 
+	public PledgeSubjectRealtyLandLease(){
+		super.setTypeOfCollateral("Недвижимость - ЗУ - право аренды");
+	}
+
 	public String getPermittedUse() {
 		return permittedUse;
 	}

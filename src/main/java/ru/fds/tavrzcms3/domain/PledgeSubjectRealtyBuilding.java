@@ -25,6 +25,10 @@ public class PledgeSubjectRealtyBuilding extends PledgeSubjectRealty {
 	@JoinColumn(name = "market_segment_id")
 	private MarketSegment marketSegment;
 
+	public PledgeSubjectRealtyBuilding(){
+		super.setTypeOfCollateral("Недвижимость - здание/сооружение");
+	}
+
 	public int getReadinessDegree() {
 		return readinessDegree;
 	}

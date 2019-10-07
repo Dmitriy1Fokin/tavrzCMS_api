@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
 import ru.fds.tavrzcms3.specification.*;
@@ -45,6 +46,14 @@ public class PledgeSubjectService {
     RepositoryMarketSegment repositoryMarketSegment;
     @Autowired
     RepositoryPledgeAgreement repositoryPledgeAgreement;
+    @Autowired
+    RepositoryCostHistory repositoryCostHistory;
+    @Autowired
+    RepositoryMonitoring repositoryMonitoring;
+    @Autowired
+    RepositoryEncumbrance repositoryEncumbrance;
+    @Autowired
+    RepositoryInsurance repositoryInsurance;
 
     public PledgeSubject getPledgeSubjectById(long id){
         PledgeSubject pledgeSubject = repositoryPledgeSubject.findByPledgeSubjectId(id);
@@ -318,7 +327,8 @@ public class PledgeSubjectService {
         }
     }
 
-    public PledgeSubject updateOrInsertPledgeSubject(PledgeSubject pledgeSubject) {
+    @Transactional
+    public PledgeSubject updatePledgeSubject(PledgeSubject pledgeSubject) {
 
         if (pledgeSubject.getClass() == PledgeSubjectAuto.class)
             return repositoryPledgeSubjectAuto.save((PledgeSubjectAuto) pledgeSubject);
@@ -340,5 +350,46 @@ public class PledgeSubjectService {
             return repositoryPledgeSubjectVessel.save((PledgeSubjectVessel) pledgeSubject);
         else
             return null;
+    }
+
+    @Transactional
+    public PledgeSubject insertPledgeSubject(PledgeSubject pledgeSubject, CostHistory costHistory, Monitoring monitoring, Encumbrance encumbrance){
+        pledgeSubject.setZsDz(costHistory.getZsDz());
+        pledgeSubject.setZsZz(costHistory.getZsZz());
+        pledgeSubject.setRsDz(costHistory.getRsDz());
+        pledgeSubject.setRsZz(costHistory.getRsZz());
+        pledgeSubject.setSs(costHistory.getSs());
+        pledgeSubject.setDateConclusion(costHistory.getDateConclusion());
+        pledgeSubject.setDateMonitoring(monitoring.getDateMonitoring());
+        pledgeSubject.setStatusMonitoring(monitoring.getStatusMonitoring());
+        pledgeSubject.setTypeOfMonitoring(monitoring.getTypeOfMonitoring());
+
+        if (pledgeSubject.getClass() == PledgeSubjectAuto.class)
+            pledgeSubject = repositoryPledgeSubjectAuto.save((PledgeSubjectAuto) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectEquipment.class)
+            pledgeSubject = repositoryPledgeSubjectEquipment.save((PledgeSubjectEquipment) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectRealtyBuilding.class)
+            pledgeSubject = repositoryPledgeSubjectRealtyBuilding.save((PledgeSubjectRealtyBuilding) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectRealtyLandLease.class)
+            pledgeSubject = repositoryPledgeSubjectRealtyLandLease.save((PledgeSubjectRealtyLandLease) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectRealtyLandOwnership.class)
+            pledgeSubject = repositoryPledgeSubjectRealtyLandOwnership.save((PledgeSubjectRealtyLandOwnership) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectRealtyRoom.class)
+            pledgeSubject = repositoryPledgeSubjectRealtyRoom.save((PledgeSubjectRealtyRoom) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectSecurities.class)
+            pledgeSubject = repositoryPledgeSubjectSecurities.save((PledgeSubjectSecurities) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectTBO.class)
+            pledgeSubject = repositoryPledgeSubjectTBO.save((PledgeSubjectTBO) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectVessel.class)
+            pledgeSubject = repositoryPledgeSubjectVessel.save((PledgeSubjectVessel) pledgeSubject);
+
+        costHistory.setPledgeSubject(pledgeSubject);
+        repositoryCostHistory.save(costHistory);
+        monitoring.setPledgeSubject(pledgeSubject);
+        repositoryMonitoring.save(monitoring);
+        encumbrance.setPledgeSubject(pledgeSubject);
+        repositoryEncumbrance.save(encumbrance);
+
+        return pledgeSubject;
     }
 }

@@ -26,6 +26,10 @@ public class PledgeSubjectRealtyRoom extends PledgeSubjectRealty {
 	@JoinColumn(name = "market_segment_id_building")
 	private MarketSegment marketSegmentBuilding;
 
+	public PledgeSubjectRealtyRoom(){
+		super.setTypeOfCollateral("Недвижимость - помещение");
+	}
+
 	public String getFloorLocation() {
 		return floorLocation;
 	}

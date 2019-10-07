@@ -36,6 +36,10 @@ public class PledgeSubjectVessel extends PledgeSubject {
 	@OneToOne(mappedBy = "pledgeSubjectVessel")
 	private PledgeSubject pledgeSubject;
 
+	public PledgeSubjectVessel(){
+		super.setTypeOfCollateral("Судно");
+	}
+
 	public int getImo() {
 		return imo;
 	}
