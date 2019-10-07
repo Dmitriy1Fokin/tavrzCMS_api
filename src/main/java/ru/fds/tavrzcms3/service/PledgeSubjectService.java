@@ -27,6 +27,8 @@ public class PledgeSubjectService {
     @Autowired
     RepositoryPledgeSubjectEquipment repositoryPledgeSubjectEquipment;
     @Autowired
+    RepositoryPledgeSubjectRealty repositoryPledgeSubjectRealty;
+    @Autowired
     RepositoryPledgeSubjectRealtyBuilding repositoryPledgeSubjectRealtyBuilding;
     @Autowired
     RepositoryPledgeSubjectRealtyLandLease repositoryPledgeSubjectRealtyLandLease;
@@ -391,5 +393,13 @@ public class PledgeSubjectService {
         repositoryEncumbrance.save(encumbrance);
 
         return pledgeSubject;
+    }
+
+    public List<PledgeSubject> getPledgeSubjectByCadastralNum(String cadastralNum){
+        return repositoryPledgeSubjectRealty.findAllByCadastralNumContainingIgnoreCase(cadastralNum);
+    }
+
+    public List<PledgeSubject> getPlegeSubjectByName(String name){
+        return repositoryPledgeSubject.findAllByNameContainingIgnoreCase(name);
     }
 }

@@ -20,4 +20,5 @@ public interface RepositoryPledgeSubject extends JpaRepository<PledgeSubject, Lo
     boolean existsByPledgeAgreementsAndDateConclusionBetween(PledgeAgreement pledgeAgreement, Date firstDate, Date secondDate);
     boolean existsByPledgeAgreementsAndDateConclusionBefore(PledgeAgreement pledgeAgreement, Date beforeDate);
     Page<PledgeSubject> findAll(Specification specification, Pageable pageable);
+    List<PledgeSubject> findAllByNameContainingIgnoreCase(String name);
 }

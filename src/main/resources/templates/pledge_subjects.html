@@ -27,12 +27,13 @@
 <div th:replace="static/nav :: user_nav_bar"></div>
 
 <h1 th:text="'Предметы залога по договору залога №' + ${pledgeAgreement.getNumPA()}">Предметы залога</h1>
+<span th:text="${pledgeAgreement.getPledgeAgreementId()}" id="pledgeAgreementId" hidden></span>
 <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
    th:text="'Вернуться к договору залога №' + ${pledgeAgreement.getNumPA()}">Вернуться к договору залога</a>
 <br>
 <br>
-<a href="javascript:setVisible('searchBar');">Добавить новый предмет залога</a>
-<div id="searchBar" style="display:none">
+<a href="javascript:setVisible('searchBarNewPS');">Добавить новый предмет залога</a>
+<div id="searchBarNewPS" style="display:none">
     <br>
     <form th:action="@{/pledge_subject_card}" th:method="get" action="pledge_subject_card.html">
         <input type="hidden" name="whatDo" value="newPS">
@@ -50,6 +51,44 @@
         </select>
         <button type="submit">Добавить</button>
     </form>
+</div>
+<br>
+<br>
+
+<a href="javascript:setVisible('searchBarCurrentPS');">Добавить существующий предмет залога</a>
+<div id="searchBarCurrentPS" style="display:none">
+    <br>
+    <form action="" id="inputSearchCadastralNum" role="form">
+        <div class="form-group">
+            <label>Недвижимое имущество(Кад №)</label>
+            <input required id="cadastralNum" type="text"/>
+            <button type="submit">Найти</button>
+        </div>
+    </form>
+    <br>
+    <form action="" id="inputSearchNamePS" role="form">
+        <div class="form-group">
+            <label>Движимое имущество(Наименование)</label>
+            <input required id="namePS" type="text"/>
+            <button type="submit">Найти</button>
+        </div>
+    </form>
+    <div id="searchResultPS" style="display:none">
+        <br>
+        <table class="customTable">
+            <thead>
+            <tr>
+                <th>check</th>
+                <th>Наименование</th>
+                <th>ОХП</th>
+            </tr>
+            </thead>
+            <tbody id="tBodyPS">
+            </tbody>
+        </table>
+        <br>
+        <input type="button" id="buttonInsert" value="добавить" onclick="insertPS()" disabled="disabled">
+    </div>
 </div>
 <br>
 <br>

@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -37,6 +39,7 @@ public class PledgeSubjectAuto extends PledgeSubject {
 	private Double horsepower;
 	
 	@OneToOne(mappedBy = "pledgeSubjectAuto")
+	@JsonIgnore
 	private PledgeSubject pledgeSubject;
 
 	public PledgeSubjectAuto(){

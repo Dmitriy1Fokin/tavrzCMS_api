@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -19,6 +21,7 @@ public class PledgeSubjectSecurities extends PledgeSubject{
 	private String typeOfSecurities;
 	
 	@OneToOne(mappedBy = "pledgeSubjectSecurities")
+	@JsonIgnore
 	private PledgeSubject pledgeSubject;
 
 	public PledgeSubjectSecurities(){

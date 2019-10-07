@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,10 +24,12 @@ public class PledgeSubjectRealtyLandOwnership extends PledgeSubjectRealty {
 	private String cadastralNumOfBuilding;
 	
 	@OneToOne(mappedBy = "pledgeSubjectRealtyLandOwnership")
+	@JsonIgnore
 	private PledgeSubjectRealty pledgeSubjectRealty;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "land_category_id")
+	@JsonIgnore
 	private LandCategory landCategory;
 
 	public PledgeSubjectRealtyLandOwnership(){

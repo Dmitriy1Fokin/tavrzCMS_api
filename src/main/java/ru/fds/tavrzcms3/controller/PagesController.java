@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.fds.tavrzcms3.service.*;
 import ru.fds.tavrzcms3.domain.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -851,5 +848,35 @@ public class PagesController {
         loanAgreementService.updateInsertLoanAgreement(loanAgreement);
 
         return countPAAfterUpdate - countPABeforeUpdate;
+    }
+
+    @PostMapping("searchPS")
+    public @ResponseBody List<PledgeSubject> searchPS(@RequestParam("cadastralNum") Optional<String> cadastralNum,
+                                                      @RequestParam("namePS") Optional<String> namePS){
+
+        if(cadastralNum.isPresent())
+            return pledgeSubjectService.getPledgeSubjectByCadastralNum(cadastralNum.get());
+        else if(namePS.isPresent())
+            return pledgeSubjectService.getPlegeSubjectByName(namePS.get());
+        else
+            return null;
+    }
+
+    @PostMapping("insertPS")
+    public @ResponseBody int insertCurrentPledgeSubject(@RequestParam("pledgeSubjectsIdArray[]") long[] pledgeSubjectsIdArray,
+                                                        @RequestParam("pledgeAgreementId") long pledgeAgreementId){
+
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId);
+        int countPSBeforeUpdate = pledgeSubjectList.size();
+        for(int i = 0; i < pledgeSubjectsIdArray.length; i++)
+            pledgeSubjectList.add(pledgeSubjectService.getPledgeSubjectById(pledgeSubjectsIdArray[i]));
+
+        int countPSAfterUpdate = pledgeSubjectList.size();
+
+        pledgeAgreement.setPledgeSubjects(pledgeSubjectList);
+        pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
+
+        return countPSAfterUpdate - countPSBeforeUpdate;
     }
 }

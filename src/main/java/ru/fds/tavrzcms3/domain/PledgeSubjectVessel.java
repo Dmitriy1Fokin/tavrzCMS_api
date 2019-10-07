@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -34,6 +36,7 @@ public class PledgeSubjectVessel extends PledgeSubject {
 	private String statusVessel;
 	
 	@OneToOne(mappedBy = "pledgeSubjectVessel")
+	@JsonIgnore
 	private PledgeSubject pledgeSubject;
 
 	public PledgeSubjectVessel(){

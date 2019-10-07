@@ -72,3 +72,96 @@ function insertPA() {
         }
     });
 }
+
+
+$(document).ready(function () {
+    $("#inputSearchCadastralNum").submit(function (e) {
+        e.preventDefault();
+        var num = $("#cadastralNum").val();
+        $('#tBodyPS').html('');
+
+        $.ajax({
+            url : 'searchPS',
+            type: 'POST',
+            dataType: 'json',
+            data : ({
+                cadastralNum: num
+            }),
+            success: function (pledgeSubjectList) {
+                console.log(pledgeSubjectList);
+                el=document.getElementById("searchResultPS");
+                el.style.display="block";
+                for (var index in pledgeSubjectList) {
+                    var ps = pledgeSubjectList[index];
+                    $('#tBodyPS').append("<tr><td><input type=\"checkbox\" onclick='choise()' name=\"checkPA\" value='"+ ps['pledgeSubjectId']+ "'></td><td>" + ps['name'] + "</td><td>" + ps['cadastralNum'] + "</td></tr>");
+                }
+            }
+        });
+    });
+
+
+    $("#inputSearchNamePS").submit(function (e) {
+        e.preventDefault();
+        var num = $("#namePS").val();
+        $('#tBodyPS').html('');
+
+        $.ajax({
+            url : 'searchPS',
+            type: 'POST',
+            dataType: 'json',
+            data : ({
+                namePS: num
+            }),
+            success: function (pledgeSubjectList) {
+                console.log(pledgeSubjectList);
+                el=document.getElementById("searchResultPS");
+                el.style.display="block";
+                for (var index in pledgeSubjectList) {
+                    var ps = pledgeSubjectList[index];
+                    if(ps["typeOfCollateral"] == "Авто/спецтехника"){
+                        $('#tBodyPS').append("<tr><td><input type=\"checkbox\" onclick='choise()' name=\"checkPA\" value='"+ ps['pledgeSubjectId']+ "'></td><td>" + ps['name'] + "</td><td>" + ps['vin'] + "</td></tr>");
+                    }else if(ps["typeOfCollateral"] == "Оборудование"){
+                        $('#tBodyPS').append("<tr><td><input type=\"checkbox\" onclick='choise()' name=\"checkPA\" value='"+ ps['pledgeSubjectId']+ "'></td><td>" + ps['name'] + "</td><td>" + ps['serialNum'] + "</td></tr>");
+                    }else if(ps["typeOfCollateral"] == "Ценные бумаги"){
+                        $('#tBodyPS').append("<tr><td><input type=\"checkbox\" onclick='choise()' name=\"checkPA\" value='"+ ps['pledgeSubjectId']+ "'></td><td>" + ps['name'] + "</td><td>" + ps['nominalValue'] + "</td></tr>");
+                    }else if(ps["typeOfCollateral"] == "Судно"){
+                        $('#tBodyPS').append("<tr><td><input type=\"checkbox\" onclick='choise()' name=\"checkPA\" value='"+ ps['pledgeSubjectId']+ "'></td><td>" + ps['name'] + "</td><td>" + ps['imo'] + "</td></tr>");
+                    }else if(ps["typeOfCollateral"] == "ТМЦ"){
+                        $('#tBodyPS').append("<tr><td><input type=\"checkbox\" onclick='choise()' name=\"checkPA\" value='"+ ps['pledgeSubjectId']+ "'></td><td>" + ps['name'] + "</td><td>" + ps['carryingAmount'] + "</td></tr>");
+                    }else if(ps["typeOfCollateral"] == "Недвижимость - ЗУ - собственность" ||
+                            ps["typeOfCollateral"] == "Недвижимость - ЗУ - право аренды" ||
+                            ps["typeOfCollateral"] == "Недвижимость - здание/сооружение" ||
+                            ps["typeOfCollateral"] == "Недвижимость - помещение"){
+                        $('#tBodyPS').append("<tr><td><input type=\"checkbox\" onclick='choise()' name=\"checkPA\" value='"+ ps['pledgeSubjectId']+ "'></td><td>" + ps['name'] + "</td><td>" + ps['cadastralNum'] + "</td></tr>");
+                    }
+                }
+            }
+        });
+    });
+
+});
+
+
+function insertPS() {
+    var pledgeSubjectsIdArray = [];
+    $('#tBodyPS input:checkbox:checked').each(function () {
+        pledgeSubjectsIdArray.push($(this).val());
+    });
+    var pledgeAgreementId = $("#pledgeAgreementId").text();
+
+    $.ajax({
+        url: 'insertPS',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            pledgeSubjectsIdArray: pledgeSubjectsIdArray,
+            pledgeAgreementId: pledgeAgreementId
+        },
+        success: function () {
+            location.reload();
+        },
+        error: function () {
+            alert("!!!!!!!!!!!!!!!!!");
+        }
+    });
+}

@@ -1,5 +1,9 @@
 package ru.fds.tavrzcms3.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -23,22 +27,27 @@ public class PledgeSubjectRealty extends PledgeSubject {
 	private String conditionalNum;
 	
 	@OneToOne(mappedBy = "pledgeSubjectRealty")
+	@JsonIgnore
 	private PledgeSubject pledgeSubject;
 	
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
+	@JsonIgnore
 	private PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding;
 	
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
+	@JsonIgnore
 	private PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease;
 	
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
+	@JsonIgnore
 	private PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership;
 	
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
+	@JsonIgnore
 	private PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom;
 
 	public double getArea() {

@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -38,10 +40,12 @@ public class PledgeSubjectRealtyLandLease extends PledgeSubjectRealty {
 	private Date dateEndLease;
 	
 	@OneToOne(mappedBy = "pledgeSubjectRealtyLandLease")
+	@JsonIgnore
 	private PledgeSubjectRealty pledgeSubjectRealty;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "land_category_id")
+	@JsonIgnore
 	private LandCategory landCategory;
 
 	public PledgeSubjectRealtyLandLease(){

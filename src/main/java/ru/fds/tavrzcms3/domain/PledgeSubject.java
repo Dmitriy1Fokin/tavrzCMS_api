@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -97,42 +99,53 @@ public class PledgeSubject {
 	
 	@ManyToMany
 	@JoinTable(name = "dz_ps", joinColumns = @JoinColumn(name ="pledge_subject_id"), inverseJoinColumns = @JoinColumn(name ="dz_id"))
+    @JsonIgnore
 	private List<PledgeAgreement> pledgeAgreements;
 	
 	@OneToMany(mappedBy = "pledgeSubject")
-	private List<CostHistory> costHistories;
+    @JsonIgnore
+    private List<CostHistory> costHistories;
 	
 	@OneToMany(mappedBy = "pledgeSubject")
-	private List<Monitoring> monitorings;
+    @JsonIgnore
+    private List<Monitoring> monitorings;
 
 	@OneToMany(mappedBy = "pledgeSubject")
-	private List<Encumbrance> encumbrances;
+    @JsonIgnore
+    private List<Encumbrance> encumbrances;
 
     @OneToMany(mappedBy = "pledgeSubject")
+    @JsonIgnore
     private List<Insurance> insurances;
 	
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
+    @JsonIgnore
 	private PledgeSubjectAuto pledgeSubjectAuto;
 	
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
+    @JsonIgnore
 	private PledgeSubjectEquipment pledgeSubjectEquipment;
 	
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
+    @JsonIgnore
 	private PledgeSubjectRealty pledgeSubjectRealty;
 	
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
+    @JsonIgnore
 	private PledgeSubjectSecurities pledgeSubjectSecurities;
 	
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
+    @JsonIgnore
 	private PledgeSubjectTBO pledgeSubjectTBO;
 	
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
+    @JsonIgnore
 	private PledgeSubjectVessel pledgeSubjectVessel;
 
     public long getPledgeSubjectId() {

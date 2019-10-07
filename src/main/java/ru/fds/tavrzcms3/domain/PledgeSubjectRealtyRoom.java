@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,14 +18,17 @@ public class PledgeSubjectRealtyRoom extends PledgeSubjectRealty {
 	private String floorLocation;
 	
 	@OneToOne(mappedBy = "pledgeSubjectRealtyRoom")
+	@JsonIgnore
 	private PledgeSubjectRealty pledgeSubjectRealty;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "market_segment_id")
+	@JsonIgnore
 	private MarketSegment marketSegmentRoom;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "market_segment_id_building")
+	@JsonIgnore
 	private MarketSegment marketSegmentBuilding;
 
 	public PledgeSubjectRealtyRoom(){
