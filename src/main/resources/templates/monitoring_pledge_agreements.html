@@ -22,26 +22,26 @@
 </head>
 <body>
 
-<div th:replace="static/nav :: user_nav_bar"></div>
+<div th:replace="fragments/nav :: user_nav_bar"></div>
 
 <div th:if="${countOfMonitoringNotDone &gt; 0}">
     <h1>Предстоящие мониторинги</h1>
     <div class="containerTable">
-        <div th:replace="static/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementListWithMonitoringNotDone})"></div>
+        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementListWithMonitoringNotDone})"></div>
     </div>
 </div>
 
 <div th:if="${countOfMonitoringIsDone &gt; 0}">
     <h1>Выполненные мониторинги</h1>
     <div class="containerTable">
-        <div th:replace="static/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementListWithMonitoringIsDone})"></div>
+        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementListWithMonitoringIsDone})"></div>
     </div>
 </div>
 
 <div th:if="${countOfMonitoringOverdue &gt; 0}">
     <h1>Просроченные мониторинги</h1>
     <div class="containerTable">
-        <div th:replace="static/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementListWithMonitoringOverdue})"></div>
+        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementListWithMonitoringOverdue})"></div>
     </div>
 </div>
 

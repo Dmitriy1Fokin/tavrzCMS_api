@@ -22,7 +22,7 @@
 </head>
 <body>
 
-<div th:replace="static/nav :: user_nav_bar"></div>
+<div th:replace="fragments/nav :: user_nav_bar"></div>
 
 <div th:switch="${client.getTypeOfClient()}">
     <div th:case="юл">
@@ -77,7 +77,7 @@
 
     <h2>Действующее договоры залога</h2>
     <div class="containerTable">
-        <div th:replace="static/table_pledge_agreements :: pledgeAgreementTable(${@clientService.getCurrentPledgeAgreementsByPledgorId(client.getClientId())})"></div>
+        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${@clientService.getCurrentPledgeAgreementsByPledgorId(client.getClientId())})"></div>
     </div>
     <br>
     <br>
@@ -86,7 +86,7 @@
 <div th:if="${@clientService.countOfClosedPledgeAgreementsByPledgorId(client.getClientId()) &gt; 0}">
     <h2>Закрытые договоры залога</h2>
     <div class="containerTable">
-        <div th:replace="static/table_pledge_agreements :: pledgeAgreementTable(${@clientService.getClosedPledgeAgreementsByPledgorId(client.getClientId())})"></div>
+        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${@clientService.getClosedPledgeAgreementsByPledgorId(client.getClientId())})"></div>
     </div>
     <br>
     <br>
@@ -96,7 +96,7 @@
 <div th:if="${@clientService.countOfCurrentLoanEgreementsByLoanerId(client.getClientId()) &gt; 0}">
     <h2>Действующее кредитные договоры</h2>
     <div class="containerTable">
-        <div th:replace="static/table_loan_agreements :: loanAgreementTable(${@clientService.getCurrentLoanAgreementsByLoanerId(client.getClientId())})"></div>
+        <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@clientService.getCurrentLoanAgreementsByLoanerId(client.getClientId())})"></div>
     </div>
     <br>
     <br>
@@ -104,7 +104,7 @@
 <div th:if="${@clientService.countOfClosedLoanEgreementsByLoanerId(client.getClientId()) &gt; 0}">
     <h2>Закрытые кредитные договоры</h2>
     <div class="containerTable">
-        <div th:replace="static/table_loan_agreements :: loanAgreementTable(${@clientService.getClosedLoanAgreementsByLoanerId(client.getClientId())})"></div>
+        <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@clientService.getClosedLoanAgreementsByLoanerId(client.getClientId())})"></div>
     </div>
     <br>
     <br>

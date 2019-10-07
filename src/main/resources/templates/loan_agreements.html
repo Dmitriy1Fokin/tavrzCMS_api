@@ -22,11 +22,11 @@
 </head>
 <body>
 
-<div th:replace="static/nav :: user_nav_bar"></div>
+<div th:replace="fragments/nav :: user_nav_bar"></div>
 
 <h1>Кредитные договоры на сопровождении:</h1>
 <div class="containerTable">
-    <div th:replace="static/table_loan_agreements :: loanAgreementTable(${loanAgreementList})"></div>
+    <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${loanAgreementList})"></div>
 
     <div th:if="${loanAgreementList.totalPages > 1}" >
         <span th:text="'Страница: '"></span>

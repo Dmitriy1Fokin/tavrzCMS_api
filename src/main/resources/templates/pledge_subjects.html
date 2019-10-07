@@ -24,7 +24,7 @@
 </head>
 <body>
 
-<div th:replace="static/nav :: user_nav_bar"></div>
+<div th:replace="fragments/nav :: user_nav_bar"></div>
 
 <h1 th:text="'Предметы залога по договору залога №' + ${pledgeAgreement.getNumPA()}">Предметы залога</h1>
 <span th:text="${pledgeAgreement.getPledgeAgreementId()}" id="pledgeAgreementId" hidden></span>
@@ -99,7 +99,7 @@
 <br>
 <br>
 <div class="containerTable">
-    <div th:replace="static/table_pledge_subjects :: pledgeSubjectTable(${pledgeAgreement.getPledgeSubjects()})"></div>
+    <div th:replace="fragments/table_pledge_subjects :: pledgeSubjectTable(${pledgeAgreement.getPledgeSubjects()})"></div>
 </div>
 
 

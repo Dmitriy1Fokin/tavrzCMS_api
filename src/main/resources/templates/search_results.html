@@ -22,25 +22,25 @@
 </head>
 <body>
 
-<div th:replace="static/nav :: user_nav_bar"></div>
+<div th:replace="fragments/nav :: user_nav_bar"></div>
 
 <h1>Результы поиска:</h1>
 <div th:switch="${reqParam.get('typeOfSearch')}">
     <div th:case="searchLA">
         <div class="containerTable">
-            <div th:replace="static/table_loan_agreements :: loanAgreementTable(${resultList})"></div>
+            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${resultList})"></div>
         </div>
     </div>
     <div th:case="searchPA">
         <div class="containerTable">
-            <div th:replace="static/table_pledge_agreements :: pledgeAgreementTable(${resultList})"></div>
+            <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${resultList})"></div>
         </div>
     </div>
     <div th:case="searchPS">
-        <div th:replace="static/table_pledge_subjects :: pledgeSubjectTable(${resultList})"></div>
+        <div th:replace="fragments/table_pledge_subjects :: pledgeSubjectTable(${resultList})"></div>
     </div>
     <div th:case="searchClient">
-        <div th:replace="static/table_client :: clietTable(${resultList})"></div>
+        <div th:replace="fragments/table_client :: clietTable(${resultList})"></div>
     </div>
 </div>
 

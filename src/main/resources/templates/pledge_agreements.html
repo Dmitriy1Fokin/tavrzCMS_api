@@ -32,7 +32,7 @@
 </head>
 <body>
 
-<div th:replace="static/nav :: user_nav_bar"></div>
+<div th:replace="fragments/nav :: user_nav_bar"></div>
 
 
 <div th:switch="${pervPosl}">
@@ -47,7 +47,7 @@
     </div>
 </div>
 <div class="containerTable">
-    <div th:replace="static/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementList})"></div>
+    <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementList})"></div>
 
     <div th:if="${pledgeAgreementList.totalPages > 1}" >
         <span th:text="'Страница: '"></span>
