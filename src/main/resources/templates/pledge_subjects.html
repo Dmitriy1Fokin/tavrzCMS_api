@@ -99,7 +99,7 @@
 <br>
 <br>
 <div class="containerTable">
-    <div th:replace="fragments/table_pledge_subjects :: pledgeSubjectTable(${pledgeAgreement.getPledgeSubjects()})"></div>
+    <div th:replace="fragments/table_pledge_subjects :: pledgeSubjectTableWithDelete(${pledgeAgreement.getPledgeSubjects()}, ${pledgeAgreement.getPledgeAgreementId()})"></div>
 </div>
 
 

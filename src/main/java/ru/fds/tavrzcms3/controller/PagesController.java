@@ -121,7 +121,8 @@ public class PagesController {
     }
 
     @GetMapping("/pledge_subjects")
-    public String pledgeSubjectsPage(@RequestParam("pledgeAgreementId") long pledgeAgreementId, Model model){
+    public String pledgeSubjectsPage(@RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                     Model model){
         PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
@@ -741,6 +742,23 @@ public class PagesController {
         PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get());
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
+    }
+
+    @PostMapping("withdrawFromDepositPledgeSubject")
+    public @ResponseBody int withdrawFromDepositPledgeSubject(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+                                                   @RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                                   Model model){
+
+        System.out.println("pledgeSubjectId" + pledgeSubjectId);
+        System.out.println("pledgeAgreementId" + pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId);
+        pledgeSubjectList.remove(pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId));
+        pledgeAgreement.setPledgeSubjects(pledgeSubjectList);
+        pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
+
+
+        return pledgeSubjectList.size();
     }
 
     @GetMapping("/update")

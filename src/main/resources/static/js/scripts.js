@@ -165,3 +165,24 @@ function insertPS() {
         }
     });
 }
+
+function withdrawFromDepositPledgeSubject(pledgeSubjectId, pledgeAgreementId) {
+    $.ajax({
+        url: 'withdrawFromDepositPledgeSubject',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            pledgeSubjectId: pledgeSubjectId,
+            pledgeAgreementId: pledgeAgreementId
+        },
+        success: function (data) {
+            console.log(data);
+
+            location.reload();
+        },
+        error: function () {
+            alert("!!!!!!!!!!!!!!!!!");
+        }
+    });
+
+}
