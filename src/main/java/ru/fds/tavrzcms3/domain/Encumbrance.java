@@ -15,7 +15,7 @@ public class Encumbrance {
     private long encumbranceId;
 
     @Column(name ="name")
-    private String name;
+    private String nameEncumbrance;
 
     @Column(name ="type_of_encumbrance")
     private String typeOfEncumbrance;
@@ -48,12 +48,12 @@ public class Encumbrance {
         this.encumbranceId = encumbranceId;
     }
 
-    public String getName() {
-        return name;
+    public String getNameEncumbrance() {
+        return nameEncumbrance;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameEncumbrance(String nameEncumbrance) {
+        this.nameEncumbrance = nameEncumbrance;
     }
 
     public String getTypeOfEncumbrance() {
@@ -108,7 +108,7 @@ public class Encumbrance {
     public String toString() {
         return "Encumbrance{" +
                 "encumbranceId=" + encumbranceId +
-                ", name='" + name + '\'' +
+                ", nameEncumbrance='" + nameEncumbrance + '\'' +
                 ", typeOfEncumbrance='" + typeOfEncumbrance + '\'' +
                 ", inFavorOfWhom='" + inFavorOfWhom + '\'' +
                 ", dateBegin=" + dateBegin +
