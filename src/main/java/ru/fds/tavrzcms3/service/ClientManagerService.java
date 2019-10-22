@@ -18,4 +18,8 @@ public class ClientManagerService {
         Sort sortByDateSurname = new Sort(Sort.Direction.ASC, "surname");
         return repositoryClientManager.findAll(sortByDateSurname);
     }
+
+    public ClientManager getClientManager(long id){
+        return repositoryClientManager.getOne(id);
+    }
 }

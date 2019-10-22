@@ -35,5 +35,17 @@
 <br>
 <br>
 
+<span>Импортировать сущностей</span>
+<br>
+<form method="POST" action="/upload" enctype="multipart/form-data">
+    <select name="whatUpload">
+        <option value="legalEntity">Клиенты.ЮЛ</option>
+        <option value="individual">Клиенты.ФЛ</option>
+    </select>
+    <input type="file" name="file" accept=".xls,.xlsx"/>
+    <input type="submit" value="импорт"/>
+</form>
+<div th:text="${message}"></div>
+
 </body>
 </html>

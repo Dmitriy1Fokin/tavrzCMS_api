@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.controller;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -8,9 +10,12 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.service.*;
 import ru.fds.tavrzcms3.domain.*;
 
+import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -31,6 +36,8 @@ public class PagesController {
     private final LandCategoryService landCategoryService;
     private final MarketSegmentService marketSegmentService;
     private final ClientManagerService clientManagerService;
+    private final UploadUnloadService uploadUnloadService;
+
 
     public PagesController(EmployeeService employeeService,
                            PledgeAgreementService pledgeAgreementService,
@@ -43,7 +50,8 @@ public class PagesController {
                            MonitoringService monitoringService,
                            LandCategoryService landCategoryService,
                            MarketSegmentService marketSegmentService,
-                           ClientManagerService clientManagerService) {
+                           ClientManagerService clientManagerService,
+                           UploadUnloadService uploadUnloadService) {
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.pledgeSubjectService = pledgeSubjectService;
@@ -56,6 +64,7 @@ public class PagesController {
         this.landCategoryService = landCategoryService;
         this.marketSegmentService = marketSegmentService;
         this.clientManagerService = clientManagerService;
+        this.uploadUnloadService = uploadUnloadService;
     }
 
     @GetMapping("/")
@@ -896,5 +905,52 @@ public class PagesController {
         pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
 
         return countPSAfterUpdate - countPSBeforeUpdate;
+    }
+
+    @PostMapping("/upload")
+    public String uploadFile(@RequestParam("file") Optional<MultipartFile> file,
+                             @RequestParam("whatUpload") Optional<String> whatUpload,
+                             Model model){
+
+
+        if (whatUpload.isPresent()) {
+            if (whatUpload.get().equals("legalEntity")) {
+
+                try {
+                    File uploadFile =  uploadUnloadService.uploadFile(file.orElseThrow(() -> new IOException("Файл не найден.")), "legal_entity");
+                    List<ClientLegalEntity> clientLegalEntityList = clientService.insertClientLegalEntityFromExcel(uploadFile);
+                    String ids = "";
+                    for(ClientLegalEntity cle : clientLegalEntityList)
+                        ids += cle.getClientId() + " ";
+                    String message = "Добавлено " + clientLegalEntityList.size() + " клиента(ов) с id " + ids;
+                    model.addAttribute("message", message);
+                    return "update";
+
+                }catch (IOException ioe){
+                    ioe.printStackTrace();
+                    model.addAttribute("message", ioe.getMessage());
+                    return "update";
+                }catch (InvalidFormatException ife){
+                    ife.printStackTrace();
+                    model.addAttribute("message", ife.getMessage());
+                    return "update";
+                }
+
+
+            }else if (whatUpload.get().equals("individual")) {
+
+            }
+        } else {
+            model.addAttribute("message", "Ошибка импорта.");
+            return "update";
+        }
+
+
+
+
+
+
+
+        return "update";
     }
 }
