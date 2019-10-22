@@ -110,14 +110,21 @@ public class PledgeAgreementService {
             return repositoryPledgeAgreement.findByPledgorInAndStatusPAEquals(pledgors, "открыт", sort);
     }
 
+    public Page<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(long employeeId, Pageable pageable){
+        Employee employee = employeeService.getEmployee(employeeId);
+        List<Client> pledgors = clientService.getClientByEmployee(employee);
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC,"pledgor");
+
+        return repositoryPledgeAgreement.findByPledgorInAndStatusPAEquals(pledgors, "открыт", pageable);
+    }
+
     public Page<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(long employeeId, String pervPosl, Pageable pageable){
         Employee employee = employeeService.getEmployee(employeeId);
         List<Client> pledgors = clientService.getClientByEmployee(employee);
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC,"pledgor");
-        if(!pervPosl.isEmpty())
-            return repositoryPledgeAgreement.findByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors,  pervPosl, "открыт", pageable);
-        else
-            return repositoryPledgeAgreement.findByPledgorInAndStatusPAEquals(pledgors, "открыт", pageable);
+
+        return repositoryPledgeAgreement.findByPledgorInAndPervPoslEqualsAndStatusPAEquals(pledgors,  pervPosl, "открыт", pageable);
+
     }
 
     public int countOfCurrentPledgeAgreementForEmployee(Employee employee){

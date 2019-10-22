@@ -112,17 +112,24 @@ public class PagesController {
 
     @GetMapping("/pledge_agreements")
     public String pledgeAgreementPage(@RequestParam("employeeId") long employeeId,
-                                      @RequestParam("pervPosl") String pervPosl,
+                                      @RequestParam("pervPosl") Optional<String> pervPosl,
                                       @RequestParam("page") Optional<Integer> page,
                                       @RequestParam("size") Optional<Integer> size,
                                       Model model) {
         int currentPage = page.orElse(0);
         int pageSize = size.orElse(50);
         Pageable pageable = PageRequest.of(currentPage, pageSize);
-        Page<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsForEmployee(employeeId, pervPosl, pageable);
+
+        Page<PledgeAgreement> pledgeAgreementList = null;
+        if(pervPosl.isPresent())
+            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsForEmployee(employeeId, pervPosl.get(), pageable);
+        else
+            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsForEmployee(employeeId, pageable);
+
+
 
         model.addAttribute("pledgeAgreementList", pledgeAgreementList);
-        model.addAttribute("pervPosl", pervPosl);
+        model.addAttribute("pervPosl", pervPosl.orElse(null));
         model.addAttribute("employeeId", employeeId);
 
         int totalPages = pledgeAgreementList.getTotalPages();

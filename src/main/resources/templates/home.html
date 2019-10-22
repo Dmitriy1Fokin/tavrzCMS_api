@@ -22,7 +22,7 @@
 
 <p>Договоров залога на сопровождении:</p>
 <label>Всего:</label>
-<a th:href="@{/pledge_agreements(size=50, page=0, employeeId=${employee.employeeId}, pervPosl='')}" href="pledge_agreements.html" th:text="${countOfAllPledgeAgreement}">0</a>
+<a th:href="@{/pledge_agreements(size=50, page=0, employeeId=${employee.employeeId})}" href="pledge_agreements.html" th:text="${countOfAllPledgeAgreement}">0</a>
 <label>Первичных:</label>
 <a th:href="@{/pledge_agreements(size=50, page=0, employeeId=${employee.employeeId}, pervPosl='перв')}" href="pledge_agreements.html" th:text="${countOfPervPledgeAgreements}">0</a>
 <label>Последующих:</label>

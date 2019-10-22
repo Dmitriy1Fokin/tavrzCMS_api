@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <div th:switch="${pervPosl}">
-        <div th:case="all">
-            <title>Договоры залога на сопровождении (все):</title>
-        </div>
-        <div th:case="perv">
+        <div th:case="перв">
             <title>Договоры залога на сопровождении (первичные):</title>
         </div>
-        <div th:case="posl">
+        <div th:case="посл">
             <title>Договоры залога на сопровождении (последующие):</title>
+        </div>
+        <div th:case="*">
+            <title>Договоры залога на сопровождении (все):</title>
         </div>
     </div>
     <style type="text/css">
@@ -36,14 +36,14 @@
 
 
 <div th:switch="${pervPosl}">
-    <div th:case="''">
-        <h1>Договоры залога на сопровождении (все):</h1>
-    </div>
     <div th:case="перв">
         <h1>Договоры залога на сопровождении (первичные):</h1>
     </div>
     <div th:case="посл">
         <h1>Договоры залога на сопровождении (последующие):</h1>
+    </div>
+    <div th:case="*">
+        <h1>Договоры залога на сопровождении (все):</h1>
     </div>
 </div>
 <div class="containerTable">
@@ -51,12 +51,21 @@
 
     <div th:if="${pledgeAgreementList.totalPages > 1}" >
         <span th:text="'Страница: '"></span>
-        <div th:each="pageNumber : ${pageNumbers}" style="display: inline">
-            <a th:href="@{/pledge_agreements(size=${pledgeAgreementList.size}, page=${pageNumber}-1, employeeId=${employeeId}, pervPosl=${pervPosl})}"
-               th:text="${pageNumber}"
-               th:class="${pageNumber==pledgeAgreementList.number + 1} ? active"></a>
+        <div th:if="${pervPosl == 'перв' || pervPosl == 'посл'}">
+            <div th:each="pageNumber : ${pageNumbers}" style="display: inline">
+                <a th:href="@{/pledge_agreements(size=${pledgeAgreementList.size}, page=${pageNumber}-1, employeeId=${employeeId}, pervPosl=${pervPosl})}"
+                   th:text="${pageNumber}"
+                   th:class="${pageNumber==pledgeAgreementList.number + 1} ? active"></a>
+            </div>
         </div>
-    </div>
+        <div th:unless="${pervPosl == 'перв' || pervPosl == 'посл'}">
+            <div th:each="pageNumber : ${pageNumbers}" style="display: inline">
+                <a th:href="@{/pledge_agreements(size=${pledgeAgreementList.size}, page=${pageNumber}-1, employeeId=${employeeId})}"
+                   th:text="${pageNumber}"
+                   th:class="${pageNumber==pledgeAgreementList.number + 1} ? active"></a>
+            </div>
+        </div>
+</div>
 </div>
 </body>
 </html>
