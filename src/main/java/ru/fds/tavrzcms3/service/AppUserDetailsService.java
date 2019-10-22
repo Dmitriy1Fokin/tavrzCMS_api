@@ -33,7 +33,7 @@ public class AppUserDetailsService implements UserDetailsService {
             }
         }
 
-        UserDetails userDetails = (UserDetails) new User(appUser.getName(), appUser.getPassword(),authorityList);
+        UserDetails userDetails = (UserDetails) new User(appUser.getName(), appUser.getPassword(), authorityList);
 
         return userDetails;
     }

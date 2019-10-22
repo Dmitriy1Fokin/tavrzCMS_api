@@ -67,6 +67,11 @@ public class PagesController {
         this.uploadUnloadService = uploadUnloadService;
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "/login";
+    }
+
     @GetMapping("/")
     public String homePage(@AuthenticationPrincipal User user, Model model) {
         Employee employee = employeeService.getEmployee(user);
