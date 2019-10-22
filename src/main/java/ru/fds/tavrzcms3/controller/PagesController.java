@@ -77,41 +77,41 @@ public class PagesController {
         Employee employee = employeeService.getEmployee(user);
         model.addAttribute("employee", employee);
 
-        int countOfPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee.getEmployeeId(), "");
+        int countOfPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee);
         model.addAttribute("countOfAllPledgeAgreement", countOfPA);
 
-        int countOfPervPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee.getEmployeeId(), "перв");
+        int countOfPervPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee, "перв");
         model.addAttribute("countOfPervPledgeAgreements", countOfPervPA);
 
-        int countOfPoslPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee.getEmployeeId(), "посл");
+        int countOfPoslPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee, "посл");
         model.addAttribute("countOfPoslPledgeAgreements", countOfPoslPA);
 
-        int countOfLoanAgreements = pledgeAgreementService.countOfLoanAgreementsForEmployee(employee.getEmployeeId());
+        int countOfLoanAgreements = loanAgreementService.countOfCurrentLoanAgreementsForEmployee(employee);
         model.addAttribute("countOfLoanAgreements", countOfLoanAgreements);
 
-        int countOfMonitoringNotDone = pledgeAgreementService.countOfMonitoringNotDone(employee.getEmployeeId());
+        int countOfMonitoringNotDone = pledgeAgreementService.countOfMonitoringNotDone(employee);
         model.addAttribute("countOfMonitoringNotDone", countOfMonitoringNotDone);
 
-        int countOfMonitoringIsDone = pledgeAgreementService.countOfMonitoringIsDone(employee.getEmployeeId());
+        int countOfMonitoringIsDone = pledgeAgreementService.countOfMonitoringIsDone(employee);
         model.addAttribute("countOfMonitoringIsDone", countOfMonitoringIsDone);
 
-        int countOfMonitoringOverdue = pledgeAgreementService.countOfMonitoringOverdue(employee.getEmployeeId());
+        int countOfMonitoringOverdue = pledgeAgreementService.countOfMonitoringOverdue(employee);
         model.addAttribute("countOfMonitoringOverdue", countOfMonitoringOverdue);
 
-        int countOfConclusionNotDone = pledgeAgreementService.countOfConclusionNotDone(employee.getEmployeeId());
+        int countOfConclusionNotDone = pledgeAgreementService.countOfConclusionNotDone(employee);
         model.addAttribute("countOfConclusionNotDone", countOfConclusionNotDone);
 
-        int countOfConclusionIsDone = pledgeAgreementService.countOfConclusionIsDone(employee.getEmployeeId());
+        int countOfConclusionIsDone = pledgeAgreementService.countOfConclusionIsDone(employee);
         model.addAttribute("countOfConclusionIsDone", countOfConclusionIsDone);
 
-        int countOfConclusionOverdue = pledgeAgreementService.countOfConclusionOverdue(employee.getEmployeeId());
+        int countOfConclusionOverdue = pledgeAgreementService.countOfConclusionOverdue(employee);
         model.addAttribute("countOfConclusionOverdue", countOfConclusionOverdue);
 
         return "home";
     }
 
     @GetMapping("/pledge_agreements")
-    public String pledgeEgreementPage(@RequestParam("employeeId") long employeeId,
+    public String pledgeAgreementPage(@RequestParam("employeeId") long employeeId,
                                       @RequestParam("pervPosl") String pervPosl,
                                       @RequestParam("page") Optional<Integer> page,
                                       @RequestParam("size") Optional<Integer> size,
@@ -285,9 +285,10 @@ public class PagesController {
         model.addAttribute("countOfMonitoringNotDone", countOfMonitoringNotDone);
         model.addAttribute("countOfMonitoringIsDone", countOfMonitoringIsDone);
         model.addAttribute("countOfMonitoringOverdue", countOfMonitoringOverdue);
-        List<PledgeAgreement> pledgeAgreementListWithMonitoringNotDone = pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(employeeId);
-        List<PledgeAgreement> pledgeAgreementListWithMonitoringIsDone = pledgeAgreementService.getPledgeAgreementWithMonitoringIsDone(employeeId);
-        List<PledgeAgreement> pledgeAgreementListWithMonitoringOverdue = pledgeAgreementService.getPledgeAgreementWithMonitoringOverDue(employeeId);
+        Employee employee = employeeService.getEmployee(employeeId);
+        List<PledgeAgreement> pledgeAgreementListWithMonitoringNotDone = pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(employee);
+        List<PledgeAgreement> pledgeAgreementListWithMonitoringIsDone = pledgeAgreementService.getPledgeAgreementWithMonitoringIsDone(employee);
+        List<PledgeAgreement> pledgeAgreementListWithMonitoringOverdue = pledgeAgreementService.getPledgeAgreementWithMonitoringOverDue(employee);
         model.addAttribute("pledgeAgreementListWithMonitoringNotDone", pledgeAgreementListWithMonitoringNotDone);
         model.addAttribute("pledgeAgreementListWithMonitoringIsDone", pledgeAgreementListWithMonitoringIsDone);
         model.addAttribute("pledgeAgreementListWithMonitoringOverdue", pledgeAgreementListWithMonitoringOverdue);
@@ -305,9 +306,10 @@ public class PagesController {
         model.addAttribute("countOfConclusionNotDone", countOfConclusionNotDone);
         model.addAttribute("countOfConclusionIsDone", countOfConclusionIsDone);
         model.addAttribute("countOfConclusionOverdue", countOfConclusionOverdue);
-        List<PledgeAgreement> pledgeAgreementListWithConclusionNotDone = pledgeAgreementService.getPledgeAgreementWithConclusionNotDone(employeeId);
-        List<PledgeAgreement> pledgeAgreementListWithConclusionIsDone = pledgeAgreementService.getPledgeAgreementWithConclusionIsDone(employeeId);
-        List<PledgeAgreement> pledgeAgreementListWithConclusionOverdue = pledgeAgreementService.getPledgeAgreementWithConclusionOverDue(employeeId);
+        Employee employee = employeeService.getEmployee(employeeId);
+        List<PledgeAgreement> pledgeAgreementListWithConclusionNotDone = pledgeAgreementService.getPledgeAgreementWithConclusionNotDone(employee);
+        List<PledgeAgreement> pledgeAgreementListWithConclusionIsDone = pledgeAgreementService.getPledgeAgreementWithConclusionIsDone(employee);
+        List<PledgeAgreement> pledgeAgreementListWithConclusionOverdue = pledgeAgreementService.getPledgeAgreementWithConclusionOverDue(employee);
         model.addAttribute("pledgeAgreementListWithConclusionNotDone", pledgeAgreementListWithConclusionNotDone);
         model.addAttribute("pledgeAgreementListWithConclusionIsDone", pledgeAgreementListWithConclusionIsDone);
         model.addAttribute("pledgeAgreementListWithConclusionOverdue", pledgeAgreementListWithConclusionOverdue);

@@ -34,10 +34,19 @@ public class LoanAgreementService {
     RepositoryClientIndividual repositoryClientIndividual;
     @Autowired
     RepositoryEmployee repositoryEmployee;
+    @Autowired
+    EmployeeService employeeService;
+    @Autowired
+    ClientService clientService;
 
     public LoanAgreement getLoanAgreementById(long loanAgreementId){
         LoanAgreement loanAgreement = repositoryLoanAgreement.getOne(loanAgreementId);
         return loanAgreement;
+    }
+
+    public int countOfCurrentLoanAgreementsForEmployee(Employee employee){
+        List<Client> loaners = clientService.getClientByEmployee(employee);
+        return repositoryLoanAgreement.countAllByLoanerInAndStatusLAEquals(loaners, "открыт");
     }
 
     public int countOfCurrentPledgeAgreements(long loanAgreementId){

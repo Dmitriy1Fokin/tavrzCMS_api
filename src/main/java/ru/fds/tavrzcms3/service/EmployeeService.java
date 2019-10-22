@@ -30,7 +30,7 @@ public class EmployeeService {
     }
 
     public List<Employee> getAllEmployee(){
-        Sort sortByDateSuname = new Sort(Sort.Direction.ASC, "surname");
-        return repositoryEmployee.findAll(sortByDateSuname);
+        Sort sortByDateSurname = new Sort(Sort.Direction.ASC, "surname");
+        return repositoryEmployee.findAll(sortByDateSurname);
     }
 }

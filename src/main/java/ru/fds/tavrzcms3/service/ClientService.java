@@ -63,6 +63,10 @@ public class ClientService {
         return repositoryClient.getOne(clientId);
     }
 
+    public List<Client> getClientByEmployee(Employee employee){
+        return repositoryClient.findByEmployee(employee);
+    }
+
     public int countOfCurrentPledgeAgreementsByPledgorId(long pledgorId){
         return repositoryPledgeAgreement.countAllByPledgorAndStatusPAEquals(repositoryClient.getOne(pledgorId), "открыт");
     }
