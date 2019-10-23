@@ -15,6 +15,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.PositiveOrZero;
 
 @Entity
 @Table(name = "insurance")
@@ -24,31 +28,40 @@ public class Insurance {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="insurance_id")
 	private long insuranceId;
-	
+
+	@NotBlank
 	@Column(name ="num_insurance")
 	private String numInsurance;
-	
+
+	@NotNull
 	@Column(name ="date_begin")
 	@Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateBeginInsurance;
-	
+
+	@NotNull
 	@Column(name ="date_end")
 	@Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateEndInsurance;
 
+	@NotNull
+	@PositiveOrZero
 	@Column(name ="sum_insured")
 	private double sumInsured;
 
+	@NotNull
     @Column(name ="date_insurance_contract")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateInsuranceContract;
-	
+
+    @Pattern(regexp = "да|нет")
 	@Column(name ="payment_of_insurance_premium")
 	private String paymentOfInsurancePremium;
 
+    @NotNull
+    @PositiveOrZero
 	@Column(name = "franchise_amount")
     private Double franchiseAmount;
 	
