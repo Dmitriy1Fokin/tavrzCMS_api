@@ -67,7 +67,7 @@
     <br>
     <div class="row">
         <label>ПФО</label>
-        <input name="pfo" type="text"/>
+        <input type="number" min="1" max="5" name="pfo" />
         <select name="pfoOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -79,7 +79,7 @@
     <br>
     <div class="row">
         <label>Кат.кач</label>
-        <input name="quality" type="text"/>
+        <input type="number" min="1" max="5" name="quality" />
         <select name="qualityOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -91,7 +91,7 @@
     <br>
     <div class="row">
         <label>Сумма договора</label>
-        <input name="amaunt" type="text"/>
+        <input type="number" min="0" step="0.01" name="amaunt" />
         <select name="amauntOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -103,7 +103,7 @@
     <br>
     <div class="row">
         <label>Ссудная задолженность</label>
-        <input name="debt" type="text"/>
+        <input type="number" min="0" step="0.01" name="debt"/>
         <select name="debtOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -115,7 +115,7 @@
     <br>
     <div class="row">
         <label>%</label>
-        <input name="interestRate" type="text"/>
+        <input type="number" min="0" max="1" step="0.01" name="interestRate"/>
         <select name="interestRateOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -192,7 +192,7 @@
     <br>
     <div class="row">
         <label>Рыночная стоимость по ДЗ</label>
-        <input name="rsDZ" type="text"/>
+        <input type="number" min="0" step="0.01" name="rsDZ"/>
         <select name="rsDZOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -204,7 +204,7 @@
     <br>
     <div class="row">
         <label>Рыночная стоимость по ЗЗ</label>
-        <input name="rsZZ" type="text"/>
+        <input type="number" min="0" step="0.01" name="rsZZ"/>
         <select name="rsZZOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -216,7 +216,7 @@
     <br>
     <div class="row">
         <label>Залоговая стоимость по ДЗ</label>
-        <input name="zsDZ" type="text"/>
+        <input type="number" min="0" step="0.01" name="zsDZ"/>
         <select name="zsDZOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -228,7 +228,7 @@
     <br>
     <div class="row">
         <label>Залоговая стоимость по ЗЗ</label>
-        <input name="zsZZ" type="text"/>
+        <input type="number" min="0" step="0.01" name="zsZZ"/>
         <select name="zsZZOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -240,7 +240,7 @@
     <br>
     <div class="row">
         <label>Справедливая стоимость</label>
-        <input name="ss" type="text"/>
+        <input type="number" min="0" step="0.01" name="ss"/>
         <select name="ssOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -307,7 +307,7 @@
     <br>
     <div class="row">
         <label>РС по ДЗ</label>
-        <input name="rsDZ" type="text"/>
+        <input type="number" min="0" step="0.01" name="rsDZ"/>
         <select name="rsDZOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -319,7 +319,7 @@
     <br>
     <div class="row">
         <label>ЗС по ДЗ</label>
-        <input name="zsDZ" type="text"/>
+        <input type="number" min="0" step="0.01" name="zsDZ"/>
         <select name="zsDZOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -331,7 +331,7 @@
     <br>
     <div class="row">
         <label>РС по ЗЗ</label>
-        <input name="rsZZ" type="text"/>
+        <input type="number" min="0" step="0.01" name="rsZZ"/>
         <select name="rsZZOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -343,7 +343,7 @@
     <br>
     <div class="row">
         <label>ЗС по ЗЗ</label>
-        <input name="zsZZ" type="text"/>
+        <input type="number" min="0" step="0.01" name="zsZZ"/>
         <select name="zsZZOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -355,7 +355,7 @@
     <br>
     <div class="row">
         <label>СС</label>
-        <input name="ss" type="text"/>
+        <input type="number" min="0" step="0.01" name="ss"/>
         <select name="ssOption">
             <option selected value=":">равно</option>
             <option value=">">больше</option>
@@ -532,7 +532,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '<label>Год выпуска</label>\n' +
-                '<input name="yearOfManufactureAuto" type="text"/>\n' +
+                '<input type="number" min="0" name="yearOfManufactureAuto"/>\n' +
                 '<select name="yearOfManufactureAutoOption">\n' +
                 '<option selected value=":">равно</option>\n' +
                 '<option value=">">больше</option>\n' +
@@ -587,7 +587,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Год выпуска</label>\n' +
-                '    <input name="yearOfManufactureEquip" type="text"/>\n' +
+                '    <input type="number" min="0" name="yearOfManufactureEquip"/>\n' +
                 '    <select name="yearOfManufactureEquipOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -637,7 +637,7 @@
         }else if(choise == 'tbo'){
             var codeInner = '<div class="row">\n' +
                 '    <label>Баланс. стоимость</label>\n' +
-                '    <input name="carryingAmount" type="text"/>\n' +
+                '    <input type="number" min="0" step="0.01" name="carryingAmount"/>\n' +
                 '    <select name="carryingAmountOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -671,7 +671,7 @@
         }else if(choise == 'securities'){
             var codeInner = '<div class="row">\n' +
                 '    <label>Номинал. стоимость</label>\n' +
-                '    <input name="nominalValue" type="text"/>\n' +
+                '    <input type="number" min="0" step="0.01" name="nominalValue"/>\n' +
                 '    <select name="nominalValueOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -683,7 +683,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Действ. стоимость</label>\n' +
-                '    <input name="actuaValue" type="text"/>\n' +
+                '    <input type="number" min="0" step="0.01" name="actuaValue"/>\n' +
                 '    <select name="actuaValueOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -714,7 +714,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Площадь</label>\n' +
-                '    <input name="area" type="text"/>\n' +
+                '    <input type="number" min="0" step="0.01" name="area"/>\n' +
                 '    <select name="areaOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -772,7 +772,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Площадь</label>\n' +
-                '    <input name="area" type="text"/>\n' +
+                '    <input type="number" min="0" step="0.01" name="area"/>\n' +
                 '    <select name="areaOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -822,7 +822,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Дата начала аренды</label>\n' +
-                '    <input name="beginDateLease" type="text"/>\n' +
+                '    <input name="beginDateLease" type="date"/>\n' +
                 '    <select name="beginDateLeaseOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -834,7 +834,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Дата окончания аренды</label>\n' +
-                '    <input name="endDateLease" type="text"/>\n' +
+                '    <input name="endDateLease" type="date"/>\n' +
                 '    <select name="endDateLeaseOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -854,7 +854,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Площадь</label>\n' +
-                '    <input name="area" type="text"/>\n' +
+                '    <input type="number" min="0" step="0.01" name="area"/>\n' +
                 '    <select name="areaOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -891,7 +891,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Степень готовности</label>\n' +
-                '    <input name="readinessВegree" type="text"/>\n' +
+                '    <input type="number" min="0" max="100" name="readinessВegree"/>\n' +
                 '    <select name="readinessВegreeOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -903,7 +903,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Год постройки</label>\n' +
-                '    <input name="yearOfConstructionBuilding" type="text"/>\n' +
+                '    <input type="number" min="0" name="yearOfConstructionBuilding"/>\n' +
                 '    <select name="yearOfConstructionBuildingOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -923,7 +923,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Площадь</label>\n' +
-                '    <input name="area" type="text"/>\n' +
+                '    <input type="number" min="0" step="0.01" name="area"/>\n' +
                 '    <select name="areaOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -996,7 +996,7 @@
             var codeInner = '';
             elementPS.innerHTML = '<div class="row">\n' +
                 '    <label>IMO</label>\n' +
-                '    <input name="imo" type="text"/>\n' +
+                '    <input type="number" min="0" name="imo"/>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
@@ -1035,7 +1035,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Валовая вместимость</label>\n' +
-                '    <input name="grossTonnage" type="text"/>\n' +
+                '    <input type="number" min="0" name="grossTonnage"/>\n' +
                 '    <select name="grossTonnageOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -1047,7 +1047,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Дедвейт</label>\n' +
-                '    <input name="deadweight" type="text"/>\n' +
+                '    <input type="number" min="0" name="deadweight"/>\n' +
                 '    <select name="deadweightOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
@@ -1059,7 +1059,7 @@
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Год постройки</label>\n' +
-                '    <input name="yearBuiltVessel" type="text"/>\n' +
+                '    <input type="number" min="0" name="yearBuiltVessel"/>\n' +
                 '    <select name="yearBuiltVesselOption">\n' +
                 '        <option selected value=":">равно</option>\n' +
                 '        <option value=">">больше</option>\n' +
