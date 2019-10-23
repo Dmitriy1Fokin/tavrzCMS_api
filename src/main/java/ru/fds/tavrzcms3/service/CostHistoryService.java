@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.domain.CostHistory;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.repository.RepositoryCostHistory;
-import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 
 import java.util.List;
 
@@ -17,12 +16,9 @@ public class CostHistoryService {
     @Autowired
     RepositoryCostHistory repositoryCostHistory;
 
-    @Autowired
-    RepositoryPledgeSubject repositoryPledgeSubject;
-
-    public List<CostHistory> getCostHistoryByPledgeSubjectId(long pledgeSubjectId){
+    public List<CostHistory> getCostHistoryPledgeSubject(PledgeSubject pledgeSubject){
         Sort sortByDateConclusion = new Sort(Sort.Direction.DESC, "dateConclusion");
-        return repositoryCostHistory.findByPledgeSubject(repositoryPledgeSubject.findByPledgeSubjectId(pledgeSubjectId), sortByDateConclusion);
+        return repositoryCostHistory.findByPledgeSubject(pledgeSubject, sortByDateConclusion);
     }
     @Transactional
     public CostHistory insertCostHistoryInPledgeSubject(PledgeSubject pledgeSubject, CostHistory costHistory){

@@ -26,9 +26,9 @@ public class MonitoringService {
     RepositoryPledgeAgreement repositoryPledgeAgreement;
 
 
-    public List<Monitoring> getMonitoringByPledgeSubjectId(long pledgeSubjectId){
+    public List<Monitoring> getMonitoringByPledgeSubject(PledgeSubject pledgeSubject){
         Sort sortByDateMonitoring = new Sort(Sort.Direction.DESC, "dateMonitoring");
-        return repositoryMonitoring.findByPledgeSubject(repositoryPledgeSubject.findByPledgeSubjectId(pledgeSubjectId), sortByDateMonitoring);
+        return repositoryMonitoring.findByPledgeSubject(pledgeSubject, sortByDateMonitoring);
     }
 
     @Transactional

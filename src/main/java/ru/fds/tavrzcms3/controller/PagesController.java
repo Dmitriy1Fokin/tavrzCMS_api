@@ -146,6 +146,7 @@ public class PagesController {
                                      Model model){
         PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
         model.addAttribute("pledgeAgreement", pledgeAgreement);
+
         return "pledge_subjects";
     }
 
@@ -156,6 +157,7 @@ public class PagesController {
         List<Insurance> insuranceList = insuranceService.getInsurancesByPledgeSubject(pledgeSubject);
         model.addAttribute("pledgeSubject", pledgeSubject);
         model.addAttribute("insuranceList", insuranceList);
+
         return "insurances";
     }
 
@@ -171,6 +173,7 @@ public class PagesController {
         List <Insurance> insuranceList = insuranceService.getInsurancesByPledgeSubject(insuranceInserted.getPledgeSubject());
         model.addAttribute("pledgeSubject", insuranceInserted.getPledgeSubject());
         model.addAttribute("insuranceList", insuranceList);
+
         return "insurances";
     }
 
@@ -180,6 +183,7 @@ public class PagesController {
         Insurance insurance = new Insurance();
         insurance.setPledgeSubject(pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId));
         model.addAttribute("insurance", insurance);
+
         return "insurance_card";
     }
 
@@ -190,6 +194,7 @@ public class PagesController {
         List<Encumbrance> encumbranceList = encumbranceService.getEncumbranceByPledgeSubject(pledgeSubject);
         model.addAttribute("pledgeSubject", pledgeSubject);
         model.addAttribute("encumbranceList", encumbranceList);
+
         return "encumbrances";
     }
 
@@ -200,6 +205,7 @@ public class PagesController {
         Encumbrance encumbrance = new Encumbrance();
         encumbrance.setPledgeSubject(pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId));
         model.addAttribute("encumbrance", encumbrance);
+
         return "encumbrance_card";
     }
 
@@ -220,7 +226,8 @@ public class PagesController {
     }
 
     @GetMapping("/pledge_subject_detail")
-    public String pledgeSubjectDetailPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
+    public String pledgeSubjectDetailPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+                                          Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
         model.addAttribute("pledgeSubject", pledgeSubject);
 
@@ -228,42 +235,51 @@ public class PagesController {
     }
 
     @GetMapping("/client")
-    public String clientPage(@RequestParam("clientId") long pledgorId, Model model){
-        Client client = clientService.getClientByClientId(pledgorId);
+    public String clientPage(@RequestParam("clientId") long clientId,
+                             Model model){
+        Client client = clientService.getClientByClientId(clientId);
         model.addAttribute("client", client);
 
         return "client";
     }
 
     @GetMapping("/pledge_agreement_detail")
-    public String pledgeAgreementsDetailPage(@RequestParam("pledgeAgreementId") long pledgeAgreementId, Model model){
+    public String pledgeAgreementDetailPage(@RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                            Model model){
         PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
         model.addAttribute("pledgeAgreement", pledgeAgreement);
+
         return "pledge_agreement_detail";
     }
 
     @GetMapping("/loan_agreement_detail")
-    public String loanAgreementDetailPage(@RequestParam("loanAgreementId") long loanAgreementId, Model model){
+    public String loanAgreementDetailPage(@RequestParam("loanAgreementId") long loanAgreementId,
+                                          Model model){
         LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId);
         model.addAttribute("loanAgreement", loanAgreement);
+
         return "loan_agreement_detail";
     }
 
     @GetMapping("cost_history")
-    public String costHistoryPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
+    public String costHistoryPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+                                  Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
-        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryByPledgeSubjectId(pledgeSubjectId);
+        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(pledgeSubject);
         model.addAttribute("pledgeSubject", pledgeSubject);
         model.addAttribute("costHistoryList", costHistoryList);
+
         return "cost_history";
     }
 
     @GetMapping("monitoring_pledge_subject")
-    public String monitoringPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
+    public String monitoringPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+                                 Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
-        List<Monitoring> monitoringList = monitoringService.getMonitoringByPledgeSubjectId(pledgeSubjectId);
+        List<Monitoring> monitoringList = monitoringService.getMonitoringByPledgeSubject(pledgeSubject);
         model.addAttribute("pledgeSubject", pledgeSubject);
         model.addAttribute("monitoringList", monitoringList);
+
         return "monitoring_pledge_subject";
     }
 
@@ -338,7 +354,8 @@ public class PagesController {
     }
 
     @GetMapping("/search_results")
-    public String searchResultsPage(@RequestParam Map<String, String> reqParam, Model model){
+    public String searchResultsPage(@RequestParam Map<String, String> reqParam,
+                                    Model model){
 //        reqParam.forEach((k, v) -> System.out.println(k + " : " + v));
         switch (reqParam.get("typeOfSearch")){
 
@@ -355,7 +372,7 @@ public class PagesController {
                 reqParam.remove("page");
                 model.addAttribute("reqParam", reqParam);
 
-                return "search_results";
+                break;
 
             case "searchPA":
                 Page<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementFromSearch(reqParam);
@@ -370,7 +387,7 @@ public class PagesController {
                 reqParam.remove("page");
                 model.addAttribute("reqParam", reqParam);
 
-                return "search_results";
+                break;
 
             case "searchPS":
 
@@ -386,7 +403,7 @@ public class PagesController {
                 reqParam.remove("page");
                 model.addAttribute("reqParam", reqParam);
 
-                return "search_results";
+                break;
 
             case "searchClient":
 
@@ -402,12 +419,10 @@ public class PagesController {
                 reqParam.remove("page");
                 model.addAttribute("reqParam", reqParam);
 
-                return "search_results";
-
-            default:
-                return null;
-
+                break;
         }
+
+        return "search_results";
     }
 
     @GetMapping("/monitoring_card")
@@ -455,7 +470,7 @@ public class PagesController {
             case "ps":
                 PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(Long.parseLong(reqParam.get("pledgeSubjectId")));
                 Monitoring monitoringForPS = monitoringService.insertMonitoringInPledgeSubject(pledgeSubject, monitoring);
-                List<Monitoring> monitoringListForPS = monitoringService.getMonitoringByPledgeSubjectId(pledgeSubject.getPledgeSubjectId());
+                List<Monitoring> monitoringListForPS = monitoringService.getMonitoringByPledgeSubject(pledgeSubject);
 
                 model.addAttribute("pledgeSubject", pledgeSubject);
                 model.addAttribute("monitoringList", monitoringListForPS);
@@ -488,7 +503,7 @@ public class PagesController {
 
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
         CostHistory costHistoryForPS = costHistoryService.insertCostHistoryInPledgeSubject(pledgeSubject, costHistory);
-        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryByPledgeSubjectId(pledgeSubject.getPledgeSubjectId());
+        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(pledgeSubject);
         model.addAttribute("pledgeSubject", pledgeSubject);
         model.addAttribute("costHistoryList", costHistoryList);
         return "cost_history";
