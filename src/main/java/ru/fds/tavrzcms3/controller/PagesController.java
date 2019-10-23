@@ -1,7 +1,6 @@
 package ru.fds.tavrzcms3.controller;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -9,13 +8,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.service.*;
 import ru.fds.tavrzcms3.domain.*;
 
+import javax.validation.Valid;
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -150,7 +150,8 @@ public class PagesController {
     }
 
     @GetMapping("/insurances")
-    public String insurancesPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
+    public String insurancesPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+                                 Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
         List<Insurance> insuranceList = insuranceService.getInsurancesByPledgeSubject(pledgeSubject);
         model.addAttribute("pledgeSubject", pledgeSubject);
@@ -159,14 +160,16 @@ public class PagesController {
     }
 
     @PostMapping("/insurances")
-    public String insurenceInsert(@ModelAttribute Insurance insurance,
-                                  @RequestParam("pledgeSubjectId") long pledgeSubjectId,
+    public String insuranceInsert(@Valid Insurance insurance,
+                                  BindingResult bindingResult,
                                   Model model){
 
-        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
-        Insurance insuranceInserted = insuranceService.insertInsuranceInPledgeSubject(pledgeSubject, insurance);
-        List <Insurance> insuranceList = insuranceService.getInsurancesByPledgeSubject(pledgeSubject);
-        model.addAttribute("pledgeSubject", pledgeSubject);
+        if(bindingResult.hasErrors())
+            return "insurance_card";
+
+        Insurance insuranceInserted = insuranceService.updateInsertInsurance(insurance);
+        List <Insurance> insuranceList = insuranceService.getInsurancesByPledgeSubject(insuranceInserted.getPledgeSubject());
+        model.addAttribute("pledgeSubject", insuranceInserted.getPledgeSubject());
         model.addAttribute("insuranceList", insuranceList);
         return "insurances";
     }
@@ -175,8 +178,8 @@ public class PagesController {
     public String insuranceCardGet(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
                                    Model model){
         Insurance insurance = new Insurance();
+        insurance.setPledgeSubject(pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId));
         model.addAttribute("insurance", insurance);
-        model.addAttribute("pledgeSubjectId", pledgeSubjectId);
         return "insurance_card";
     }
 

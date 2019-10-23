@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
 <head>
     <meta charset="UTF-8">
     <title th:text="'Добавить договор страхования'">Добавить договор страхования</title>
@@ -19,44 +20,59 @@
 <h1 th:text="'Добавить договор страхования'">Добавить договор страхования</h1>
 
 <form th:action="@{/insurances}" th:method="post" th:object="${insurance}" action="insurances.html">
-    <input type="hidden", name="pledgeSubjectId" th:value="${pledgeSubjectId}">
+    <input type="hidden", th:field="*{pledgeSubject}" th:value="${insurance.getPledgeSubject()}">
 
     <div class="row">
         <label>№ договора страхования</label>
         <input required th:field="*{numInsurance}" type="text"/>
+        <div th:if="${#fields.hasErrors('numInsurance')}"
+             th:text="'Неверное значение № договора'">Неверное значение № договора</div>
     </div>
     <br>
     <div class="row">
         <label>Дата договора страхования</label>
         <input required th:field="*{dateInsuranceContract}" type="date"/>
+        <div th:if="${#fields.hasErrors('dateInsuranceContract')}"
+             th:text="'Неверное значение даты договора'">Неверное значение даты договора</div>
     </div>
     <br>
     <div class="row">
         <label>Дата начала страхования</label>
         <input required th:field="*{dateBeginInsurance}" type="date"/>
+        <div th:if="${#fields.hasErrors('dateBeginInsurance')}"
+             th:text="'Неверное значение даты начала страхования'">Неверное значение даты начала страхования</div>
     </div>
     <br>
     <div class="row">
         <label>Дата окончания страхования</label>
         <input required th:field="*{dateEndInsurance}" type="date"/>
+        <div th:if="${#fields.hasErrors('dateEndInsurance')}"
+             th:text="'Неверное значение даты окончания страхования'">Неверное значение даты окончания страхования</div>
     </div>
     <br>
     <div class="row">
         <label>Страховая сумма</label>
         <input required th:field="*{sumInsured}" type="text"/>
+        <div th:if="${#fields.hasErrors('sumInsured')}"
+             th:text="'Неверное значение страховой суммы'">Неверное значение страховой суммы</div>
     </div>
     <br>
     <div class="row">
         <label>Оплата страховой премии</label>
         <select required th:field="*{paymentOfInsurancePremium}">
-            <option value="да">да</option>
             <option value="нет">нет</option>
+            <option value="да">да</option>
         </select>
+        <div th:if="${#fields.hasErrors('paymentOfInsurancePremium')}"
+             th:text="'Неверное значение оплаты страховой премии'">Неверное значение оплаты страховой премии</div>
     </div>
     <br>
     <div class="row">
         <label>Размер франшизы</label>
         <input required th:field="*{franchiseAmount}" type="text"/>
+        <!--<div th:if="${#fields.hasErrors('franchiseAmount')}" th:errors="*{franchiseAmount}">Name Error</div>-->
+        <div th:if="${#fields.hasErrors('franchiseAmount')}"
+             th:text="'Неверное значение франшизы'">Неверное значение франшизы</div>
     </div>
     <br>
 

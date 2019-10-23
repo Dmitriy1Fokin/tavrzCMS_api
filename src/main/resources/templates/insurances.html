@@ -26,6 +26,11 @@
 
 <h1 th:text="'Страхование для предмета залога:' + ${pledgeSubject.getName()}">Страхование для предмета залога</h1>
 
+<a th:href="@{/pledge_subject_detail(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
+   href="pledge_subject_detail.html"
+   th:text="'Вернуться к предмету залога ' + ${pledgeSubject.getName()}">Вернуться к предмету залога</a>
+<br>
+<br>
 <a th:href="@{insurance_card(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
    href="insurance_card.html"
    th:text="'Добавить договор страхования'">Добавить договор страхования</a>

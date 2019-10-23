@@ -23,8 +23,7 @@ public class InsuranceService {
     }
 
     @Transactional
-    public Insurance insertInsuranceInPledgeSubject(PledgeSubject pledgeSubject, Insurance insurance){
-        insurance.setPledgeSubject(pledgeSubject);
+    public Insurance updateInsertInsurance(Insurance insurance){
         return repositoryInsurance.save(insurance);
     }
 }
