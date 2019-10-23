@@ -29,39 +29,39 @@ public class Insurance {
 	@Column(name ="insurance_id")
 	private long insuranceId;
 
-	@NotBlank
+	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="num_insurance")
 	private String numInsurance;
 
-	@NotNull
+	@NotNull(message = "Обязательно для заполнения")
 	@Column(name ="date_begin")
 	@Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateBeginInsurance;
 
-	@NotNull
+	@NotNull(message = "Обязательно для заполнения")
 	@Column(name ="date_end")
 	@Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateEndInsurance;
 
-	@NotNull
-	@PositiveOrZero
+	@NotNull(message = "Обязательно для заполнения")
+	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="sum_insured")
 	private double sumInsured;
 
-	@NotNull
+	@NotNull(message = "Обязательно для заполнения")
     @Column(name ="date_insurance_contract")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateInsuranceContract;
 
-    @Pattern(regexp = "да|нет")
+    @Pattern(regexp = "да|нет", message = "Возможные варианты: да, нет")
 	@Column(name ="payment_of_insurance_premium")
 	private String paymentOfInsurancePremium;
 
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "Обязательно для заполнения")
+    @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name = "franchise_amount")
     private Double franchiseAmount;
 	
