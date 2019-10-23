@@ -184,7 +184,8 @@ public class PagesController {
     }
 
     @GetMapping("/encumbrances")
-    public  String encumbrancePage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
+    public  String encumbrancePage(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+                                   Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
         List<Encumbrance> encumbranceList = encumbranceService.getEncumbranceByPledgeSubject(pledgeSubject);
         model.addAttribute("pledgeSubject", pledgeSubject);
@@ -197,21 +198,24 @@ public class PagesController {
                                          Model model){
 
         Encumbrance encumbrance = new Encumbrance();
+        encumbrance.setPledgeSubject(pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId));
         model.addAttribute("encumbrance", encumbrance);
-        model.addAttribute("pledgeSubjectId", pledgeSubjectId);
         return "encumbrance_card";
     }
 
     @PostMapping("/encumbrance_card")
-    public String encumbranceCardPagePost(@ModelAttribute Encumbrance encumbrance,
-                                          @RequestParam("pledgeSubjectId") long pledgeSubjectId,
+    public String encumbranceCardPagePost(@Valid Encumbrance encumbrance,
+                                          BindingResult bindingResult,
                                           Model model){
 
-        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
-        Encumbrance encumbranceInserted = encumbranceService.insertEncumbranceInPledgeSubject(pledgeSubject, encumbrance);
+        if(bindingResult.hasErrors())
+            return "encumbrance_card";
+
+        Encumbrance encumbranceInserted = encumbranceService.updateInsertEncumbrance(encumbrance);
         List<Encumbrance> encumbranceList = encumbranceService.getEncumbranceByPledgeSubject(encumbranceInserted.getPledgeSubject());
         model.addAttribute("pledgeSubject", encumbranceInserted.getPledgeSubject());
         model.addAttribute("encumbranceList", encumbranceList);
+
         return "encumbrances";
     }
 
@@ -219,6 +223,7 @@ public class PagesController {
     public String pledgeSubjectDetailPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
         model.addAttribute("pledgeSubject", pledgeSubject);
+
         return "pledge_subject_detail";
     }
 

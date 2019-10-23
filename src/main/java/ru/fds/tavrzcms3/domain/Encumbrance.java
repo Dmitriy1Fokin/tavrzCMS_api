@@ -3,6 +3,9 @@ package ru.fds.tavrzcms3.domain;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
@@ -14,25 +17,32 @@ public class Encumbrance {
     @Column(name ="encumbrance_id")
     private long encumbranceId;
 
+    @NotBlank(message = "Обязательно для заполнения")
     @Column(name ="name")
     private String nameEncumbrance;
 
+    @Pattern(regexp = "залог|арест|аренда|сервитут|доверительное управление",
+            message = "Возможные варианты: залог, арест, аренда, сервитут, доверительное управление")
     @Column(name ="type_of_encumbrance")
     private String typeOfEncumbrance;
 
+    @NotBlank(message = "Обязательно для заполнения")
     @Column(name ="in_favor_of_whom")
     private String inFavorOfWhom;
 
+    @NotNull(message = "Обязательно для заполнения")
     @Column(name ="date_begin")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateBegin;
 
+    @NotNull(message = "Обязательно для заполнения")
     @Column(name ="date_end")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateEnd;
 
+    @NotBlank(message = "Обязательно для заполнения")
     @Column(name = "num_of_encumbrance")
     private String numOfEncumbrance;
 

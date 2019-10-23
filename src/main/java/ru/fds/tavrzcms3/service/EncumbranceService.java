@@ -20,8 +20,7 @@ public class EncumbranceService {
     }
 
     @Transactional
-    public Encumbrance insertEncumbranceInPledgeSubject(PledgeSubject pledgeSubject, Encumbrance encumbrance){
-        encumbrance.setPledgeSubject(pledgeSubject);
+    public Encumbrance updateInsertEncumbrance(Encumbrance encumbrance){
         return repositoryEncumbrance.save(encumbrance);
     }
 }
