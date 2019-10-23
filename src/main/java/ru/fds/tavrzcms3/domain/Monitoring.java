@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "monitoring")
@@ -24,18 +27,22 @@ public class Monitoring {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="monitoring_id")
 	private long monitoringId;
-	
+
+	@NotNull(message = "Обязательно для заполнения")
 	@Column(name ="date")
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateMonitoring;
-	
+
+	@Pattern(regexp = "в наличии|утрата|частичная утрата", message = "Возможные варианты: в наличии, утрата, частичная утрата")
 	@Column(name ="status")
 	private String statusMonitoring;
-	
+
+	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="employee")
 	private String employee;
-	
+
+	@Pattern(regexp = "документарный|визуальный", message = "Возможные варианты: документарный, визуальный")
 	@Column(name ="type")
 	private String typeOfMonitoring;
 

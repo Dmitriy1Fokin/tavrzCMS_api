@@ -69,15 +69,15 @@
 <form th:action="@{/monitoring_card}" th:method="post" th:object="${monitoring}" action="monitoring_card.html">
     <div th:switch="${whereUpdateMonitoring}">
         <div th:case="pa">
-            <input type="hidden", name="whereUpdateMonitoring" value="pa">
+            <input type="hidden", name="whereUpdateMonitoring" th:value="${whereUpdateMonitoring}">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreement.getPledgeAgreementId()}" value="0">
         </div>
         <div th:case="ps">
-            <input type="hidden", name="whereUpdateMonitoring" value="ps">
+            <input type="hidden", name="whereUpdateMonitoring" th:value="${whereUpdateMonitoring}">
             <input type="hidden", name="pledgeSubjectId" th:value="${pledgeSubject.getPledgeSubjectId()}" value="0">
         </div>
         <div th:case="pledgor">
-            <input type="hidden", name="whereUpdateMonitoring" value="pledgor">
+            <input type="hidden", name="whereUpdateMonitoring" th:value="${whereUpdateMonitoring}">
             <input type="hidden", name="pledgorId" th:value="${pledgor.getClientId()}" value="0">
         </div>
     </div>
@@ -86,6 +86,7 @@
     <div class="row">
         <label>Дата мониторинга</label>
         <input required th:field="*{dateMonitoring}" type="date"/>
+        <div th:if="${#fields.hasErrors('dateMonitoring')}" th:errors="*{dateMonitoring}">Name Error</div>
     </div>
     <br>
     <div class="row">
@@ -95,6 +96,7 @@
             <option value="документарный">документарный</option>
             <option value="визуальный">визуальный</option>
         </select>
+        <div th:if="${#fields.hasErrors('typeOfMonitoring')}" th:errors="*{typeOfMonitoring}">Name Error</div>
     </div>
     <br>
     <div class="row">
@@ -104,21 +106,25 @@
             <option value="утрата">утрата</option>
             <option value="частичная утрата">частичная утрата</option>
         </select>
+        <div th:if="${#fields.hasErrors('statusMonitoring')}" th:errors="*{statusMonitoring}">Name Error</div>
     </div>
     <br>
     <div class="row">
         <label>Ответственный сотрудник</label>
         <input required th:field="*{employee}" type="text"/>
+        <div th:if="${#fields.hasErrors('employee')}" th:errors="*{employee}">Name Error</div>
     </div>
     <br>
     <div class="row">
         <label>Залоговая стоимость (в случаи утраты)</label>
-        <input th:field="*{collateralValue}" type="text"/>
+        <input type="number" min="0" step="0.01" th:field="*{collateralValue}"/>
+        <div th:if="${#fields.hasErrors('collateralValue')}" th:errors="*{collateralValue}">Name Error</div>
     </div>
     <br>
     <div class="row">
         <label>Комментарии</label>
         <input th:field="*{notice}" type="text"/>
+        <div th:if="${#fields.hasErrors('notice')}" th:errors="*{notice}">Name Error</div>
     </div>
     <br>
     <button type="submit">Обновить</button>

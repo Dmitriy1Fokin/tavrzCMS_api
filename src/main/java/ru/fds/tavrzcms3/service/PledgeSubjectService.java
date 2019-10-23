@@ -67,6 +67,10 @@ public class PledgeSubjectService {
         return repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
     }
 
+    public List<PledgeSubject> getPledgeSubjectsForPledgeAgreements(List<PledgeAgreement> pledgeAgreementList){
+        return repositoryPledgeSubject.findByPledgeAgreementsIn(pledgeAgreementList);
+    }
+
     public Page<PledgeSubject> getPledgeSubjectsFromSearch(Map<String, String> searchParam){
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");

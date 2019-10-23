@@ -26,6 +26,12 @@
 
 <h1 th:text="'История мониторингов предмета залога:' + ${pledgeSubject.getName()}">История мониторингов предмета залога</h1>
 
+<a th:href="@{/pledge_subject_detail(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
+   href="pledge_subject_detail.html"
+   th:text="'Вернуться к предмету залога ' + ${pledgeSubject.getName()}">Вернуться к предмету залога</a>
+<br>
+<br>
+
 <a th:href="@{monitoring_card(whereUpdateMonitoring='ps', pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
    href="monitoring_card.html"
    th:text="'Добавить мониторинг'">Добавить мониторинг</a>

@@ -426,40 +426,49 @@ public class PagesController {
     }
 
     @GetMapping("/monitoring_card")
-    public String monitoringCardPageGet(@RequestParam Map<String, String> reqParam, Model model){
-        switch (reqParam.get("whereUpdateMonitoring")) {
+    public String monitoringCardPageGet(@RequestParam("whereUpdateMonitoring") String whereUpdateMonitoring,
+                                        @RequestParam("pledgeAgreementId") Optional<Long> pledgeAgreementId,
+                                        @RequestParam("pledgeSubjectId") Optional<Long> pledgeSubjectId,
+                                        @RequestParam("pledgorId") Optional<Long> pledgorId,
+                                        Model model){
+        switch(whereUpdateMonitoring) {
             case "pa":
-                PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(Long.parseLong(reqParam.get("pledgeAgreementId")));
-                model.addAttribute("whereUpdateMonitoring", reqParam.get("whereUpdateMonitoring"));
+                PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get());
+                model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
                 model.addAttribute("pledgeAgreement", pledgeAgreement);
                 model.addAttribute("monitoring", new Monitoring());
-                return "monitoring_card";
+                break;
             case "ps":
-                PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(Long.parseLong(reqParam.get("pledgeSubjectId")));
-                model.addAttribute("whereUpdateMonitoring", reqParam.get("whereUpdateMonitoring"));
+                PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId.get());
+                model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
                 model.addAttribute("pledgeSubject", pledgeSubject);
                 model.addAttribute("monitoring", new Monitoring());
-                return "monitoring_card";
+                break;
             case "pledgor":
-                Client pledgor = clientService.getClientByClientId(Long.parseLong(reqParam.get("pledgorId")));
-                model.addAttribute("whereUpdateMonitoring", reqParam.get("whereUpdateMonitoring"));
+                Client pledgor = clientService.getClientByClientId(pledgorId.get());
+                model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
                 model.addAttribute("pledgor", pledgor);
                 model.addAttribute("monitoring", new Monitoring());
-                return "monitoring_card";
-
-                default:
-                    return "monitoring_card";
+                break;
         }
+        return "monitoring_card";
     }
 
     @PostMapping("/monitoring_card")
-    public String monitoringCardPagePost(@ModelAttribute Monitoring monitoring,
-                                         @RequestParam Map<String, String> reqParam,
+    public String monitoringCardPagePost(@Valid @ModelAttribute Monitoring monitoring,
+                                         BindingResult bindingResult,
+                                         @RequestParam("whereUpdateMonitoring") String whereUpdateMonitoring,
+                                         @RequestParam("pledgeAgreementId") Optional<Long> pledgeAgreementId,
+                                         @RequestParam("pledgeSubjectId") Optional<Long> pledgeSubjectId,
+                                         @RequestParam("pledgorId") Optional<Long> pledgorId,
                                          Model model){
 
-        switch (reqParam.get("whereUpdateMonitoring")) {
+        if(bindingResult.hasErrors())
+            return "monitoring_card";
+
+        switch (whereUpdateMonitoring) {
             case "pa":
-                PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(Long.parseLong(reqParam.get("pledgeAgreementId")));
+                PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get());
                 List<Monitoring> monitoringListForPA = monitoringService.insertMonitoringInPledgeAgreement(pledgeAgreement, monitoring);
 
                 model.addAttribute("whereUpdateMonitoring", "responseSuccess");
@@ -468,25 +477,28 @@ public class PagesController {
                 return "monitoring_card";
 
             case "ps":
-                PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(Long.parseLong(reqParam.get("pledgeSubjectId")));
-                Monitoring monitoringForPS = monitoringService.insertMonitoringInPledgeSubject(pledgeSubject, monitoring);
+                PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId.get());
+                monitoring.setPledgeSubject(pledgeSubject);
+                Monitoring monitoringForPS = monitoringService.insertMonitoringInPledgeSubject(monitoring);
                 List<Monitoring> monitoringListForPS = monitoringService.getMonitoringByPledgeSubject(pledgeSubject);
 
                 model.addAttribute("pledgeSubject", pledgeSubject);
                 model.addAttribute("monitoringList", monitoringListForPS);
                 return "monitoring_pledge_subject";
+
             case "pledgor":
-                Client pledgor = clientService.getClientByClientId(Long.parseLong(reqParam.get("pledgorId")));
+                Client pledgor = clientService.getClientByClientId(pledgorId.get());
                 List<Monitoring> monitoringListForPledgor = monitoringService.insertMonitoringInPledgor(pledgor, monitoring);
                 model.addAttribute("whereUpdateMonitoring", "responseSuccess");
                 model.addAttribute("pledgor", pledgor);
                 model.addAttribute("monitoringList" , monitoringListForPledgor);
                 return "monitoring_card";
 
-            default:
-                return "monitoring_card";
         }
+
+        return "monitoring_card";
     }
+
 
     @GetMapping("/cost_history_card")
     public String costHistryCardGet(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){

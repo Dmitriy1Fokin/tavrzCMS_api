@@ -26,8 +26,6 @@ public class PledgeAgreementService {
     RepositoryPledgeSubject repositoryPledgeSubject;
     @Autowired
     RepositoryLoanAgreement repositoryLoanAgreement;
-//    @Autowired
-//    RepositoryClient repositoryClient;
     @Autowired
     RepositoryClientLegalEntity repositoryClientLegalEntity;
     @Autowired
@@ -402,6 +400,10 @@ public class PledgeAgreementService {
 
         return repositoryPledgeAgreement.findAll(spec, pageable);
 
+    }
+
+    public List<PledgeAgreement> getCurrentPledgeAgreementsByPledgor(Client client){
+        return repositoryPledgeAgreement.findByPledgorAndStatusPA(client, "открыт");
     }
 
     @Transactional

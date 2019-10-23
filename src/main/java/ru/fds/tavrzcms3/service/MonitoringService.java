@@ -21,9 +21,9 @@ public class MonitoringService {
     @Autowired
     RepositoryMonitoring repositoryMonitoring;
     @Autowired
-    RepositoryPledgeSubject repositoryPledgeSubject;
+    PledgeSubjectService pledgeSubjectService;
     @Autowired
-    RepositoryPledgeAgreement repositoryPledgeAgreement;
+    PledgeAgreementService pledgeAgreementService;
 
 
     public List<Monitoring> getMonitoringByPledgeSubject(PledgeSubject pledgeSubject){
@@ -33,31 +33,34 @@ public class MonitoringService {
 
     @Transactional
     public List<Monitoring> insertMonitoringInPledgeAgreement(PledgeAgreement pledgeAgreement, Monitoring monitoring){
-        List<PledgeSubject> pledgeSubjectList = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId());
         List<Monitoring> monitoringList = new ArrayList<>();
         for (PledgeSubject ps : pledgeSubjectList){
             monitoring.setPledgeSubject(ps);
-            monitoringList.add(repositoryMonitoring.save(new Monitoring(monitoring)));
+            monitoringList.add(new Monitoring(monitoring));
         }
+
+        monitoringList = repositoryMonitoring.saveAll(monitoringList);
 
         return monitoringList;
     }
 
     @Transactional
-    public Monitoring insertMonitoringInPledgeSubject(PledgeSubject pledgeSubject, Monitoring monitoring){
-        monitoring.setPledgeSubject(pledgeSubject);
+    public Monitoring insertMonitoringInPledgeSubject(Monitoring monitoring){
         return repositoryMonitoring.save(monitoring);
     }
 
     @Transactional
     public List<Monitoring> insertMonitoringInPledgor(Client pledgor, Monitoring monitoring){
-        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement.findByPledgor(pledgor);
-        List<PledgeSubject> pledgeSubjectList = repositoryPledgeSubject.findByPledgeAgreementsIn(pledgeAgreementList);
+        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByPledgor(pledgor);
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreements(pledgeAgreementList);
         List<Monitoring> monitoringList = new ArrayList<>();
         for(PledgeSubject ps : pledgeSubjectList){
             monitoring.setPledgeSubject(ps);
-            monitoringList.add(repositoryMonitoring.save(new Monitoring(monitoring)));
+            monitoringList.add(new Monitoring(monitoring));
         }
+
+        monitoringList = repositoryMonitoring.saveAll(monitoringList);
 
         return monitoringList;
     }
