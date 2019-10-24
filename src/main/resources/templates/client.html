@@ -57,7 +57,7 @@
    th:text="'Изменить данные клиента'">Изменить данные клиента</a>
 <br>
 <br>
-<a th:href="@{pledge_agreement_card(whatDo='newPA', pledgeAgreementId='0', clientId=${client.getClientId()})}"
+<a th:href="@{pledge_agreement_card(whatDo='newPA', clientId=${client.getClientId()})}"
    href="pledge_agreement_card.html"
    th:text="'Добавить новый договор залога'">Добавить новый договор залога</a>
 <br>

@@ -19,6 +19,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "dz")
@@ -28,23 +31,30 @@ public class PledgeAgreement {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="dz_id")
 	private long pledgeAgreementId;
-	
+
+	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="num_dz")
 	private String numPA;
-	
+
+	@NotNull(message = "Обязательно для заполнения")
 	@Column(name ="date_begin_dz")
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateBeginPA;
-	
+
+	@NotNull(message = "Обязательно для заполнения")
 	@Column(name ="date_end_dz")
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateEndPA;
-	
+
+	@Pattern(regexp = "перв|посл",
+			message = "Возможные варианты: перв, посл")
 	@Column(name ="perv_posl")
 	private String pervPosl;
-	
+
+	@Pattern(regexp = "открыт|закрыт",
+			message = "Возможные варианты: открыт, закрыт")
 	@Column(name ="status")
 	private String statusPA;
 	
@@ -67,17 +77,17 @@ public class PledgeAgreement {
 	private double ss;
 
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany()
 	@JoinTable(name = "kd_dz", joinColumns = @JoinColumn(name ="dz_id"), inverseJoinColumns = @JoinColumn(name ="kd_id"))
 	private List<LoanAgreement> loanAgreements;
 
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
 	@JoinColumn(name = "pledgor_id")
 	private Client pledgor;
 
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany()
 	@JoinTable(name = "dz_ps", joinColumns = @JoinColumn(name ="dz_id"), inverseJoinColumns = @JoinColumn(name ="pledge_subject_id"))
 	private List<PledgeSubject> pledgeSubjects;
 

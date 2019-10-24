@@ -26,7 +26,7 @@
 <div th:switch="${whatDo}">
     <div th:case="changePA">
         <form th:action="@{/pledge_agreement_card}" th:method="post" th:object="${pledgeAgreement}" action="pledge_agreement_card.html">
-            <input type="hidden", name="whatDo" value="changePA">
+            <input type="hidden", name="whatDo" th:value="${whatDo}">
             <input type="hidden", th:field="*{pledgeAgreementId}" th:value="${pledgeAgreement.getPledgeAgreementId()}">
             <input type="hidden", th:field="*{pledgor}" th:value="${pledgeAgreement.getPledgor()}">
             <input type="hidden", th:field="*{loanAgreements}" th:value="${pledgeAgreement.getLoanAgreements()}">
@@ -35,16 +35,19 @@
             <div class="row">
                 <label>№ ДЗ:</label>
                 <input required th:field="*{numPA}" type="text" th:value="${pledgeAgreement.getNumPA()}"/>
+                <div th:if="${#fields.hasErrors('numPA')}" th:errors="*{numPA}">Name Error</div>
             </div>
             <br>
             <div class="row">
                 <label>Дата начала ДЗ</label>
                 <input required th:field="*{dateBeginPA}" type="date" th:value="${pledgeAgreement.getDateBeginPA()}"/>
+                <div th:if="${#fields.hasErrors('dateBeginPA')}" th:errors="*{dateBeginPA}">Name Error</div>
             </div>
             <br>
             <div class="row">
                 <label>Дата окончания ДЗ</label>
                 <input required th:field="*{dateEndPA}" type="date" th:value="${pledgeAgreement.getDateEndPA()}"/>
+                <div th:if="${#fields.hasErrors('dateEndPA')}" th:errors="*{dateEndPA}">Name Error</div>
             </div>
             <br>
             <div class="row">
@@ -53,6 +56,7 @@
                     <option value="перв">Первичный</option>
                     <option value="посл">Последующий</option>
                 </select>
+                <div th:if="${#fields.hasErrors('pervPosl')}" th:errors="*{pervPosl}">Name Error</div>
             </div>
             <br>
             <div class="row">
@@ -61,11 +65,13 @@
                     <option value="открыт">открыт</option>
                     <option value="закрыт">закрыт</option>
                 </select>
+                <div th:if="${#fields.hasErrors('statusPA')}" th:errors="*{statusPA}">Name Error</div>
             </div>
             <br>
             <div class="row">
                 <label>Комментарии:</label>
                 <input th:field="*{noticePA}" type="text" th:value="${pledgeAgreement.getNoticePA()}"/>
+                <div th:if="${#fields.hasErrors('noticePA')}" th:errors="*{noticePA}">Name Error</div>
             </div>
             <br>
             <button type="submit">Обновить</button>
@@ -73,22 +79,25 @@
     </div>
     <div th:case="newPA">
         <form th:action="@{/pledge_agreement_card}" th:method="post" th:object="${pledgeAgreement}" action="pledge_agreement_card.html">
-            <input type="hidden", name="whatDo" value="newPA">
+            <input type="hidden", name="whatDo" th:value="${whatDo}">
             <input type="hidden", th:field="*{pledgor}" th:value="${pledgeAgreement.getPledgor()}">
 
             <div class="row">
                 <label>№ ДЗ:</label>
                 <input required th:field="*{numPA}" type="text"/>
+                <div th:if="${#fields.hasErrors('numPA')}" th:errors="*{numPA}">Name Error</div>
             </div>
             <br>
             <div class="row">
                 <label>Дата начала ДЗ</label>
                 <input required th:field="*{dateBeginPA}" type="date"/>
+                <div th:if="${#fields.hasErrors('dateBeginPA')}" th:errors="*{dateBeginPA}">Name Error</div>
             </div>
             <br>
             <div class="row">
                 <label>Дата окончания ДЗ</label>
                 <input required th:field="*{dateEndPA}" type="date"/>
+                <div th:if="${#fields.hasErrors('dateEndPA')}" th:errors="*{dateEndPA}">Name Error</div>
             </div>
             <br>
             <div class="row">
@@ -98,6 +107,7 @@
                     <option value="перв">Первичный</option>
                     <option value="посл">Последующий</option>
                 </select>
+                <div th:if="${#fields.hasErrors('pervPosl')}" th:errors="*{pervPosl}">Name Error</div>
             </div>
             <br>
             <div class="row">
@@ -106,11 +116,13 @@
                     <option selected value="открыт">открыт</option>
                     <option value="закрыт">закрыт</option>
                 </select>
+                <div th:if="${#fields.hasErrors('statusPA')}" th:errors="*{statusPA}">Name Error</div>
             </div>
             <br>
             <div class="row">
                 <label>Комментарии:</label>
                 <input th:field="*{noticePA}" type="text"/>
+                <div th:if="${#fields.hasErrors('noticePA')}" th:errors="*{noticePA}">Name Error</div>
             </div>
             <br>
             <button type="submit">Добавить</button>
@@ -120,6 +132,9 @@
         <h3>Успешно добавлен новый договор залога</h3>
         <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
            th:text="'подробрее'">н/д</a>
+    </div>
+    <div th:case="responseError">
+
     </div>
 </div>
 </body>

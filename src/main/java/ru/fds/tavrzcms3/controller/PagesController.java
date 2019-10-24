@@ -469,19 +469,16 @@ public class PagesController {
                     PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get());
                     model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
                     model.addAttribute("pledgeAgreement", pledgeAgreement);
-                    model.addAttribute("monitoring",monitoring);
                     break;
                 case "ps":
                     PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId.get());
                     model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
                     model.addAttribute("pledgeSubject", pledgeSubject);
-                    model.addAttribute("monitoring", monitoring);
                     break;
                 case "pledgor":
                     Client pledgor = clientService.getClientByClientId(pledgorId.get());
                     model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
                     model.addAttribute("pledgor", pledgor);
-                    model.addAttribute("monitoring", monitoring);
                     break;
             }
             return "monitoring_card";
@@ -583,7 +580,6 @@ public class PagesController {
                                             Model model){
 
         if(bindingResult.hasErrors()){
-            model.addAttribute("loanAgreement", loanAgreement);
             model.addAttribute("whatDo", whatDo);
             return "loan_agreement_card";
         }
@@ -608,34 +604,43 @@ public class PagesController {
     }
 
     @GetMapping("/pledge_agreement_card")
-    public String pledgeAgreementCardGet(@RequestParam("pledgeAgreementId") long pledgeAgreementId,
+    public String pledgeAgreementCardGet(@RequestParam("pledgeAgreementId") Optional<Long> pledgeAgreementId,
                                          @RequestParam("clientId") Optional<Long> clientId,
                                          @RequestParam("whatDo") String whatDo,
                                          Model model){
         if(whatDo.equals("changePA")){
-            PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+            PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get());
 
             model.addAttribute("pledgeAgreement", pledgeAgreement);
             model.addAttribute("whatDo", whatDo);
 
             return "pledge_agreement_card";
-        }else {
+
+        }else if(whatDo.equals("newPA")){
             PledgeAgreement pledgeAgreement = new PledgeAgreement();
-            Client client = clientService.getClientByClientId(clientId.orElse((long)0));
+            Client client = clientService.getClientByClientId(clientId.get());
             pledgeAgreement.setPledgor(client);
 
             model.addAttribute("pledgeAgreement", pledgeAgreement);
             model.addAttribute("whatDo", whatDo);
 
             return "pledge_agreement_card";
-        }
+
+        }else
+            return null;
 
     }
 
     @PostMapping("/pledge_agreement_card")
-    public String pledgeAgreementCardPost(@ModelAttribute PledgeAgreement pledgeAgreement,
+    public String pledgeAgreementCardPost(@Valid PledgeAgreement pledgeAgreement,
+                                          BindingResult bindingResult,
                                           @RequestParam("whatDo") String whatDo,
                                           Model model){
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("whatDo", whatDo);
+            return "pledge_agreement_card";
+        }
 
         if(whatDo.equals("changePA")){
             PledgeAgreement pa = pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
