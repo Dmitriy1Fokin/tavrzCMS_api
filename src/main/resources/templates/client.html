@@ -62,7 +62,7 @@
    th:text="'Добавить новый договор залога'">Добавить новый договор залога</a>
 <br>
 <br>
-<a th:href="@{loan_agreement_card(whatDo='newLA', loanAgreementId='0', clientId=${client.getClientId()})}"
+<a th:href="@{loan_agreement_card(whatDo='newLA', clientId=${client.getClientId()})}"
    href="loan_agreement_card.html"
    th:text="'Добавить новый кредитный договор'">Добавить новый кредитный договор</a>
 <br>

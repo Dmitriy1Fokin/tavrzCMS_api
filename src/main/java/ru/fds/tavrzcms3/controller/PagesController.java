@@ -524,53 +524,66 @@ public class PagesController {
         List<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(costHistoryUpdated.getPledgeSubject());
         model.addAttribute("pledgeSubject", costHistoryUpdated.getPledgeSubject());
         model.addAttribute("costHistoryList", costHistoryList);
+
         return "cost_history";
     }
 
     @GetMapping("/loan_agreement_card")
-    public String loanAgreementCardPageGet(@RequestParam("loanAgreementId") long loanAgreementId,
+    public String loanAgreementCardPageGet(@RequestParam("loanAgreementId") Optional<Long> loanAgreementId,
                                            @RequestParam("clientId") Optional<Long> clientId,
                                            @RequestParam("whatDo") String whatDo,
                                            Model model){
         if(whatDo.equals("changeLA")){
-            LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId);
+            LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId.get());
 
             model.addAttribute("loanAgreement", loanAgreement);
             model.addAttribute("whatDo", whatDo);
 
             return "loan_agreement_card";
-        }else {
+
+        }else if(whatDo.equals("newLA")){
             LoanAgreement loanAgreement = new LoanAgreement();
-            Client client = clientService.getClientByClientId(clientId.orElse((long)0));
+            Client client = clientService.getClientByClientId(clientId.get());
             loanAgreement.setLoaner(client);
 
             model.addAttribute("loanAgreement", loanAgreement);
             model.addAttribute("whatDo", whatDo);
 
             return "loan_agreement_card";
-        }
+        }else
+            return null;
 
     }
 
     @PostMapping("/loan_agreement_card")
-    public String loanAgreementCardPagePost(@ModelAttribute LoanAgreement loanAgreement,
+    public String loanAgreementCardPagePost(@Valid LoanAgreement loanAgreement,
+                                            BindingResult bindingResult,
                                             @RequestParam("whatDo") String whatDo,
                                             Model model){
 
-        if(whatDo.equals("changeLA")){
-            LoanAgreement la = loanAgreementService.updateInsertLoanAgreement(loanAgreement);
+        if(bindingResult.hasErrors()){
+            model.addAttribute("loanAgreement", loanAgreement);
+            model.addAttribute("whatDo", whatDo);
+            return "loan_agreement_card";
+        }
 
-            model.addAttribute("loanAgreement", la);
+        if(whatDo.equals("changeLA")){
+            LoanAgreement loanAgreementUpdated = loanAgreementService.updateInsertLoanAgreement(loanAgreement);
+
+            model.addAttribute("loanAgreement", loanAgreementUpdated);
 
             return "loan_agreement_detail";
-        }else {
-            LoanAgreement la = loanAgreementService.updateInsertLoanAgreement(loanAgreement);
 
-            model.addAttribute("loanAgreement", la);
+        }else  if(whatDo.equals("newLA")){
+            LoanAgreement loanAgreementUpdated = loanAgreementService.updateInsertLoanAgreement(loanAgreement);
+
+            model.addAttribute("loanAgreement", loanAgreementUpdated);
             model.addAttribute("whatDo", "responseSuccess");
 
             return "loan_agreement_card";
-        }
+
+        }else
+            return null;
     }
 
     @GetMapping("/pledge_agreement_card")
