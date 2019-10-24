@@ -29,13 +29,13 @@
     <br>
     <div class="row">
         <label>РС по ДЗ</label>
-        <input type="number" step="0.01" required th:field="*{rsDz}"/>
+        <input type="number" step="0.01" required th:field="*{rsDz}" th:value="${costHistory.getRsDz()}"/>
         <div th:if="${#fields.hasErrors('rsDz')}" th:errors="*{rsDz}">Name Error</div>
     </div>
     <br>
     <div class="row">
         <label>ЗС по ДЗ</label>
-        <input type="number" step="0.01" required th:field="*{zsDz}"/>
+        <input type="number" step="0.01"  required th:field="*{zsDz}" th:value="${costHistory.getZsDz()}"/>
         <div th:if="${#fields.hasErrors('zsDz')}" th:errors="*{zsDz}">Name Error</div>
     </div>
     <br>

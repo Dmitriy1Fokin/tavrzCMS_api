@@ -506,6 +506,8 @@ public class PagesController {
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
         CostHistory costHistory = new CostHistory();
         costHistory.setPledgeSubject(pledgeSubject);
+        costHistory.setRsDz(pledgeSubject.getRsDz());
+        costHistory.setZsDz(pledgeSubject.getZsDz());
         model.addAttribute("costHistory", costHistory);
 
         return "cost_history_card";
