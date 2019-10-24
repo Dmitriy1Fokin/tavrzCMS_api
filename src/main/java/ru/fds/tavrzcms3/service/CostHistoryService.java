@@ -21,8 +21,7 @@ public class CostHistoryService {
         return repositoryCostHistory.findByPledgeSubject(pledgeSubject, sortByDateConclusion);
     }
     @Transactional
-    public CostHistory insertCostHistoryInPledgeSubject(PledgeSubject pledgeSubject, CostHistory costHistory){
-        costHistory.setPledgeSubject(pledgeSubject);
+    public CostHistory insertCostHistory(CostHistory costHistory){
         return repositoryCostHistory.save(costHistory);
     }
 }

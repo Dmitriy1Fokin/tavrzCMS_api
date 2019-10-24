@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Entity
 @Table(name = "cost_history")
@@ -24,24 +26,35 @@ public class CostHistory {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="cost_history_id")
 	private long costHistoryId;
-	
+
+	@NotNull(message = "Обязательно для заполнения")
 	@Column(name ="date")
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateConclusion;
-	
+
+	@NotNull(message = "Обязательно для заполнения")
+	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="zs_dz")
 	private double zsDz;
 
+	@NotNull(message = "Обязательно для заполнения")
+	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="zs_zz")
 	private double zsZz;
 
+	@NotNull(message = "Обязательно для заполнения")
+	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="rs_dz")
 	private double rsDz;
 
+	@NotNull(message = "Обязательно для заполнения")
+	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="rs_zz")
 	private double rsZz;
 
+	@NotNull(message = "Обязательно для заполнения")
+	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="ss")
 	private double ss;
 

@@ -455,7 +455,7 @@ public class PagesController {
     }
 
     @PostMapping("/monitoring_card")
-    public String monitoringCardPagePost(@Valid @ModelAttribute Monitoring monitoring,
+    public String monitoringCardPagePost(@Valid Monitoring monitoring,
                                          BindingResult bindingResult,
                                          @RequestParam("whereUpdateMonitoring") String whereUpdateMonitoring,
                                          @RequestParam("pledgeAgreementId") Optional<Long> pledgeAgreementId,
@@ -501,22 +501,26 @@ public class PagesController {
 
 
     @GetMapping("/cost_history_card")
-    public String costHistryCardGet(@RequestParam("pledgeSubjectId") long pledgeSubjectId, Model model){
+    public String costHistoryCardGet(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+                                     Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
-        model.addAttribute("pledgeSubject", pledgeSubject);
-        model.addAttribute("costHistory", new CostHistory());
+        CostHistory costHistory = new CostHistory();
+        costHistory.setPledgeSubject(pledgeSubject);
+        model.addAttribute("costHistory", costHistory);
+
         return "cost_history_card";
     }
 
     @PostMapping("/cost_history_card")
-    public String costHistryCardPost(@ModelAttribute CostHistory costHistory,
-                                     @RequestParam("pledgeSubjectId") long pledgeSubjectId,
-                                     Model model){
+    public String costHistoryCardPost(@Valid CostHistory costHistory,
+                                      BindingResult bindingResult,
+                                      Model model){
+        if(bindingResult.hasErrors())
+            return "cost_history_card";
 
-        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
-        CostHistory costHistoryForPS = costHistoryService.insertCostHistoryInPledgeSubject(pledgeSubject, costHistory);
-        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(pledgeSubject);
-        model.addAttribute("pledgeSubject", pledgeSubject);
+        CostHistory costHistoryUpdated = costHistoryService.insertCostHistory(costHistory);
+        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(costHistoryUpdated.getPledgeSubject());
+        model.addAttribute("pledgeSubject", costHistoryUpdated.getPledgeSubject());
         model.addAttribute("costHistoryList", costHistoryList);
         return "cost_history";
     }
