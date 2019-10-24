@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.fds.tavrzcms3.domain.AppRole;
 import ru.fds.tavrzcms3.domain.AppUser;
+import ru.fds.tavrzcms3.repository.RepositoryAppRole;
 import ru.fds.tavrzcms3.repository.RepositoryAppUser;
 
 import java.util.ArrayList;
@@ -20,14 +21,17 @@ public class AppUserDetailsService implements UserDetailsService {
 
     @Autowired
     RepositoryAppUser repositoryAppUser;
+    @Autowired
+    RepositoryAppRole repositoryAppRole;
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         AppUser appUser = repositoryAppUser.findByName(name);
+        List<AppRole> appRoleList = repositoryAppRole.findAllByAppUsers(appUser);
 
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        if(!appUser.getAppRoles().isEmpty()){
-            for(AppRole role : appUser.getAppRoles()){
+        if(!appRoleList.isEmpty()){
+            for(AppRole role : appRoleList){
                 GrantedAuthority authority = new SimpleGrantedAuthority(role.getName());
                 authorityList.add(authority);
             }
