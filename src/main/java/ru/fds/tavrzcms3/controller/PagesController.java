@@ -463,8 +463,29 @@ public class PagesController {
                                          @RequestParam("pledgorId") Optional<Long> pledgorId,
                                          Model model){
 
-        if(bindingResult.hasErrors())
+        if(bindingResult.hasErrors()) {
+            switch(whereUpdateMonitoring) {
+                case "pa":
+                    PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get());
+                    model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
+                    model.addAttribute("pledgeAgreement", pledgeAgreement);
+                    model.addAttribute("monitoring",monitoring);
+                    break;
+                case "ps":
+                    PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId.get());
+                    model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
+                    model.addAttribute("pledgeSubject", pledgeSubject);
+                    model.addAttribute("monitoring", monitoring);
+                    break;
+                case "pledgor":
+                    Client pledgor = clientService.getClientByClientId(pledgorId.get());
+                    model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
+                    model.addAttribute("pledgor", pledgor);
+                    model.addAttribute("monitoring", monitoring);
+                    break;
+            }
             return "monitoring_card";
+        }
 
         switch (whereUpdateMonitoring) {
             case "pa":
