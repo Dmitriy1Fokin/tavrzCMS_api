@@ -46,15 +46,15 @@
 
                 <div th:switch="${ps.getTypeOfCollateral()}">
                     <div th:case="'Авто/спецтехника'">
-                        <td th:text="${ps.getPledgeSubjectAuto().getHorsepower()}">0.00</td>
+                        <td th:text="${ps.getHorsepower()}">0.00</td>
                         <td>л.с.</td>
                     </div>
                     <div th:case="Оборудование">
-                        <td th:text="${ps.getPledgeSubjectEquipment().getProductivity()}">0.00</td>
-                        <td th:text="${ps.getPledgeSubjectEquipment().getTypeOfProductivity()}">н/д</td>
+                        <td th:text="${ps.getProductivity()}">0.00</td>
+                        <td th:text="${ps.getTypeOfProductivity()}">н/д</td>
                     </div>
                     <div th:case="ТМЦ">
-                        <td th:text="${ps.getPledgeSubjectTBO().getCountOfTBO()}">0.00</td>
+                        <td th:text="${ps.getCountOfTBO()}">0.00</td>
                         <td>Кол-во</td>
                     </div>
                     <div th:case="'Ценные бумаги'">
@@ -62,22 +62,22 @@
                         <td>-</td>
                     </div>
                     <div th:case="Судно">
-                        <td th:text="${ps.getPledgeSubjectVessel().getDeadweight()}">0.00</td>
+                        <td th:text="${ps.getDeadweight()}">0.00</td>
                         <td>дейдвейт</td>
                     </div>
                     <div th:case="*">
-                        <td th:text="${ps.getPledgeSubjectRealty().getArea()}">0.00</td>
+                        <td th:text="${ps.getArea()}">0.00</td>
                         <td>кв.м.</td>
                     </div>
                 </div>
 
                 <div th:switch="${ps.getTypeOfCollateral()}">
                     <div th:case="'Авто/спецтехника'">
-                        <td th:text="${ps.getPledgeSubjectAuto().getVin()}">0.00</td>
+                        <td th:text="${ps.getVin()}">0.00</td>
                         <td>VIN</td>
                     </div>
                     <div th:case="Оборудование">
-                        <td th:text="${ps.getPledgeSubjectEquipment().getSerialNum()}">0.00</td>
+                        <td th:text="${ps.getSerialNum()}">0.00</td>
                         <td>Завод№</td>
                     </div>
                     <div th:case="ТМЦ">
@@ -89,11 +89,11 @@
                         <td>-</td>
                     </div>
                     <div th:case="Судно">
-                        <td th:text="${ps.getPledgeSubjectVessel().getImo()}">0.00</td>
+                        <td th:text="${ps.getImo()}">0.00</td>
                         <td>IMO</td>
                     </div>
                     <div th:case="*">
-                        <td th:text="${ps.getPledgeSubjectRealty().getCadastralNum()}">0.00</td>
+                        <td th:text="${ps.getCadastralNum()}">0.00</td>
                         <td>Кад№</td>
                     </div>
                 </div>
@@ -201,15 +201,15 @@
 
                 <div th:switch="${ps.getTypeOfCollateral()}">
                     <div th:case="'Авто/спецтехника'">
-                        <td th:text="${ps.getPledgeSubjectAuto().getHorsepower()}">0.00</td>
+                        <td th:text="${ps.getHorsepower()}">0.00</td>
                         <td>л.с.</td>
                     </div>
                     <div th:case="Оборудование">
-                        <td th:text="${ps.getPledgeSubjectEquipment().getProductivity()}">0.00</td>
-                        <td th:text="${ps.getPledgeSubjectEquipment().getTypeOfProductivity()}">н/д</td>
+                        <td th:text="${ps.getProductivity()}">0.00</td>
+                        <td th:text="${ps.getTypeOfProductivity()}">н/д</td>
                     </div>
                     <div th:case="ТМЦ">
-                        <td th:text="${ps.getPledgeSubjectTBO().getCountOfTBO()}">0.00</td>
+                        <td th:text="${ps.getCountOfTBO()}">0.00</td>
                         <td>Кол-во</td>
                     </div>
                     <div th:case="'Ценные бумаги'">
@@ -217,22 +217,22 @@
                         <td>-</td>
                     </div>
                     <div th:case="Судно">
-                        <td th:text="${ps.getPledgeSubjectVessel().getDeadweight()}">0.00</td>
+                        <td th:text="${ps.getDeadweight()}">0.00</td>
                         <td>дейдвейт</td>
                     </div>
                     <div th:case="*">
-                        <td th:text="${ps.getPledgeSubjectRealty().getArea()}">0.00</td>
+                        <td th:text="${ps.getArea()}">0.00</td>
                         <td>кв.м.</td>
                     </div>
                 </div>
 
                 <div th:switch="${ps.getTypeOfCollateral()}">
                     <div th:case="'Авто/спецтехника'">
-                        <td th:text="${ps.getPledgeSubjectAuto().getVin()}">0.00</td>
+                        <td th:text="${ps.getVin()}">0.00</td>
                         <td>VIN</td>
                     </div>
                     <div th:case="Оборудование">
-                        <td th:text="${ps.getPledgeSubjectEquipment().getSerialNum()}">0.00</td>
+                        <td th:text="${ps.getSerialNum()}">0.00</td>
                         <td>Завод№</td>
                     </div>
                     <div th:case="ТМЦ">
@@ -244,11 +244,11 @@
                         <td>-</td>
                     </div>
                     <div th:case="Судно">
-                        <td th:text="${ps.getPledgeSubjectVessel().getImo()}">0.00</td>
+                        <td th:text="${ps.getImo()}">0.00</td>
                         <td>IMO</td>
                     </div>
                     <div th:case="*">
-                        <td th:text="${ps.getPledgeSubjectRealty().getCadastralNum()}">0.00</td>
+                        <td th:text="${ps.getCadastralNum()}">0.00</td>
                         <td>Кад№</td>
                     </div>
                 </div>

@@ -359,7 +359,7 @@ public class PledgeSubjectService {
     }
 
     @Transactional
-    public PledgeSubject insertPledgeSubject(PledgeSubject pledgeSubject, CostHistory costHistory, Monitoring monitoring, Encumbrance encumbrance){
+    public PledgeSubject insertPledgeSubject(PledgeSubject pledgeSubject, CostHistory costHistory, Monitoring monitoring){
         pledgeSubject.setZsDz(costHistory.getZsDz());
         pledgeSubject.setZsZz(costHistory.getZsZz());
         pledgeSubject.setRsDz(costHistory.getRsDz());
@@ -393,17 +393,20 @@ public class PledgeSubjectService {
         repositoryCostHistory.save(costHistory);
         monitoring.setPledgeSubject(pledgeSubject);
         repositoryMonitoring.save(monitoring);
-        encumbrance.setPledgeSubject(pledgeSubject);
-        repositoryEncumbrance.save(encumbrance);
 
         return pledgeSubject;
     }
+
 
     public List<PledgeSubject> getPledgeSubjectByCadastralNum(String cadastralNum){
         return repositoryPledgeSubjectRealty.findAllByCadastralNumContainingIgnoreCase(cadastralNum);
     }
 
-    public List<PledgeSubject> getPlegeSubjectByName(String name){
+    public List<PledgeSubject> getPledgeSubjectByName(String name){
         return repositoryPledgeSubject.findAllByNameContainingIgnoreCase(name);
+    }
+
+    public PledgeSubjectAuto getPledgeSubjectAuto(long id){
+        return repositoryPledgeSubjectAuto.getOne(id);
     }
 }

@@ -339,7 +339,7 @@
     <br>
     <label>Дата мониторинга:</label>
     <a th:href="@{/monitoring_pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="monitoring_pledge_subject.html"
-       th:text="${pledgeSubject.getDateMonitoring()}">н/д</a>
+       th:text="${#dates.format(pledgeSubject.getDateMonitoring(), 'dd.MM.yyyy')}">н/д</a>
     <br>
     <br>
     <label>Вид мониторинга:</label>
@@ -377,8 +377,8 @@
     <a th:href="@{/encumbrances(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="encumbrances.html" th:text="подробнее">подробнее</a>
     <br>
     <br>
-    <a th:href="@{pledge_subject_card(whatDo='changePS', pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
-       href="pledge_subject_card.html"
+    <a th:href="@{pledge_subject_card_update(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
+       href="pledge_subject_card_update.html"
        th:text="'Изменить данные'">Изменить данные</a>
     <br>
     <br>

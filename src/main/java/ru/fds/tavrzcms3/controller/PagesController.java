@@ -660,189 +660,665 @@ public class PagesController {
 
     }
 
-    @GetMapping("/pledge_subject_card")
-    public String pledgeSubjectCard(@RequestParam("pledgeSubjectId") Optional<Long> pledgeSubjectId,
-                                    @RequestParam("typeOfCollateral") Optional<String> typeOfCollateral,
-                                    @RequestParam("pledgeAgreementId") Optional<Long> pledgeAgreementId,
-                                    @RequestParam("whatDo") String whatDo,
-                                    Model model){
+    @GetMapping("/pledge_subject_card_update")
+    public String pledgeSubjectCardUpdate(@RequestParam("pledgeSubjectId") Optional<Long> pledgeSubjectId,
+                                          Model model){
 
-        switch (whatDo){
-            case "changePS":
-                PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId.get());
+        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId.get());
+        if(pledgeSubject.getClass()==PledgeSubjectAuto.class){
+            model.addAttribute("pledgeSubjectAuto", pledgeSubject);
+        }else if(pledgeSubject.getClass()==PledgeSubjectEquipment.class){
+            model.addAttribute("pledgeSubjectEquipment", pledgeSubject);
+        }else if(pledgeSubject.getClass()==PledgeSubjectSecurities.class){
+            model.addAttribute("pledgeSubjectSecurities", pledgeSubject);
+        }else if(pledgeSubject.getClass()==PledgeSubjectVessel.class){
+            model.addAttribute("pledgeSubjectVessel", pledgeSubject);
+        }else if(pledgeSubject.getClass()==PledgeSubjectTBO.class){
+            model.addAttribute("pledgeSubjectTBO", pledgeSubject);
+        }else if(pledgeSubject.getClass()==PledgeSubjectRealtyLandOwnership.class ||
+                pledgeSubject.getClass()==PledgeSubjectRealtyLandLease.class){
+            List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
+            model.addAttribute("landCategoryList", landCategoryList);
+            model.addAttribute("pledgeSubjectRealty", pledgeSubject);
+        }else if(pledgeSubject.getClass()==PledgeSubjectRealtyBuilding.class ||
+                pledgeSubject.getClass()==PledgeSubjectRealtyRoom.class){
+            List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
+            model.addAttribute("marketSegmentList", marketSegmentList);
+            model.addAttribute("pledgeSubjectRealty", pledgeSubject);
+        }
 
-                if(pledgeSubject.getClass() == PledgeSubjectRealtyLandLease.class ||
-                        pledgeSubject.getClass() == PledgeSubjectRealtyLandOwnership.class){
-                    List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
-                    model.addAttribute("landCategoryList", landCategoryList);
-                }else if(pledgeSubject.getClass() == PledgeSubjectRealtyBuilding.class ||
-                        pledgeSubject.getClass() == PledgeSubjectRealtyRoom.class){
-                    List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
-                    model.addAttribute("marketSegmentList", marketSegmentList);
-                }
+        model.addAttribute("typeOfCollateral", pledgeSubject.getTypeOfCollateral());
 
-                model.addAttribute("pledgeSubject", pledgeSubject);
-                model.addAttribute("whatDo", whatDo);
+        return "pledge_subject_card_update";
+    }
 
-                return "pledge_subject_card";
+    @GetMapping("pledge_subject_card_new")
+    public String pledgeSubjectCardNew(@RequestParam("typeOfCollateral") Optional<String> typeOfCollateral,
+                                       @RequestParam("pledgeAgreementId") Optional<Long> pledgeAgreementId,
+                                       Model model){
 
-            case "newPS":
+        List<PledgeAgreement> pledgeAgreementList= new ArrayList<>();
+        pledgeAgreementList.add(pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get()));
 
-                List<PledgeAgreement> pledgeAgreementList= new ArrayList<>();
-                pledgeAgreementList.add(pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get()));
-
-                if(typeOfCollateral.get().equals("Авто/спецтехника")) {
-                    PledgeSubjectAuto pledgeSubjectAuto = new PledgeSubjectAuto();
-                    pledgeSubjectAuto.setPledgeAgreements(pledgeAgreementList);
-                    model.addAttribute("pledgeSubject", pledgeSubjectAuto);
-                }
-                else if(typeOfCollateral.get().equals("Оборудование")){
-                    PledgeSubjectEquipment pledgeSubjectEquipment = new PledgeSubjectEquipment();
-                    pledgeSubjectEquipment.setPledgeAgreements(pledgeAgreementList);
-                    model.addAttribute("pledgeSubject", pledgeSubjectEquipment);
-                }
-                else if(typeOfCollateral.get().equals("Ценные бумаги")){
-                    PledgeSubjectSecurities pledgeSubjectSecurities = new PledgeSubjectSecurities();
-                    pledgeSubjectSecurities.setPledgeAgreements(pledgeAgreementList);
-                    model.addAttribute("pledgeSubject", pledgeSubjectSecurities);
-                }
-                else if(typeOfCollateral.get().equals("Судно")){
-                    PledgeSubjectVessel pledgeSubjectVessel = new PledgeSubjectVessel();
-                    pledgeSubjectVessel.setPledgeAgreements(pledgeAgreementList);
-                    model.addAttribute("pledgeSubject", pledgeSubjectVessel);
-                }
-                else if(typeOfCollateral.get().equals("ТМЦ")){
-                    PledgeSubjectTBO pledgeSubjectTBO = new PledgeSubjectTBO();
-                    pledgeSubjectTBO.setPledgeAgreements(pledgeAgreementList);
-                    model.addAttribute("pledgeSubject", pledgeSubjectTBO);
-                }
-                else if(typeOfCollateral.get().equals("Недвижимость - ЗУ - собственность")){
-                    PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership = new PledgeSubjectRealtyLandOwnership();
-                    pledgeSubjectRealtyLandOwnership.setPledgeAgreements(pledgeAgreementList);
-                    List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
-                    model.addAttribute("pledgeSubject", pledgeSubjectRealtyLandOwnership);
-                    model.addAttribute("landCategoryList", landCategoryList);
-                }
-                else if(typeOfCollateral.get().equals("Недвижимость - ЗУ - право аренды")){
-                    PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease = new PledgeSubjectRealtyLandLease();
-                    pledgeSubjectRealtyLandLease.setPledgeAgreements(pledgeAgreementList);
-                    List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
-                    model.addAttribute("pledgeSubject", pledgeSubjectRealtyLandLease);
-                    model.addAttribute("landCategoryList", landCategoryList);
-                }
-                else if(typeOfCollateral.get().equals("Недвижимость - здание/сооружение")){
-                    PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding = new PledgeSubjectRealtyBuilding();
-                    pledgeSubjectRealtyBuilding.setPledgeAgreements(pledgeAgreementList);
-                    List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
-                    model.addAttribute("pledgeSubject", pledgeSubjectRealtyBuilding);
-                    model.addAttribute("marketSegmentList", marketSegmentList);
-                }
-                else if(typeOfCollateral.get().equals("Недвижимость - помещение")){
-                    PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom = new PledgeSubjectRealtyRoom();
-                    pledgeSubjectRealtyRoom.setPledgeAgreements(pledgeAgreementList);
-                    List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
-                    model.addAttribute("pledgeSubject", pledgeSubjectRealtyRoom);
-                    model.addAttribute("marketSegmentList", marketSegmentList);
-                }
+        if(typeOfCollateral.get().equals("Авто/спецтехника")) {
+            PledgeSubjectAuto pledgeSubjectAuto = new PledgeSubjectAuto();
+            pledgeSubjectAuto.setPledgeAgreements(pledgeAgreementList);
+            model.addAttribute("pledgeSubjectAuto", pledgeSubjectAuto);
+        }
+        else if(typeOfCollateral.get().equals("Оборудование")){
+            PledgeSubjectEquipment pledgeSubjectEquipment = new PledgeSubjectEquipment();
+            pledgeSubjectEquipment.setPledgeAgreements(pledgeAgreementList);
+            model.addAttribute("pledgeSubjectEquipment", pledgeSubjectEquipment);
+        }
+        else if(typeOfCollateral.get().equals("Ценные бумаги")){
+            PledgeSubjectSecurities pledgeSubjectSecurities = new PledgeSubjectSecurities();
+            pledgeSubjectSecurities.setPledgeAgreements(pledgeAgreementList);
+            model.addAttribute("pledgeSubjectSecurities", pledgeSubjectSecurities);
+        }
+        else if(typeOfCollateral.get().equals("Судно")){
+            PledgeSubjectVessel pledgeSubjectVessel = new PledgeSubjectVessel();
+            pledgeSubjectVessel.setPledgeAgreements(pledgeAgreementList);
+            model.addAttribute("pledgeSubjectVessel", pledgeSubjectVessel);
+        }
+        else if(typeOfCollateral.get().equals("ТМЦ")){
+            PledgeSubjectTBO pledgeSubjectTBO = new PledgeSubjectTBO();
+            pledgeSubjectTBO.setPledgeAgreements(pledgeAgreementList);
+            model.addAttribute("pledgeSubjectTBO", pledgeSubjectTBO);
+        }
+        else if(typeOfCollateral.get().equals("Недвижимость - ЗУ - собственность")){
+            PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership = new PledgeSubjectRealtyLandOwnership();
+            pledgeSubjectRealtyLandOwnership.setPledgeAgreements(pledgeAgreementList);
+            List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
+            model.addAttribute("pledgeSubjectRealtyLandOwnership", pledgeSubjectRealtyLandOwnership);
+            model.addAttribute("landCategoryList", landCategoryList);
+        }
+        else if(typeOfCollateral.get().equals("Недвижимость - ЗУ - право аренды")){
+            PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease = new PledgeSubjectRealtyLandLease();
+            pledgeSubjectRealtyLandLease.setPledgeAgreements(pledgeAgreementList);
+            List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
+            model.addAttribute("pledgeSubjectRealtyLandLease", pledgeSubjectRealtyLandLease);
+            model.addAttribute("landCategoryList", landCategoryList);
+        }
+        else if(typeOfCollateral.get().equals("Недвижимость - здание/сооружение")){
+            PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding = new PledgeSubjectRealtyBuilding();
+            pledgeSubjectRealtyBuilding.setPledgeAgreements(pledgeAgreementList);
+            List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
+            model.addAttribute("marketSegmentList", marketSegmentList);
+            model.addAttribute("pledgeSubjectRealtyBuilding", pledgeSubjectRealtyBuilding);
+        }
+        else if(typeOfCollateral.get().equals("Недвижимость - помещение")){
+            PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom = new PledgeSubjectRealtyRoom();
+            pledgeSubjectRealtyRoom.setPledgeAgreements(pledgeAgreementList);
+            List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
+            model.addAttribute("marketSegmentList", marketSegmentList);
+            model.addAttribute("pledgeSubjectRealtyRoom", pledgeSubjectRealtyRoom);
+        }
 
 
+        CostHistory costHistory = new CostHistory();
+        Monitoring monitoring = new Monitoring();
 
-                CostHistory costHistory = new CostHistory();
-                Monitoring monitoring = new Monitoring();
-                Encumbrance encumbrance = new Encumbrance();
 
-                model.addAttribute("costHistory", costHistory);
-                model.addAttribute("monitoring", monitoring);
-                model.addAttribute("encumbrance", encumbrance);
-                model.addAttribute("pledgeAgreementId", pledgeAgreementId.get());
-                model.addAttribute("whatDo", whatDo);
+        model.addAttribute("costHistory", costHistory);
+        model.addAttribute("monitoring", monitoring);
+        model.addAttribute("pledgeAgreementId", pledgeAgreementId.get());
+        model.addAttribute("typeOfCollateral", typeOfCollateral.get());
 
-                return "pledge_subject_card";
-
-            }
-
-        return null;
+        return "pledge_subject_card_new";
 
     }
 
+    @PostMapping("/update_pledge_subject_auto")
+    public String updatePledgeSubjectAuto(@Valid PledgeSubjectAuto pledgeSubjectAuto,
+                                          BindingResult bindingResult,
+                                          Model model){
 
-    @PostMapping("/pledge_subject_detail")
-    public String updatePledgeSubject(@ModelAttribute PledgeSubject pledgeSubject,
-                                      @ModelAttribute PledgeSubjectAuto pledgeSubjectAuto,
-                                      @ModelAttribute PledgeSubjectEquipment pledgeSubjectEquipment,
-                                      @ModelAttribute PledgeSubjectSecurities pledgeSubjectSecurities,
-                                      @ModelAttribute PledgeSubjectVessel pledgeSubjectVessel,
-                                      @ModelAttribute PledgeSubjectTBO pledgeSubjectTBO,
-                                      @ModelAttribute PledgeSubjectRealty pledgeSubjectRealty,
-                                      @ModelAttribute CostHistory costHistory,
-                                      @ModelAttribute Monitoring monitoring,
-                                      @ModelAttribute Encumbrance encumbrance,
-                                      Model model){
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("typeOfCollateral", pledgeSubjectAuto.getTypeOfCollateral());
 
-        PledgeSubject pledgeSubjectUpdated = null;
+            return "pledge_subject_card_update";
+        }
 
-                if(pledgeSubject.getTypeOfCollateral().equals("Авто/спецтехника"))
-                    pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectAuto);
-                else if(pledgeSubject.getTypeOfCollateral().equals("Оборудование"))
-                    pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectEquipment);
-                else if(pledgeSubject.getTypeOfCollateral().equals("Ценные бумаги"))
-                    pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectSecurities);
-                else if(pledgeSubject.getTypeOfCollateral().equals("Судно"))
-                    pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectVessel);
-                else if(pledgeSubject.getTypeOfCollateral().equals("ТМЦ"))
-                    pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectTBO);
-                else if(pledgeSubject.getTypeOfCollateral().equals("Недвижимость - ЗУ - собственность") ||
-                        pledgeSubject.getTypeOfCollateral().equals("Недвижимость - ЗУ - право аренды") ||
-                        pledgeSubject.getTypeOfCollateral().equals("Недвижимость - здание/сооружение") ||
-                        pledgeSubject.getTypeOfCollateral().equals("Недвижимость - помещение"))
-                    pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectRealty);
+        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectAuto);
 
-                model.addAttribute("pledgeSubject", pledgeSubjectUpdated);
+        model.addAttribute("pledgeSubject", pledgeSubjectUpdated);
 
-                return "pledge_subject_detail";
-
+        return "pledge_subject_detail";
     }
 
-    @PostMapping("/pledge_subjects")
-    public String insertNewPledgeSubject(@ModelAttribute PledgeSubject pledgeSubject,
-                                         @ModelAttribute PledgeSubjectAuto pledgeSubjectAuto,
-                                         @ModelAttribute PledgeSubjectEquipment pledgeSubjectEquipment,
-                                         @ModelAttribute PledgeSubjectSecurities pledgeSubjectSecurities,
-                                         @ModelAttribute PledgeSubjectVessel pledgeSubjectVessel,
-                                         @ModelAttribute PledgeSubjectTBO pledgeSubjectTBO,
-                                         @ModelAttribute PledgeSubjectRealty pledgeSubjectRealty,
-                                         @ModelAttribute PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership,
-                                         @ModelAttribute PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease,
-                                         @ModelAttribute PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding,
-                                         @ModelAttribute PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom,
-                                         @ModelAttribute CostHistory costHistory,
-                                         @ModelAttribute Monitoring monitoring,
-                                         @ModelAttribute Encumbrance encumbrance,
-                                         @RequestParam("pledgeAgreementId") Optional<Long> pledgeAgreementId,
+    @PostMapping("update_pledge_subject_equipment")
+    public String updatePledgeSubjectEquipment(@Valid PledgeSubjectEquipment pledgeSubjectEquipment,
+                                               BindingResult bindingResult,
+                                               Model model){
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("typeOfCollateral", pledgeSubjectEquipment.getTypeOfCollateral());
+
+            return "pledge_subject_card_update";
+        }
+
+        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectEquipment);
+
+        model.addAttribute("pledgeSubject", pledgeSubjectUpdated);
+
+        return "pledge_subject_detail";
+    }
+
+    @PostMapping("update_pledge_subject_securities")
+    public String updatePledgeSubjectSecurities(@Valid PledgeSubjectSecurities pledgeSubjectSecurities,
+                                                BindingResult bindingResult,
+                                                Model model){
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("typeOfCollateral", pledgeSubjectSecurities.getTypeOfCollateral());
+
+            return "pledge_subject_card_update";
+        }
+
+        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectSecurities);
+
+        model.addAttribute("pledgeSubject", pledgeSubjectUpdated);
+
+        return "pledge_subject_detail";
+    }
+
+    @PostMapping("update_pledge_subject_vessel")
+    public String updatePledgeSubjectVessel(@Valid PledgeSubjectVessel pledgeSubjectVessel,
+                                            BindingResult bindingResult,
+                                            Model model){
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("typeOfCollateral", pledgeSubjectVessel.getTypeOfCollateral());
+
+            return "pledge_subject_card_update";
+        }
+
+        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectVessel);
+
+        model.addAttribute("pledgeSubject", pledgeSubjectUpdated);
+
+        return "pledge_subject_detail";
+    }
+
+    @PostMapping("update_pledge_subject_tbo")
+    public String updatePledgeSubjectTBO(@Valid PledgeSubjectTBO pledgeSubjectTBO,
+                                         BindingResult bindingResult,
                                          Model model){
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("typeOfCollateral", pledgeSubjectTBO.getTypeOfCollateral());
 
-        PledgeSubject pledgeSubjectUpdated = null;
+            return "pledge_subject_card_update";
+        }
 
-        if(pledgeSubject.getTypeOfCollateral().equals("Авто/спецтехника"))
-            pledgeSubjectUpdated = pledgeSubjectService.insertPledgeSubject(pledgeSubjectAuto, costHistory, monitoring, encumbrance);
-        else if(pledgeSubject.getTypeOfCollateral().equals("Оборудование"))
-            pledgeSubjectUpdated = pledgeSubjectService.insertPledgeSubject(pledgeSubjectEquipment, costHistory, monitoring, encumbrance);
-        else if(pledgeSubject.getTypeOfCollateral().equals("Ценные бумаги"))
-            pledgeSubjectUpdated = pledgeSubjectService.insertPledgeSubject(pledgeSubjectSecurities,costHistory, monitoring, encumbrance);
-        else if(pledgeSubject.getTypeOfCollateral().equals("Судно"))
-            pledgeSubjectUpdated = pledgeSubjectService.insertPledgeSubject(pledgeSubjectVessel, costHistory, monitoring, encumbrance);
-        else if(pledgeSubject.getTypeOfCollateral().equals("ТМЦ"))
-            pledgeSubjectUpdated = pledgeSubjectService.insertPledgeSubject(pledgeSubjectTBO, costHistory, monitoring, encumbrance);
-        else if(pledgeSubject.getTypeOfCollateral().equals("Недвижимость - ЗУ - собственность"))
-            pledgeSubjectUpdated = pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyLandOwnership, costHistory, monitoring, encumbrance);
-        else if(pledgeSubject.getTypeOfCollateral().equals("Недвижимость - ЗУ - право аренды"))
-            pledgeSubjectUpdated = pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyLandLease, costHistory, monitoring, encumbrance);
-        else if(pledgeSubject.getTypeOfCollateral().equals("Недвижимость - здание/сооружение"))
-            pledgeSubjectUpdated = pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyBuilding, costHistory, monitoring, encumbrance);
-        else if(pledgeSubject.getTypeOfCollateral().equals("Недвижимость - помещение"))
-            pledgeSubjectUpdated = pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyRoom, costHistory, monitoring, encumbrance);
+        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectTBO);
 
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get());
+        model.addAttribute("pledgeSubject", pledgeSubjectUpdated);
+
+        return "pledge_subject_detail";
+    }
+
+    @PostMapping("update_pledge_subject_landOwn")
+    public String updatePledgeSubjectLandOwnership(@Valid PledgeSubjectRealty pledgeSubjectRealtyLandOwnership,
+                                                 BindingResult bindingResult,
+                                                 Model model){
+        if(bindingResult.hasErrors()) {
+            List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
+            model.addAttribute("landCategoryList", landCategoryList);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyLandOwnership.getTypeOfCollateral());
+
+            return "pledge_subject_card_update";
+        }
+
+        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectRealtyLandOwnership);
+
+        model.addAttribute("pledgeSubject", pledgeSubjectUpdated);
+
+        return "pledge_subject_detail";
+    }
+
+    @PostMapping("update_pledge_subject_landLease")
+    public String updatePledgeSubjectLandLease(@Valid PledgeSubjectRealty pledgeSubjectRealtyLandLease,
+                                               BindingResult bindingResult,
+                                               Model model){
+        if(bindingResult.hasErrors()) {
+            List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
+            model.addAttribute("landCategoryList", landCategoryList);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyLandLease.getTypeOfCollateral());
+
+            return "pledge_subject_card_update";
+        }
+
+        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectRealtyLandLease);
+
+        model.addAttribute("pledgeSubject", pledgeSubjectUpdated);
+
+        return "pledge_subject_detail";
+    }
+
+    @PostMapping("update_pledge_subject_building")
+    public String updatePledgeSubjectBuilding(@Valid PledgeSubjectRealty pledgeSubjectRealtyBuilding,
+                                              BindingResult bindingResult,
+                                              Model model){
+        if(bindingResult.hasErrors()) {
+            List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
+            model.addAttribute("marketSegmentList", marketSegmentList);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyBuilding.getTypeOfCollateral());
+
+            return "pledge_subject_card_update";
+        }
+
+        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectRealtyBuilding);
+
+        model.addAttribute("pledgeSubject", pledgeSubjectUpdated);
+
+        return "pledge_subject_detail";
+    }
+
+    @PostMapping("update_pledge_subject_room")
+    public String updatePledgeSubjectRoom(@Valid PledgeSubjectRealty pledgeSubjectRealtyRoom,
+                                          BindingResult bindingResult,
+                                          Model model){
+        if(bindingResult.hasErrors()) {
+            List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
+            model.addAttribute("marketSegmentList", marketSegmentList);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyRoom.getTypeOfCollateral());
+
+            return "pledge_subject_card_update";
+        }
+
+        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectRealtyRoom);
+
+        model.addAttribute("pledgeSubject", pledgeSubjectUpdated);
+
+        return "pledge_subject_detail";
+    }
+
+    @PostMapping("insert_pledge_subject_auto")
+    public String insertNewPledgeSubjectAuto(@Valid PledgeSubjectAuto pledgeSubjectAuto,
+                                             BindingResult bindingResultAuto,
+                                             @Valid CostHistory costHistory,
+                                             BindingResult bindingResultCostHistory,
+                                             @Valid Monitoring monitoring,
+                                             BindingResult bindingResultMonitoring,
+                                             @RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                             Model model){
+
+        if(bindingResultAuto.hasErrors()){
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectAuto.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultCostHistory.hasErrors()){
+            model.addAttribute("pledgeSubjectAuto", pledgeSubjectAuto);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectAuto.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultMonitoring.hasErrors()){
+            model.addAttribute("pledgeSubjectAuto", pledgeSubjectAuto);
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectAuto.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+        }
+
+        pledgeSubjectService.insertPledgeSubject(pledgeSubjectAuto, costHistory, monitoring);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        model.addAttribute("pledgeAgreement", pledgeAgreement);
+        return "pledge_subjects";
+    }
+
+    @PostMapping("insert_pledge_subject_equipment")
+    public String insertNewPledgeSubjectEquipment(@Valid PledgeSubjectEquipment pledgeSubjectEquipment,
+                                                  BindingResult bindingResultEquipment,
+                                                  @Valid CostHistory costHistory,
+                                                  BindingResult bindingResultCostHistory,
+                                                  @Valid Monitoring monitoring,
+                                                  BindingResult bindingResultMonitoring,
+                                                  @RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                                  Model model){
+
+        if(bindingResultEquipment.hasErrors()){
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectEquipment.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultCostHistory.hasErrors()){
+            model.addAttribute("pledgeSubjectEquipment", pledgeSubjectEquipment);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectEquipment.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultMonitoring.hasErrors()){
+            model.addAttribute("pledgeSubjectEquipment", pledgeSubjectEquipment);
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectEquipment.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+        }
+
+        pledgeSubjectService.insertPledgeSubject(pledgeSubjectEquipment, costHistory, monitoring);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        model.addAttribute("pledgeAgreement", pledgeAgreement);
+        return "pledge_subjects";
+    }
+
+    @PostMapping("insert_pledge_subject_securities")
+    public String insertNewPledgeSubjectSecurities(@Valid PledgeSubjectSecurities pledgeSubjectSecurities,
+                                                   BindingResult bindingResultSecurities,
+                                                   @Valid CostHistory costHistory,
+                                                   BindingResult bindingResultCostHistory,
+                                                   @Valid Monitoring monitoring,
+                                                   BindingResult bindingResultMonitoring,
+                                                   @RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                                   Model model){
+
+        if(bindingResultSecurities.hasErrors()){
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectSecurities.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultCostHistory.hasErrors()){
+            model.addAttribute("pledgeSubjectSecurities", pledgeSubjectSecurities);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectSecurities.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultMonitoring.hasErrors()){
+            model.addAttribute("pledgeSubjectSecurities", pledgeSubjectSecurities);
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectSecurities.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+        }
+
+        pledgeSubjectService.insertPledgeSubject(pledgeSubjectSecurities, costHistory, monitoring);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        model.addAttribute("pledgeAgreement", pledgeAgreement);
+        return "pledge_subjects";
+    }
+
+    @PostMapping("insert_pledge_subject_vessel")
+    public String insertNewPledgeSubjectVessel(@Valid PledgeSubjectVessel pledgeSubjectVessel,
+                                               BindingResult bindingResultVessel,
+                                               @Valid CostHistory costHistory,
+                                               BindingResult bindingResultCostHistory,
+                                               @Valid Monitoring monitoring,
+                                               BindingResult bindingResultMonitoring,
+                                               @RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                               Model model){
+
+        if(bindingResultVessel.hasErrors()){
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectVessel.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultCostHistory.hasErrors()){
+            model.addAttribute("pledgeSubjectVessel", pledgeSubjectVessel);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectVessel.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultMonitoring.hasErrors()){
+            model.addAttribute("pledgeSubjectVessel", pledgeSubjectVessel);
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectVessel.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+        }
+
+        pledgeSubjectService.insertPledgeSubject(pledgeSubjectVessel, costHistory, monitoring);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        model.addAttribute("pledgeAgreement", pledgeAgreement);
+        return "pledge_subjects";
+    }
+
+    @PostMapping("insert_pledge_subject_tbo")
+    public String insertNewPledgeSubjectTBO(@Valid PledgeSubjectTBO pledgeSubjectTBO,
+                                            BindingResult bindingResultTBO,
+                                            @Valid CostHistory costHistory,
+                                            BindingResult bindingResultCostHistory,
+                                            @Valid Monitoring monitoring,
+                                            BindingResult bindingResultMonitoring,
+                                            @RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                            Model model){
+
+        if(bindingResultTBO.hasErrors()){
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectTBO.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultCostHistory.hasErrors()){
+            model.addAttribute("pledgeSubjectTBO", pledgeSubjectTBO);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectTBO.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultMonitoring.hasErrors()){
+            model.addAttribute("pledgeSubjectTBO", pledgeSubjectTBO);
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectTBO.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+        }
+
+        pledgeSubjectService.insertPledgeSubject(pledgeSubjectTBO, costHistory, monitoring);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        model.addAttribute("pledgeAgreement", pledgeAgreement);
+        return "pledge_subjects";
+    }
+
+    @PostMapping("insert_pledge_subject_landOwn")
+    public String insertNewPledgeSubjectLandOwnership(@Valid PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership,
+                                                      BindingResult bindingResultLandOwn,
+                                                      @Valid CostHistory costHistory,
+                                                      BindingResult bindingResultCostHistory,
+                                                      @Valid Monitoring monitoring,
+                                                      BindingResult bindingResultMonitoring,
+                                                      @RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                                      Model model){
+
+        if(bindingResultLandOwn.hasErrors()){
+            List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
+            model.addAttribute("landCategoryList", landCategoryList);
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyLandOwnership.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultCostHistory.hasErrors()){
+            List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
+            model.addAttribute("landCategoryList", landCategoryList);
+            model.addAttribute("pledgeSubjectRealtyLandOwnership", pledgeSubjectRealtyLandOwnership);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyLandOwnership.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultMonitoring.hasErrors()){
+            List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
+            model.addAttribute("landCategoryList", landCategoryList);
+            model.addAttribute("pledgeSubjectRealtyLandOwnership", pledgeSubjectRealtyLandOwnership);
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyLandOwnership.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+        }
+
+        pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyLandOwnership, costHistory, monitoring);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        model.addAttribute("pledgeAgreement", pledgeAgreement);
+        return "pledge_subjects";
+    }
+
+    @PostMapping("insert_pledge_subject_landLease")
+    public String insertNewPledgeSubjectLandLease(@Valid PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease,
+                                                  BindingResult bindingResultLandLease,
+                                                  @Valid CostHistory costHistory,
+                                                  BindingResult bindingResultCostHistory,
+                                                  @Valid Monitoring monitoring,
+                                                  BindingResult bindingResultMonitoring,
+                                                  @RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                                  Model model){
+
+        if(bindingResultLandLease.hasErrors()){
+            List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
+            model.addAttribute("landCategoryList", landCategoryList);
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyLandLease.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultCostHistory.hasErrors()){
+            List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
+            model.addAttribute("landCategoryList", landCategoryList);
+            model.addAttribute("pledgeSubjectRealtyLandLease", pledgeSubjectRealtyLandLease);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyLandLease.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultMonitoring.hasErrors()){
+            List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
+            model.addAttribute("landCategoryList", landCategoryList);
+            model.addAttribute("pledgeSubjectRealtyLandLease", pledgeSubjectRealtyLandLease);
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyLandLease.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+        }
+
+        pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyLandLease, costHistory, monitoring);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        model.addAttribute("pledgeAgreement", pledgeAgreement);
+        return "pledge_subjects";
+    }
+
+    @PostMapping("insert_pledge_subject_building")
+    public String insertNewPledgeSubjectBuilding(@Valid PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding,
+                                                 BindingResult bindingResultBuilding,
+                                                 @Valid CostHistory costHistory,
+                                                 BindingResult bindingResultCostHistory,
+                                                 @Valid Monitoring monitoring,
+                                                 BindingResult bindingResultMonitoring,
+                                                 @RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                                 Model model){
+
+        if(bindingResultBuilding.hasErrors()){
+            List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
+            model.addAttribute("marketSegmentList", marketSegmentList);
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyBuilding.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultCostHistory.hasErrors()){
+            List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
+            model.addAttribute("marketSegmentList", marketSegmentList);
+            model.addAttribute("pledgeSubjectRealtyBuilding", pledgeSubjectRealtyBuilding);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyBuilding.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultMonitoring.hasErrors()){
+            List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
+            model.addAttribute("marketSegmentList", marketSegmentList);
+            model.addAttribute("pledgeSubjectRealtyBuilding", pledgeSubjectRealtyBuilding);
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyBuilding.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+        }
+
+        pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyBuilding, costHistory, monitoring);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        model.addAttribute("pledgeAgreement", pledgeAgreement);
+        return "pledge_subjects";
+    }
+
+    @PostMapping("insert_pledge_subject_room")
+    public String insertNewPledgeSubjectRoom(@Valid PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom,
+                                             BindingResult bindingResultRoom,
+                                             @Valid CostHistory costHistory,
+                                             BindingResult bindingResultCostHistory,
+                                             @Valid Monitoring monitoring,
+                                             BindingResult bindingResultMonitoring,
+                                             @RequestParam("pledgeAgreementId") long pledgeAgreementId,
+                                             Model model){
+
+        if(bindingResultRoom.hasErrors()){
+            List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
+            model.addAttribute("marketSegmentList", marketSegmentList);
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyRoom.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultCostHistory.hasErrors()){
+            List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
+            model.addAttribute("marketSegmentList", marketSegmentList);
+            model.addAttribute("pledgeSubjectRealtyRoom", pledgeSubjectRealtyRoom);
+            model.addAttribute("monitoring", monitoring);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyRoom.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+
+        }else if(bindingResultMonitoring.hasErrors()){
+            List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
+            model.addAttribute("marketSegmentList", marketSegmentList);
+            model.addAttribute("pledgeSubjectRealtyRoom", pledgeSubjectRealtyRoom);
+            model.addAttribute("costHistory", costHistory);
+            model.addAttribute("pledgeAgreementId", pledgeAgreementId);
+            model.addAttribute("typeOfCollateral", pledgeSubjectRealtyRoom.getTypeOfCollateral());
+
+            return "pledge_subject_card_new";
+        }
+
+        pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyRoom, costHistory, monitoring);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
     }
@@ -978,7 +1454,7 @@ public class PagesController {
         if(cadastralNum.isPresent())
             return pledgeSubjectService.getPledgeSubjectByCadastralNum(cadastralNum.get());
         else if(namePS.isPresent())
-            return pledgeSubjectService.getPlegeSubjectByName(namePS.get());
+            return pledgeSubjectService.getPledgeSubjectByName(namePS.get());
         else
             return null;
     }

@@ -22,6 +22,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.PositiveOrZero;
 
 @Entity
 @Table(name = "pledge_subject")
@@ -32,50 +36,76 @@ public class PledgeSubject {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="pledge_subject_id")
 	private long pledgeSubjectId;
-	
+
+    @NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="name")
 	private String name;
 
+    @Pattern(regexp = "высокая|средняя|ниже средней|низкая",
+            message = "Возможные варианты: высокая, средняя, ниже средней, низкая")
 	@Column(name ="liquidity")
 	private String liquidity;
 
+    @NotNull(message = "Обязательно для заполнения")
+    @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="zs_dz")
 	private double zsDz;
 
+    @NotNull(message = "Обязательно для заполнения")
+    @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="zs_zz")
 	private double zsZz;
 
+    @NotNull(message = "Обязательно для заполнения")
+    @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="rs_dz")
 	private double rsDz;
 
+    @NotNull(message = "Обязательно для заполнения")
+    @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="rs_zz")
 	private double rsZz;
 
+    @NotNull(message = "Обязательно для заполнения")
+    @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="ss")
 	private double ss;
 
+    @NotNull(message = "Обязательно для заполнения")
 	@Column(name ="date_monitoring")
 	@Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateMonitoring;
 
+    @NotNull(message = "Обязательно для заполнения")
 	@Column(name ="date_conclusion")
 	@Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateConclusion;
 
+    @Pattern(regexp = "в наличии|утрата|частичная утрата",
+            message = "Возможные варианты: в наличии, утрата, частичная утрата")
 	@Column(name ="status_monitoring")
 	private String statusMonitoring;
 
+    @Pattern(regexp = "Авто/спецтехника|Оборудование|ТМЦ|Ценные бумаги|Недвижимость - ЗУ - собственность|" +
+            "Недвижимость - ЗУ - право аренды|Недвижимость - здание/сооружение|Недвижимость - помещение|Судно",
+            message = "Возможные варианты: Авто/спецтехника, Оборудование, ТМЦ, Ценные бумаги, Недвижимость - ЗУ - собственность, " +
+                    "Недвижимость - ЗУ - право аренды, Недвижимость - здание/сооружение, Недвижимость - помещение, Судно")
 	@Column(name ="type_of_collateral")
 	private String typeOfCollateral;
 
+    @Pattern(regexp = "возвратная|рычаговая|ограничивающая|информационная",
+            message = "Возможные варианты: возвратная, рычаговая, ограничивающая, информационная")
 	@Column(name ="type_of_pledge")
 	private String typeOfPledge;
 
+    @Pattern(regexp = "документарный|визуальный",
+            message = "Возможные варианты: документарный, визуальный")
 	@Column(name ="type_of_monitoring")
 	private String typeOfMonitoring;
 
+    @NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="adress_region")
 	private String adressRegion;
 
@@ -94,6 +124,7 @@ public class PledgeSubject {
 	@Column(name ="adress_premises")
 	private String adressPemises;
 
+    @Pattern(regexp = "да|нет", message = "Возможные варианты: да, нет")
 	@Column(name ="insurance_obligation")
 	private String insuranceObligation;
 	

@@ -9,20 +9,28 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "pledge_realty_land_ownership")
 public class PledgeSubjectRealtyLandOwnership extends PledgeSubjectRealty {
 
+	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="permitted_use")
 	private String permittedUse;
-	
+
+	@Pattern(regexp = "да|нет", message = "Возможные варианты: да, нет")
 	@Column(name ="built_up")
 	private String builtUp;
-	
+
+	@Pattern(regexp = "^$|[0-9]{2}:[0-9]{3,7}:[0-9]+",
+			message = "Неверное значение")
 	@Column(name ="cadastral_num_of_building")
 	private String cadastralNumOfBuilding;
-	
+
+	@Valid
 	@OneToOne(mappedBy = "pledgeSubjectRealtyLandOwnership")
 	@JsonIgnore
 	private PledgeSubjectRealty pledgeSubjectRealty;

@@ -6,20 +6,31 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 
 @Entity
 @Table(name = "pledge_tbo")
 public class PledgeSubjectTBO extends PledgeSubject {
-	
+
+	@Positive(message = "Значение должно быть больше нуля")
 	@Column(name ="count_of_tbo")
 	private int countOfTBO;
-	
+
+	@Positive(message = "Значение должно быть больше нуля")
 	@Column(name ="carrying_amount")
 	private double carryingAmount;
-	
+
+	@Pattern(regexp = "транспорт|запчасти|одежда|продукты питания|алкоголь|нефтехимия|металлопродукция|стройматериалы|" +
+			"крс|мрс|медикаменты|сантехника",
+			message = "Возможные варианты: транспорт, запчасти, одежда,продукты питания, алкоголь. нефтехимия, " +
+					"металлопродукция, стройматериалы, крс, мрс, медикаменты, сантехника")
 	@Column(name ="type_of_tbo")
 	private String typeOfTBO;
-	
+
+	@Valid
 	@OneToOne(mappedBy = "pledgeSubjectTBO")
 	@JsonIgnore
 	private PledgeSubject pledgeSubject;

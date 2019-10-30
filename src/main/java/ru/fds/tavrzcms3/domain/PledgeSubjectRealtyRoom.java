@@ -9,14 +9,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "pledge_realty_room")
 public class PledgeSubjectRealtyRoom extends PledgeSubjectRealty {
-	
+
+	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="floor_location")
 	private String floorLocation;
-	
+
+	@Valid
 	@OneToOne(mappedBy = "pledgeSubjectRealtyRoom")
 	@JsonIgnore
 	private PledgeSubjectRealty pledgeSubjectRealty;

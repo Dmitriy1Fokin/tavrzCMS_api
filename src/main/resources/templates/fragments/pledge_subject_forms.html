@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="generalProperty(pledgeSubject)">
+    <div class="row">
+        <label>Наименование:</label>
+        <input required th:field="*{name}" type="text" th:value="${pledgeSubject.getName()}"/>
+        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Ликвидность</label>
+        <select required th:field="*{liquidity}">
+            <option value="высокая">высокая</option>
+            <option value="средняя">средняя</option>
+            <option value="ниже средней">ниже средней</option>
+            <option value="низкая">низкая</option>
+        </select>
+        <div th:if="${#fields.hasErrors('liquidity')}" th:errors="*{liquidity}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Вид обеспечения</label>
+        <input disabled="disabled" th:field="*{typeOfCollateral}" th:value="${pledgeSubject.getTypeOfCollateral()}"/>
+        <div th:if="${#fields.hasErrors('typeOfCollateral')}" th:errors="*{typeOfCollateral}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Функция залога</label>
+        <select required th:field="*{typeOfPledge}">
+            <option value="возвратная">возвратная</option>
+            <option value="рычаговая">рычаговая</option>
+            <option value="ограничивающая">ограничивающая</option>
+            <option value="информационная">информационная</option>
+        </select>
+        <div th:if="${#fields.hasErrors('typeOfPledge')}" th:errors="*{typeOfPledge}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Адрес(Регион)</label>
+        <input required th:field="*{adressRegion}" type="text" th:value="${pledgeSubject.getAdressRegion()}"/>
+        <div th:if="${#fields.hasErrors('adressRegion')}" th:errors="*{adressRegion}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Адрес(Район)</label>
+        <input th:field="*{adressDistrict}" type="text" th:value="${pledgeSubject.getAdressDistrict()}"/>
+        <div th:if="${#fields.hasErrors('adressDistrict')}" th:errors="*{adressDistrict}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Адрес(Город)</label>
+        <input th:field="*{adressCity}" type="text" th:value="${pledgeSubject.getAdressCity()}"/>
+        <div th:if="${#fields.hasErrors('adressCity')}" th:errors="*{adressCity}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Адрес(Улица)</label>
+        <input th:field="*{adressStreet}" type="text" th:value="${pledgeSubject.getAdressStreet()}"/>
+        <div th:if="${#fields.hasErrors('adressStreet')}" th:errors="*{adressStreet}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Адрес(Дом)</label>
+        <input th:field="*{adressBuilbing}" type="text" th:value="${pledgeSubject.getAdressBuilbing()}"/>
+        <div th:if="${#fields.hasErrors('adressBuilbing')}" th:errors="*{adressBuilbing}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Адрес(Помещение)</label>
+        <input th:field="*{adressPemises}" type="text" th:value="${pledgeSubject.getAdressPemises()}"/>
+        <div th:if="${#fields.hasErrors('adressPemises')}" th:errors="*{adressPemises}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Обязательство страхования</label>
+        <select required th:field="*{insuranceObligation}">
+            <option value="да">да</option>
+            <option value="нет">нет</option>
+        </select>
+        <div th:if="${#fields.hasErrors('insuranceObligation')}" th:errors="*{insuranceObligation}">Name Error</div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div th:fragment="autoProperty(pledgeSubject)">
+    <div class="row">
+        <label>Марка</label>
+        <input required th:field="*{brand}" type="text" th:value="${pledgeSubject.getBrand()}"/>
+        <div th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Модель</label>
+        <input required th:field="*{model}" type="text" th:value="${pledgeSubject.getModel()}"/>
+        <div th:if="${#fields.hasErrors('model')}" th:errors="*{model}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>VIN</label>
+        <input th:field="*{vin}" type="text"
+               th:value="${pledgeSubject.getVin()}"/>
+        <div th:if="${#fields.hasErrors('vin')}" th:errors="*{vin}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>№ двигателя</label>
+        <input  th:field="*{numOfEngine}" type="text"
+                th:value="${pledgeSubject.getNumOfEngine()}"/>
+        <div th:if="${#fields.hasErrors('numOfEngine')}" th:errors="*{numOfEngine}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>№ ПТС</label>
+        <input th:field="*{numOfPTS}" type="text"
+               th:value="${pledgeSubject.getNumOfPTS()}"/>
+        <div th:if="${#fields.hasErrors('numOfPTS')}" th:errors="*{numOfPTS}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Год выпуска</label>
+        <input th:field="*{yearOfManufacture}" type="number" min="1000" max="9999"
+               th:value="${pledgeSubject.getYearOfManufacture()}"/>
+        <div th:if="${#fields.hasErrors('yearOfManufacture')}" th:errors="*{yearOfManufacture}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Инв. №</label>
+        <input th:field="*{inventoryNum}" type="text" th:value="${pledgeSubject.getInventoryNum()}"/>
+        <div th:if="${#fields.hasErrors('inventoryNum')}" th:errors="*{inventoryNum}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>л.с.</label>
+        <input th:field="*{horsepower}" type="number" min="0.01" step="0.01"
+               th:value="${pledgeSubject.getHorsepower()}"/>
+        <div th:if="${#fields.hasErrors('horsepower')}" th:errors="*{horsepower}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Вид транспорта</label>
+        <select required th:field="*{typeOfAuto}">
+            <option value="бульдозер">бульдозер</option>
+            <option value="экскаватор">экскаватор</option>
+            <option value="прицеп">прицеп</option>
+            <option value="погрузчик">погрузчик</option>
+            <option value="кран">кран</option>
+            <option value="дорожно-строительная">дорожно-строительная</option>
+            <option value="комбайн">комбайн</option>
+            <option value="трактор">трактор</option>
+            <option value="пассажирский транспорт">пассажирский транспорт</option>
+            <option value="грузовой транспорт">грузовой транспорт</option>
+            <option value="легковой транспорт">легковой транспорт</option>
+            <option value="ж/д транспорт">ж/д транспорт</option>
+            <option value="иное">иное</option>
+        </select>
+        <div th:if="${#fields.hasErrors('typeOfAuto')}" th:errors="*{typeOfAuto}">Name Error</div>
+    </div>
+</div>
+
+
+
+
+
+<div th:fragment="equipmentProperty(pledgeSubject)">
+    <div class="row">
+        <label>Марка</label>
+        <input required th:field="*{brand}" type="text"
+               th:value="${pledgeSubject.getBrand()}"/>
+        <div th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Модель</label>
+        <input required th:field="*{model}" type="text"
+               th:value="${pledgeSubject.getModel()}"/>
+        <div th:if="${#fields.hasErrors('model')}" th:errors="*{model}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Завод. №</label>
+        <input th:field="*{serialNum}" type="text"
+               th:value="${pledgeSubject.getSerialNum()}"/>
+        <div th:if="${#fields.hasErrors('serialNum')}" th:errors="*{serialNum}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Год выпуска</label>
+        <input th:field="*{yearOfManufacture}" type="number" min="1000" max="9999"
+               th:value="${pledgeSubject.getYearOfManufacture()}"/>
+        <div th:if="${#fields.hasErrors('yearOfManufacture')}" th:errors="*{yearOfManufacture}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Инв. №</label>
+        <input th:field="*{inventoryNum}" type="text"
+               th:value="${pledgeSubject.getInventoryNum()}"/>
+        <div th:if="${#fields.hasErrors('inventoryNum')}" th:errors="*{inventoryNum}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Вид оборудования</label>
+        <select required th:field="*{typeOfquipment}">
+            <option selected value="">не выбрано</option>
+            <option value="металлообработка">металлообработка</option>
+            <option value="лесообработка">лесообработка</option>
+            <option value="торговое">торговое</option>
+            <option value="офисное">офисное</option>
+            <option value="сети ито">сети ито</option>
+            <option value="рекламное">рекламное</option>
+            <option value="пищевое">пищевое</option>
+            <option value="автомобильное">автомобильное</option>
+            <option value="азс">азс</option>
+            <option value="химическое">химическое</option>
+            <option value="измерительное">измерительное</option>
+            <option value="медицинское">медицинское</option>
+            <option value="нефте-газовое">нефте-газовое</option>
+            <option value="карьерное и горное">карьерное и горное</option>
+            <option value="подъемное">подъемное</option>
+            <option value="авиационное">авиационное</option>
+            <option value="строительое">строительое</option>
+            <option value="ресторанное">ресторанное</option>
+            <option value="транспортировка">транспортировка</option>
+            <option value="упаковачное">упаковачное</option>
+            <option value="хранение">хранение</option>
+            <option value="с/х назначения">с/х назначения</option>
+            <option value="иное">иное</option>
+        </select>
+        <div th:if="${#fields.hasErrors('typeOfquipment')}" th:errors="*{typeOfquipment}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Производительность</label>
+        <input th:field="*{productivity}" type="number" step="any"
+               th:value="${pledgeSubject.getProductivity()}"/>
+        <div th:if="${#fields.hasErrors('productivity')}" th:errors="*{productivity}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Вид производительности</label>
+        <input th:field="*{typeOfProductivity}" type="text"
+               th:value="${pledgeSubject.getTypeOfProductivity()}"/>
+        <div th:if="${#fields.hasErrors('typeOfProductivity')}" th:errors="*{typeOfProductivity}">Name Error</div>
+    </div>
+</div>
+
+
+
+
+
+<div th:fragment="securitiesProperty(pledgeSubject)">
+    <div class="row">
+        <label>Номинал. стоимость</label>
+        <input required th:field="*{nominalValue}" type="number" step="0.01"
+               th:value="${pledgeSubject.getNominalValue()}"/>
+        <div th:if="${#fields.hasErrors('nominalValue')}" th:errors="*{nominalValue}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Действ. стоимость</label>
+        <input required th:field="*{actualValue}" type="number" step="0.01"
+               th:value="${pledgeSubject.getActualValue()}"/>
+        <div th:if="${#fields.hasErrors('actualValue')}" th:errors="*{actualValue}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Вид ценных бумаг</label>
+        <select required th:field="*{typeOfSecurities}">
+            <option value="доли в ук">доли в ук</option>
+            <option value="акции">акции</option>
+            <option value="вексель">вексель</option>
+            <option value="паи">паи</option>
+        </select>
+        <div th:if="${#fields.hasErrors('typeOfSecurities')}" th:errors="*{typeOfSecurities}">Name Error</div>
+    </div>
+</div>
+
+
+
+
+
+<div th:fragment="vesselProperty(pledgeSubject)">
+    <div class="row">
+        <label>ИМО</label>
+        <input required th:field="*{imo}" type="number"
+               th:value="${pledgeSubject.getImo()}"/>
+        <div th:if="${#fields.hasErrors('imo')}" th:errors="*{imo}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>MMSI</label>
+        <input th:field="*{mmsi}" type="number"
+               th:value="${pledgeSubject.getMmsi()}"/>
+        <div th:if="${#fields.hasErrors('mmsi')}" th:errors="*{mmsi}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Флаг</label>
+        <input required th:field="*{flag}" type="text"
+               th:value="${pledgeSubject.getFlag()}"/>
+        <div th:if="${#fields.hasErrors('flag')}" th:errors="*{flag}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Валовый тоннаж</label>
+        <input required th:field="*{grossTonnage}" type="number"
+               th:value="${pledgeSubject.getGrossTonnage()}"/>
+        <div th:if="${#fields.hasErrors('grossTonnage')}" th:errors="*{grossTonnage}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дедвейт</label>
+        <input required th:field="*{deadweight}" type="number"
+               th:value="${pledgeSubject.getDeadweight()}"/>
+        <div th:if="${#fields.hasErrors('deadweight')}" th:errors="*{deadweight}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Год постройки</label>
+        <input required th:field="*{yearBuilt}" type="number" min="1000" max="9999"
+               th:value="${pledgeSubject.getYearBuilt()}"/>
+        <div th:if="${#fields.hasErrors('yearBuilt')}" th:errors="*{yearBuilt}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Статус судна</label>
+        <input required th:field="*{statusVessel}" type="text"
+               th:value="${pledgeSubject.getStatusVessel()}"/>
+        <div th:if="${#fields.hasErrors('statusVessel')}" th:errors="*{statusVessel}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Вид судна</label>
+        <select required th:field="*{vesselType}">
+            <option value="general cargo (gcd)">general cargo (gcd)</option>
+            <option value="container ship (con)">container ship (con)</option>
+            <option value="log carrier/timber (log)">log carrier/timber (log)</option>
+            <option value="ro-ro (r/r)">ro-ro (r/r)</option>
+            <option value="bulk carrier (b/c)">bulk carrier (b/c)</option>
+            <option value="ore/oil carrier (o/o)">ore/oil carrier (o/o)</option>
+            <option value="oil/bulk/ore carrier (obo)">oil/bulk/ore carrier (obo)</option>
+            <option value="tanker product (tnp)">tanker product (tnp)</option>
+            <option value="tanker crude (tnc)">tanker crude (tnc)</option>
+            <option value="tanker storage (tns)">tanker storage (tns)</option>
+            <option value="tanker vlcc/ulcc (tnv)">tanker vlcc/ulcc (tnv)</option>
+            <option value="chemical tanker (chm)">chemical tanker (chm)</option>
+            <option value="lpg/lng carrier (gas)">lpg/lng carrier (gas)</option>
+            <option value="offshore supply vessel (osv)">offshore supply vessel (osv)</option>
+            <option value="heavy lift vessel (hvl)">heavy lift vessel (hvl)</option>
+            <option value="survey vessel (srv)">survey vessel (srv)</option>
+            <option value="passenger ship (pas)">passenger ship (pas)</option>
+            <option value="reefer (rfg)">reefer (rfg)</option>
+            <option value="livestock carrier (liv)">livestock carrier (liv)</option>
+            <option value="tug">tug</option>
+            <option value="fishing trawler (fsh)">fishing trawler (fsh)</option>
+            <option value="dredger (drg)">dredger (drg)</option>
+            <option value="м">м</option>
+            <option value="м-сп">м-сп</option>
+            <option value="о">о</option>
+            <option value="р">р</option>
+            <option value="л">л</option>
+        </select>
+        <div th:if="${#fields.hasErrors('vesselType')}" th:errors="*{vesselType}">Name Error</div>
+    </div>
+</div>
+
+
+
+
+<div th:fragment="tboProperty(pledgeSubject)">
+    <div class="row">
+        <label>Количество</label>
+        <input th:field="*{countOfTBO}" type="number"
+               th:value="${pledgeSubject.getCountOfTBO()}"/>
+        <div th:if="${#fields.hasErrors('countOfTBO')}" th:errors="*{countOfTBO}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Баланс. стоимость</label>
+        <input th:field="*{carryingAmount}" type="number" step="0.01"
+               th:value="${pledgeSubject.getCarryingAmount()}"/>
+        <div th:if="${#fields.hasErrors('carryingAmount')}" th:errors="*{carryingAmount}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Вид ТМЦ</label>
+        <select required th:field="*{typeOfTBO}">
+            <option value="транспорт">транспорт</option>
+            <option value="запчасти">запчасти</option>
+            <option value="одежда">одежда</option>
+            <option value="продукты питания">продукты питания</option>
+            <option value="алкоголь">алкоголь</option>
+            <option value="нефтехимия">нефтехимия</option>
+            <option value="металлопродукция">металлопродукция</option>
+            <option value="стройматериалы">стройматериалы</option>
+            <option value="крс">крс</option>
+            <option value="мрс">мрс</option>
+            <option value="медикаменты">медикаменты</option>
+            <option value="сантехника">сантехника</option>
+        </select>
+        <div th:if="${#fields.hasErrors('typeOfTBO')}" th:errors="*{typeOfTBO}">Name Error</div>
+    </div>
+</div>
+
+
+
+
+<div th:fragment="realtyProperty(pledgeSubject)">
+    <div class="row">
+        <label>Площадь</label>
+        <input required th:field="*{area}" type="number" step="0.01"
+               th:value="${pledgeSubject.getArea()}"/>
+        <div th:if="${#fields.hasErrors('area')}" th:errors="*{area}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Кад. №</label>
+        <input required th:field="*{cadastralNum}" type="text"
+               th:value="${pledgeSubject.getCadastralNum()}"/>
+        <div th:if="${#fields.hasErrors('cadastralNum')}" th:errors="*{cadastralNum}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Услов. №</label>
+        <input th:field="*{conditionalNum}" type="text"
+               th:value="${pledgeSubject.getConditionalNum()}"/>
+        <div th:if="${#fields.hasErrors('conditionalNum')}" th:errors="*{conditionalNum}">Name Error</div>
+    </div>
+</div>
+
+
+
+
+
+<div th:fragment="landOwnshipProperty(pledgeSubject, landCategoryList)">
+    <div class="row">
+        <label>Категория земель</label>
+        <select required th:field="*{landCategory}">
+            <div th:each="lc : ${landCategoryList}">
+                <option th:text="${lc.name}" th:value="${lc.landCategoryid}"></option>
+            </div>
+        </select>
+        <div th:if="${#fields.hasErrors('landCategory')}" th:errors="*{landCategory}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Разрешенное использование</label>
+        <input required th:field="*{permittedUse}" type="text"
+               th:value="${pledgeSubject.getPermittedUse()}"/>
+        <div th:if="${#fields.hasErrors('permittedUse')}" th:errors="*{permittedUse}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Наличение ОКС</label>
+        <select required th:field="*{builtUp}">
+            <option value="да">да</option>
+            <option value="нет">нет</option>
+        </select>
+        <div th:if="${#fields.hasErrors('builtUp')}" th:errors="*{builtUp}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Кад. № ОКС</label>
+        <input th:field="*{cadastralNumOfBuilding}" type="text"
+               th:value="${pledgeSubject.getCadastralNumOfBuilding()}"/>
+        <div th:if="${#fields.hasErrors('cadastralNumOfBuilding')}" th:errors="*{cadastralNumOfBuilding}">Name Error</div>
+    </div>
+</div>
+
+
+
+
+
+<div th:fragment="landLeaseProperty(pledgeSubject, landCategoryList)">
+    <div class="row">
+        <label>Категория земель</label>
+        <select required th:field="*{landCategory}">
+            <div th:each="lc : ${landCategoryList}">
+                <option th:text="${lc.name}" th:value="${lc.landCategoryid}"></option>
+            </div>
+        </select>
+        <div th:if="${#fields.hasErrors('landCategory')}" th:errors="*{landCategory}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Разрешенное использование</label>
+        <input required th:field="*{permittedUse}" type="text"
+               th:value="${pledgeSubject.getPermittedUse()}"/>
+        <div th:if="${#fields.hasErrors('permittedUse')}" th:errors="*{permittedUse}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Наличение ОКС</label>
+        <select required th:field="*{builtUp}">
+            <option value="да">да</option>
+            <option value="нет">нет</option>
+        </select>
+        <div th:if="${#fields.hasErrors('builtUp')}" th:errors="*{builtUp}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Кад. № ОКС</label>
+        <input th:field="*{cadastralNumOfBuilding}" type="text"
+               th:value="${pledgeSubject.getCadastralNumOfBuilding()}"/>
+        <div th:if="${#fields.hasErrors('cadastralNumOfBuilding')}" th:errors="*{cadastralNumOfBuilding}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дата начала аренды</label>
+        <input required th:field="*{dateBeginLease}" type="date"
+               th:value="${pledgeSubject.getDateBeginLease()}"/>
+        <div th:if="${#fields.hasErrors('dateBeginLease')}" th:errors="*{dateBeginLease}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дата окончания аренды</label>
+        <input required th:field="*{dateEndLease}" type="date"
+               th:value="${pledgeSubject.getDateEndLease()}"/>
+        <div th:if="${#fields.hasErrors('dateEndLease')}" th:errors="*{dateEndLease}">Name Error</div>
+    </div>
+</div>
+
+
+
+
+<div th:fragment="buildingProperty(pledgeSubject, marketSegmentList)">
+    <div class="row">
+        <label>Степень готовноси</label>
+        <input th:field="*{readinessDegree}" type="number" min="1" max="100"
+               th:value="${pledgeSubject.getReadinessDegree()}"/>
+        <div th:if="${#fields.hasErrors('readinessDegree')}" th:errors="*{readinessDegree}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Год постройки</label>
+        <input th:field="*{yearOfConstruction}" type="number"
+               th:value="${pledgeSubject.getYearOfConstruction()}"/>
+        <div th:if="${#fields.hasErrors('yearOfConstruction')}" th:errors="*{yearOfConstruction}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Сегмент рынка</label>
+        <select required th:field="*{marketSegment}">
+            <div th:each="ms : ${marketSegmentList}">
+                <option th:text="${ms.name}" th:value="${ms.marketSegmentId}"></option>
+            </div>
+        </select>
+        <div th:if="${#fields.hasErrors('marketSegment')}" th:errors="*{marketSegment}">Name Error</div>
+    </div>
+</div>
+
+
+
+
+
+<div th:fragment="roomProperty(pledgeSubject, marketSegmentList)">
+    <div class="row">
+        <label>Этаж расположения</label>
+        <input th:field="*{floorLocation}" type="text"
+               th:value="${pledgeSubject.getFloorLocation()}"/>
+        <div th:if="${#fields.hasErrors('floorLocation')}" th:errors="*{floorLocation}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Сегмент рынка помещения</label>
+        <select required th:field="*{marketSegmentRoom}">
+            <div th:each="ms : ${marketSegmentList}">
+                <option th:text="${ms.name}" th:value="${ms.marketSegmentId}"></option>
+            </div>
+        </select>
+        <div th:if="${#fields.hasErrors('marketSegmentRoom')}" th:errors="*{marketSegmentRoom}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Сегмент рынка здания где расположенно помещение</label>
+        <select required th:field="*{marketSegmentBuilding}">
+            <div th:each="ms : ${marketSegmentList}">
+                <option th:text="${ms.name}" th:value="${ms.marketSegmentId}"></option>
+            </div>
+        </select>
+        <div th:if="${#fields.hasErrors('marketSegmentBuilding')}" th:errors="*{marketSegmentBuilding}">Name Error</div>
+    </div>
+</div>
+
+
+<div th:fragment="costHistoryProperty(costHistory)">
+    <div class="row">
+        <label>Дата заключения</label>
+        <input required th:field="${costHistory.dateConclusion}" type="date"/>
+        <div th:if="${#fields.hasErrors('dateConclusion')}" th:errors="*{dateConclusion}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>РС по ДЗ</label>
+        <input required th:field="${costHistory.rsDz}" type="number" step="0.01"/>
+        <div th:if="${#fields.hasErrors('rsDz')}" th:errors="*{rsDz}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>ЗС по ДЗ</label>
+        <input required th:field="${costHistory.zsDz}" type="number" step="0.01"/>
+        <div th:if="${#fields.hasErrors('zsDz')}" th:errors="*{zsDz}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>РС по ЗЗ</label>
+        <input required th:field="${costHistory.rsZz}" type="number" step="0.01"/>
+        <div th:if="${#fields.hasErrors('rsZz')}" th:errors="*{rsZz}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>ЗС по ЗЗ</label>
+        <input required th:field="${costHistory.zsZz}" type="number" step="0.01"/>
+        <div th:if="${#fields.hasErrors('zsZz')}" th:errors="*{zsZz}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>СС</label>
+        <input required th:field="${costHistory.ss}" type="number" step="0.01"/>
+        <div th:if="${#fields.hasErrors('ss')}" th:errors="*{ss}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Оценщик</label>
+        <input th:field="${costHistory.appraiser}" type="text"/>
+        <div th:if="${#fields.hasErrors('appraiser')}" th:errors="*{appraiser}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>№ отчета об оценке</label>
+        <input th:field="${costHistory.appraisalReportNum}" type="text"/>
+        <div th:if="${#fields.hasErrors('appraisalReportNum')}" th:errors="*{appraisalReportNum}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дата отчета об оценке</label>
+        <input th:field="${costHistory.appraisalReportDate}" type="date"/>
+        <div th:if="${#fields.hasErrors('appraisalReportDate')}" th:errors="*{appraisalReportDate}">Name Error</div>
+    </div>
+</div>
+
+
+
+<div th:fragment="monitoringProperty(monitoring)">
+    <div class="row">
+        <label>Дата мониторинга</label>
+        <input required th:field="${monitoring.dateMonitoring}" type="date"/>
+        <div th:if="${#fields.hasErrors('dateMonitoring')}" th:errors="*{dateMonitoring}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Вид мониторинга</label>
+        <select required th:field="${monitoring.typeOfMonitoring}">
+            <option value="документарный">документарный</option>
+            <option value="визуальный">визуальный</option>
+        </select>
+        <div th:if="${#fields.hasErrors('typeOfMonitoring')}" th:errors="*{typeOfMonitoring}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Результат мониторинга</label>
+        <select required th:field="${monitoring.statusMonitoring}">
+            <option value="в наличии">в наличии</option>
+            <option value="утрата">утрата</option>
+            <option value="частичная утрата">частичная утрата</option>
+        </select>
+        <div th:if="${#fields.hasErrors('statusMonitoring')}" th:errors="*{statusMonitoring}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Ответственный сотрудник</label>
+        <input required th:field="${monitoring.employee}" type="text"/>
+        <div th:if="${#fields.hasErrors('employee')}" th:errors="*{employee}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Залоговая стоимость (в случаи утраты)</label>
+        <input th:field="${monitoring.collateralValue}" type="number" step="0.01"/>
+        <div th:if="${#fields.hasErrors('collateralValue')}" th:errors="*{collateralValue}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Комментарии</label>
+        <input th:field="${monitoring.notice}" type="text"/>
+        <div th:if="${#fields.hasErrors('notice')}" th:errors="*{notice}">Name Error</div>
+    </div>
+</div>
+
+
+
+</body>
+</html>

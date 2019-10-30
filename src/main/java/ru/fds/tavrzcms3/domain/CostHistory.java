@@ -174,7 +174,6 @@ public class CostHistory {
 				", appraiser='" + appraiser + '\'' +
 				", appraisalReportNum='" + appraisalReportNum + '\'' +
 				", appraisalReportDate=" + appraisalReportDate +
-				", pledgeSubject=" + pledgeSubject +
 				'}';
 	}
 }
