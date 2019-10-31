@@ -204,12 +204,12 @@ public class ClientService {
         Client client = repositoryClient.findByClientId(clientId);
 
 
-        if(client.getClass()==ClientIndividual.class){
+        if(client.getTypeOfClient().equals("фл")){
             ClientIndividual clientIndividual = repositoryClientIndividual.findByClient(client);
 
             return clientIndividual.getSurname() + " " + clientIndividual.getName() + " " + clientIndividual.getPatronymic();
 
-        }else if(client.getClass()==ClientLegalEntity.class){
+        }else if(client.getTypeOfClient().equals("юл")){
             ClientLegalEntity clientLegalEntity = repositoryClientLegalEntity.findByClient(client);
 
             return clientLegalEntity.getOrganizationalForm() + " " + clientLegalEntity.getName();

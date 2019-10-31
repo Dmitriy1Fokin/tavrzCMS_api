@@ -40,25 +40,16 @@
     <br>
     <br>
     <label>Дата начала ДЗ:</label>
-    <span th:text="${pledgeAgreement.getDateBeginPA()}">н/д</span>
+    <span th:text="${#dates.format(pledgeAgreement.getDateBeginPA(), 'dd.MM.yyyy')}">н/д</span>
     <br>
     <br>
     <label>Дата окончания ДЗ:</label>
-    <span th:text="${pledgeAgreement.getDateEndPA()}">н/д</span>
+    <span th:text="${#dates.format(pledgeAgreement.getDateEndPA(), 'dd.MM.yyyy')}">н/д</span>
     <br>
     <br>
     <label>Залогодатель:</label>
-    <div th:switch="${pledgeAgreement.getClient().getTypeOfClient()}">
-        <div th:case="юл">
-            <a th:href="@{/client(clientId=${pledgeAgreement.getClient().getClientId()})}" href="client.html"
-               th:text="${pledgeAgreement.getClient().getClientLegalEntity().getOrganizationalForm() + ' ' + pledgeAgreement.getClient().getClientLegalEntity().getName()}">Залогодатель ЮЛ</a>
-        </div>
-        <div th:case="фл">
-            <a th:href="@{/client(clientId=${pledgeAgreement.getClient().getClientId()})}" href="client.html"
-               th:text="${pledgeAgreement.getClient().getClientIndividual().getSurname() + ' ' + pledgeAgreement.getClient().getClientIndividual().getName()}">Залогодатель ФЛ</a>
-
-        </div>
-    </div>
+    <a th:href="@{/client(clientId=${pledgeAgreement.getClient().getClientId()})}" href="client.html"
+       th:text="${@clientService.getFullNameClient(pledgeAgreement.getClient().getClientId())}">Залогодатель</a>
     <br>
     <br>
     <label>Тип договора:</label>

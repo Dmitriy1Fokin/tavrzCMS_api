@@ -24,16 +24,13 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
+<h1 th:text="'Клиент: ' + ${@clientService.getFullNameClient(client.getClientId())}">Клиент ЮЛ</h1>
 <div th:switch="${client.getTypeOfClient()}">
     <div th:case="юл">
-        <h1 th:text="'Клиент: ' + ${client.getOrganizationalForm()} + ' ' + ${client.getName()}">Клиент ЮЛ</h1>
         <label>ИНН:</label>
         <span th:text="${client.getInn()}"></span>
     </div>
     <div th:case="фл">
-        <h1 th:text="'Клиент:' + ${client.getSurname() + ' '
-        + client.getName() + ' '
-        + client.getPatronymic()}">Клиент ФЛ</h1>
         <label>Паспорт:</label>
         <span th:text="${client.getPasportNum()}"></span>
     </div>

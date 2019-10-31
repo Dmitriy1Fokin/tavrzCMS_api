@@ -36,9 +36,9 @@
                    th:text="${pa.getNumPA()}">н/д</a>
             </td>
 
-            <td th:text="${pa.getDateBeginPA()}"></td>
+            <td th:text="${#dates.format(pa.getDateBeginPA(), 'dd.MM.yyyy')}"></td>
 
-            <td th:text="${pa.getDateEndPA()}"></td>
+            <td th:text="${#dates.format(pa.getDateEndPA(), 'dd.MM.yyyy')}"></td>
 
             <td>
                 <a th:href="@{/client(clientId=${pa.getClient().getClientId()})}" href="client.html"
@@ -88,13 +88,13 @@
 
             <td>
                 <div th:each="dateOfConclusion : ${@pledgeAgreementService.getDatesOfConclusion(pa.getPledgeAgreementId())}">
-                    <span th:text="${dateOfConclusion}">н/д</span>
+                    <span th:text="${#dates.format(dateOfConclusion, 'dd.MM.yyyy')}">н/д</span>
                 </div>
             </td>
 
             <td>
                 <div th:each="dateOfMonitoring : ${@pledgeAgreementService.getDatesOfMonitoring(pa.getPledgeAgreementId())}">
-                    <span th:text="${dateOfMonitoring}">н/д</span>
+                    <span th:text="${#dates.format(dateOfMonitoring, 'dd.MM.yyyy')}">н/д</span>
                 </div>
             </td>
 

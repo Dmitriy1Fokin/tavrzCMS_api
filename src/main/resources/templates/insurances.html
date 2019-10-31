@@ -54,9 +54,9 @@
             <div th:each="insurance : ${insuranceList}">
                 <tr>
                     <td th:text="${insurance.getNumInsurance()}">н/д</td>
-                    <td th:text="${insurance.getDateInsuranceContract()}">н/д</td>
-                    <td th:text="${insurance.getDateBeginInsurance()}">н/д</td>
-                    <td th:text="${insurance.getDateEndInsurance()}">н/д</td>
+                    <td th:text="${#dates.format(insurance.getDateInsuranceContract(), 'dd.MM.yyyy')}">н/д</td>
+                    <td th:text="${#dates.format(insurance.getDateBeginInsurance(), 'dd.MM.yyyy')}">н/д</td>
+                    <td th:text="${#dates.format(insurance.getDateEndInsurance(), 'dd.MM.yyyy')}">н/д</td>
                     <td th:text="${#numbers.formatCurrency(insurance.getSumInsured())}">н/д</td>
                     <td th:text="${insurance.getPaymentOfInsurancePremium()}">н/д</td>
                     <td th:text="${#numbers.formatCurrency(insurance.getFranchiseAmount())}">н/д</td>

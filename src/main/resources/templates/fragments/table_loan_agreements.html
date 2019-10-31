@@ -33,8 +33,8 @@
                     <a th:href="@{/client(clientId=${la.getClient().getClientId()})}" href="client.html"
                        th:text="${@clientService.getFullNameClient(la.getClient().getClientId())}"></a>
                 </td>
-                <td th:text="${la.getDateBeginLA()}">н/д</td>
-                <td th:text="${la.getDateEndLA()}">н/д</td>
+                <td th:text="${#dates.format(la.getDateBeginLA(), 'dd.MM.yyyy')}">н/д</td>
+                <td th:text="${#dates.format(la.getDateEndLA(), 'dd.MM.yyyy')}">н/д</td>
                 <td th:text="${#numbers.formatCurrency(la.getAmountLA())}">н/д</td>
                 <td th:text="${#numbers.formatPercent(la.getInterestRateLA(), 0, 1)}">н/д</td>
                 <td th:text="${#numbers.formatCurrency(la.getDebtLA())}">н/д</td>
