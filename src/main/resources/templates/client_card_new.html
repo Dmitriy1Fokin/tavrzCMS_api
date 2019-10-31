@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Создание нового клиента'">Создание нового КД</title>
+    <style type="text/css">
+        .nav-item{
+            display: inline;
+        }
+        .row{
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/nav :: user_nav_bar"></div>
+
+<div th:switch="${typeOfClient}">
+    <div th:case="юл">
+        <form th:action="@{/insert_client_le}" th:method="post" th:object="${clientLegalEntity}" action="client_card_new.html">
+            <div th:replace="fragments/client_forms :: generalProperty(${clientLegalEntity}, ${employeeList}, ${clientManagerList})"></div>
+            <br>
+            <div th:replace="fragments/client_forms :: legalEntitylProperty(${clientLegalEntity})"></div>
+            <br>
+            <button type="submit">Обновить</button>
+        </form>
+    </div>
+    <div th:case="фл">
+        <form th:action="@{/insert_client_ind}" th:method="post" th:object="${clientIndividual}" action="client_card_new.html">
+            <div th:replace="fragments/client_forms :: generalProperty(${clientIndividual}, ${employeeList}, ${clientManagerList})"></div>
+            <br>
+            <div th:replace="fragments/client_forms :: individualProperty(${clientIndividual})"></div>
+            <br>
+            <button type="submit">Обновить</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

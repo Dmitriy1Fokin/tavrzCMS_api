@@ -26,16 +26,16 @@
 
 <div th:switch="${client.getTypeOfClient()}">
     <div th:case="юл">
-        <h1 th:text="'Клиент: ' + ${client.getClientLegalEntity().getOrganizationalForm()} + ' ' + ${client.getClientLegalEntity().getName()}">Клиент ЮЛ</h1>
+        <h1 th:text="'Клиент: ' + ${client.getOrganizationalForm()} + ' ' + ${client.getName()}">Клиент ЮЛ</h1>
         <label>ИНН:</label>
-        <span th:text="${client.getClientLegalEntity().getInn()}"></span>
+        <span th:text="${client.getInn()}"></span>
     </div>
     <div th:case="фл">
-        <h1 th:text="'Клиент:' + ${client.getClientIndividual().getSurname() + ' '
-        + client.getClientIndividual().getName() + ' '
-        + client.getClientIndividual().getPatronymic()}">Клиент ФЛ</h1>
+        <h1 th:text="'Клиент:' + ${client.getSurname() + ' '
+        + client.getName() + ' '
+        + client.getPatronymic()}">Клиент ФЛ</h1>
         <label>Паспорт:</label>
-        <span th:text="${client.getClientIndividual().getPasportNum()}"></span>
+        <span th:text="${client.getPasportNum()}"></span>
     </div>
 </div>
 <br>
@@ -52,8 +52,8 @@
 <span th:text="${client.getClientId()}"></span>
 <br>
 <br>
-<a th:href="@{client_card(whatDo='changeClient', clientId=${client.getClientId()})}"
-   href="client_card.html"
+<a th:href="@{client_card_update(clientId=${client.getClientId()})}"
+   href="client_card_update.html"
    th:text="'Изменить данные клиента'">Изменить данные клиента</a>
 <br>
 <br>
@@ -69,7 +69,7 @@
 <br>
 
 <div th:if="${@clientService.countOfCurrentPledgeAgreementsByPledgorId(client.getClientId()) &gt; 0}">
-    <a th:href="@{monitoring_card(whereUpdateMonitoring='pledgor', pledgorId=${client.getClientId()})}"
+    <a th:href="@{monitoring_card(whereUpdateMonitoring='client', pledgorId=${client.getClientId()})}"
        href="monitoring_card.html"
        th:text="'Обновить мониторинг предметов залога по всем договорам залога залогодателя'">Обновить мониторинг предметов залога по всем договорам залога залогодателя</a>
     <br>

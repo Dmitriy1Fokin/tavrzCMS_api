@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +59,7 @@ public class ClientService {
 
 
     public Client getClientByClientId(long clientId){
-        return repositoryClient.getOne(clientId);
+        return repositoryClient.findByClientId(clientId);
     }
 
     public List<Client> getClientByEmployee(Employee employee){
@@ -68,35 +67,35 @@ public class ClientService {
     }
 
     public int countOfCurrentPledgeAgreementsByPledgorId(long pledgorId){
-        return repositoryPledgeAgreement.countAllByPledgorAndStatusPAEquals(repositoryClient.getOne(pledgorId), "открыт");
+        return repositoryPledgeAgreement.countAllByClientAndStatusPAEquals(repositoryClient.findByClientId(pledgorId), "открыт");
     }
 
     public List<PledgeAgreement> getCurrentPledgeAgreementsByPledgorId(long pledgorId){
-        return repositoryPledgeAgreement.findByPledgorAndStatusPA(repositoryClient.getOne(pledgorId), "открыт");
+        return repositoryPledgeAgreement.findByClientAndStatusPA(repositoryClient.findByClientId(pledgorId), "открыт");
     }
 
     public int countOfClosedPledgeAgreementsByPledgorId(long pledgorId){
-        return repositoryPledgeAgreement.countAllByPledgorAndStatusPAEquals(repositoryClient.getOne(pledgorId), "закрыт");
+        return repositoryPledgeAgreement.countAllByClientAndStatusPAEquals(repositoryClient.findByClientId(pledgorId), "закрыт");
     }
 
     public List<PledgeAgreement> getClosedPledgeAgreementsByPledgorId(long pledgorId){
-        return repositoryPledgeAgreement.findByPledgorAndStatusPA(repositoryClient.getOne(pledgorId), "закрыт");
+        return repositoryPledgeAgreement.findByClientAndStatusPA(repositoryClient.findByClientId(pledgorId), "закрыт");
     }
 
     public int countOfCurrentLoanEgreementsByLoanerId(long loanerId){
-        return repositoryLoanAgreement.countAllByLoanerAndStatusLAEquals(repositoryClient.getOne(loanerId), "открыт");
+        return repositoryLoanAgreement.countAllByClientAndStatusLAEquals(repositoryClient.findByClientId(loanerId), "открыт");
     }
 
     public List<LoanAgreement> getCurrentLoanAgreementsByLoanerId(long loanerId){
-        return repositoryLoanAgreement.findByLoanerAndStatusLAEquals(repositoryClient.getOne(loanerId), "открыт");
+        return repositoryLoanAgreement.findByClientAndStatusLAEquals(repositoryClient.findByClientId(loanerId), "открыт");
     }
 
     public int countOfClosedLoanEgreementsByLoanerId(long loanerId){
-        return repositoryLoanAgreement.countAllByLoanerAndStatusLAEquals(repositoryClient.getOne(loanerId), "закрыт");
+        return repositoryLoanAgreement.countAllByClientAndStatusLAEquals(repositoryClient.findByClientId(loanerId), "закрыт");
     }
 
     public List<LoanAgreement> getClosedLoanAgreementsByLoanerId(long loanerId){
-        return repositoryLoanAgreement.findByLoanerAndStatusLAEquals(repositoryClient.getOne(loanerId), "закрыт");
+        return repositoryLoanAgreement.findByClientAndStatusLAEquals(repositoryClient.findByClientId(loanerId), "закрыт");
     }
 
     public Page<Client> getClientFromSearch(Map<String, String> searchParam){
@@ -145,23 +144,13 @@ public class ClientService {
     }
 
     @Transactional
-    public ClientIndividual updateClientIndividual(ClientIndividual clientIndividual){
-        return repositoryClientIndividual.save(clientIndividual);
-    }
+    public Client updateInsertClient(Client client){
+        if(client.getClass()==ClientLegalEntity.class)
+            client = repositoryClientLegalEntity.save((ClientLegalEntity) client);
+        else if(client.getClass()==ClientIndividual.class)
+            client = repositoryClientIndividual.save((ClientIndividual) client);
 
-    @Transactional
-    public ClientLegalEntity updateClientLegalEntity(ClientLegalEntity clientLegalEntity){
-        return repositoryClientLegalEntity.save(clientLegalEntity);
-    }
-
-    @Transactional
-    public Client saveClientLegalEntity(ClientLegalEntity clientLegalEntity){
-        return repositoryClientLegalEntity.save(clientLegalEntity);
-    }
-
-    @Transactional
-    public Client saveClientIndividual(ClientIndividual clientIndividual){
-        return repositoryClientIndividual.save(clientIndividual);
+        return client;
     }
 
     @Transactional
@@ -209,6 +198,24 @@ public class ClientService {
         clientLegalEntityList = repositoryClientLegalEntity.saveAll(clientLegalEntityList);
 
         return clientLegalEntityList;
+    }
+
+    public String getFullNameClient(long clientId){
+        Client client = repositoryClient.findByClientId(clientId);
+
+
+        if(client.getClass()==ClientIndividual.class){
+            ClientIndividual clientIndividual = repositoryClientIndividual.findByClient(client);
+
+            return clientIndividual.getSurname() + " " + clientIndividual.getName() + " " + clientIndividual.getPatronymic();
+
+        }else if(client.getClass()==ClientLegalEntity.class){
+            ClientLegalEntity clientLegalEntity = repositoryClientLegalEntity.findByClient(client);
+
+            return clientLegalEntity.getOrganizationalForm() + " " + clientLegalEntity.getName();
+
+        }else
+            return null;
     }
 
 }

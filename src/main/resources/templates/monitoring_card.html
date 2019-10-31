@@ -9,17 +9,17 @@
         <div th:case="ps">
             <title th:text="'Обновление мониторинга предмета залога: ' + ${pledgeSubject.getName()}">Обновление мониторинга</title>
         </div>
-        <div th:case="pledgor">
-            <div th:switch="${pledgor.getTypeOfClient()}">
+        <div th:case="client">
+            <div th:switch="${client.getTypeOfClient()}">
                 <div th:case="юл">
                     <title th:text="'Обновление мониторинга предмета залога по залогодателю: '
-                    + ${pledgor.getClientLegalEntity().getOrganizationalForm()} + ' '
-                    + ${pledgor.getClientLegalEntity().getName()}">Обновление мониторинга предмета залога по залогодателю ЮЛ</title>
+                    + ${client.getClientLegalEntity().getOrganizationalForm()} + ' '
+                    + ${client.getClientLegalEntity().getName()}">Обновление мониторинга предмета залога по залогодателю ЮЛ</title>
                 </div>
                 <div th:case="фл">
                     <title th:text="'Обновление мониторинга предмета залога по залогодателю: '
-                     + ${pledgor.getClientIndividual().getSurname()} + ' '
-                        + ${pledgor.getClientIndividual().getName()}">Обновление мониторинга предмета залога по залогодателю ФЛ</title>
+                     + ${client.getClientIndividual().getSurname()} + ' '
+                        + ${client.getClientIndividual().getName()}">Обновление мониторинга предмета залога по залогодателю ФЛ</title>
                 </div>
             </div>
         </div>
@@ -47,17 +47,17 @@
     <div th:case="ps">
         <h1 th:text="'Обновление мониторинга предмета залога:' + ${pledgeSubject.getName()}">Обновление мониторинга</h1>
     </div>
-    <div th:case="pledgor">
-        <div th:switch="${pledgor.getTypeOfClient()}">
+    <div th:case="client">
+        <div th:switch="${client.getTypeOfClient()}">
             <div th:case="юл">
                 <h1 th:text="'Обновление мониторинга предмета залога по залогодателю:'
-                    + ${pledgor.getClientLegalEntity().getOrganizationalForm()} + ' '
-                    + ${pledgor.getClientLegalEntity().getName()}">Обновление мониторинга предмета залога по залогодателю ЮЛ</h1>
+                    + ${client.getClientLegalEntity().getOrganizationalForm()} + ' '
+                    + ${client.getClientLegalEntity().getName()}">Обновление мониторинга предмета залога по залогодателю ЮЛ</h1>
             </div>
             <div th:case="фл">
                 <h1 th:text="'Обновление мониторинга предмета залога по залогодателю:'
-                     + ${pledgor.getClientIndividual().getSurname()} + ' '
-                        + ${pledgor.getClientIndividual().getName()}">Обновление мониторинга предмета залога по залогодателю ФЛ</h1>
+                     + ${client.getClientIndividual().getSurname()} + ' '
+                        + ${client.getClientIndividual().getName()}">Обновление мониторинга предмета залога по залогодателю ФЛ</h1>
             </div>
         </div>
     </div>
@@ -76,9 +76,9 @@
             <input type="hidden", name="whereUpdateMonitoring" th:value="${whereUpdateMonitoring}">
             <input type="hidden", name="pledgeSubjectId" th:value="${pledgeSubject.getPledgeSubjectId()}" value="0">
         </div>
-        <div th:case="pledgor">
+        <div th:case="client">
             <input type="hidden", name="whereUpdateMonitoring" th:value="${whereUpdateMonitoring}">
-            <input type="hidden", name="pledgorId" th:value="${pledgor.getClientId()}" value="0">
+            <input type="hidden", name="pledgorId" th:value="${client.getClientId()}" value="0">
         </div>
     </div>
 

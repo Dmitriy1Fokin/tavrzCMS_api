@@ -13,4 +13,5 @@ import java.util.List;
 public interface RepositoryClientLegalEntity extends JpaRepository<ClientLegalEntity, Long>, JpaSpecificationExecutor<ClientLegalEntity> {
     List<ClientLegalEntity> findByNameContainingIgnoreCase (String name);
     Page<Client> findAll(Specification specification, Pageable pageable);
+    ClientLegalEntity findByClient(Client client);
 }

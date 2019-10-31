@@ -46,7 +46,7 @@ public class LoanAgreementService {
 
     public int countOfCurrentLoanAgreementsForEmployee(Employee employee){
         List<Client> loaners = clientService.getClientByEmployee(employee);
-        return repositoryLoanAgreement.countAllByLoanerInAndStatusLAEquals(loaners, "открыт");
+        return repositoryLoanAgreement.countAllByClientInAndStatusLAEquals(loaners, "открыт");
     }
 
     public int countOfCurrentPledgeAgreements(long loanAgreementId){
@@ -160,7 +160,7 @@ public class LoanAgreementService {
     public Page<LoanAgreement> getCurrentLoanAgreementsForEmployee(Pageable pageable, long employeeId){
         Employee employee = repositoryEmployee.getOne(employeeId);
         List<Client> clientList = repositoryClient.findByEmployee(employee);
-        return repositoryLoanAgreement.findByLoanerInAndStatusLAEquals(clientList, "открыт", pageable);
+        return repositoryLoanAgreement.findByClientInAndStatusLAEquals(clientList, "открыт", pageable);
 
     }
 

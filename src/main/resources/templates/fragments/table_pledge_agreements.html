@@ -40,20 +40,10 @@
 
             <td th:text="${pa.getDateEndPA()}"></td>
 
-            <div th:switch="${pa.getPledgor().getTypeOfClient()}">
-                <div th:case="юл">
-                    <td>
-                        <a th:href="@{/client(clientId=${pa.getPledgor().getClientId()})}" href="client.html"
-                           th:text="${pa.getPledgor().getClientLegalEntity().getOrganizationalForm() + ' ' + pa.getPledgor().getClientLegalEntity().getName()}"></a>
-                    </td>
-                </div>
-                <div th:case="фл">
-                    <td>
-                        <a th:href="@{/client(clientId=${pa.getPledgor().getClientId()})}" href="client.html"
-                           th:text="${pa.getPledgor().getClientIndividual().getSurname() + ' ' + pa.getPledgor().getClientIndividual().getName()}"></a>
-                    </td>
-                </div>
-            </div>
+            <td>
+                <a th:href="@{/client(clientId=${pa.getClient().getClientId()})}" href="client.html"
+                   th:text="${@clientService.getFullNameClient(pa.getClient().getClientId())}"></a>
+            </td>
 
             <td>
                 <ol>

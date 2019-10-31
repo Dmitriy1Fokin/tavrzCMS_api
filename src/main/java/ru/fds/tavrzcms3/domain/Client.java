@@ -3,6 +3,7 @@ package ru.fds.tavrzcms3.domain;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "client_prime")
@@ -13,7 +14,8 @@ public class Client {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="client_id")
 	private long clientId;
-	
+
+	@Pattern(regexp = "юл|фл", message = "Возможные варианты: юл, фл")
 	@Column(name = "type_of_client")
 	private String typeOfClient;
 	
@@ -33,10 +35,10 @@ public class Client {
 	@JoinColumn(name = "client_id")
 	private ClientLegalEntity clientLegalEntity;
 	
-	@OneToMany(mappedBy = "loaner")
+	@OneToMany(mappedBy = "client")
 	private List<LoanAgreement> loanAgreements;
 
-	@OneToMany(mappedBy = "pledgor")
+	@OneToMany(mappedBy = "client")
 	private List<PledgeAgreement> pledgeAgreements;
 
 	public long getClientId() {

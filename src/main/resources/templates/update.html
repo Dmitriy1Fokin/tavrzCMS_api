@@ -24,18 +24,18 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<a th:href="@{client_card(whatDo='newClientLE')}"
-   href="client_card.html"
+<a th:href="@{client_card_new(typeOfClient='юл')}"
+   href="client_card_new.html"
    th:text="'Добавить нового клиента (ЮЛ)'">Добавить нового клиента (ЮЛ)</a>
 <br>
 <br>
-<a th:href="@{client_card(whatDo='newClientInd')}"
-   href="client_card.html"
+<a th:href="@{client_card_new(typeOfClient='фл')}"
+   href="client_card_new.html"
    th:text="'Добавить нового клиента (ФЛ)'">Добавить нового клиента (ФЛ)</a>
 <br>
 <br>
 
-<span>Импортировать сущностей</span>
+<span>Импорт сущностей</span>
 <br>
 <form method="POST" action="/upload" enctype="multipart/form-data">
     <select name="whatUpload">

@@ -80,7 +80,7 @@ public class LoanAgreement {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "loaner_id")
-	private Client loaner;
+	private Client client;
 	
 	@ManyToMany
 	@JoinTable(name = "kd_dz", joinColumns = @JoinColumn(name ="kd_id"), inverseJoinColumns = @JoinColumn(name ="dz_id"))
@@ -166,12 +166,12 @@ public class LoanAgreement {
 		this.qualityCategory = qualityCategory;
 	}
 
-	public Client getLoaner() {
-		return loaner;
+	public Client getClient() {
+		return client;
 	}
 
-	public void setLoaner(Client loaner) {
-		this.loaner = loaner;
+	public void setClient(Client client) {
+		this.client = client;
 	}
 
 	public List<PledgeAgreement> getPledgeAgreements() {

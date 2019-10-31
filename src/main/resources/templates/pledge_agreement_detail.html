@@ -28,7 +28,7 @@
 
 <h1 th:text="'Договор залога: №' + ${pledgeAgreement.getNumPA()} + ' от ' + ${pledgeAgreement.getDateBeginPA()}">Договор залога</h1>
     <label>Ответственный сотрудник: </label>
-    <span th:text="${pledgeAgreement.getPledgor().getEmployee().getSurname()} + ' ' + ${pledgeAgreement.getPledgor().getEmployee().name}"></span>
+    <span th:text="${pledgeAgreement.getClient().getEmployee().getSurname()} + ' ' + ${pledgeAgreement.getClient().getEmployee().name}"></span>
     <br>
     <br>
     <label>Id договора залога:</label>
@@ -48,14 +48,14 @@
     <br>
     <br>
     <label>Залогодатель:</label>
-    <div th:switch="${pledgeAgreement.getPledgor().getTypeOfClient()}">
+    <div th:switch="${pledgeAgreement.getClient().getTypeOfClient()}">
         <div th:case="юл">
-            <a th:href="@{/client(clientId=${pledgeAgreement.getPledgor().getClientId()})}" href="client.html"
-               th:text="${pledgeAgreement.getPledgor().getClientLegalEntity().getOrganizationalForm() + ' ' + pledgeAgreement.getPledgor().getClientLegalEntity().getName()}">Залогодатель ЮЛ</a>
+            <a th:href="@{/client(clientId=${pledgeAgreement.getClient().getClientId()})}" href="client.html"
+               th:text="${pledgeAgreement.getClient().getClientLegalEntity().getOrganizationalForm() + ' ' + pledgeAgreement.getClient().getClientLegalEntity().getName()}">Залогодатель ЮЛ</a>
         </div>
         <div th:case="фл">
-            <a th:href="@{/client(clientId=${pledgeAgreement.getPledgor().getClientId()})}" href="client.html"
-               th:text="${pledgeAgreement.getPledgor().getClientIndividual().getSurname() + ' ' + pledgeAgreement.getPledgor().getClientIndividual().getName()}">Залогодатель ФЛ</a>
+            <a th:href="@{/client(clientId=${pledgeAgreement.getClient().getClientId()})}" href="client.html"
+               th:text="${pledgeAgreement.getClient().getClientIndividual().getSurname() + ' ' + pledgeAgreement.getClient().getClientIndividual().getName()}">Залогодатель ФЛ</a>
 
         </div>
     </div>

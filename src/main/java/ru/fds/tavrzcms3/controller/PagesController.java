@@ -234,15 +234,6 @@ public class PagesController {
         return "pledge_subject_detail";
     }
 
-    @GetMapping("/client")
-    public String clientPage(@RequestParam("clientId") long clientId,
-                             Model model){
-        Client client = clientService.getClientByClientId(clientId);
-        model.addAttribute("client", client);
-
-        return "client";
-    }
-
     @GetMapping("/pledge_agreement_detail")
     public String pledgeAgreementDetailPage(@RequestParam("pledgeAgreementId") long pledgeAgreementId,
                                             Model model){
@@ -562,7 +553,7 @@ public class PagesController {
         }else if(whatDo.equals("newLA")){
             LoanAgreement loanAgreement = new LoanAgreement();
             Client client = clientService.getClientByClientId(clientId.get());
-            loanAgreement.setLoaner(client);
+            loanAgreement.setClient(client);
 
             model.addAttribute("loanAgreement", loanAgreement);
             model.addAttribute("whatDo", whatDo);
@@ -619,7 +610,7 @@ public class PagesController {
         }else if(whatDo.equals("newPA")){
             PledgeAgreement pledgeAgreement = new PledgeAgreement();
             Client client = clientService.getClientByClientId(clientId.get());
-            pledgeAgreement.setPledgor(client);
+            pledgeAgreement.setClient(client);
 
             model.addAttribute("pledgeAgreement", pledgeAgreement);
             model.addAttribute("whatDo", whatDo);
@@ -1345,77 +1336,140 @@ public class PagesController {
         return "update";
     }
 
-    @GetMapping("/client_card")
-    public String clientCardGet(@RequestParam("clientId") Optional<Long> clientId,
-                                @RequestParam("whatDo") String whatDo,
-                                Model model){
+    @GetMapping("/client")
+    public String clientPage(@RequestParam("clientId") long clientId,
+                             Model model){
+        Client client = clientService.getClientByClientId(clientId);
+        model.addAttribute("client", client);
+
+        return "client";
+    }
+
+    @GetMapping("/client_card_update")
+    public String clientCardUpdatePage(@RequestParam("clientId") Optional<Long> clientId,
+                                       Model model){
 
         List<ClientManager> clientManagerList = clientManagerService.getAllClientManager();
         List<Employee> employeeList = employeeService.getAllEmployee();
 
-        if(whatDo.equals("newClientLE")){
-            ClientLegalEntity clientLegalEntity = new ClientLegalEntity();
-
-            model.addAttribute("whatDo", whatDo);
-            model.addAttribute("clientManagerList", clientManagerList);
-            model.addAttribute("employeeList", employeeList);
-            model.addAttribute("clientLegalEntity", clientLegalEntity);
-
-            return "client_card";
-        }else if(whatDo.equals("newClientInd")){
-            ClientIndividual clientIndividual = new ClientIndividual();
-
-            model.addAttribute("whatDo", whatDo);
-            model.addAttribute("clientManagerList", clientManagerList);
-            model.addAttribute("employeeList", employeeList);
-            model.addAttribute("clientIndividual", clientIndividual);
-
-            return "client_card";
-        }else {
-            Client client = clientService.getClientByClientId(clientId.orElse((long)0));
-
-            model.addAttribute("whatDo", whatDo);
-            model.addAttribute("clientManagerList", clientManagerList);
-            model.addAttribute("employeeList", employeeList);
-            model.addAttribute("client", client);
-
-            return "client_card";
+        Client client = clientService.getClientByClientId(clientId.get());
+        if(client.getClass()==ClientLegalEntity.class){
+            model.addAttribute("clientLegalEntity", client);
+        }else if(client.getClass()==ClientIndividual.class){
+            model.addAttribute("clientIndividual", client);
         }
+
+        model.addAttribute("clientManagerList", clientManagerList);
+        model.addAttribute("employeeList", employeeList);
+        model.addAttribute("typeOfClient", client.getTypeOfClient());
+
+        return "client_card_update";
     }
 
-    @PostMapping("/client_card")
-    public String clientCardPost(@ModelAttribute Client client,
-                                 @ModelAttribute ClientIndividual clientIndividual,
-                                 @ModelAttribute ClientLegalEntity clientLegalEntity,
-                                 @RequestParam("whatDo") String whatDo,
-                                 Model model){
+    @GetMapping("/client_card_new")
+    public String clientCardNewPage(@RequestParam("typeOfClient") String typeOfClient,
+                                    Model model){
 
-        if(whatDo.equals("newClientLE")){
-            Client clientLegalEntityNew = clientService.saveClientLegalEntity(clientLegalEntity);
+        List<ClientManager> clientManagerList = clientManagerService.getAllClientManager();
+        List<Employee> employeeList = employeeService.getAllEmployee();
 
-            model.addAttribute("client", clientLegalEntityNew);
-            model.addAttribute("whatDo", "responseSuccess");
+        if(typeOfClient.equals("юл")){
+            ClientLegalEntity clientLegalEntity = new ClientLegalEntity();
+            model.addAttribute("clientLegalEntity", clientLegalEntity);
 
-            return "client_card";
+        }else if(typeOfClient.equals("фл")){
+            ClientIndividual clientIndividual = new ClientIndividual();
+            model.addAttribute("clientIndividual", clientIndividual);
 
-        }else if(whatDo.equals("newClientInd")){
-            Client clientIndividualNew = clientService.saveClientIndividual(clientIndividual);
-
-            model.addAttribute("client", clientIndividualNew);
-            model.addAttribute("whatDo", "responseSuccess");
-
-            return "client_card";
-        }else {
-            if(client.getTypeOfClient().equals("юл")){
-                ClientLegalEntity clientLegalEntityUpdated = clientService.updateClientLegalEntity(clientLegalEntity);
-                model.addAttribute("client", clientLegalEntityUpdated);
-            }else {
-                ClientIndividual clientIndividualUpdated = clientService.updateClientIndividual(clientIndividual);
-                model.addAttribute("client", clientIndividualUpdated);
-            }
-
-            return "client";
         }
+
+        model.addAttribute("typeOfClient", typeOfClient);
+        model.addAttribute("clientManagerList", clientManagerList);
+        model.addAttribute("employeeList", employeeList);
+
+        return "client_card_new";
+    }
+
+    @PostMapping("update_client_le")
+    public String updateClientLegalEntity(@Valid ClientLegalEntity clientLegalEntity,
+                                          BindingResult bindingResult,
+                                          Model model){
+        if(bindingResult.hasErrors()){
+            List<ClientManager> clientManagerList = clientManagerService.getAllClientManager();
+            List<Employee> employeeList = employeeService.getAllEmployee();
+            model.addAttribute("clientManagerList", clientManagerList);
+            model.addAttribute("employeeList", employeeList);
+            model.addAttribute("typeOfClient", clientLegalEntity.getTypeOfClient());
+
+            return "client_card_update";
+        }
+
+        Client clientUpdated = clientService.updateInsertClient(clientLegalEntity);
+
+        model.addAttribute("client", clientUpdated);
+
+        return "client";
+    }
+
+    @PostMapping("update_client_ind")
+    public String updateClientIndividual(@Valid ClientIndividual clientIndividual,
+                                          BindingResult bindingResult,
+                                          Model model){
+        if(bindingResult.hasErrors()){
+            List<ClientManager> clientManagerList = clientManagerService.getAllClientManager();
+            List<Employee> employeeList = employeeService.getAllEmployee();
+            model.addAttribute("clientManagerList", clientManagerList);
+            model.addAttribute("employeeList", employeeList);
+            model.addAttribute("typeOfClient", clientIndividual.getTypeOfClient());
+
+            return "client_card_update";
+        }
+
+        Client clientUpdated = clientService.updateInsertClient(clientIndividual);
+        model.addAttribute("client", clientUpdated);
+
+        return "client";
+    }
+
+    @PostMapping("insert_client_le")
+    public String insertNewClientLegalEntity(@Valid ClientLegalEntity clientLegalEntity,
+                                             BindingResult bindingResult,
+                                             Model model){
+        if(bindingResult.hasErrors()){
+            List<ClientManager> clientManagerList = clientManagerService.getAllClientManager();
+            List<Employee> employeeList = employeeService.getAllEmployee();
+            model.addAttribute("clientManagerList", clientManagerList);
+            model.addAttribute("employeeList", employeeList);
+            model.addAttribute("typeOfClient", clientLegalEntity.getTypeOfClient());
+
+            return "client_card_new";
+        }
+
+        Client clientUpdated = clientService.updateInsertClient(clientLegalEntity);
+
+        model.addAttribute("client", clientUpdated);
+
+        return "client";
+    }
+
+    @PostMapping("insert_client_ind")
+    public String insertNewClientIndividual(@Valid ClientIndividual clientIndividual,
+                                            BindingResult bindingResult,
+                                            Model model){
+        if(bindingResult.hasErrors()){
+            List<ClientManager> clientManagerList = clientManagerService.getAllClientManager();
+            List<Employee> employeeList = employeeService.getAllEmployee();
+            model.addAttribute("clientManagerList", clientManagerList);
+            model.addAttribute("employeeList", employeeList);
+            model.addAttribute("typeOfClient", clientIndividual.getTypeOfClient());
+
+            return "client_card_new";
+        }
+
+        Client clientUpdated = clientService.updateInsertClient(clientIndividual);
+        model.addAttribute("client", clientUpdated);
+
+        return "client";
     }
 
     @PostMapping("searchPA")

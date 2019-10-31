@@ -28,7 +28,7 @@
 
 <h1 th:text="'Кредитный договор: №' + ${loanAgreement.getNumLA()} + ' от ' + ${loanAgreement.getDateBeginLA()}">Кредитный договор</h1>
 <label>Ответственный сотрудник: </label>
-<span th:text="${loanAgreement.getLoaner().getEmployee().getSurname()} + ' ' + ${loanAgreement.getLoaner().getEmployee().name}"></span>
+<span th:text="${loanAgreement.getClient().getEmployee().getSurname()} + ' ' + ${loanAgreement.getClient().getEmployee().name}"></span>
 <br>
 <br>
 
@@ -49,14 +49,14 @@
 <br>
 <br>
 <label>Заемщик:</label>
-<div th:switch="${loanAgreement.getLoaner().getTypeOfClient()}">
+<div th:switch="${loanAgreement.getClient().getTypeOfClient()}">
     <div th:case="юл">
-        <a th:href="@{/client(clientId=${loanAgreement.getLoaner().getClientId()})}" href="client.html"
-           th:text="${loanAgreement.getLoaner().getClientLegalEntity().getOrganizationalForm() + ' ' + loanAgreement.getLoaner().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
+        <a th:href="@{/client(clientId=${loanAgreement.getClient().getClientId()})}" href="client.html"
+           th:text="${loanAgreement.getClient().getClientLegalEntity().getOrganizationalForm() + ' ' + loanAgreement.getClient().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
     </div>
     <div th:case="фл">
-        <a th:href="@{/client(clientId=${loanAgreement.getLoaner().getClientId()})}" href="client.html"
-           th:text="${loanAgreement.getLoaner().getClientIndividual().getSurname() + ' ' + loanAgreement.getLoaner().getClientIndividual().getName()}">Заемщик ФЛ</a>
+        <a th:href="@{/client(clientId=${loanAgreement.getClient().getClientId()})}" href="client.html"
+           th:text="${loanAgreement.getClient().getClientIndividual().getSurname() + ' ' + loanAgreement.getClient().getClientIndividual().getName()}">Заемщик ФЛ</a>
 
     </div>
 </div>

@@ -28,7 +28,7 @@
         <form th:action="@{/pledge_agreement_card}" th:method="post" th:object="${pledgeAgreement}" action="pledge_agreement_card.html">
             <input type="hidden", name="whatDo" th:value="${whatDo}">
             <input type="hidden", th:field="*{pledgeAgreementId}" th:value="${pledgeAgreement.getPledgeAgreementId()}">
-            <input type="hidden", th:field="*{pledgor}" th:value="${pledgeAgreement.getPledgor()}">
+            <input type="hidden" , th:field="*{client}" th:value="${pledgeAgreement.getClient()}">
             <input type="hidden", th:field="*{loanAgreements}" th:value="${pledgeAgreement.getLoanAgreements()}">
             <input type="hidden", th:field="*{pledgeSubjects}" th:value="${pledgeAgreement.getPledgeSubjects()}">
 
@@ -80,7 +80,7 @@
     <div th:case="newPA">
         <form th:action="@{/pledge_agreement_card}" th:method="post" th:object="${pledgeAgreement}" action="pledge_agreement_card.html">
             <input type="hidden", name="whatDo" th:value="${whatDo}">
-            <input type="hidden", th:field="*{pledgor}" th:value="${pledgeAgreement.getPledgor()}">
+            <input type="hidden" , th:field="*{client}" th:value="${pledgeAgreement.getClient()}">
 
             <div class="row">
                 <label>№ ДЗ:</label>

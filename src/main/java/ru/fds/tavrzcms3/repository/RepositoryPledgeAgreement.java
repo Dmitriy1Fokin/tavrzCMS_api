@@ -14,17 +14,17 @@ import java.util.List;
 
 public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement, Long>, JpaSpecificationExecutor<PledgeAgreement> {
     PledgeAgreement findByPledgeAgreementId(long pledgeAgreementId);
-    List<PledgeAgreement> findByPledgor (Client pledgor);
-    int countAllByPledgorInAndStatusPAEquals(List<Client> pledgors, String statusPA);
-    int countAllByPledgorInAndPervPoslEqualsAndStatusPAEquals(List<Client> pledgors, String perv, String statusPA);
-    int countAllByPledgorAndStatusPAEquals(Client pledgor, String statusPA);
-    List<PledgeAgreement> findByPledgorAndStatusPA(Client pledgor, String statusPA);
+    List<PledgeAgreement> findByClient(Client client);
+    int countAllByClientInAndStatusPAEquals(List<Client> clients, String statusPA);
+    int countAllByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, String perv, String statusPA);
+    int countAllByClientAndStatusPAEquals(Client client, String statusPA);
+    List<PledgeAgreement> findByClientAndStatusPA(Client client, String statusPA);
     List<PledgeAgreement> findByLoanAgreements(LoanAgreement loanAgreement);
     List<PledgeAgreement> findByLoanAgreementsAndStatusPAEquals(LoanAgreement loanAgreement, String statusPA);
-    List<PledgeAgreement> findByPledgorInAndPervPoslEqualsAndStatusPAEquals(List<Client> pledgors, String pervPosl, String statusPA, Sort sort);
-    Page<PledgeAgreement> findByPledgorInAndPervPoslEqualsAndStatusPAEquals(List<Client> pledgors, String pervPosl, String statusPA, Pageable pageable);
-    List<PledgeAgreement> findByPledgorInAndStatusPAEquals(List<Client> pledgors, String statusPA, Sort sort);
-    Page<PledgeAgreement> findByPledgorInAndStatusPAEquals(List<Client> pledgors, String statusPA, Pageable pageable);
+    List<PledgeAgreement> findByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, String pervPosl, String statusPA, Sort sort);
+    Page<PledgeAgreement> findByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, String pervPosl, String statusPA, Pageable pageable);
+    List<PledgeAgreement> findByClientInAndStatusPAEquals(List<Client> clients, String statusPA, Sort sort);
+    Page<PledgeAgreement> findByClientInAndStatusPAEquals(List<Client> clients, String statusPA, Pageable pageable);
     Page<PledgeAgreement> findAll(Specification specification, Pageable pageable);
     List<PledgeAgreement> findAllByNumPAContainingIgnoreCase(String numPA);
 }

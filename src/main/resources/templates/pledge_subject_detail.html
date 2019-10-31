@@ -391,14 +391,14 @@
                 <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
                    th:text="${pe.getNumPA() + ' от ' + pe.getDateBeginPA()}">№ ДЗ</a>
             </li>
-            <div th:switch="${pe.getPledgor().getTypeOfClient()}">
+            <div th:switch="${pe.getClient().getTypeOfClient()}">
                 <div th:case="юл">
-                    <a th:href="@{/client(clientId=${pe.getPledgor().getClientId()})}" href="client.html"
-                       th:text="${pe.getPledgor().getClientLegalEntity().getOrganizationalForm() + ' ' + pe.getPledgor().getClientLegalEntity().getName()}">Залогодатель ЮЛ</a>
+                    <a th:href="@{/client(clientId=${pe.getClient().getClientId()})}" href="client.html"
+                       th:text="${pe.getClient().getClientLegalEntity().getOrganizationalForm() + ' ' + pe.getClient().getClientLegalEntity().getName()}">Залогодатель ЮЛ</a>
                 </div>
                 <div th:case="фл">
-                    <a th:href="@{/client(clientId=${pe.getPledgor().getClientId()})}" href="client.html"
-                       th:text="${pe.getPledgor().getClientIndividual().getSurname() + ' ' + pe.getPledgor().getClientIndividual().getName()}">Залогодатель ФЛ</a>
+                    <a th:href="@{/client(clientId=${pe.getClient().getClientId()})}" href="client.html"
+                       th:text="${pe.getClient().getClientIndividual().getSurname() + ' ' + pe.getClient().getClientIndividual().getName()}">Залогодатель ФЛ</a>
 
                 </div>
             </div>
@@ -416,14 +416,14 @@
                     <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
                        th:text="${loanAgreement.getNumLA() + ' от ' + loanAgreement.getDateBeginLA()}">№ КД</a>
                 </li>
-                <div th:switch="${loanAgreement.getLoaner().getTypeOfClient()}">
+                <div th:switch="${loanAgreement.getClient().getTypeOfClient()}">
                     <div th:case="юл">
-                        <a th:href="@{/client(clientId=${loanAgreement.getLoaner().getClientId()})}" href="client.html"
-                           th:text="${loanAgreement.getLoaner().getClientLegalEntity().getOrganizationalForm() + ' ' + loanAgreement.getLoaner().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
+                        <a th:href="@{/client(clientId=${loanAgreement.getClient().getClientId()})}" href="client.html"
+                           th:text="${loanAgreement.getClient().getClientLegalEntity().getOrganizationalForm() + ' ' + loanAgreement.getClient().getClientLegalEntity().getName()}">Заемщик ЮЛ</a>
                     </div>
                     <div th:case="фл">
-                        <a th:href="@{/client(clientId=${loanAgreement.getLoaner().getClientId()})}" href="client.html"
-                           th:text="${loanAgreement.getLoaner().getClientIndividual().getSurname() + ' ' + loanAgreement.getLoaner().getClientIndividual().getName()}">Заемщик ФЛ</a>
+                        <a th:href="@{/client(clientId=${loanAgreement.getClient().getClientId()})}" href="client.html"
+                           th:text="${loanAgreement.getClient().getClientIndividual().getSurname() + ' ' + loanAgreement.getClient().getClientIndividual().getName()}">Заемщик ФЛ</a>
                     </div>
                 </div>
             </div>

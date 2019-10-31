@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="generalProperty(client, employeeList, clientManagerList)">
+    <div class="row">
+        <label>Ответственный сотрудник</label>
+        <select required th:field="*{employee}">
+            <div th:each="emp : ${employeeList}">
+                <option th:value="${emp.getEmployeeId()}" th:text="${emp.getSurname() + ' ' + emp.getName()}"></option>
+            </div>
+        </select>
+        <div th:if="${#fields.hasErrors('employee')}" th:errors="*{employee}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Клиентский менеджер</label>
+        <select required th:field="*{clientManager}">
+            <div th:each="cm : ${clientManagerList}">
+                <option th:value="${cm.clientManagerId}" th:text="${cm.getSurname() + ' ' + cm.getName()}"></option>
+            </div>
+        </select>
+        <div th:if="${#fields.hasErrors('clientManager')}" th:errors="*{clientManager}">Name Error</div>
+    </div>
+</div>
+
+
+<div th:fragment="legalEntitylProperty(client)">
+    <div class="row">
+        <label>Правовая форма</label>
+        <input required th:field="*{organizationalForm}" type="text" th:value="${client.getOrganizationalForm()}"/>
+        <div th:if="${#fields.hasErrors('organizationalForm')}" th:errors="*{organizationalForm}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Наименование</label>
+        <input required th:field="*{name}" type="text" th:value="${client.getName()}"/>
+        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>ИНН</label>
+        <input th:field="*{inn}" type="text" th:value="${client.getInn()}"/>
+        <div th:if="${#fields.hasErrors('inn')}" th:errors="*{inn}">Name Error</div>
+    </div>
+</div>
+
+
+<div th:fragment="individualProperty(client)">
+    <div class="row">
+        <label>Фамилия</label>
+        <input required th:field="*{surname}" type="text" th:value="${client.getSurname()}"/>
+        <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Имя</label>
+        <input required th:field="*{name}" type="text" th:value="${client.getName()}"/>
+        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Отчество</label>
+        <input th:field="*{patronymic}" type="text" th:value="${client.getPatronymic()}"/>
+        <div th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>№ паспорта</label>
+        <input th:field="*{pasportNum}" type="text" th:value="${client.getPasportNum()}"/>
+        <div th:if="${#fields.hasErrors('pasportNum')}" th:errors="*{pasportNum}">Name Error</div>
+    </div>
+</div>
+
+
+</body>
+</html>

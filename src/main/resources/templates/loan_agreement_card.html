@@ -28,7 +28,7 @@
         <form th:action="@{/loan_agreement_card}" th:method="post" th:object="${loanAgreement}" action="loan_agreement_card.html">
             <input type="hidden", name="whatDo" th:value="${whatDo}">
             <input type="hidden", th:field="*{loanAgreementId}" th:value="${loanAgreement.getLoanAgreementId()}">
-            <input type="hidden", th:field="*{loaner}" th:value="${loanAgreement.getLoaner()}">
+            <input type="hidden" , th:field="*{client}" th:value="${loanAgreement.getClient()}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${loanAgreement.getPledgeAgreements()}">
 
             <div class="row">
@@ -106,7 +106,7 @@
     <div th:case="newLA">
         <form th:action="@{/loan_agreement_card}" th:method="post" th:object="${loanAgreement}" action="loan_agreement_card.html">
             <input type="hidden", name="whatDo" th:value="${whatDo}">
-            <input type="hidden", th:field="*{loaner}" th:value="${loanAgreement.getLoaner()}">
+            <input type="hidden" , th:field="*{client}" th:value="${loanAgreement.getClient()}">
 
             <div class="row">
                 <label>№ КД:</label>
