@@ -314,19 +314,19 @@ public class PledgeAgreementService {
 
         if(!searchParam.get("numPA").isEmpty())
             builder.with("numPA", ":", searchParam.get("numPA"), false);
-        if(!searchParam.get("pledgor").isEmpty()) {
-            if (searchParam.get("pledgorOption").equals("юл")) {
-                List<ClientLegalEntity> pledgors = repositoryClientLegalEntity.findByNameContainingIgnoreCase(searchParam.get("pledgor"));
+        if(!searchParam.get("client").isEmpty()) {
+            if (searchParam.get("clientOption").equals("юл")) {
+                List<ClientLegalEntity> pledgors = repositoryClientLegalEntity.findByNameContainingIgnoreCase(searchParam.get("client"));
                 if(pledgors.isEmpty())
-                    builder.with("pledgor", ":", null, false);
+                    builder.with("client", ":", null, false);
                 else if(pledgors.size() == 1)
-                    builder.with("pledgor", ":", pledgors.get(0), false);
+                    builder.with("client", ":", pledgors.get(0), false);
                 else if(pledgors.size() > 1)
                     for(ClientLegalEntity cle : pledgors)
-                        builder.with("pledgor", ":", cle, true);
+                        builder.with("client", ":", cle, true);
             }
             else{
-                String[] words = searchParam.get("pledgor").split("\\s");
+                String[] words = searchParam.get("client").split("\\s");
                 List<ClientIndividual> pledgors = new ArrayList<>();
 
                 if(words.length == 1)
@@ -335,12 +335,12 @@ public class PledgeAgreementService {
                     pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(words[0], words[1]);
 
                 if(pledgors.isEmpty())
-                    builder.with("pledgor", ":", null, false);
+                    builder.with("client", ":", null, false);
                 else if(pledgors.size() == 1)
-                    builder.with("pledgor", ":", pledgors.get(0), false);
+                    builder.with("client", ":", pledgors.get(0), false);
                 else if(pledgors.size() > 1)
                     for(ClientIndividual ci : pledgors)
-                        builder.with("pledgor", ":", ci, true);
+                        builder.with("client", ":", ci, true);
             }
         }
         if(!searchParam.get("dateBeginPA").isEmpty()){

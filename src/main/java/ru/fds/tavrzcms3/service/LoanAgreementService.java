@@ -85,20 +85,20 @@ public class LoanAgreementService {
 
         if(!searchParam.get("numLA").isEmpty())
             builder.with("numLA", ":", searchParam.get("numLA"), false);
-        if(!searchParam.get("loaner").isEmpty()) {
-            if (searchParam.get("loanerOption").equals("юл")) {
-                List<ClientLegalEntity> loaners = repositoryClientLegalEntity.findByNameContainingIgnoreCase(searchParam.get("loaner"));
+        if(!searchParam.get("client").isEmpty()) {
+            if (searchParam.get("clientOption").equals("юл")) {
+                List<ClientLegalEntity> loaners = repositoryClientLegalEntity.findByNameContainingIgnoreCase(searchParam.get("client"));
 
                 if(loaners.isEmpty())
-                    builder.with("loaner", ":", null, false);
+                    builder.with("client", ":", null, false);
                 else if(loaners.size() == 1)
-                    builder.with("loaner", ":", loaners.get(0), false);
+                    builder.with("client", ":", loaners.get(0), false);
                 else if(loaners.size() > 1)
                     for(ClientLegalEntity cle : loaners)
-                        builder.with("loaner", ":", cle, true);
+                        builder.with("client", ":", cle, true);
             }
             else{
-                String[] words = searchParam.get("loaner").split("\\s");
+                String[] words = searchParam.get("client").split("\\s");
                 List<ClientIndividual> loaners = new ArrayList<>();
 
                 if(words.length == 1)
@@ -107,12 +107,12 @@ public class LoanAgreementService {
                     loaners = repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(words[0], words[1]);
 
                 if(loaners.isEmpty())
-                    builder.with("loaner", ":", null, false);
+                    builder.with("client", ":", null, false);
                 else if(loaners.size() == 1)
-                    builder.with("loaner", ":", loaners.get(0), false);
+                    builder.with("client", ":", loaners.get(0), false);
                 else if(loaners.size() > 1)
                     for(ClientIndividual ci : loaners)
-                        builder.with("loaner", ":", ci, true);
+                        builder.with("client", ":", ci, true);
             }
         }
         if(!searchParam.get("dateBeginLA").isEmpty()){
