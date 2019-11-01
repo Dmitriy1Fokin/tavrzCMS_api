@@ -38,9 +38,26 @@
 <span>Импорт сущностей</span>
 <br>
 <form method="POST" action="/upload" enctype="multipart/form-data">
-    <select name="whatUpload">
-        <option value="legalEntity">Клиенты.ЮЛ</option>
-        <option value="individual">Клиенты.ФЛ</option>
+    <select required name="whatUpload">
+        <option value="">не выбрано</option>
+        <option value="clientLegalEntity">Клиенты.ЮЛ</option>
+        <option value="clientIndividual">Клиенты.ФЛ</option>
+        <option value="pledgeAgreement">Договоры залога</option>
+        <option value="loanAgreement">Кредитные договоры</option>
+        <option value="psBuilding">Предметы залога.Здания/Сооружения</option>
+        <option value="psRoom">Предметы залога.Помещения</option>
+        <option value="psLandOwnership">Предметы залога.ЗУ.Собственность</option>
+        <option value="psLandLease">Предметы залога.ЗУ.Аренда</option>
+        <option value="psAuto">Предметы залога.Транспорт/Спецтехника</option>
+        <option value="psEquipment">Предметы залога.Оборудование</option>
+        <option value="psTBO">Предметы залога.ТМЦ</option>
+        <option value="psSecurities">Предметы залога.Ценные бумаги</option>
+        <option value="psVessel">Предметы залога.Судна</option>
+        <option value="insurance">Договоры страхования</option>
+        <option value="encumbrance">Обременения</option>
+        <option value="costHistory">Стоимости предметов залога</option>
+        <option value="monitoring">Мониторинги</option>
+        <option value="clientManager">Клиентские менеджеры</option>
     </select>
     <input type="file" name="file" accept=".xls,.xlsx"/>
     <input type="submit" value="импорт"/>

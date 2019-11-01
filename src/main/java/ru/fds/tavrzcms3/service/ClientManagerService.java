@@ -7,6 +7,7 @@ import ru.fds.tavrzcms3.domain.ClientManager;
 import ru.fds.tavrzcms3.repository.RepositoryClientManager;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientManagerService {
@@ -19,7 +20,7 @@ public class ClientManagerService {
         return repositoryClientManager.findAll(sortByDateSurname);
     }
 
-    public ClientManager getClientManager(long id){
-        return repositoryClientManager.getOne(id);
+    public Optional<ClientManager> getClientManager(long clientManagerId){
+        return repositoryClientManager.findById(clientManagerId);
     }
 }

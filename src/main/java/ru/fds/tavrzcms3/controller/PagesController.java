@@ -116,15 +116,16 @@ public class PagesController {
                                       @RequestParam("page") Optional<Integer> page,
                                       @RequestParam("size") Optional<Integer> size,
                                       Model model) {
+        Employee employee = employeeService.getEmployee(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         int currentPage = page.orElse(0);
         int pageSize = size.orElse(50);
         Pageable pageable = PageRequest.of(currentPage, pageSize);
 
         Page<PledgeAgreement> pledgeAgreementList = null;
         if(pervPosl.isPresent())
-            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsForEmployee(employeeId, pervPosl.get(), pageable);
+            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsForEmployee(employee, pervPosl.get(), pageable);
         else
-            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsForEmployee(employeeId, pageable);
+            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsForEmployee(employee, pageable);
 
 
 
@@ -307,7 +308,7 @@ public class PagesController {
         model.addAttribute("countOfMonitoringNotDone", countOfMonitoringNotDone);
         model.addAttribute("countOfMonitoringIsDone", countOfMonitoringIsDone);
         model.addAttribute("countOfMonitoringOverdue", countOfMonitoringOverdue);
-        Employee employee = employeeService.getEmployee(employeeId);
+        Employee employee = employeeService.getEmployee(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         List<PledgeAgreement> pledgeAgreementListWithMonitoringNotDone = pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(employee);
         List<PledgeAgreement> pledgeAgreementListWithMonitoringIsDone = pledgeAgreementService.getPledgeAgreementWithMonitoringIsDone(employee);
         List<PledgeAgreement> pledgeAgreementListWithMonitoringOverdue = pledgeAgreementService.getPledgeAgreementWithMonitoringOverDue(employee);
@@ -328,7 +329,7 @@ public class PagesController {
         model.addAttribute("countOfConclusionNotDone", countOfConclusionNotDone);
         model.addAttribute("countOfConclusionIsDone", countOfConclusionIsDone);
         model.addAttribute("countOfConclusionOverdue", countOfConclusionOverdue);
-        Employee employee = employeeService.getEmployee(employeeId);
+        Employee employee = employeeService.getEmployee(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         List<PledgeAgreement> pledgeAgreementListWithConclusionNotDone = pledgeAgreementService.getPledgeAgreementWithConclusionNotDone(employee);
         List<PledgeAgreement> pledgeAgreementListWithConclusionIsDone = pledgeAgreementService.getPledgeAgreementWithConclusionIsDone(employee);
         List<PledgeAgreement> pledgeAgreementListWithConclusionOverdue = pledgeAgreementService.getPledgeAgreementWithConclusionOverDue(employee);
@@ -1536,12 +1537,11 @@ public class PagesController {
                              @RequestParam("whatUpload") Optional<String> whatUpload,
                              Model model){
 
+        try {
+            File uploadFile =  uploadUnloadService.uploadFile(file.orElseThrow(() -> new IOException("Файл не найден.")), "legal_entity");
 
-        if (whatUpload.isPresent()) {
-            if (whatUpload.get().equals("legalEntity")) {
-
-                try {
-                    File uploadFile =  uploadUnloadService.uploadFile(file.orElseThrow(() -> new IOException("Файл не найден.")), "legal_entity");
+            if(whatUpload.isPresent()){
+                if(whatUpload.get().equals("clientLegalEntity")){
                     List<ClientLegalEntity> clientLegalEntityList = clientService.insertClientLegalEntityFromExcel(uploadFile);
                     String ids = "";
                     for(ClientLegalEntity cle : clientLegalEntityList)
@@ -1549,32 +1549,59 @@ public class PagesController {
                     String message = "Добавлено " + clientLegalEntityList.size() + " клиента(ов) с id " + ids;
                     model.addAttribute("message", message);
                     return "update";
+                }else if(whatUpload.get().equals("clientIndividual")){
 
-                }catch (IOException ioe){
-                    ioe.printStackTrace();
-                    model.addAttribute("message", ioe.getMessage());
-                    return "update";
-                }catch (InvalidFormatException ife){
-                    ife.printStackTrace();
-                    model.addAttribute("message", ife.getMessage());
-                    return "update";
+                }else if(whatUpload.get().equals("pledgeAgreement")){
+
+                }else if(whatUpload.get().equals("loanAgreement")){
+
+                }else if(whatUpload.get().equals("psBuilding")){
+
+                }else if(whatUpload.get().equals("psRoom")){
+
+                }else if(whatUpload.get().equals("psLandOwnership")){
+
+                }else if(whatUpload.get().equals("psLandLease")){
+
+                }else if(whatUpload.get().equals("psAuto")){
+
+                }else if(whatUpload.get().equals("psEquipment")){
+
+                }else if(whatUpload.get().equals("psTBO")){
+
+                }else if(whatUpload.get().equals("psSecurities")){
+
+                }else if(whatUpload.get().equals("psVessel")){
+
+                }else if(whatUpload.get().equals("insurance")){
+
+                }else if(whatUpload.get().equals("encumbrance")){
+
+                }else if(whatUpload.get().equals("costHistory")){
+
+                }else if(whatUpload.get().equals("monitoring")){
+
+                }else if(whatUpload.get().equals("clientManager")){
+
                 }
 
-
-            }else if (whatUpload.get().equals("individual")) {
-
+            }else {
+                model.addAttribute("message", "Ошибка импорта.");
+                return "update";
             }
-        } else {
-            model.addAttribute("message", "Ошибка импорта.");
+
+        }catch (IOException ioe){
+            ioe.printStackTrace();
+            model.addAttribute("message", ioe.getMessage());
+            return "update";
+
+        }catch (InvalidFormatException ife){
+            ife.printStackTrace();
+            model.addAttribute("message", ife.getMessage());
+            return "update";
+
+        }finally {
             return "update";
         }
-
-
-
-
-
-
-
-        return "update";
     }
 }

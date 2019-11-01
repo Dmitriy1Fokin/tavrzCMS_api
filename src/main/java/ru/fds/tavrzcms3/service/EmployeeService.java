@@ -9,6 +9,7 @@ import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.repository.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -25,8 +26,8 @@ public class EmployeeService {
         return repositoryEmployee.findByAppUser(appUser);
     }
 
-    public Employee getEmployee(long employeeId){
-        return repositoryEmployee.getOne(employeeId);
+    public Optional<Employee> getEmployee(long employeeId){
+        return repositoryEmployee.findById(employeeId);
     }
 
     public List<Employee> getAllEmployee(){

@@ -108,16 +108,14 @@ public class PledgeAgreementService {
             return repositoryPledgeAgreement.findByClientInAndStatusPAEquals(pledgors, "открыт", sort);
     }
 
-    public Page<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(long employeeId, Pageable pageable){
-        Employee employee = employeeService.getEmployee(employeeId);
+    public Page<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(Employee employee, Pageable pageable){
         List<Client> pledgors = clientService.getClientByEmployee(employee);
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC,"client");
 
         return repositoryPledgeAgreement.findByClientInAndStatusPAEquals(pledgors, "открыт", pageable);
     }
 
-    public Page<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(long employeeId, String pervPosl, Pageable pageable){
-        Employee employee = employeeService.getEmployee(employeeId);
+    public Page<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(Employee employee, String pervPosl, Pageable pageable){
         List<Client> pledgors = clientService.getClientByEmployee(employee);
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC,"client");
 
