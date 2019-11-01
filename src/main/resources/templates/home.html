@@ -37,10 +37,7 @@
     <li th:text="${'Выполненые: ' + countOfMonitoringIsDone}">Выполненые</li>
     <li th:text="${'Просроченные: ' + countOfMonitoringOverdue}">Просроченные</li>
 </ul>
-<a th:href="@{/monitoring_pledge_agreements(employeeId=${employee.employeeId},
-                countOfMonitoringNotDone = ${countOfMonitoringNotDone},
-                countOfMonitoringIsDone = ${countOfMonitoringIsDone},
-                countOfMonitoringOverdue = ${countOfMonitoringOverdue})}"
+<a th:href="@{/monitoring_pledge_agreements(employeeId=${employee.employeeId})}"
    href="monitoring_pledge_agreements.html"
    th:text="подробнее">подробнее</a>
 
@@ -50,10 +47,7 @@
     <li th:text="${'Выполненые: ' + countOfConclusionIsDone}">Выполненые</li>
     <li th:text="${'Просроченные: ' + countOfConclusionOverdue}">Просроченные</li>
 </ul>
-<a th:href="@{/conclusion_pledge_agreements(employeeId=${employee.employeeId},
-                countOfConclusionNotDone = ${countOfConclusionNotDone},
-                countOfConclusionIsDone = ${countOfConclusionIsDone},
-                countOfConclusionOverdue = ${countOfConclusionOverdue})}"
+<a th:href="@{/conclusion_pledge_agreements(employeeId=${employee.employeeId})}"
    href="conclusion_pledge_agreements.html"
    th:text="подробнее">подробнее</a>
 

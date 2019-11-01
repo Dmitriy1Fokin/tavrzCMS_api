@@ -23,21 +23,21 @@
 <body>
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<div th:if="${countOfConclusionNotDone &gt; 0}">
+<div th:unless="${pledgeAgreementListWithConclusionNotDone.isEmpty()}">
     <h1>Предстоящие заключения</h1>
     <div class="containerTable">
         <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementListWithConclusionNotDone})"></div>
     </div>
 </div>
 
-<div th:if="${countOfConclusionIsDone &gt; 0}">
-<h1>Выполненные заключения</h1>
-<div class="containerTable">
-    <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementListWithConclusionIsDone})"></div>
-</div>
+<div th:unless="${pledgeAgreementListWithConclusionIsDone.isEmpty()}">
+    <h1>Выполненные заключения</h1>
+    <div class="containerTable">
+        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementListWithConclusionIsDone})"></div>
+    </div>
 </div>
 
-<div th:if="${countOfConclusionOverdue &gt; 0}">
+<div th:unless="${pledgeAgreementListWithConclusionOverdue.isEmpty()}">
     <h1>Просроченные заключения</h1>
     <div class="containerTable">
         <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementListWithConclusionOverdue})"></div>

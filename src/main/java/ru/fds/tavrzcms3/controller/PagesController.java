@@ -299,15 +299,9 @@ public class PagesController {
     }
 
     @GetMapping("/monitoring_pledge_agreements")
-    public String monitoringPledgeAgreementsPage(@RequestParam("countOfMonitoringNotDone") int countOfMonitoringNotDone,
-                                                 @RequestParam("countOfMonitoringIsDone") int countOfMonitoringIsDone,
-                                                 @RequestParam("countOfMonitoringOverdue") int countOfMonitoringOverdue,
-                                                 @RequestParam("employeeId") long employeeId,
+    public String monitoringPledgeAgreementsPage(@RequestParam("employeeId") long employeeId,
                                                  Model model){
 
-        model.addAttribute("countOfMonitoringNotDone", countOfMonitoringNotDone);
-        model.addAttribute("countOfMonitoringIsDone", countOfMonitoringIsDone);
-        model.addAttribute("countOfMonitoringOverdue", countOfMonitoringOverdue);
         Employee employee = employeeService.getEmployee(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         List<PledgeAgreement> pledgeAgreementListWithMonitoringNotDone = pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(employee);
         List<PledgeAgreement> pledgeAgreementListWithMonitoringIsDone = pledgeAgreementService.getPledgeAgreementWithMonitoringIsDone(employee);
@@ -320,15 +314,9 @@ public class PagesController {
     }
 
     @GetMapping("/conclusion_pledge_agreements")
-    public String conclusionPledgeAgreementsPage(@RequestParam("countOfConclusionNotDone") int countOfConclusionNotDone,
-                                                 @RequestParam("countOfConclusionIsDone") int countOfConclusionIsDone,
-                                                 @RequestParam("countOfConclusionOverdue") int countOfConclusionOverdue,
-                                                 @RequestParam("employeeId") long employeeId,
+    public String conclusionPledgeAgreementsPage(@RequestParam("employeeId") long employeeId,
                                                  Model model){
 
-        model.addAttribute("countOfConclusionNotDone", countOfConclusionNotDone);
-        model.addAttribute("countOfConclusionIsDone", countOfConclusionIsDone);
-        model.addAttribute("countOfConclusionOverdue", countOfConclusionOverdue);
         Employee employee = employeeService.getEmployee(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         List<PledgeAgreement> pledgeAgreementListWithConclusionNotDone = pledgeAgreementService.getPledgeAgreementWithConclusionNotDone(employee);
         List<PledgeAgreement> pledgeAgreementListWithConclusionIsDone = pledgeAgreementService.getPledgeAgreementWithConclusionIsDone(employee);
