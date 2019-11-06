@@ -36,7 +36,7 @@ public class PagesController {
     private final LandCategoryService landCategoryService;
     private final MarketSegmentService marketSegmentService;
     private final ClientManagerService clientManagerService;
-    private final UploadUnloadService uploadUnloadService;
+    private final FilesService filesService;
 
 
     public PagesController(EmployeeService employeeService,
@@ -51,7 +51,7 @@ public class PagesController {
                            LandCategoryService landCategoryService,
                            MarketSegmentService marketSegmentService,
                            ClientManagerService clientManagerService,
-                           UploadUnloadService uploadUnloadService) {
+                           FilesService filesService) {
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.pledgeSubjectService = pledgeSubjectService;
@@ -64,7 +64,7 @@ public class PagesController {
         this.landCategoryService = landCategoryService;
         this.marketSegmentService = marketSegmentService;
         this.clientManagerService = clientManagerService;
-        this.uploadUnloadService = uploadUnloadService;
+        this.filesService = filesService;
     }
 
     @GetMapping("/login")
@@ -1521,16 +1521,17 @@ public class PagesController {
     }
 
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") Optional<MultipartFile> file,
-                             @RequestParam("whatUpload") Optional<String> whatUpload,
-                             Model model){
+    public String importEntityFromExcel(@RequestParam("file") Optional<MultipartFile> file,
+                                        @RequestParam("whatUpload") Optional<String> whatUpload,
+                                        Model model){
 
         try {
-            File uploadFile =  uploadUnloadService.uploadFile(file.orElseThrow(() -> new IOException("Файл не найден.")), "legal_entity");
+            File uploadFile =  filesService.uploadFile(file.orElseThrow(() -> new IOException("Файл не найден.")), "legal_entity");
 
             if(whatUpload.isPresent()){
                 if(whatUpload.get().equals("clientLegalEntity")){
-                    List<ClientLegalEntity> clientLegalEntityList = clientService.insertClientLegalEntityFromExcel(uploadFile);
+                    List<ClientLegalEntity> clientLegalEntityList = filesService.getClientLegalEntityFromExcel(uploadFile);
+                    clientLegalEntityList = clientService.updateInsertClientLegalEntityList(clientLegalEntityList);
                     String ids = "";
                     for(ClientLegalEntity cle : clientLegalEntityList)
                         ids += cle.getClientId() + " ";
