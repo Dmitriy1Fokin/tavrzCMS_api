@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.fds.tavrzcms3.domain.ClientIndividual;
 import ru.fds.tavrzcms3.domain.ClientLegalEntity;
 
 import javax.validation.ConstraintViolation;
@@ -41,6 +42,14 @@ public class FilesService {
     private int numColumnLegalEntityName;
     @Value("${excel_table.import.client.legal_entity.column.inn}")
     private int numColumnInn;
+    @Value("${excel_table.import.client.individual.surname}")
+    private int numColumnIndividualSurname;
+    @Value("${excel_table.import.client.individual.name}")
+    private int numColumnIndividualName;
+    @Value("${excel_table.import.client.individual.patronymic}")
+    private int numColumnIndividualPatronymic;
+    @Value("${excel_table.import.client.individual.pasport_number}")
+    private int numColumnIndividualPasport;
 
 
     public File uploadFile(MultipartFile file, String prefixName) throws IOException{
@@ -92,23 +101,24 @@ public class FilesService {
         return false;
     }
 
-    public List<ClientLegalEntity> getClientLegalEntityFromExcel(File file) throws IOException, InvalidFormatException {
-
+    private Workbook getWorkBookExcel(File file) throws IOException{
         FileInputStream fileInputStream = new FileInputStream(file);
-        Workbook workbook;
-        Validator validator;
-        Set<ConstraintViolation<ClientLegalEntity>> violations;
-        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        validator = validatorFactory.usingContext().getValidator();
 
         if(getExtension(file.getName()).equalsIgnoreCase("xlsx")){
-            workbook = new XSSFWorkbook(fileInputStream);
+            return new XSSFWorkbook(fileInputStream);
         }else if (getExtension(file.getName()).equalsIgnoreCase("xls")){
-            workbook = new HSSFWorkbook(fileInputStream);
+           return new HSSFWorkbook(fileInputStream);
         }else {
-            throw new InvalidFormatException("Не верный формат файла");
+            throw new IOException("Не верный формат файла");
         }
+    }
 
+    public List<ClientLegalEntity> getClientLegalEntityFromExcel(File file) throws IOException, InvalidFormatException {
+
+        Validator validator = Validation.buildDefaultValidatorFactory().usingContext().getValidator();
+        Set<ConstraintViolation<ClientLegalEntity>> violations;
+
+        Workbook workbook = getWorkBookExcel(file);
         Sheet sheet = workbook.getSheetAt(0);
 
         List<ClientLegalEntity> clientLegalEntityList = new ArrayList<>();
@@ -147,14 +157,14 @@ public class FilesService {
                 if(isCellEmpty(row.getCell(numColumnOrganizationForm)))
                     throw new InvalidFormatException("Отсутствует значение правовой формы организации в строке " + (i+1));
                 else if(row.getCell(numColumnOrganizationForm).getCellType() == CellType.STRING)
-                    clientLegalEntity.setOrganizationalForm(row.getCell(numColumnOrganizationForm).getRichStringCellValue().getString());
+                    clientLegalEntity.setOrganizationalForm(row.getCell(numColumnOrganizationForm).getStringCellValue());
                 else
                     throw new InvalidFormatException("Неверный формат/значение правовой формы организации в строке " + (i+1));
 
                 if(isCellEmpty(row.getCell(numColumnLegalEntityName)))
                     throw new InvalidFormatException("Отсутствует название организации  в строке " + (i+1));
                 else if(row.getCell(numColumnLegalEntityName).getCellType() == CellType.STRING)
-                    clientLegalEntity.setName(row.getCell(numColumnLegalEntityName).getRichStringCellValue().getString());
+                    clientLegalEntity.setName(row.getCell(numColumnLegalEntityName).getStringCellValue());
                 else
                     throw new InvalidFormatException("Неверный формат/значение названия организации в строке " + (i+1));
 
@@ -162,7 +172,7 @@ public class FilesService {
                 else if(row.getCell(numColumnInn).getCellType() == CellType.NUMERIC)
                     clientLegalEntity.setInn(String.valueOf(row.getCell(numColumnInn).getNumericCellValue()));
                 else if(row.getCell(numColumnInn).getCellType() == CellType.STRING)
-                    clientLegalEntity.setInn(row.getCell(numColumnInn).getRichStringCellValue().getString());
+                    clientLegalEntity.setInn(row.getCell(numColumnInn).getStringCellValue());
                 else
                     throw new InvalidFormatException("Неверный формат/значение ИНН в строке " + (i+1));
 
@@ -184,5 +194,93 @@ public class FilesService {
         }
 
         return clientLegalEntityList;
+    }
+
+    public List<ClientIndividual> getClientIndividualFromExcel(File file) throws IOException, InvalidFormatException{
+
+        Validator validator = Validation.buildDefaultValidatorFactory().usingContext().getValidator();
+        Set<ConstraintViolation<ClientIndividual>> violations;
+
+        Workbook workbook = getWorkBookExcel(file);
+        Sheet sheet = workbook.getSheetAt(0);
+
+        List<ClientIndividual> clientIndividualList = new ArrayList<>();
+
+        for(int i = 1; i < sheet.getPhysicalNumberOfRows(); i++){
+            try {
+                Row row = sheet.getRow(i);
+
+                ClientIndividual clientIndividual = new ClientIndividual();
+
+                if(isCellEmpty(row.getCell(numColumnClientManager)))
+                    throw new InvalidFormatException("Отсутствует id клиентского менеджера в строке " + (i+1));
+                else if(row.getCell(numColumnClientManager).getCellType()==CellType.NUMERIC) {
+                    clientIndividual.
+                            setClientManager(clientManagerService.
+                                    getClientManager((long) row.getCell(numColumnClientManager).getNumericCellValue()).
+                                    orElseThrow(() ->
+                                            new InvalidFormatException("Клиентский менеджер с таким id(" +
+                                                    row.getCell(numColumnClientManager).getNumericCellValue() +
+                                                    ") отсутствует")));
+                }
+                else
+                    throw new InvalidFormatException("Неверный формат/значение id клиентского менеджера в строке " + (i+1));
+
+                if(isCellEmpty(row.getCell(numColumnEmployee)))
+                    throw new InvalidFormatException("Отсутствует id ответственного сотрудника в строке " + (i+1));
+                else if(row.getCell(numColumnEmployee).getCellType()==CellType.NUMERIC)
+                    clientIndividual.setEmployee(employeeService.
+                            getEmployee((long) row.getCell(numColumnEmployee).getNumericCellValue()).
+                            orElseThrow(() ->
+                                    new InvalidFormatException("Ответственный сотрудник с таким id(" +
+                                            row.getCell(numColumnEmployee).getNumericCellValue() + ") отсутствует")));
+                else
+                    throw new InvalidFormatException("Неверный формат/значение id ответственного сотрудника в строке " + (i+1));
+
+                if(isCellEmpty(row.getCell(numColumnIndividualSurname)))
+                    throw new InvalidFormatException("Отсутствует фамилия в строке " + (i+1));
+                else if(row.getCell(numColumnIndividualSurname).getCellType()==CellType.STRING)
+                    clientIndividual.setSurname(row.getCell(numColumnIndividualSurname).getStringCellValue());
+                else
+                    throw new InvalidFormatException("Неверный формат/значение фамилии в строке " + (i+1));
+
+                if(isCellEmpty(row.getCell(numColumnIndividualName)))
+                    throw new InvalidFormatException("Отсутствует имя в строке " + (i+1));
+                else if(row.getCell(numColumnIndividualName).getCellType()==CellType.STRING)
+                    clientIndividual.setName(row.getCell(numColumnIndividualName).getStringCellValue());
+                else
+                    throw new InvalidFormatException("Неверный формат/значение имени в строке " + (i+1));
+
+                if(isCellEmpty(row.getCell(numColumnIndividualPatronymic))){}
+                else if(row.getCell(numColumnIndividualPatronymic).getCellType()==CellType.STRING)
+                    clientIndividual.setPatronymic(row.getCell(numColumnIndividualPatronymic).getStringCellValue());
+                else
+                    throw new InvalidFormatException("Неверный формат/значение отчества в строке " + (i+1));
+
+                if(isCellEmpty(row.getCell(numColumnIndividualPasport))){}
+                else if(row.getCell(numColumnIndividualPasport).getCellType()==CellType.STRING)
+                    clientIndividual.setPasportNum(row.getCell(numColumnIndividualPasport).getStringCellValue());
+                else
+                    throw new InvalidFormatException("Неверный формат/значение паспорта в строке " + (i+1));
+
+
+                violations = validator.validate(clientIndividual);
+                if(violations.size() > 0){
+                    String message = "Ошибка в строке " + (i+1) + ": ";
+                    for (ConstraintViolation<ClientIndividual> c : violations)
+                        message += c.getMessage() + "(" + c.getInvalidValue() + ") в поле: \"" + c.getPropertyPath() + "\". ";
+
+                    throw new InvalidFormatException(message);
+                }
+
+                clientIndividualList.add(clientIndividual);
+
+
+            }catch (IllegalStateException ise){
+                throw new InvalidFormatException("Неверные данные в строке " + (i+1) + ".");
+            }
+        }
+
+        return clientIndividualList;
     }
 }

@@ -132,6 +132,11 @@ public class ClientService {
         return repositoryClientLegalEntity.saveAll(clientLegalEntityList);
     }
 
+    @Transactional
+    public List<ClientIndividual> updateInsertClientIndividualList(List<ClientIndividual> clientIndividualList){
+        return repositoryClientIndividual.saveAll(clientIndividualList);
+    }
+
     public String getFullNameClient(long clientId){
         Optional<Client> client = repositoryClient.findById(clientId);
 

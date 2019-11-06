@@ -1532,13 +1532,26 @@ public class PagesController {
                 if(whatUpload.get().equals("clientLegalEntity")){
                     List<ClientLegalEntity> clientLegalEntityList = filesService.getClientLegalEntityFromExcel(uploadFile);
                     clientLegalEntityList = clientService.updateInsertClientLegalEntityList(clientLegalEntityList);
-                    String ids = "";
-                    for(ClientLegalEntity cle : clientLegalEntityList)
-                        ids += cle.getClientId() + " ";
-                    String message = "Добавлено " + clientLegalEntityList.size() + " клиента(ов) с id " + ids;
-                    model.addAttribute("message", message);
+
+                    model.addAttribute("clientLegalEntityList", clientLegalEntityList);
+                    model.addAttribute("messageSuccess", true);
+                    model.addAttribute("whatUpload", whatUpload.get());
+
+
+
+//                    String ids = "";
+//                    for(ClientLegalEntity cle : clientLegalEntityList)
+//                        ids += cle.getClientId() + " ";
+//                    String message = "Добавлено " + clientLegalEntityList.size() + " клиента(ов) с id " + ids;
+//                    model.addAttribute("message", message);
                     return "update";
                 }else if(whatUpload.get().equals("clientIndividual")){
+                    List<ClientIndividual> clientIndividualList = filesService.getClientIndividualFromExcel(uploadFile);
+                    clientIndividualList = clientService.updateInsertClientIndividualList(clientIndividualList);
+
+                    model.addAttribute("clientIndividualList", clientIndividualList);
+                    model.addAttribute("messageSuccess", true);
+                    model.addAttribute("whatUpload", whatUpload.get());
 
                 }else if(whatUpload.get().equals("pledgeAgreement")){
 
@@ -1575,18 +1588,18 @@ public class PagesController {
                 }
 
             }else {
-                model.addAttribute("message", "Ошибка импорта.");
+                model.addAttribute("messageError", "Ошибка импорта.");
                 return "update";
             }
 
         }catch (IOException ioe){
             ioe.printStackTrace();
-            model.addAttribute("message", ioe.getMessage());
+            model.addAttribute("messageError", ioe.getMessage());
             return "update";
 
         }catch (InvalidFormatException ife){
             ife.printStackTrace();
-            model.addAttribute("message", ife.getMessage());
+            model.addAttribute("messageError", ife.getMessage());
             return "update";
 
         }finally {

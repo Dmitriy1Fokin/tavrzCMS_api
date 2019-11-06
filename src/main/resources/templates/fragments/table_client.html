@@ -32,10 +32,10 @@
                 <td>
                     <div th:switch="${client.getTypeOfClient()}">
                         <div th:case="юл">
-                            <span th:text="${client.getClientLegalEntity().getInn()}"></span>
+                            <span th:text="${client.getInn()}"></span>
                         </div>
                         <div th:case="фл">
-                            <span th:text="${client.getClientIndividual().getPasportNum()}"></span>
+                            <span th:text="${client.getPasportNum()}"></span>
                         </div>
                     </div>
                 </td>

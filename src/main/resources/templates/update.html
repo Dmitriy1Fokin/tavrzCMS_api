@@ -62,7 +62,26 @@
     <input type="file" name="file" accept=".xls,.xlsx"/>
     <input type="submit" value="импорт"/>
 </form>
-<div th:text="${message}"></div>
+
+
+<div th:text="${messageError}"></div>
+
+<div th:if="${messageSuccess}">
+    <div th:switch="${whatUpload}">
+        <div th:case="clientLegalEntity">
+            <br>
+            <span>Добавлены следующие клиенты (ЮЛ)</span>
+            <br>
+            <div th:replace="fragments/table_client :: clietTable(${clientLegalEntityList})"></div>
+        </div>
+        <div th:case="clientIndividual">
+            <br>
+            <span>Добавлены следующие клиенты (ФЛ)</span>
+            <br>
+            <div th:replace="fragments/table_client :: clietTable(${clientIndividualList})"></div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
