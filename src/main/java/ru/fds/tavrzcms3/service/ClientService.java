@@ -32,8 +32,8 @@ public class ClientService {
 
 
 
-    public Client getClientByClientId(long clientId){
-        return repositoryClient.findByClientId(clientId);
+    public Optional<Client> getClientById(long clientId){
+        return repositoryClient.findById(clientId);
     }
 
     public List<Client> getClientByEmployee(Employee employee){

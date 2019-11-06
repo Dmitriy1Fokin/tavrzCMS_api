@@ -247,7 +247,7 @@ public class PagesController {
     @GetMapping("/loan_agreement_detail")
     public String loanAgreementDetailPage(@RequestParam("loanAgreementId") long loanAgreementId,
                                           Model model){
-        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId);
+        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         model.addAttribute("loanAgreement", loanAgreement);
 
         return "loan_agreement_detail";
@@ -425,7 +425,7 @@ public class PagesController {
                 model.addAttribute("monitoring", new Monitoring());
                 break;
             case "pledgor":
-                Client pledgor = clientService.getClientByClientId(pledgorId.get());
+                Client pledgor = clientService.getClientById(pledgorId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
                 model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
                 model.addAttribute("pledgor", pledgor);
                 model.addAttribute("monitoring", new Monitoring());
@@ -456,7 +456,7 @@ public class PagesController {
                     model.addAttribute("pledgeSubject", pledgeSubject);
                     break;
                 case "pledgor":
-                    Client pledgor = clientService.getClientByClientId(pledgorId.get());
+                    Client pledgor = clientService.getClientById(pledgorId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
                     model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
                     model.addAttribute("pledgor", pledgor);
                     break;
@@ -485,7 +485,7 @@ public class PagesController {
                 return "monitoring_pledge_subject";
 
             case "pledgor":
-                Client pledgor = clientService.getClientByClientId(pledgorId.get());
+                Client pledgor = clientService.getClientById(pledgorId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
                 List<Monitoring> monitoringListForPledgor = monitoringService.insertMonitoringInPledgor(pledgor, monitoring);
                 model.addAttribute("whereUpdateMonitoring", "responseSuccess");
                 model.addAttribute("pledgor", pledgor);
@@ -532,7 +532,7 @@ public class PagesController {
                                            @RequestParam("whatDo") String whatDo,
                                            Model model){
         if(whatDo.equals("changeLA")){
-            LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId.get());
+            LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
 
             model.addAttribute("loanAgreement", loanAgreement);
             model.addAttribute("whatDo", whatDo);
@@ -541,7 +541,7 @@ public class PagesController {
 
         }else if(whatDo.equals("newLA")){
             LoanAgreement loanAgreement = new LoanAgreement();
-            Client client = clientService.getClientByClientId(clientId.get());
+            Client client = clientService.getClientById(clientId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
             loanAgreement.setClient(client);
 
             model.addAttribute("loanAgreement", loanAgreement);
@@ -598,7 +598,7 @@ public class PagesController {
 
         }else if(whatDo.equals("newPA")){
             PledgeAgreement pledgeAgreement = new PledgeAgreement();
-            Client client = clientService.getClientByClientId(clientId.get());
+            Client client = clientService.getClientById(clientId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
             pledgeAgreement.setClient(client);
 
             model.addAttribute("pledgeAgreement", pledgeAgreement);
@@ -1328,7 +1328,7 @@ public class PagesController {
     @GetMapping("/client")
     public String clientPage(@RequestParam("clientId") long clientId,
                              Model model){
-        Client client = clientService.getClientByClientId(clientId);
+        Client client = clientService.getClientById(clientId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         model.addAttribute("client", client);
 
         return "client";
@@ -1341,7 +1341,7 @@ public class PagesController {
         List<ClientManager> clientManagerList = clientManagerService.getAllClientManager();
         List<Employee> employeeList = employeeService.getAllEmployee();
 
-        Client client = clientService.getClientByClientId(clientId.get());
+        Client client = clientService.getClientById(clientId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         if(client.getClass()==ClientLegalEntity.class){
             model.addAttribute("clientLegalEntity", client);
         }else if(client.getClass()==ClientIndividual.class){
@@ -1483,7 +1483,7 @@ public class PagesController {
         int countPAAfterUpdate = pledgeAgreementList.size();
         System.out.println(countPAAfterUpdate - countPABeforeUpdate);
 
-        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId);
+        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         loanAgreement.setPledgeAgreements(pledgeAgreementList);
         loanAgreementService.updateInsertLoanAgreement(loanAgreement);
 
@@ -1534,26 +1534,18 @@ public class PagesController {
                     clientLegalEntityList = clientService.updateInsertClientLegalEntityList(clientLegalEntityList);
 
                     model.addAttribute("clientLegalEntityList", clientLegalEntityList);
-                    model.addAttribute("messageSuccess", true);
-                    model.addAttribute("whatUpload", whatUpload.get());
 
-
-
-//                    String ids = "";
-//                    for(ClientLegalEntity cle : clientLegalEntityList)
-//                        ids += cle.getClientId() + " ";
-//                    String message = "Добавлено " + clientLegalEntityList.size() + " клиента(ов) с id " + ids;
-//                    model.addAttribute("message", message);
-                    return "update";
                 }else if(whatUpload.get().equals("clientIndividual")){
                     List<ClientIndividual> clientIndividualList = filesService.getClientIndividualFromExcel(uploadFile);
                     clientIndividualList = clientService.updateInsertClientIndividualList(clientIndividualList);
 
                     model.addAttribute("clientIndividualList", clientIndividualList);
-                    model.addAttribute("messageSuccess", true);
-                    model.addAttribute("whatUpload", whatUpload.get());
 
                 }else if(whatUpload.get().equals("pledgeAgreement")){
+                    List<PledgeAgreement> pledgeAgreementList = filesService.getPledgeAgreementFromExcel(uploadFile);
+                    pledgeAgreementList = pledgeAgreementService.updateInsertPledgeAgreementList(pledgeAgreementList);
+
+                    model.addAttribute("pledgeAgreementList", pledgeAgreementList);
 
                 }else if(whatUpload.get().equals("loanAgreement")){
 
@@ -1586,6 +1578,12 @@ public class PagesController {
                 }else if(whatUpload.get().equals("clientManager")){
 
                 }
+
+                model.addAttribute("messageSuccess", true);
+                model.addAttribute("whatUpload", whatUpload.get());
+
+                return "update";
+
 
             }else {
                 model.addAttribute("messageError", "Ошибка импорта.");

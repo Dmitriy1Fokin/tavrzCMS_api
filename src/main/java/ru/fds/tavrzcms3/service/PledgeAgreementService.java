@@ -408,4 +408,8 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.save(pledgeAgreement);
     }
 
+    @Transactional
+    public List<PledgeAgreement> updateInsertPledgeAgreementList(List<PledgeAgreement> pledgeAgreementList){
+        return repositoryPledgeAgreement.saveAll(pledgeAgreementList);
+    }
 }

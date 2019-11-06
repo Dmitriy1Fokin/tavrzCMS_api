@@ -14,10 +14,7 @@ import ru.fds.tavrzcms3.specification.SpecificationBuilderImpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class LoanAgreementService {
@@ -39,9 +36,8 @@ public class LoanAgreementService {
     @Autowired
     ClientService clientService;
 
-    public LoanAgreement getLoanAgreementById(long loanAgreementId){
-        LoanAgreement loanAgreement = repositoryLoanAgreement.getOne(loanAgreementId);
-        return loanAgreement;
+    public Optional<LoanAgreement> getLoanAgreementById(long loanAgreementId){
+        return repositoryLoanAgreement.findById(loanAgreementId);
     }
 
     public int countOfCurrentLoanAgreementsForEmployee(Employee employee){

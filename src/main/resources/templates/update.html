@@ -80,6 +80,61 @@
             <br>
             <div th:replace="fragments/table_client :: clietTable(${clientIndividualList})"></div>
         </div>
+        <div th:case="pledgeAgreement">
+            <br>
+            <span>Добавлены следующие договоры залога</span>
+            <br>
+            <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementList})"></div>
+        </div>
+        <div th:case="loanAgreement">
+            <br>
+            <span>Добавлены следующие кредитные договоры</span>
+            <br>
+            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${resultList})"></div>
+        </div>
+        <!--<div th:case="psBuilding">-->
+            <!--<br>-->
+            <!--<span>Добавлены следующие клиенты (ЮЛ)</span>-->
+            <!--<br>-->
+            <!--<div th:replace="fragments/table_client :: clietTable(${clientLegalEntityList})"></div>-->
+        <!--</div>-->
+        <!--<div th:case="clientLegalEntity">-->
+            <!--<br>-->
+            <!--<span>Добавлены следующие клиенты (ЮЛ)</span>-->
+            <!--<br>-->
+            <!--<div th:replace="fragments/table_client :: clietTable(${clientLegalEntityList})"></div>-->
+        <!--</div>-->
+        <!--<div th:case="clientLegalEntity">-->
+            <!--<br>-->
+            <!--<span>Добавлены следующие клиенты (ЮЛ)</span>-->
+            <!--<br>-->
+            <!--<div th:replace="fragments/table_client :: clietTable(${clientLegalEntityList})"></div>-->
+        <!--</div>-->
+        <!--<div th:case="clientLegalEntity">-->
+            <!--<br>-->
+            <!--<span>Добавлены следующие клиенты (ЮЛ)</span>-->
+            <!--<br>-->
+            <!--<div th:replace="fragments/table_client :: clietTable(${clientLegalEntityList})"></div>-->
+        <!--</div>-->
+        <!--<div th:case="clientLegalEntity">-->
+            <!--<br>-->
+            <!--<span>Добавлены следующие клиенты (ЮЛ)</span>-->
+            <!--<br>-->
+            <!--<div th:replace="fragments/table_client :: clietTable(${clientLegalEntityList})"></div>-->
+        <!--</div>-->
+        <!--<div th:case="clientLegalEntity">-->
+            <!--<br>-->
+            <!--<span>Добавлены следующие клиенты (ЮЛ)</span>-->
+            <!--<br>-->
+            <!--<div th:replace="fragments/table_client :: clietTable(${clientLegalEntityList})"></div>-->
+        <!--</div>-->
+        <!--<div th:case="clientLegalEntity">-->
+            <!--<br>-->
+            <!--<span>Добавлены следующие клиенты (ЮЛ)</span>-->
+            <!--<br>-->
+            <!--<div th:replace="fragments/table_client :: clietTable(${clientLegalEntityList})"></div>-->
+        <!--</div>-->
+
     </div>
 </div>
 

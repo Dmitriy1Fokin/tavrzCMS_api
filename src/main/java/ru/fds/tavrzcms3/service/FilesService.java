@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.domain.ClientIndividual;
 import ru.fds.tavrzcms3.domain.ClientLegalEntity;
+import ru.fds.tavrzcms3.domain.LoanAgreement;
+import ru.fds.tavrzcms3.domain.PledgeAgreement;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -29,18 +31,22 @@ public class FilesService {
     ClientManagerService clientManagerService;
     @Autowired
     EmployeeService employeeService;
+    @Autowired
+    ClientService clientService;
+    @Autowired
+    LoanAgreementService loanAgreementService;
 
     @Value("${path.excel.import}")
     private String pathExcelImport;
-    @Value("${excel_table.import.client.column.client_manager_id}")
+    @Value("${excel_table.import.client.client_manager_id}")
     private int numColumnClientManager;
-    @Value("${excel_table.import.client.column.employee_id}")
+    @Value("${excel_table.import.client.employee_id}")
     private int numColumnEmployee;
-    @Value("${excel_table.import.client.legal_entity.column.organizational_form}")
+    @Value("${excel_table.import.client.legal_entity.organizational_form}")
     private int numColumnOrganizationForm;
-    @Value("${excel_table.import.client.legal_entity.column.name}")
+    @Value("${excel_table.import.client.legal_entity.name}")
     private int numColumnLegalEntityName;
-    @Value("${excel_table.import.client.legal_entity.column.inn}")
+    @Value("${excel_table.import.client.legal_entity.inn}")
     private int numColumnInn;
     @Value("${excel_table.import.client.individual.surname}")
     private int numColumnIndividualSurname;
@@ -50,6 +56,23 @@ public class FilesService {
     private int numColumnIndividualPatronymic;
     @Value("${excel_table.import.client.individual.pasport_number}")
     private int numColumnIndividualPasport;
+    @Value("${excel_table.import.pledgeAgreement.numPA}")
+    private int numColumnPledgeAgreementNumPA;
+    @Value("${excel_table.import.pledge_agreement.date_begin_pa}")
+    private int numColumnPledgeAgreementDateBegin;
+    @Value("${excel_table.import.pledge_agreement.date_end_pa}")
+    private int numColumnPledgeAgreementDateEnd;
+    @Value("${excel_table.import.pledge_agreement.perv_posl}")
+    private int numColumnPledgeAgreementPervPosl;
+    @Value("${excel_table.import.pledge_agreement.pledgor_id}")
+    private int numColumnPledgeAgreementPledgor;
+    @Value("${excel_table.import.pledge_agreement.status}")
+    private int numColumnPledgeAgreementStatus;
+    @Value("${excel_table.import.pledge_agreement.notice}")
+    private int numColumnPledgeAgreementNotice;
+    @Value("${excel_table.import.pledge_agreement.la_id}")
+    private int numColumnPledgeAgreementLA;
+
 
 
     public File uploadFile(MultipartFile file, String prefixName) throws IOException{
@@ -282,5 +305,108 @@ public class FilesService {
         }
 
         return clientIndividualList;
+    }
+
+    public List<PledgeAgreement> getPledgeAgreementFromExcel(File file) throws IOException, InvalidFormatException{
+
+        Validator validator = Validation.buildDefaultValidatorFactory().usingContext().getValidator();
+        Set<ConstraintViolation<PledgeAgreement>> violations;
+
+        Workbook workbook = getWorkBookExcel(file);
+        Sheet sheet = workbook.getSheetAt(0);
+
+        List<PledgeAgreement> pledgeAgreementList = new ArrayList<>();
+
+        for(int i = 1; i < sheet.getPhysicalNumberOfRows(); i++){
+            try {
+                Row row = sheet.getRow(i);
+
+                PledgeAgreement pledgeAgreement = new PledgeAgreement();
+
+                if(isCellEmpty(row.getCell(numColumnPledgeAgreementNumPA)))
+                    throw new InvalidFormatException("Отсутствует № договора залога в строке " + (i+1));
+                else if(row.getCell(numColumnPledgeAgreementNumPA).getCellType()==CellType.STRING)
+                    pledgeAgreement.setNumPA(row.getCell(numColumnPledgeAgreementNumPA).getStringCellValue());
+                else
+                    throw new InvalidFormatException("Неверный формат/значение № договора залога в строке " + (i+1));
+
+                if(isCellEmpty(row.getCell(numColumnPledgeAgreementDateBegin)))
+                    throw new InvalidFormatException("Отсутствует дата начала ДЗ в строке " + (i+1));
+                else if(DateUtil.isCellDateFormatted(row.getCell(numColumnPledgeAgreementDateBegin)))
+                    pledgeAgreement.setDateBeginPA(row.getCell(numColumnPledgeAgreementDateBegin).getDateCellValue());
+                else
+                    throw new InvalidFormatException("Неверный формат/значение даты начала ДЗ в строке " + (i+1));
+
+                if(isCellEmpty(row.getCell(numColumnPledgeAgreementDateEnd)))
+                    throw new InvalidFormatException("Отсутствует дата окончания ДЗ в строке " + (i+1));
+                else if(DateUtil.isCellDateFormatted(row.getCell(numColumnPledgeAgreementDateEnd)))
+                    pledgeAgreement.setDateEndPA(row.getCell(numColumnPledgeAgreementDateEnd).getDateCellValue());
+                else
+                    throw new InvalidFormatException("Неверный формат/значение даты окончания ДЗ в строке " + (i+1));
+
+                if(isCellEmpty(row.getCell(numColumnPledgeAgreementPervPosl)))
+                    throw new InvalidFormatException("Отсутствует тип договора в строке " + (i+1));
+                else if(row.getCell(numColumnPledgeAgreementPervPosl).getCellType()==CellType.STRING)
+                    pledgeAgreement.setPervPosl(row.getCell(numColumnPledgeAgreementPervPosl).getStringCellValue());
+                else
+                    throw new InvalidFormatException("Неверный формат/значение типа договора в строке " + (i+1));
+
+                if(isCellEmpty(row.getCell(numColumnPledgeAgreementPledgor)))
+                    throw new InvalidFormatException("Отсутствует id залогодателя в строке " + (i+1));
+                else if(row.getCell(numColumnPledgeAgreementPledgor).getCellType()==CellType.NUMERIC)
+                    pledgeAgreement.setClient(clientService.
+                            getClientById((long) row.getCell(numColumnPledgeAgreementPledgor).getNumericCellValue()).
+                            orElseThrow(()->
+                                    new InvalidFormatException("Клиент с таким id(" +
+                                            row.getCell(numColumnPledgeAgreementPledgor).getNumericCellValue() + ") отсутствует")));
+                else
+                    throw new InvalidFormatException("Неверный формат/значение id клиента в строке " + (i+1));
+
+                if(isCellEmpty(row.getCell(numColumnPledgeAgreementStatus)))
+                    throw new InvalidFormatException("Отсутствует статус ДЗ в строке " + (i+1));
+                else if(row.getCell(numColumnPledgeAgreementStatus).getCellType()==CellType.STRING)
+                    pledgeAgreement.setStatusPA(row.getCell(numColumnPledgeAgreementStatus).getStringCellValue());
+                else
+                    throw new InvalidFormatException("Неверный формат/значение статуса ДЗ в строке " + (i+1));
+
+                if(isCellEmpty(row.getCell(numColumnPledgeAgreementNotice))){}
+                else if(row.getCell(numColumnPledgeAgreementNotice).getCellType()==CellType.STRING ||
+                        row.getCell(numColumnPledgeAgreementNotice).getCellType()==CellType.NUMERIC)
+                    pledgeAgreement.setNoticePA(row.getCell(numColumnPledgeAgreementNotice).getStringCellValue());
+                else
+                    throw new InvalidFormatException("Неверный формат/значение заметки ДЗ в строке " + (i+1));
+
+                if(isCellEmpty(row.getCell(numColumnPledgeAgreementLA))){}
+                else if(row.getCell(numColumnPledgeAgreementLA).getCellType()==CellType.NUMERIC){
+                    LoanAgreement loanAgreement = loanAgreementService.
+                            getLoanAgreementById((long) row.getCell(numColumnPledgeAgreementLA).getNumericCellValue()).
+                            orElseThrow(()->
+                                    new InvalidFormatException("КД с таким id(" +
+                                            row.getCell(numColumnPledgeAgreementLA).getNumericCellValue() + ") отсутствует"));
+                    List<LoanAgreement> loanAgreementList = new ArrayList<>();
+                    loanAgreementList.add(loanAgreement);
+                    pledgeAgreement.setLoanAgreements(loanAgreementList);
+                }else
+                    throw new InvalidFormatException("Неверный формат/значение id КД в строке " + (i+1));
+
+
+                violations = validator.validate(pledgeAgreement);
+                if(violations.size() > 0){
+                    String message = "Ошибка в строке " + (i+1) + ": ";
+                    for (ConstraintViolation<PledgeAgreement> c : violations)
+                        message += c.getMessage() + "(" + c.getInvalidValue() + ") в поле: \"" + c.getPropertyPath() + "\". ";
+
+                    throw new InvalidFormatException(message);
+                }
+
+                pledgeAgreementList.add(pledgeAgreement);
+
+
+            }catch (IllegalStateException ise){
+                throw new InvalidFormatException("Неверные данные в строке " + (i+1) + ".");
+            }
+        }
+
+        return pledgeAgreementList;
     }
 }
