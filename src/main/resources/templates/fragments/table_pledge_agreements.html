@@ -92,13 +92,13 @@
             <td th:text="${#numbers.formatCurrency(pa.getSs())}">0.00</td>
 
             <td>
-                <div th:each="dateOfConclusion : ${@pledgeAgreementService.getDatesOfConclusion(pa.getPledgeAgreementId())}">
+                <div th:each="dateOfConclusion : ${@pledgeAgreementService.getDatesOfConclusion(pa)}">
                     <span th:text="${#dates.format(dateOfConclusion, 'dd.MM.yyyy')}">н/д</span>
                 </div>
             </td>
 
             <td>
-                <div th:each="dateOfMonitoring : ${@pledgeAgreementService.getDatesOfMonitoring(pa.getPledgeAgreementId())}">
+                <div th:each="dateOfMonitoring : ${@pledgeAgreementService.getDatesOfMonitoring(pa)}">
                     <span th:text="${#dates.format(dateOfMonitoring, 'dd.MM.yyyy')}">н/д</span>
                 </div>
             </td>

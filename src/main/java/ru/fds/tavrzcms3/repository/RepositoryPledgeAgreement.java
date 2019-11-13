@@ -6,10 +6,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 
+import java.util.Date;
 import java.util.List;
 
 public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement, Long>, JpaSpecificationExecutor<PledgeAgreement> {
@@ -27,4 +29,18 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     Page<PledgeAgreement> findByClientInAndStatusPAEquals(List<Client> clients, String statusPA, Pageable pageable);
     Page<PledgeAgreement> findAll(Specification specification, Pageable pageable);
     List<PledgeAgreement> findAllByNumPAContainingIgnoreCase(String numPA);
+
+    @Query(nativeQuery = true, value = "select distinct ps.date_conclusion " +
+                                        "from pledge_subject as ps " +
+                                        "join dz_ps as dzps on dzps.pledge_subject_id = ps.pledge_subject_id " +
+                                        "join dz as d on d.dz_id = dzps.dz_id " +
+                                        "where d.dz_id = ?1")
+    List<Date> getDatesOfConclusion(long pledgeAgreementId);
+
+    @Query(nativeQuery = true, value = "select distinct ps.date_monitoring " +
+                                        "from pledge_subject as ps " +
+                                        "join dz_ps as dzps on dzps.pledge_subject_id = ps.pledge_subject_id " +
+                                        "join dz as d on d.dz_id = dzps.dz_id " +
+                                        "where d.dz_id = ?1")
+    List<Date> getDatesOMonitorings(long pledgeAgreementId);
 }

@@ -1463,7 +1463,7 @@ public class PagesController {
 
     @PostMapping("searchPA")
     public @ResponseBody List<PledgeAgreement> searchPA(@RequestParam("numPA") String numPA){
-        List<PledgeAgreement> pledgeAgreements = pledgeAgreementService.getPledgeAgreementsBynumPA(numPA);
+        List<PledgeAgreement> pledgeAgreements = pledgeAgreementService.getPledgeAgreementsByNumPA(numPA);
         if(!pledgeAgreements.isEmpty())
             return pledgeAgreements;
         else

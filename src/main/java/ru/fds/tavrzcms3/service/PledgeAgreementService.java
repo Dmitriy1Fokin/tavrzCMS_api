@@ -35,28 +35,16 @@ public class PledgeAgreementService {
     @Autowired
     ClientService clientService;
 
-    public List<PledgeAgreement> getPledgeAgreementsBynumPA(String numPA){
+    public List<PledgeAgreement> getPledgeAgreementsByNumPA(String numPA){
         return repositoryPledgeAgreement.findAllByNumPAContainingIgnoreCase(numPA);
     }
 
-    public Set<Date> getDatesOfConclusion(long pledgeAgreementId){
-        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
-        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-        Set<Date> dates = new LinkedHashSet<>();
-        for(PledgeSubject ps : pledgeSubjects)
-            dates.add(ps.getDateConclusion());
-
-        return  dates;
+    public List<Date> getDatesOfConclusion(PledgeAgreement pledgeAgreement){
+        return repositoryPledgeAgreement.getDatesOfConclusion(pledgeAgreement.getPledgeAgreementId());
     }
 
-    public Set<Date> getDatesOfMonitoring(long pledgeAgreementId){
-        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
-        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-        Set<Date> dates = new LinkedHashSet<>();
-        for(PledgeSubject ps : pledgeSubjects)
-            dates.add(ps.getDateMonitoring());
-
-        return  dates;
+    public List<Date> getDatesOfMonitoring(PledgeAgreement pledgeAgreement){
+        return repositoryPledgeAgreement.getDatesOMonitorings(pledgeAgreement.getPledgeAgreementId());
     }
 
     public Set<String> getResultsOfMonitoring(long pledgeAgreementId){
