@@ -1,10 +1,18 @@
 package ru.fds.tavrzcms3.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
+
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+@Data
+@AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "client_legal_entity")
 public class ClientLegalEntity extends Client {
@@ -28,38 +36,6 @@ public class ClientLegalEntity extends Client {
 
 	public ClientLegalEntity(){
 		super.setTypeOfClient("юл");
-	}
-
-	public String getOrganizationalForm() {
-		return organizationalForm;
-	}
-
-	public void setOrganizationalForm(String organizationalForm) {
-		this.organizationalForm = organizationalForm;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getInn() {
-		return inn;
-	}
-
-	public void setInn(String inn) {
-		this.inn = inn;
-	}
-
-	public Client getClient() {
-		return client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
 	}
 
 	@Override

@@ -1,4 +1,6 @@
 package ru.fds.tavrzcms3.domain;
+import lombok.*;
+
 import java.util.List;
 
 import javax.persistence.Column;
@@ -9,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "client_manager")
 public class ClientManager {
@@ -26,49 +32,10 @@ public class ClientManager {
 	
 	@Column(name = "patronymic")
 	private String patronymic;
-	
+
+	@Singular
 	@OneToMany(mappedBy = "clientManager")
 	private List<Client> clients;
-
-	public long getClientManagerId() {
-		return clientManagerId;
-	}
-
-	public void setClientManagerId(long clientManagerId) {
-		this.clientManagerId = clientManagerId;
-	}
-
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getPatronymic() {
-		return patronymic;
-	}
-
-	public void setPatronymic(String patronymic) {
-		this.patronymic = patronymic;
-	}
-
-	public List<Client> getClients() {
-		return clients;
-	}
-
-	public void setClients(List<Client> clients) {
-		this.clients = clients;
-	}
 
 	@Override
 	public String toString() {

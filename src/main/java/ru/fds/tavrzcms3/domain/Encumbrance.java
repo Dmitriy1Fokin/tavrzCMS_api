@@ -1,5 +1,9 @@
 package ru.fds.tavrzcms3.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -8,6 +12,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "encumbrance")
 public class Encumbrance {
@@ -49,70 +57,6 @@ public class Encumbrance {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pledgesubject_id")
     private PledgeSubject pledgeSubject;
-
-    public long getEncumbranceId() {
-        return encumbranceId;
-    }
-
-    public void setEncumbranceId(long encumbranceId) {
-        this.encumbranceId = encumbranceId;
-    }
-
-    public String getNameEncumbrance() {
-        return nameEncumbrance;
-    }
-
-    public void setNameEncumbrance(String nameEncumbrance) {
-        this.nameEncumbrance = nameEncumbrance;
-    }
-
-    public String getTypeOfEncumbrance() {
-        return typeOfEncumbrance;
-    }
-
-    public void setTypeOfEncumbrance(String typeOfEncumbrance) {
-        this.typeOfEncumbrance = typeOfEncumbrance;
-    }
-
-    public String getInFavorOfWhom() {
-        return inFavorOfWhom;
-    }
-
-    public void setInFavorOfWhom(String inFavorOfWhom) {
-        this.inFavorOfWhom = inFavorOfWhom;
-    }
-
-    public Date getDateBegin() {
-        return dateBegin;
-    }
-
-    public void setDateBegin(Date dateBegin) {
-        this.dateBegin = dateBegin;
-    }
-
-    public Date getDateEnd() {
-        return dateEnd;
-    }
-
-    public void setDateEnd(Date dateEnd) {
-        this.dateEnd = dateEnd;
-    }
-
-    public String getNumOfEncumbrance() {
-        return numOfEncumbrance;
-    }
-
-    public void setNumOfEncumbrance(String numOfEncumbrance) {
-        this.numOfEncumbrance = numOfEncumbrance;
-    }
-
-    public PledgeSubject getPledgeSubject() {
-        return pledgeSubject;
-    }
-
-    public void setPledgeSubject(PledgeSubject pledgeSubject) {
-        this.pledgeSubject = pledgeSubject;
-    }
 
     @Override
     public String toString() {

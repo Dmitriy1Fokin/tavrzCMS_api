@@ -1,6 +1,10 @@
 package ru.fds.tavrzcms3.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +17,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+@Data
 @Entity
+@AllArgsConstructor
+@SuperBuilder
 @Table(name = "pledge_realty_land_ownership")
 public class PledgeSubjectRealtyLandOwnership extends PledgeSubjectRealty {
 
@@ -42,46 +49,6 @@ public class PledgeSubjectRealtyLandOwnership extends PledgeSubjectRealty {
 
 	public PledgeSubjectRealtyLandOwnership(){
 		super.setTypeOfCollateral("Недвижимость - ЗУ - собственность");
-	}
-
-	public String getPermittedUse() {
-		return permittedUse;
-	}
-
-	public void setPermittedUse(String permittedUse) {
-		this.permittedUse = permittedUse;
-	}
-
-	public String getBuiltUp() {
-		return builtUp;
-	}
-
-	public void setBuiltUp(String builtUp) {
-		this.builtUp = builtUp;
-	}
-
-	public String getCadastralNumOfBuilding() {
-		return cadastralNumOfBuilding;
-	}
-
-	public void setCadastralNumOfBuilding(String cadastralNumOfBuilding) {
-		this.cadastralNumOfBuilding = cadastralNumOfBuilding;
-	}
-
-	public PledgeSubjectRealty getPledgeSubjectRealty() {
-		return pledgeSubjectRealty;
-	}
-
-	public void setPledgeSubjectRealty(PledgeSubjectRealty pledgeSubjectRealty) {
-		this.pledgeSubjectRealty = pledgeSubjectRealty;
-	}
-
-	public LandCategory getLandCategory() {
-		return landCategory;
-	}
-
-	public void setLandCategory(LandCategory landCategory) {
-		this.landCategory = landCategory;
 	}
 
 	@Override

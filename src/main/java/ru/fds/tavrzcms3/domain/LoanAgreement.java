@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.domain;
 
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -20,6 +21,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.*;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "kd")
 public class LoanAgreement {
@@ -81,106 +86,11 @@ public class LoanAgreement {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "loaner_id")
 	private Client client;
-	
+
+	@Singular
 	@ManyToMany
 	@JoinTable(name = "kd_dz", joinColumns = @JoinColumn(name ="kd_id"), inverseJoinColumns = @JoinColumn(name ="dz_id"))
 	private List<PledgeAgreement> pledgeAgreements;
-
-	public long getLoanAgreementId() {
-		return loanAgreementId;
-	}
-
-	public void setLoanAgreementId(long loanAgreementId) {
-		this.loanAgreementId = loanAgreementId;
-	}
-
-	public String getNumLA() {
-		return numLA;
-	}
-
-	public void setNumLA(String numLA) {
-		this.numLA = numLA;
-	}
-
-	public Date getDateBeginLA() {
-		return dateBeginLA;
-	}
-
-	public void setDateBeginLA(Date dateBeginLA) {
-		this.dateBeginLA = dateBeginLA;
-	}
-
-	public Date getDateEndLA() {
-		return dateEndLA;
-	}
-
-	public void setDateEndLA(Date dateEndLA) {
-		this.dateEndLA = dateEndLA;
-	}
-
-	public String getStatusLA() {
-		return statusLA;
-	}
-
-	public void setStatusLA(String statusLA) {
-		this.statusLA = statusLA;
-	}
-
-	public double getAmountLA() {
-		return amountLA;
-	}
-
-	public void setAmountLA(double amountLA) {
-		this.amountLA = amountLA;
-	}
-
-	public double getDebtLA() {
-		return debtLA;
-	}
-
-	public void setDebtLA(double debtLA) {
-		this.debtLA = debtLA;
-	}
-
-	public double getInterestRateLA() {
-		return interestRateLA;
-	}
-
-	public void setInterestRateLA(double interestRateLA) {
-		this.interestRateLA = interestRateLA;
-	}
-
-	public byte getPfo() {
-		return pfo;
-	}
-
-	public void setPfo(byte pfo) {
-		this.pfo = pfo;
-	}
-
-	public byte getQualityCategory() {
-		return qualityCategory;
-	}
-
-	public void setQualityCategory(byte qualityCategory) {
-		this.qualityCategory = qualityCategory;
-	}
-
-	public Client getClient() {
-		return client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
-	}
-
-	public List<PledgeAgreement> getPledgeAgreements() {
-		return pledgeAgreements;
-	}
-
-	public void setPledgeAgreements(List<PledgeAgreement> pledgeAgreements) {
-		this.pledgeAgreements = pledgeAgreements;
-	}
 
 	@Override
 	public String toString() {
