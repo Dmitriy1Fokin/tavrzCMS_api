@@ -40,6 +40,22 @@ public class LoanAgreementService {
         return repositoryLoanAgreement.findById(loanAgreementId);
     }
 
+    public int countOfCurrentLoanAgreementsForPledgeAgreement(PledgeAgreement pledgeAgreement){
+        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, "открыт");
+    }
+
+    public List<LoanAgreement> getCurrentLoanAgreementsForPledgeAgreement(PledgeAgreement pledgeAgreement){
+        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, "открыт");
+    }
+
+    public int countOfClosedLoanAgreementsForPledgeAgreement(PledgeAgreement pledgeAgreement){
+        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, "закрыт");
+    }
+
+    public List<LoanAgreement> getClosedLoanAgreementsForPledgeAgreement(PledgeAgreement pledgeAgreement){
+        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, "закрыт");
+    }
+
     public int countOfCurrentLoanAgreementsForEmployee(Employee employee){
         List<Client> loaners = clientService.getClientByEmployee(employee);
         return repositoryLoanAgreement.countAllByClientInAndStatusLAEquals(loaners, "открыт");

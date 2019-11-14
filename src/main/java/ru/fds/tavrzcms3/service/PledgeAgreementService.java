@@ -47,53 +47,20 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.getDatesOMonitorings(pledgeAgreement.getPledgeAgreementId());
     }
 
-    public Set<String> getResultsOfMonitoring(long pledgeAgreementId){
-        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
-        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-        Set<String> results = new LinkedHashSet<>();
-        for(PledgeSubject ps : pledgeSubjects)
-            results.add(ps.getStatusMonitoring());
-
-        return  results;
+    public List<String> getResultsOfMonitoring(PledgeAgreement pledgeAgreement){
+        return repositoryPledgeAgreement.getResultsOfMonitoring(pledgeAgreement.getPledgeAgreementId());
     }
 
-    public PledgeAgreement getPledgeAgreement(long pledgeAgreementId){
-        return repositoryPledgeAgreement.getOne(pledgeAgreementId);
+    public Optional<PledgeAgreement> getPledgeAgreement(long pledgeAgreementId){
+        return repositoryPledgeAgreement.findById(pledgeAgreementId);
     }
 
-    public Set<String> getTypeOfCollateral(long pledgeAgreementId){
-        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
-        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-        Set<String> typeOfCollateralSet = new LinkedHashSet<>();
-        for(PledgeSubject ps : pledgeSubjects)
-            typeOfCollateralSet.add(ps.getTypeOfCollateral());
-
-        return  typeOfCollateralSet;
-    }
-
-    public int countOfCurrentLoanAgreementsForPladgeAgreement(long pledgeAgreementId){
-        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "открыт");
-    }
-
-    public List<LoanAgreement> getCurrentLoanAgreementsForPledgeAgreement(long pledgeAgreementId){
-        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "открыт");
-    }
-
-    public int countOfClosedLoanAgreementsForPledgeAgreement(long pledgeAgreementId){
-        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
-    }
-
-    public List<LoanAgreement> getClosedLoanAgreementsForPledgeAgreement(long pledgeAgreementId){
-        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(repositoryPledgeAgreement.findByPledgeAgreementId(pledgeAgreementId), "закрыт");
+    public List<String> getTypeOfCollateral(PledgeAgreement pledgeAgreement){
+        return  repositoryPledgeAgreement.getTypeOfCollateral(pledgeAgreement.getPledgeAgreementId());
     }
 
     public List<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(Employee employee, String pervPosl){
-        List<Client> pledgors = clientService.getClientByEmployee(employee);
-        Sort sort = new Sort(Sort.Direction.ASC,"client");
-        if(!pervPosl.isEmpty())
-            return repositoryPledgeAgreement.findByClientInAndPervPoslEqualsAndStatusPAEquals(pledgors,  pervPosl, "открыт", sort);
-        else
-            return repositoryPledgeAgreement.findByClientInAndStatusPAEquals(pledgors, "открыт", sort);
+        return repositoryPledgeAgreement.getCurrentPledgeAgreementsForEmployee(employee.getEmployeeId(), pervPosl);
     }
 
     public Page<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(Employee employee, Pageable pageable){

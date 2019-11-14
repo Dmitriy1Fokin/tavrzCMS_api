@@ -145,7 +145,7 @@ public class PagesController {
     @GetMapping("/pledge_subjects")
     public String pledgeSubjectsPage(@RequestParam("pledgeAgreementId") long pledgeAgreementId,
                                      Model model){
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         model.addAttribute("pledgeAgreement", pledgeAgreement);
 
         return "pledge_subjects";
@@ -238,7 +238,7 @@ public class PagesController {
     @GetMapping("/pledge_agreement_detail")
     public String pledgeAgreementDetailPage(@RequestParam("pledgeAgreementId") long pledgeAgreementId,
                                             Model model){
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         model.addAttribute("pledgeAgreement", pledgeAgreement);
 
         return "pledge_agreement_detail";
@@ -413,7 +413,7 @@ public class PagesController {
                                         Model model){
         switch(whereUpdateMonitoring) {
             case "pa":
-                PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get());
+                PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
                 model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
                 model.addAttribute("pledgeAgreement", pledgeAgreement);
                 model.addAttribute("monitoring", new Monitoring());
@@ -446,7 +446,7 @@ public class PagesController {
         if(bindingResult.hasErrors()) {
             switch(whereUpdateMonitoring) {
                 case "pa":
-                    PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get());
+                    PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
                     model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
                     model.addAttribute("pledgeAgreement", pledgeAgreement);
                     break;
@@ -466,7 +466,7 @@ public class PagesController {
 
         switch (whereUpdateMonitoring) {
             case "pa":
-                PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get());
+                PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
                 List<Monitoring> monitoringListForPA = monitoringService.insertMonitoringInPledgeAgreement(pledgeAgreement, monitoring);
 
                 model.addAttribute("whereUpdateMonitoring", "responseSuccess");
@@ -589,7 +589,7 @@ public class PagesController {
                                          @RequestParam("whatDo") String whatDo,
                                          Model model){
         if(whatDo.equals("changePA")){
-            PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get());
+            PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
 
             model.addAttribute("pledgeAgreement", pledgeAgreement);
             model.addAttribute("whatDo", whatDo);
@@ -677,58 +677,59 @@ public class PagesController {
                                        @RequestParam("pledgeAgreementId") Optional<Long> pledgeAgreementId,
                                        Model model){
 
-        List<PledgeAgreement> pledgeAgreementList= new ArrayList<>();
-        pledgeAgreementList.add(pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get()));
+        if(!typeOfCollateral.isPresent() || !pledgeAgreementId.isPresent())
+            throw new RuntimeException("Неверная ссылка");
+
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
 
         if(typeOfCollateral.get().equals("Авто/спецтехника")) {
-            PledgeSubjectAuto pledgeSubjectAuto = new PledgeSubjectAuto();
-            pledgeSubjectAuto.setPledgeAgreements(pledgeAgreementList);
+            PledgeSubjectAuto pledgeSubjectAuto = PledgeSubjectAuto.builder().pledgeAgreement(pledgeAgreement).build();
             model.addAttribute("pledgeSubjectAuto", pledgeSubjectAuto);
         }
         else if(typeOfCollateral.get().equals("Оборудование")){
-            PledgeSubjectEquipment pledgeSubjectEquipment = new PledgeSubjectEquipment();
-            pledgeSubjectEquipment.setPledgeAgreements(pledgeAgreementList);
+            PledgeSubjectEquipment pledgeSubjectEquipment = PledgeSubjectEquipment.builder().pledgeAgreement(pledgeAgreement).build();
             model.addAttribute("pledgeSubjectEquipment", pledgeSubjectEquipment);
         }
         else if(typeOfCollateral.get().equals("Ценные бумаги")){
-            PledgeSubjectSecurities pledgeSubjectSecurities = new PledgeSubjectSecurities();
-            pledgeSubjectSecurities.setPledgeAgreements(pledgeAgreementList);
+            PledgeSubjectSecurities pledgeSubjectSecurities = PledgeSubjectSecurities.builder().pledgeAgreement(pledgeAgreement).build();
             model.addAttribute("pledgeSubjectSecurities", pledgeSubjectSecurities);
         }
         else if(typeOfCollateral.get().equals("Судно")){
-            PledgeSubjectVessel pledgeSubjectVessel = new PledgeSubjectVessel();
-            pledgeSubjectVessel.setPledgeAgreements(pledgeAgreementList);
+            PledgeSubjectVessel pledgeSubjectVessel = PledgeSubjectVessel.builder().pledgeAgreement(pledgeAgreement).build();
             model.addAttribute("pledgeSubjectVessel", pledgeSubjectVessel);
         }
         else if(typeOfCollateral.get().equals("ТМЦ")){
-            PledgeSubjectTBO pledgeSubjectTBO = new PledgeSubjectTBO();
-            pledgeSubjectTBO.setPledgeAgreements(pledgeAgreementList);
+            PledgeSubjectTBO pledgeSubjectTBO = PledgeSubjectTBO.builder().pledgeAgreement(pledgeAgreement).build();
             model.addAttribute("pledgeSubjectTBO", pledgeSubjectTBO);
         }
         else if(typeOfCollateral.get().equals("Недвижимость - ЗУ - собственность")){
-            PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership = new PledgeSubjectRealtyLandOwnership();
-            pledgeSubjectRealtyLandOwnership.setPledgeAgreements(pledgeAgreementList);
+            PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership = PledgeSubjectRealtyLandOwnership.builder()
+                    .pledgeAgreement(pledgeAgreement)
+                    .build();
             List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
             model.addAttribute("pledgeSubjectRealtyLandOwnership", pledgeSubjectRealtyLandOwnership);
             model.addAttribute("landCategoryList", landCategoryList);
         }
         else if(typeOfCollateral.get().equals("Недвижимость - ЗУ - право аренды")){
-            PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease = new PledgeSubjectRealtyLandLease();
-            pledgeSubjectRealtyLandLease.setPledgeAgreements(pledgeAgreementList);
+            PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease = PledgeSubjectRealtyLandLease.builder()
+                    .pledgeAgreement(pledgeAgreement)
+                    .build();
             List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
             model.addAttribute("pledgeSubjectRealtyLandLease", pledgeSubjectRealtyLandLease);
             model.addAttribute("landCategoryList", landCategoryList);
         }
         else if(typeOfCollateral.get().equals("Недвижимость - здание/сооружение")){
-            PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding = new PledgeSubjectRealtyBuilding();
-            pledgeSubjectRealtyBuilding.setPledgeAgreements(pledgeAgreementList);
+            PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding = PledgeSubjectRealtyBuilding.builder()
+                    .pledgeAgreement(pledgeAgreement)
+                    .build();
             List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
             model.addAttribute("marketSegmentList", marketSegmentList);
             model.addAttribute("pledgeSubjectRealtyBuilding", pledgeSubjectRealtyBuilding);
         }
         else if(typeOfCollateral.get().equals("Недвижимость - помещение")){
-            PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom = new PledgeSubjectRealtyRoom();
-            pledgeSubjectRealtyRoom.setPledgeAgreements(pledgeAgreementList);
+            PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom = PledgeSubjectRealtyRoom.builder()
+                    .pledgeAgreement(pledgeAgreement)
+                    .build();
             List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
             model.addAttribute("marketSegmentList", marketSegmentList);
             model.addAttribute("pledgeSubjectRealtyRoom", pledgeSubjectRealtyRoom);
@@ -946,7 +947,7 @@ public class PagesController {
         }
 
         pledgeSubjectService.insertPledgeSubject(pledgeSubjectAuto, costHistory, monitoring);
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
     }
@@ -987,7 +988,7 @@ public class PagesController {
         }
 
         pledgeSubjectService.insertPledgeSubject(pledgeSubjectEquipment, costHistory, monitoring);
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
     }
@@ -1028,7 +1029,7 @@ public class PagesController {
         }
 
         pledgeSubjectService.insertPledgeSubject(pledgeSubjectSecurities, costHistory, monitoring);
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
     }
@@ -1069,7 +1070,7 @@ public class PagesController {
         }
 
         pledgeSubjectService.insertPledgeSubject(pledgeSubjectVessel, costHistory, monitoring);
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
     }
@@ -1110,7 +1111,7 @@ public class PagesController {
         }
 
         pledgeSubjectService.insertPledgeSubject(pledgeSubjectTBO, costHistory, monitoring);
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
     }
@@ -1157,7 +1158,7 @@ public class PagesController {
         }
 
         pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyLandOwnership, costHistory, monitoring);
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
     }
@@ -1204,7 +1205,7 @@ public class PagesController {
         }
 
         pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyLandLease, costHistory, monitoring);
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
     }
@@ -1251,7 +1252,7 @@ public class PagesController {
         }
 
         pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyBuilding, costHistory, monitoring);
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
     }
@@ -1298,7 +1299,7 @@ public class PagesController {
         }
 
         pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyRoom, costHistory, monitoring);
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         model.addAttribute("pledgeAgreement", pledgeAgreement);
         return "pledge_subjects";
     }
@@ -1310,7 +1311,7 @@ public class PagesController {
 
         System.out.println("pledgeSubjectId" + pledgeSubjectId);
         System.out.println("pledgeAgreementId" + pledgeAgreementId);
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId);
         pledgeSubjectList.remove(pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId));
         pledgeAgreement.setPledgeSubjects(pledgeSubjectList);
@@ -1477,7 +1478,7 @@ public class PagesController {
         List<PledgeAgreement> pledgeAgreementList = loanAgreementService.getAllPledgeAgreements(loanAgreementId);
         int countPABeforeUpdate = pledgeAgreementList.size();
         for(int i = 0; i < pledgeAgreementIdArray.length; i++){
-            pledgeAgreementList.add(pledgeAgreementService.getPledgeAgreement(pledgeAgreementIdArray[i]));
+            pledgeAgreementList.add(pledgeAgreementService.getPledgeAgreement(pledgeAgreementIdArray[i]).orElseThrow(() -> new RuntimeException("Неверная ссылка")));
         }
 
         int countPAAfterUpdate = pledgeAgreementList.size();
@@ -1506,7 +1507,7 @@ public class PagesController {
     public @ResponseBody int insertCurrentPledgeSubject(@RequestParam("pledgeSubjectsIdArray[]") long[] pledgeSubjectsIdArray,
                                                         @RequestParam("pledgeAgreementId") long pledgeAgreementId){
 
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId);
         int countPSBeforeUpdate = pledgeSubjectList.size();
         for(int i = 0; i < pledgeSubjectsIdArray.length; i++)

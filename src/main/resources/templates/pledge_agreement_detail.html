@@ -61,7 +61,7 @@
     <br>
 
     <label>Вид залогового обеспечения:</label>
-    <div th:each="typeOfCollateral : ${@pledgeAgreementService.getTypeOfCollateral(pledgeAgreement.getPledgeAgreementId())}">
+    <div th:each="typeOfCollateral : ${@pledgeAgreementService.getTypeOfCollateral(pledgeAgreement)}">
         <ul>
             <li th:text="${typeOfCollateral}">н/д</li>
         </ul>
@@ -107,17 +107,17 @@
        th:text="'Изменить данные'">Изменить данные</a>
     <br>
     <br>
-    <div th:if="${@pledgeAgreementService.countOfCurrentLoanAgreementsForPladgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
+    <div th:if="${@loanAgreementService.countOfCurrentLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
         <label>Действующие кредитные договоры:</label>
         <div class="containerTable">
-            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@pledgeAgreementService.getCurrentLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId())})"></div>
+            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@loanAgreementService.getCurrentLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId())})"></div>
         </div>
     </div>
 
-    <div th:if="${@pledgeAgreementService.countOfClosedLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
+    <div th:if="${@loanAgreementService.countOfClosedLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
         <label>Закрытые кредитные договоры:</label>
         <div class="containerTable">
-            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@pledgeAgreementService.getClosedLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId())})"></div>
+            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@loanAgreementService.getClosedLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId())})"></div>
         </div>
     </div>
 
