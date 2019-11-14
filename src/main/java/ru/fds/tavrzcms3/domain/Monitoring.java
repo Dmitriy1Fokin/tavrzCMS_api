@@ -1,5 +1,8 @@
 package ru.fds.tavrzcms3.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -19,6 +22,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+@Data
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "monitoring")
 public class Monitoring {
@@ -69,70 +75,6 @@ public class Monitoring {
 		this.notice = monitoring.notice;
 		this.collateralValue = monitoring.collateralValue;
 		this.pledgeSubject = monitoring.pledgeSubject;
-	}
-
-	public long getMonitoringId() {
-		return monitoringId;
-	}
-
-	public void setMonitoringId(long monitoringId) {
-		this.monitoringId = monitoringId;
-	}
-
-	public Date getDateMonitoring() {
-		return dateMonitoring;
-	}
-
-	public void setDateMonitoring(Date dateMonitoring) {
-		this.dateMonitoring = dateMonitoring;
-	}
-
-	public String getStatusMonitoring() {
-		return statusMonitoring;
-	}
-
-	public void setStatusMonitoring(String statusMonitoring) {
-		this.statusMonitoring = statusMonitoring;
-	}
-
-	public String getEmployee() {
-		return employee;
-	}
-
-	public void setEmployee(String employee) {
-		this.employee = employee;
-	}
-
-	public String getTypeOfMonitoring() {
-		return typeOfMonitoring;
-	}
-
-	public void setTypeOfMonitoring(String typeOfMonitoring) {
-		this.typeOfMonitoring = typeOfMonitoring;
-	}
-
-	public String getNotice() {
-		return notice;
-	}
-
-	public void setNotice(String notice) {
-		this.notice = notice;
-	}
-
-	public Double getCollateralValue() {
-		return collateralValue;
-	}
-
-	public void setCollateralValue(Double collateralValue) {
-		this.collateralValue = collateralValue;
-	}
-
-	public PledgeSubject getPledgeSubject() {
-		return pledgeSubject;
-	}
-
-	public void setPledgeSubject(PledgeSubject pledgeSubject) {
-		this.pledgeSubject = pledgeSubject;
 	}
 
 	@Override

@@ -1,8 +1,14 @@
 package ru.fds.tavrzcms3.domain;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "db_role")
 public class AppRole {
@@ -15,33 +21,12 @@ public class AppRole {
     @Column(name ="name")
     private String name;
 
+    @Singular
     @ManyToMany
     @JoinTable(name = "db_user_role", joinColumns = @JoinColumn(name ="role_id"), inverseJoinColumns = @JoinColumn(name ="user_id"))
     private List<AppUser> appUsers;
 
-    public long getRoleId() {
-        return roleId;
-    }
 
-    public void setRoleId(long roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<AppUser> getAppUsers() {
-        return appUsers;
-    }
-
-    public void setAppUsers(List<AppUser> appUsers) {
-        this.appUsers = appUsers;
-    }
 
     @Override
     public String toString() {

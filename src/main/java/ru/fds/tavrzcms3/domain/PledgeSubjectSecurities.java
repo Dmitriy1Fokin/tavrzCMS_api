@@ -1,6 +1,10 @@
 package ru.fds.tavrzcms3.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +15,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 
+@Data
+@AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "pledge_securities")
 public class PledgeSubjectSecurities extends PledgeSubject{
@@ -37,38 +44,6 @@ public class PledgeSubjectSecurities extends PledgeSubject{
 
 	public PledgeSubjectSecurities(){
 		super.setTypeOfCollateral("Ценные бумаги");
-	}
-
-	public double getNominalValue() {
-		return nominalValue;
-	}
-
-	public void setNominalValue(double nominalValue) {
-		this.nominalValue = nominalValue;
-	}
-
-	public double getActualValue() {
-		return actualValue;
-	}
-
-	public void setActualValue(double actualValue) {
-		this.actualValue = actualValue;
-	}
-
-	public String getTypeOfSecurities() {
-		return typeOfSecurities;
-	}
-
-	public void setTypeOfSecurities(String typeOfSecurities) {
-		this.typeOfSecurities = typeOfSecurities;
-	}
-
-	public PledgeSubject getPledgeSubject() {
-		return pledgeSubject;
-	}
-
-	public void setPledgeSubject(PledgeSubject pledgeSubject) {
-		this.pledgeSubject = pledgeSubject;
 	}
 
 	@Override

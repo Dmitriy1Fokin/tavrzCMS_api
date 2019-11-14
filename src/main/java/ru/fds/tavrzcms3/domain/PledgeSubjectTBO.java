@@ -1,6 +1,10 @@
 package ru.fds.tavrzcms3.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +15,9 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
+@Data
+@AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "pledge_tbo")
 public class PledgeSubjectTBO extends PledgeSubject {
@@ -37,38 +44,6 @@ public class PledgeSubjectTBO extends PledgeSubject {
 
 	public PledgeSubjectTBO(){
 		super.setTypeOfCollateral("ТМЦ");
-	}
-
-	public int getCountOfTBO() {
-		return countOfTBO;
-	}
-
-	public void setCountOfTBO(int countOfTBO) {
-		this.countOfTBO = countOfTBO;
-	}
-
-	public double getCarryingAmount() {
-		return carryingAmount;
-	}
-
-	public void setCarryingAmount(double carryingAmount) {
-		this.carryingAmount = carryingAmount;
-	}
-
-	public String getTypeOfTBO() {
-		return typeOfTBO;
-	}
-
-	public void setTypeOfTBO(String typeOfTBO) {
-		this.typeOfTBO = typeOfTBO;
-	}
-
-	public PledgeSubject getPledgeSubject() {
-		return pledgeSubject;
-	}
-
-	public void setPledgeSubject(PledgeSubject pledgeSubject) {
-		this.pledgeSubject = pledgeSubject;
 	}
 
     @Override

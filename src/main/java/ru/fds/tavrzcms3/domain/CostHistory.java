@@ -1,5 +1,9 @@
 package ru.fds.tavrzcms3.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -18,6 +22,10 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "cost_history")
 public class CostHistory {
@@ -72,94 +80,6 @@ public class CostHistory {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pledge_subject_id")
 	private PledgeSubject pledgeSubject;
-
-	public long getCostHistoryId() {
-		return costHistoryId;
-	}
-
-	public void setCostHistoryId(long costHistoryId) {
-		this.costHistoryId = costHistoryId;
-	}
-
-	public Date getDateConclusion() {
-		return dateConclusion;
-	}
-
-	public void setDateConclusion(Date dateConclusion) {
-		this.dateConclusion = dateConclusion;
-	}
-
-	public double getZsDz() {
-		return zsDz;
-	}
-
-	public void setZsDz(double zsDz) {
-		this.zsDz = zsDz;
-	}
-
-	public double getZsZz() {
-		return zsZz;
-	}
-
-	public void setZsZz(double zsZz) {
-		this.zsZz = zsZz;
-	}
-
-	public double getRsDz() {
-		return rsDz;
-	}
-
-	public void setRsDz(double rsDz) {
-		this.rsDz = rsDz;
-	}
-
-	public double getRsZz() {
-		return rsZz;
-	}
-
-	public void setRsZz(double rsZz) {
-		this.rsZz = rsZz;
-	}
-
-	public double getSs() {
-		return ss;
-	}
-
-	public void setSs(double ss) {
-		this.ss = ss;
-	}
-
-	public String getAppraiser() {
-		return appraiser;
-	}
-
-	public void setAppraiser(String appraiser) {
-		this.appraiser = appraiser;
-	}
-
-	public String getAppraisalReportNum() {
-		return appraisalReportNum;
-	}
-
-	public void setAppraisalReportNum(String appraisalReportNum) {
-		this.appraisalReportNum = appraisalReportNum;
-	}
-
-	public Date getAppraisalReportDate() {
-		return appraisalReportDate;
-	}
-
-	public void setAppraisalReportDate(Date appraisalReportDate) {
-		this.appraisalReportDate = appraisalReportDate;
-	}
-
-	public PledgeSubject getPledgeSubject() {
-		return pledgeSubject;
-	}
-
-	public void setPledgeSubject(PledgeSubject pledgeSubject) {
-		this.pledgeSubject = pledgeSubject;
-	}
 
 	@Override
 	public String toString() {

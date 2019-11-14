@@ -1,6 +1,10 @@
 package ru.fds.tavrzcms3.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +13,9 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
+@Data
+@AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "pledge_equipment")
 public class PledgeSubjectEquipment extends PledgeSubject {
@@ -56,78 +63,6 @@ public class PledgeSubjectEquipment extends PledgeSubject {
 
 	public PledgeSubjectEquipment(){
 		super.setTypeOfCollateral("Оборудование");
-	}
-
-	public String getBrand() {
-		return brand;
-	}
-
-	public void setBrand(String brand) {
-		this.brand = brand;
-	}
-
-	public String getModel() {
-		return model;
-	}
-
-	public void setModel(String model) {
-		this.model = model;
-	}
-
-	public String getSerialNum() {
-		return serialNum;
-	}
-
-	public void setSerialNum(String serialNum) {
-		this.serialNum = serialNum;
-	}
-
-	public Integer getYearOfManufacture() {
-		return yearOfManufacture;
-	}
-
-	public void setYearOfManufacture(Integer yearOfManufacture) {
-		this.yearOfManufacture = yearOfManufacture;
-	}
-
-	public String getInventoryNum() {
-		return inventoryNum;
-	}
-
-	public void setInventoryNum(String inventoryNum) {
-		this.inventoryNum = inventoryNum;
-	}
-
-	public String getTypeOfquipment() {
-		return typeOfquipment;
-	}
-
-	public void setTypeOfquipment(String typeOfquipment) {
-		this.typeOfquipment = typeOfquipment;
-	}
-
-	public Double getProductivity() {
-		return productivity;
-	}
-
-	public void setProductivity(Double productivity) {
-		this.productivity = productivity;
-	}
-
-	public String getTypeOfProductivity() {
-		return typeOfProductivity;
-	}
-
-	public void setTypeOfProductivity(String typeOfProductivity) {
-		this.typeOfProductivity = typeOfProductivity;
-	}
-
-	public PledgeSubject getPledgeSubject() {
-		return pledgeSubject;
-	}
-
-	public void setPledgeSubject(PledgeSubject pledgeSubject) {
-		this.pledgeSubject = pledgeSubject;
 	}
 
 	@Override

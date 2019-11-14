@@ -2,6 +2,8 @@ package ru.fds.tavrzcms3.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -27,6 +29,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "pledge_subject")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -127,24 +133,29 @@ public class PledgeSubject {
     @Pattern(regexp = "да|нет", message = "Возможные варианты: да, нет")
 	@Column(name ="insurance_obligation")
 	private String insuranceObligation;
-	
+
+    @Singular
 	@ManyToMany
 	@JoinTable(name = "dz_ps", joinColumns = @JoinColumn(name ="pledge_subject_id"), inverseJoinColumns = @JoinColumn(name ="dz_id"))
     @JsonIgnore
 	private List<PledgeAgreement> pledgeAgreements;
-	
+
+    @Singular
 	@OneToMany(mappedBy = "pledgeSubject")
     @JsonIgnore
     private List<CostHistory> costHistories;
-	
+
+    @Singular
 	@OneToMany(mappedBy = "pledgeSubject")
     @JsonIgnore
     private List<Monitoring> monitorings;
 
+    @Singular
 	@OneToMany(mappedBy = "pledgeSubject")
     @JsonIgnore
     private List<Encumbrance> encumbrances;
 
+    @Singular
     @OneToMany(mappedBy = "pledgeSubject")
     @JsonIgnore
     private List<Insurance> insurances;
@@ -178,262 +189,6 @@ public class PledgeSubject {
 	@JoinColumn(name = "pledgeSubject_id")
     @JsonIgnore
 	private PledgeSubjectVessel pledgeSubjectVessel;
-
-    public long getPledgeSubjectId() {
-        return pledgeSubjectId;
-    }
-
-    public void setPledgeSubjectId(long pledgeSubjectId) {
-        this.pledgeSubjectId = pledgeSubjectId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLiquidity() {
-        return liquidity;
-    }
-
-    public void setLiquidity(String liquidity) {
-        this.liquidity = liquidity;
-    }
-
-    public double getZsDz() {
-        return zsDz;
-    }
-
-    public void setZsDz(double zsDz) {
-        this.zsDz = zsDz;
-    }
-
-    public double getZsZz() {
-        return zsZz;
-    }
-
-    public void setZsZz(double zsZz) {
-        this.zsZz = zsZz;
-    }
-
-    public double getRsDz() {
-        return rsDz;
-    }
-
-    public void setRsDz(double rsDz) {
-        this.rsDz = rsDz;
-    }
-
-    public double getRsZz() {
-        return rsZz;
-    }
-
-    public void setRsZz(double rsZz) {
-        this.rsZz = rsZz;
-    }
-
-    public double getSs() {
-        return ss;
-    }
-
-    public void setSs(double ss) {
-        this.ss = ss;
-    }
-
-    public Date getDateMonitoring() {
-        return dateMonitoring;
-    }
-
-    public void setDateMonitoring(Date dateMonitoring) {
-        this.dateMonitoring = dateMonitoring;
-    }
-
-    public Date getDateConclusion() {
-        return dateConclusion;
-    }
-
-    public void setDateConclusion(Date dateConclusion) {
-        this.dateConclusion = dateConclusion;
-    }
-
-    public String getStatusMonitoring() {
-        return statusMonitoring;
-    }
-
-    public void setStatusMonitoring(String statusMonitoring) {
-        this.statusMonitoring = statusMonitoring;
-    }
-
-    public String getTypeOfCollateral() {
-        return typeOfCollateral;
-    }
-
-    public void setTypeOfCollateral(String typeOfCollateral) {
-        this.typeOfCollateral = typeOfCollateral;
-    }
-
-    public String getTypeOfPledge() {
-        return typeOfPledge;
-    }
-
-    public void setTypeOfPledge(String typeOfPledge) {
-        this.typeOfPledge = typeOfPledge;
-    }
-
-    public String getTypeOfMonitoring() {
-        return typeOfMonitoring;
-    }
-
-    public void setTypeOfMonitoring(String typeOfMonitoring) {
-        this.typeOfMonitoring = typeOfMonitoring;
-    }
-
-    public String getAdressRegion() {
-        return adressRegion;
-    }
-
-    public void setAdressRegion(String adressRegion) {
-        this.adressRegion = adressRegion;
-    }
-
-    public String getAdressDistrict() {
-        return adressDistrict;
-    }
-
-    public void setAdressDistrict(String adressDistrict) {
-        this.adressDistrict = adressDistrict;
-    }
-
-    public String getAdressCity() {
-        return adressCity;
-    }
-
-    public void setAdressCity(String adressCity) {
-        this.adressCity = adressCity;
-    }
-
-    public String getAdressStreet() {
-        return adressStreet;
-    }
-
-    public void setAdressStreet(String adressStreet) {
-        this.adressStreet = adressStreet;
-    }
-
-    public String getAdressBuilbing() {
-        return adressBuilbing;
-    }
-
-    public void setAdressBuilbing(String adressBuilbing) {
-        this.adressBuilbing = adressBuilbing;
-    }
-
-    public String getAdressPemises() {
-        return adressPemises;
-    }
-
-    public void setAdressPemises(String adressPemises) {
-        this.adressPemises = adressPemises;
-    }
-
-    public String getInsuranceObligation() {
-        return insuranceObligation;
-    }
-
-    public void setInsuranceObligation(String insuranceObligation) {
-        this.insuranceObligation = insuranceObligation;
-    }
-
-    public List<PledgeAgreement> getPledgeAgreements() {
-        return pledgeAgreements;
-    }
-
-    public void setPledgeAgreements(List<PledgeAgreement> pledgeAgreements) {
-        this.pledgeAgreements = pledgeAgreements;
-    }
-
-    public List<CostHistory> getCostHistories() {
-        return costHistories;
-    }
-
-    public void setCostHistories(List<CostHistory> costHistories) {
-        this.costHistories = costHistories;
-    }
-
-    public List<Monitoring> getMonitorings() {
-        return monitorings;
-    }
-
-    public void setMonitorings(List<Monitoring> monitorings) {
-        this.monitorings = monitorings;
-    }
-
-    public List<Encumbrance> getEncumbrances() {
-        return encumbrances;
-    }
-
-    public void setEncumbrances(List<Encumbrance> encumbrances) {
-        this.encumbrances = encumbrances;
-    }
-
-    public List<Insurance> getInsurances() {
-        return insurances;
-    }
-
-    public void setInsurances(List<Insurance> insurances) {
-        this.insurances = insurances;
-    }
-
-    public PledgeSubjectAuto getPledgeSubjectAuto() {
-        return pledgeSubjectAuto;
-    }
-
-    public void setPledgeSubjectAuto(PledgeSubjectAuto pledgeSubjectAuto) {
-        this.pledgeSubjectAuto = pledgeSubjectAuto;
-    }
-
-    public PledgeSubjectEquipment getPledgeSubjectEquipment() {
-        return pledgeSubjectEquipment;
-    }
-
-    public void setPledgeSubjectEquipment(PledgeSubjectEquipment pledgeSubjectEquipment) {
-        this.pledgeSubjectEquipment = pledgeSubjectEquipment;
-    }
-
-    public PledgeSubjectRealty getPledgeSubjectRealty() {
-        return pledgeSubjectRealty;
-    }
-
-    public void setPledgeSubjectRealty(PledgeSubjectRealty pledgeSubjectRealty) {
-        this.pledgeSubjectRealty = pledgeSubjectRealty;
-    }
-
-    public PledgeSubjectSecurities getPledgeSubjectSecurities() {
-        return pledgeSubjectSecurities;
-    }
-
-    public void setPledgeSubjectSecurities(PledgeSubjectSecurities pledgeSubjectSecurities) {
-        this.pledgeSubjectSecurities = pledgeSubjectSecurities;
-    }
-
-    public PledgeSubjectTBO getPledgeSubjectTBO() {
-        return pledgeSubjectTBO;
-    }
-
-    public void setPledgeSubjectTBO(PledgeSubjectTBO pledgeSubjectTBO) {
-        this.pledgeSubjectTBO = pledgeSubjectTBO;
-    }
-
-    public PledgeSubjectVessel getPledgeSubjectVessel() {
-        return pledgeSubjectVessel;
-    }
-
-    public void setPledgeSubjectVessel(PledgeSubjectVessel pledgeSubjectVessel) {
-        this.pledgeSubjectVessel = pledgeSubjectVessel;
-    }
 
     @Override
     public String toString() {

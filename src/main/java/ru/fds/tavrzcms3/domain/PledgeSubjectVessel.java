@@ -1,6 +1,10 @@
 package ru.fds.tavrzcms3.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +13,9 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
+@Data
+@AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "pledge_vessel")
 public class PledgeSubjectVessel extends PledgeSubject {
@@ -69,78 +76,6 @@ public class PledgeSubjectVessel extends PledgeSubject {
 
 	public PledgeSubjectVessel(){
 		super.setTypeOfCollateral("Судно");
-	}
-
-	public Integer getImo() {
-		return imo;
-	}
-
-	public void setImo(int imo) {
-		this.imo = imo;
-	}
-
-	public Integer getMmsi() {
-		return mmsi;
-	}
-
-	public void setMmsi(Integer mmsi) {
-		this.mmsi = mmsi;
-	}
-
-	public String getFlag() {
-		return flag;
-	}
-
-	public void setFlag(String flag) {
-		this.flag = flag;
-	}
-
-	public String getVesselType() {
-		return vesselType;
-	}
-
-	public void setVesselType(String vesselType) {
-		this.vesselType = vesselType;
-	}
-
-	public int getGrossTonnage() {
-		return grossTonnage;
-	}
-
-	public void setGrossTonnage(int grossTonnage) {
-		this.grossTonnage = grossTonnage;
-	}
-
-	public int getDeadweight() {
-		return deadweight;
-	}
-
-	public void setDeadweight(int deadweight) {
-		this.deadweight = deadweight;
-	}
-
-	public int getYearBuilt() {
-		return yearBuilt;
-	}
-
-	public void setYearBuilt(int yearBuilt) {
-		this.yearBuilt = yearBuilt;
-	}
-
-	public String getStatusVessel() {
-		return statusVessel;
-	}
-
-	public void setStatusVessel(String statusVessel) {
-		this.statusVessel = statusVessel;
-	}
-
-	public PledgeSubject getPledgeSubject() {
-		return pledgeSubject;
-	}
-
-	public void setPledgeSubject(PledgeSubject pledgeSubject) {
-		this.pledgeSubject = pledgeSubject;
 	}
 
 	@Override

@@ -3,6 +3,11 @@ package ru.fds.tavrzcms3.domain;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +21,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "pledge_realty_prime")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -58,70 +67,6 @@ public class PledgeSubjectRealty extends PledgeSubject {
 	@JoinColumn(name = "pledgeSubject_id")
 	@JsonIgnore
 	private PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom;
-
-	public double getArea() {
-		return area;
-	}
-
-	public void setArea(double area) {
-		this.area = area;
-	}
-
-	public String getCadastralNum() {
-		return cadastralNum;
-	}
-
-	public void setCadastralNum(String cadastralNum) {
-		this.cadastralNum = cadastralNum;
-	}
-
-	public String getConditionalNum() {
-		return conditionalNum;
-	}
-
-	public void setConditionalNum(String conditionalNum) {
-		this.conditionalNum = conditionalNum;
-	}
-
-	public PledgeSubject getPledgeSubject() {
-		return pledgeSubject;
-	}
-
-	public void setPledgeSubject(PledgeSubject pledgeSubject) {
-		this.pledgeSubject = pledgeSubject;
-	}
-
-	public PledgeSubjectRealtyBuilding getPledgeSubjectRealtyBuilding() {
-		return pledgeSubjectRealtyBuilding;
-	}
-
-	public void setPledgeSubjectRealtyBuilding(PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding) {
-		this.pledgeSubjectRealtyBuilding = pledgeSubjectRealtyBuilding;
-	}
-
-	public PledgeSubjectRealtyLandLease getPledgeSubjectRealtyLandLease() {
-		return pledgeSubjectRealtyLandLease;
-	}
-
-	public void setPledgeSubjectRealtyLandLease(PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease) {
-		this.pledgeSubjectRealtyLandLease = pledgeSubjectRealtyLandLease;
-	}
-
-	public PledgeSubjectRealtyLandOwnership getPledgeSubjectRealtyLandOwnership() {
-		return pledgeSubjectRealtyLandOwnership;
-	}
-
-	public void setPledgeSubjectRealtyLandOwnership(PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership) {
-		this.pledgeSubjectRealtyLandOwnership = pledgeSubjectRealtyLandOwnership;
-	}
-
-	public PledgeSubjectRealtyRoom getPledgeSubjectRealtyRoom() {
-		return pledgeSubjectRealtyRoom;
-	}
-
-	public void setPledgeSubjectRealtyRoom(PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom) {
-		this.pledgeSubjectRealtyRoom = pledgeSubjectRealtyRoom;
-	}
 
 	@Override
 	public String toString() {

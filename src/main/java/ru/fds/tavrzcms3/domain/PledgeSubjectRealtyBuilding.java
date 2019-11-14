@@ -1,6 +1,10 @@
 package ru.fds.tavrzcms3.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +19,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+@Data
+@AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "pledge_realty_building")
 public class PledgeSubjectRealtyBuilding extends PledgeSubjectRealty {
@@ -43,38 +50,6 @@ public class PledgeSubjectRealtyBuilding extends PledgeSubjectRealty {
 
 	public PledgeSubjectRealtyBuilding(){
 		super.setTypeOfCollateral("Недвижимость - здание/сооружение");
-	}
-
-	public int getReadinessDegree() {
-		return readinessDegree;
-	}
-
-	public void setReadinessDegree(int readinessDegree) {
-		this.readinessDegree = readinessDegree;
-	}
-
-	public int getYearOfConstruction() {
-		return yearOfConstruction;
-	}
-
-	public void setYearOfConstruction(int yearOfConstruction) {
-		this.yearOfConstruction = yearOfConstruction;
-	}
-
-	public PledgeSubjectRealty getPledgeSubjectRealty() {
-		return pledgeSubjectRealty;
-	}
-
-	public void setPledgeSubjectRealty(PledgeSubjectRealty pledgeSubjectRealty) {
-		this.pledgeSubjectRealty = pledgeSubjectRealty;
-	}
-
-	public MarketSegment getMarketSegment() {
-		return marketSegment;
-	}
-
-	public void setMarketSegment(MarketSegment marketSegment) {
-		this.marketSegment = marketSegment;
 	}
 
 	@Override

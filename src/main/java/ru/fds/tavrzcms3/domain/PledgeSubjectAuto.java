@@ -1,6 +1,10 @@
 package ru.fds.tavrzcms3.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +13,9 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
+@Data
+@AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "pledge_auto")
 public class PledgeSubjectAuto extends PledgeSubject {
@@ -58,86 +65,6 @@ public class PledgeSubjectAuto extends PledgeSubject {
 
 	public PledgeSubjectAuto(){
 		super.setTypeOfCollateral("Авто/спецтехника");
-	}
-
-	public String getBrand() {
-		return brand;
-	}
-
-	public void setBrand(String brand) {
-		this.brand = brand;
-	}
-
-	public String getModel() {
-		return model;
-	}
-
-	public void setModel(String model) {
-		this.model = model;
-	}
-
-	public String getVin() {
-		return vin;
-	}
-
-	public void setVin(String vin) {
-		this.vin = vin;
-	}
-
-	public String getNumOfEngine() {
-		return numOfEngine;
-	}
-
-	public void setNumOfEngine(String numOfEngine) {
-		this.numOfEngine = numOfEngine;
-	}
-
-	public String getNumOfPTS() {
-		return numOfPTS;
-	}
-
-	public void setNumOfPTS(String numOfPTS) {
-		this.numOfPTS = numOfPTS;
-	}
-
-	public Integer getYearOfManufacture() {
-		return yearOfManufacture;
-	}
-
-	public void setYearOfManufacture(Integer yearOfManufacture) {
-		this.yearOfManufacture = yearOfManufacture;
-	}
-
-	public String getInventoryNum() {
-		return inventoryNum;
-	}
-
-	public void setInventoryNum(String inventoryNum) {
-		this.inventoryNum = inventoryNum;
-	}
-
-	public String getTypeOfAuto() {
-		return typeOfAuto;
-	}
-
-	public void setTypeOfAuto(String typeOfAuto) {
-		this.typeOfAuto = typeOfAuto;
-	}
-
-	public Double getHorsepower() {
-		return horsepower;
-	}
-
-	public void setHorsepower(Double horsepower) {
-		this.horsepower = horsepower;
-	}
-
-	public PledgeSubject getPledgeSubject() {
-		return pledgeSubject;
-	}
-
-	public void setPledgeSubject(PledgeSubject pledgeSubject) {
-		this.pledgeSubject = pledgeSubject;
 	}
 
 	@Override
