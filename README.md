@@ -5,4 +5,4 @@
   <li>отслеживает сроки проведения мониторинга или составления залогового заключение, а также соблюдение требований по страхованию залогового имущества, отсутствие обременений.</li>
   <li>позволяет формировать отчетность и статистику.</li>
 </ul>
-Используемые технологии: <Strong>Java 8, Spring (Boot, MVC, Security, Data Jpa), Thymeleaf, PostgeSQL 10</Strong>.<br>
+Используемые технологии: <Strong>Java 11, Spring (Boot, MVC, Security, Data Jpa), Thymeleaf, PostgeSQL 10</Strong>.<br>
