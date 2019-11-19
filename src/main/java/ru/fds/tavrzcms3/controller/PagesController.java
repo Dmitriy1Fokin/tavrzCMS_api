@@ -123,9 +123,9 @@ public class PagesController {
 
         Page<PledgeAgreement> pledgeAgreementList = null;
         if(pervPosl.isPresent())
-            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsForEmployee(employee, pervPosl.get(), pageable);
+            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(employee, pervPosl.get(), pageable);
         else
-            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsForEmployee(employee, pageable);
+            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(employee, pageable);
 
 
 

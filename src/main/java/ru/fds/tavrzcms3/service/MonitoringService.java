@@ -9,8 +9,6 @@ import ru.fds.tavrzcms3.domain.Monitoring;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.repository.RepositoryMonitoring;
-import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
-import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 
 import java.util.ArrayList;
 import java.util.List;

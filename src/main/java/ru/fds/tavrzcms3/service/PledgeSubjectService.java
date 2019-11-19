@@ -405,8 +405,4 @@ public class PledgeSubjectService {
     public List<PledgeSubject> getPledgeSubjectByName(String name){
         return repositoryPledgeSubject.findAllByNameContainingIgnoreCase(name);
     }
-
-    public PledgeSubjectAuto getPledgeSubjectAuto(long id){
-        return repositoryPledgeSubjectAuto.getOne(id);
-    }
 }

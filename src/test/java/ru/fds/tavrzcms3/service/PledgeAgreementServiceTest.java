@@ -125,7 +125,7 @@ public class PledgeAgreementServiceTest {
         List<Client> clientList = repositoryClient.findByEmployee(employee);
         List<PledgeAgreement> pledgeAgreementsTest = repositoryPledgeAgreement.findByClientInAndPervPoslEqualsAndStatusPAEquals(clientList, pervPosl, "открыт");
 
-        List<PledgeAgreement> pledgeAgreementsResult = pledgeAgreementService.getCurrentPledgeAgreementsForEmployee(employee, pervPosl);
+        List<PledgeAgreement> pledgeAgreementsResult = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(employee, pervPosl);
 
         assertEquals(pledgeAgreementsTest.size(), pledgeAgreementsResult.size());
     }
