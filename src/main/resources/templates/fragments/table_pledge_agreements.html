@@ -42,7 +42,7 @@
 
             <td>
                 <a th:href="@{/client(clientId=${pa.getClient().getClientId()})}" href="client.html"
-                   th:text="${@clientService.getFullNameClient(pa.getClient().getClientId())}"></a>
+                   th:text="${@clientService.getFullNameClient(pa.getClient())}"></a>
             </td>
 
             <td>
