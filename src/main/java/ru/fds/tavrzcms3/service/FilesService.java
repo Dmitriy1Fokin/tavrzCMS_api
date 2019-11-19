@@ -16,7 +16,6 @@ import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -170,7 +169,7 @@ public class FilesService {
                     throw new InvalidFormatException("Отсутствует id ответственного сотрудника в строке " + (i+1));
                 else if(row.getCell(numColumnEmployee).getCellType()==CellType.NUMERIC)
                     clientLegalEntity.setEmployee(employeeService.
-                            getEmployee((long) row.getCell(numColumnEmployee).getNumericCellValue()).
+                            getEmployeeById((long) row.getCell(numColumnEmployee).getNumericCellValue()).
                             orElseThrow(() ->
                                     new InvalidFormatException("Ответственный сотрудник с таким id(" +
                                             row.getCell(numColumnEmployee).getNumericCellValue() + ") отсутствует")));
@@ -253,7 +252,7 @@ public class FilesService {
                     throw new InvalidFormatException("Отсутствует id ответственного сотрудника в строке " + (i+1));
                 else if(row.getCell(numColumnEmployee).getCellType()==CellType.NUMERIC)
                     clientIndividual.setEmployee(employeeService.
-                            getEmployee((long) row.getCell(numColumnEmployee).getNumericCellValue()).
+                            getEmployeeById((long) row.getCell(numColumnEmployee).getNumericCellValue()).
                             orElseThrow(() ->
                                     new InvalidFormatException("Ответственный сотрудник с таким id(" +
                                             row.getCell(numColumnEmployee).getNumericCellValue() + ") отсутствует")));

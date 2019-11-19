@@ -24,7 +24,7 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<h1 th:text="'Клиент: ' + ${@clientService.getFullNameClient(client.getClientId())}">Клиент ЮЛ</h1>
+<h1 th:text="'Клиент: ' + ${@clientService.getFullNameClient(client)}">Клиент ЮЛ</h1>
 <div th:switch="${client.getTypeOfClient()}">
     <div th:case="юл">
         <label>ИНН:</label>
@@ -65,7 +65,7 @@
 <br>
 <br>
 
-<div th:if="${@clientService.countOfCurrentPledgeAgreementsByPledgorId(client.getClientId()) &gt; 0}">
+<div th:if="${@pledgeAgreementService.countOfCurrentPledgeAgreementsByPledgor(client) &gt; 0}">
     <a th:href="@{monitoring_card(whereUpdateMonitoring='client', pledgorId=${client.getClientId()})}"
        href="monitoring_card.html"
        th:text="'Обновить мониторинг предметов залога по всем договорам залога залогодателя'">Обновить мониторинг предметов залога по всем договорам залога залогодателя</a>
@@ -74,34 +74,34 @@
 
     <h2>Действующее договоры залога</h2>
     <div class="containerTable">
-        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${@clientService.getCurrentPledgeAgreementsByPledgorId(client.getClientId())})"></div>
+        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${@pledgeAgreementService.getCurrentPledgeAgreementsByPledgor(client)})"></div>
     </div>
     <br>
     <br>
 </div>
 
-<div th:if="${@clientService.countOfClosedPledgeAgreementsByPledgorId(client.getClientId()) &gt; 0}">
+<div th:if="${@pledgeAgreementService.countOfClosedPledgeAgreementsByPledgor(client) &gt; 0}">
     <h2>Закрытые договоры залога</h2>
     <div class="containerTable">
-        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${@clientService.getClosedPledgeAgreementsByPledgorId(client.getClientId())})"></div>
+        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${@pledgeAgreementService.getClosedPledgeAgreementsByPledgor(client)})"></div>
     </div>
     <br>
     <br>
 </div>
 
 
-<div th:if="${@clientService.countOfCurrentLoanEgreementsByLoanerId(client.getClientId()) &gt; 0}">
+<div th:if="${@loanAgreementService.countOfCurrentLoanAgreementsByLoaner(client) &gt; 0}">
     <h2>Действующее кредитные договоры</h2>
     <div class="containerTable">
-        <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@clientService.getCurrentLoanAgreementsByLoanerId(client.getClientId())})"></div>
+        <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@loanAgreementService.getCurrentLoanAgreementsByLoaner(client)})"></div>
     </div>
     <br>
     <br>
 </div>
-<div th:if="${@clientService.countOfClosedLoanEgreementsByLoanerId(client.getClientId()) &gt; 0}">
+<div th:if="${@loanAgreementService.countOfClosedLoanAgreementsByLoaner(client) &gt; 0}">
     <h2>Закрытые кредитные договоры</h2>
     <div class="containerTable">
-        <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@clientService.getClosedLoanAgreementsByLoanerId(client.getClientId())})"></div>
+        <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@loanAgreementService.getClosedLoanAgreementsByLoaner(client)})"></div>
     </div>
     <br>
     <br>

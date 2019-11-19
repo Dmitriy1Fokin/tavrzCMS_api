@@ -23,14 +23,6 @@ public class ClientService {
     RepositoryClientLegalEntity repositoryClientLegalEntity;
     @Autowired
     RepositoryClientIndividual repositoryClientIndividual;
-    @Autowired
-    RepositoryPledgeAgreement repositoryPledgeAgreement;
-    @Autowired
-    RepositoryLoanAgreement repositoryLoanAgreement;
-
-
-
-
 
     public Optional<Client> getClientById(long clientId){
         return repositoryClient.findById(clientId);
@@ -40,36 +32,33 @@ public class ClientService {
         return repositoryClient.findByEmployee(employee);
     }
 
-    public int countOfCurrentPledgeAgreementsByPledgorId(long pledgorId){
-        return repositoryPledgeAgreement.countAllByClientAndStatusPAEquals(repositoryClient.findByClientId(pledgorId), "открыт");
+    public List<ClientLegalEntity> getClientLegalEntityByName(String name){
+        return repositoryClientLegalEntity.findByNameContainingIgnoreCase(name);
     }
 
-    public List<PledgeAgreement> getCurrentPledgeAgreementsByPledgorId(long pledgorId){
-        return repositoryPledgeAgreement.findByClientAndStatusPA(repositoryClient.findByClientId(pledgorId), "открыт");
+    public List<ClientIndividual> getClientIndividualByFio(String[] fio){
+        if(fio.length == 1)
+            return repositoryClientIndividual.findBySurnameContainingIgnoreCase(fio[0]);
+        else if(fio.length == 2)
+            return repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(fio[0], fio[1]);
+        else if(fio.length > 2)
+            return repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCaseAndPatronymicContainingIgnoreCase(fio[0], fio[1], fio[2]);
+        else
+            return new ArrayList<>();
     }
 
-    public int countOfClosedPledgeAgreementsByPledgorId(long pledgorId){
-        return repositoryPledgeAgreement.countAllByClientAndStatusPAEquals(repositoryClient.findByClientId(pledgorId), "закрыт");
-    }
+    public String getFullNameClient(Client client){
+        if(client.getClass() == ClientIndividual.class){
+            ClientIndividual clientIndividual = repositoryClientIndividual.findByClient(client);
 
-    public List<PledgeAgreement> getClosedPledgeAgreementsByPledgorId(long pledgorId){
-        return repositoryPledgeAgreement.findByClientAndStatusPA(repositoryClient.findByClientId(pledgorId), "закрыт");
-    }
+            return clientIndividual.getSurname() + " " + clientIndividual.getName() + " " + clientIndividual.getPatronymic();
 
-    public int countOfCurrentLoanEgreementsByLoanerId(long loanerId){
-        return repositoryLoanAgreement.countAllByClientAndStatusLAEquals(repositoryClient.findByClientId(loanerId), "открыт");
-    }
+        }else if(client.getClass() == ClientLegalEntity.class){
+            ClientLegalEntity clientLegalEntity = repositoryClientLegalEntity.findByClient(client);
 
-    public List<LoanAgreement> getCurrentLoanAgreementsByLoanerId(long loanerId){
-        return repositoryLoanAgreement.findByClientAndStatusLAEquals(repositoryClient.findByClientId(loanerId), "открыт");
-    }
-
-    public int countOfClosedLoanEgreementsByLoanerId(long loanerId){
-        return repositoryLoanAgreement.countAllByClientAndStatusLAEquals(repositoryClient.findByClientId(loanerId), "закрыт");
-    }
-
-    public List<LoanAgreement> getClosedLoanAgreementsByLoanerId(long loanerId){
-        return repositoryLoanAgreement.findByClientAndStatusLAEquals(repositoryClient.findByClientId(loanerId), "закрыт");
+            return clientLegalEntity.getOrganizationalForm() + " " + clientLegalEntity.getName();
+        }else
+            return "";
     }
 
     public Page<Client> getClientFromSearch(Map<String, String> searchParam){
@@ -135,26 +124,6 @@ public class ClientService {
     @Transactional
     public List<ClientIndividual> updateInsertClientIndividualList(List<ClientIndividual> clientIndividualList){
         return repositoryClientIndividual.saveAll(clientIndividualList);
-    }
-
-    public String getFullNameClient(long clientId){
-        Optional<Client> client = repositoryClient.findById(clientId);
-
-        if(client.isPresent()){
-            if(client.get().getTypeOfClient().equals("фл")){
-                ClientIndividual clientIndividual = repositoryClientIndividual.findByClient(client.get());
-
-                return clientIndividual.getSurname() + " " + clientIndividual.getName() + " " + clientIndividual.getPatronymic();
-
-            }else if(client.get().getTypeOfClient().equals("юл")){
-                ClientLegalEntity clientLegalEntity = repositoryClientLegalEntity.findByClient(client.get());
-
-                return clientLegalEntity.getOrganizationalForm() + " " + clientLegalEntity.getName();
-            }else
-                return null;
-
-        }else
-            return null;
     }
 
 }

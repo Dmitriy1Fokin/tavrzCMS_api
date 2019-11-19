@@ -74,7 +74,7 @@ public class PagesController {
 
     @GetMapping("/")
     public String homePage(@AuthenticationPrincipal User user, Model model) {
-        Employee employee = employeeService.getEmployee(user);
+        Employee employee = employeeService.getEmployeeByUser(user);
         model.addAttribute("employee", employee);
 
         int countOfPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee);
@@ -86,7 +86,7 @@ public class PagesController {
         int countOfPoslPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee, "посл");
         model.addAttribute("countOfPoslPledgeAgreements", countOfPoslPA);
 
-        int countOfLoanAgreements = loanAgreementService.countOfCurrentLoanAgreementsForEmployee(employee);
+        int countOfLoanAgreements = loanAgreementService.countOfCurrentLoanAgreementsByEmployee(employee);
         model.addAttribute("countOfLoanAgreements", countOfLoanAgreements);
 
         int countOfMonitoringNotDone = pledgeAgreementService.countOfMonitoringNotDone(employee);
@@ -116,7 +116,7 @@ public class PagesController {
                                       @RequestParam("page") Optional<Integer> page,
                                       @RequestParam("size") Optional<Integer> size,
                                       Model model) {
-        Employee employee = employeeService.getEmployee(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
+        Employee employee = employeeService.getEmployeeById(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         int currentPage = page.orElse(0);
         int pageSize = size.orElse(50);
         Pageable pageable = PageRequest.of(currentPage, pageSize);
@@ -284,10 +284,11 @@ public class PagesController {
         int currentPage = page.orElse(0);
         int pageSize = size.orElse(50);
         Pageable pageable = PageRequest.of(currentPage, pageSize);
-        Page<LoanAgreement> loanAgreementList = loanAgreementService.getCurrentLoanAgreementsForEmployee(pageable, employeeId);
+        Employee employee = employeeService.getEmployeeById(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
+        Page<LoanAgreement> loanAgreementList = loanAgreementService.getCurrentLoanAgreementsByEmployee(pageable, employee);
 
         model.addAttribute("loanAgreementList", loanAgreementList);
-        model.addAttribute("employeeId", employeeId);
+        model.addAttribute("employeeId", employee.getEmployeeId());
 
         int totalPages = loanAgreementList.getTotalPages();
         if(totalPages > 0){
@@ -302,7 +303,7 @@ public class PagesController {
     public String monitoringPledgeAgreementsPage(@RequestParam("employeeId") long employeeId,
                                                  Model model){
 
-        Employee employee = employeeService.getEmployee(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
+        Employee employee = employeeService.getEmployeeById(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         List<PledgeAgreement> pledgeAgreementListWithMonitoringNotDone = pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(employee);
         List<PledgeAgreement> pledgeAgreementListWithMonitoringIsDone = pledgeAgreementService.getPledgeAgreementWithMonitoringIsDone(employee);
         List<PledgeAgreement> pledgeAgreementListWithMonitoringOverdue = pledgeAgreementService.getPledgeAgreementWithMonitoringOverDue(employee);
@@ -317,7 +318,7 @@ public class PagesController {
     public String conclusionPledgeAgreementsPage(@RequestParam("employeeId") long employeeId,
                                                  Model model){
 
-        Employee employee = employeeService.getEmployee(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
+        Employee employee = employeeService.getEmployeeById(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
         List<PledgeAgreement> pledgeAgreementListWithConclusionNotDone = pledgeAgreementService.getPledgeAgreementWithConclusionNotDone(employee);
         List<PledgeAgreement> pledgeAgreementListWithConclusionIsDone = pledgeAgreementService.getPledgeAgreementWithConclusionIsDone(employee);
         List<PledgeAgreement> pledgeAgreementListWithConclusionOverdue = pledgeAgreementService.getPledgeAgreementWithConclusionOverDue(employee);
@@ -1475,7 +1476,8 @@ public class PagesController {
     public @ResponseBody int insertPA(@RequestParam("pledgeAgreementIdArray[]") long[] pledgeAgreementIdArray,
                                       @RequestParam("loanAgreementId") long loanAgreementId){
 
-        List<PledgeAgreement> pledgeAgreementList = loanAgreementService.getAllPledgeAgreements(loanAgreementId);
+        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
+        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getAllPledgeAgreementsByLoanAgreement(loanAgreement);
         int countPABeforeUpdate = pledgeAgreementList.size();
         for(int i = 0; i < pledgeAgreementIdArray.length; i++){
             pledgeAgreementList.add(pledgeAgreementService.getPledgeAgreement(pledgeAgreementIdArray[i]).orElseThrow(() -> new RuntimeException("Неверная ссылка")));
@@ -1484,7 +1486,7 @@ public class PagesController {
         int countPAAfterUpdate = pledgeAgreementList.size();
         System.out.println(countPAAfterUpdate - countPABeforeUpdate);
 
-        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
+
         loanAgreement.setPledgeAgreements(pledgeAgreementList);
         loanAgreementService.updateInsertLoanAgreement(loanAgreement);
 

@@ -49,7 +49,7 @@
     <br>
     <label>Залогодатель:</label>
     <a th:href="@{/client(clientId=${pledgeAgreement.getClient().getClientId()})}" href="client.html"
-       th:text="${@clientService.getFullNameClient(pledgeAgreement.getClient().getClientId())}">Залогодатель</a>
+       th:text="${@clientService.getFullNameClient(pledgeAgreement.getClient())}">Залогодатель</a>
     <br>
     <br>
     <label>Тип договора:</label>
@@ -107,17 +107,17 @@
        th:text="'Изменить данные'">Изменить данные</a>
     <br>
     <br>
-    <div th:if="${@loanAgreementService.countOfCurrentLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
+    <div th:if="${@loanAgreementService.countOfCurrentLoanAgreementsByPledgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
         <label>Действующие кредитные договоры:</label>
         <div class="containerTable">
-            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@loanAgreementService.getCurrentLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId())})"></div>
+            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@loanAgreementService.getCurrentLoanAgreementsByPledgeAgreement(pledgeAgreement.getPledgeAgreementId())})"></div>
         </div>
     </div>
 
-    <div th:if="${@loanAgreementService.countOfClosedLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
+    <div th:if="${@loanAgreementService.countOfClosedLoanAgreementsByPledgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
         <label>Закрытые кредитные договоры:</label>
         <div class="containerTable">
-            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@loanAgreementService.getClosedLoanAgreementsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId())})"></div>
+            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@loanAgreementService.getClosedLoanAgreementsByPledgeAgreement(pledgeAgreement.getPledgeAgreementId())})"></div>
         </div>
     </div>
 

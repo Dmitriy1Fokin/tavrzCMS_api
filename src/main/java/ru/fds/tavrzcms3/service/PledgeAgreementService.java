@@ -354,8 +354,40 @@ public class PledgeAgreementService {
 
     }
 
+    public int countOfCurrentPledgeAgreementsByPledgor(Client client){
+        return repositoryPledgeAgreement.countAllByClientAndStatusPAEquals(client, "открыт");
+    }
+
     public List<PledgeAgreement> getCurrentPledgeAgreementsByPledgor(Client client){
         return repositoryPledgeAgreement.findByClientAndStatusPA(client, "открыт");
+    }
+
+    public int countOfClosedPledgeAgreementsByPledgor(Client client){
+        return repositoryPledgeAgreement.countAllByClientAndStatusPAEquals(client, "закрыт");
+    }
+
+    public List<PledgeAgreement> getClosedPledgeAgreementsByPledgor(Client client){
+        return repositoryPledgeAgreement.findByClientAndStatusPA(client, "закрыт");
+    }
+
+    public int countOfCurrentPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){
+        return repositoryPledgeAgreement.countAllByLoanAgreementsAndStatusPAEquals(loanAgreement,"открыт");
+    }
+
+    public List<PledgeAgreement> getCurrentPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){
+        return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPAEquals(loanAgreement, "открыт");
+    }
+
+    public int countOfClosedPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){
+        return repositoryPledgeAgreement.countAllByLoanAgreementsAndStatusPAEquals(loanAgreement, "закрыт");
+    }
+
+    public List<PledgeAgreement> getClosedPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){
+        return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPAEquals(loanAgreement,"закрыт");
+    }
+
+    public List<PledgeAgreement> getAllPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){
+        return repositoryPledgeAgreement.findByLoanAgreements(loanAgreement);
     }
 
     @Transactional

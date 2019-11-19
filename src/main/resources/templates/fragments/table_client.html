@@ -24,7 +24,7 @@
 
                 <td>
                     <a th:href="@{/client(clientId=${client.getClientId()})}" href="client.html"
-                       th:text="${@clientService.getFullNameClient(client.getClientId())}">Клиент</a>
+                       th:text="${@clientService.getFullNameClient(client)}">Клиент</a>
                 </td>
 
                 <td th:text="${client.getTypeOfClient()}"></td>

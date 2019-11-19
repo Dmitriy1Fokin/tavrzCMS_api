@@ -21,12 +21,12 @@ public class EmployeeService {
     @Autowired
     RepositoryAppUser repositoryAppUser;
 
-    public Employee getEmployee(User user){
+    public Employee getEmployeeByUser(User user){
         AppUser appUser = repositoryAppUser.findByName(user.getUsername());
         return repositoryEmployee.findByAppUser(appUser);
     }
 
-    public Optional<Employee> getEmployee(long employeeId){
+    public Optional<Employee> getEmployeeById(long employeeId){
         return repositoryEmployee.findById(employeeId);
     }
 

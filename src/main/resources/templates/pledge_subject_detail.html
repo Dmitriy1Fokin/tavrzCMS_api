@@ -391,7 +391,7 @@
                 <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pe.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
                    th:text="${pe.getNumPA() + ' от ' + #dates.format(pe.getDateBeginPA(), 'dd.MM.yyyy')}">№ ДЗ</a>
                 <a th:href="@{/client(clientId=${pe.getClient().getClientId()})}" href="client.html"
-                   th:text="${@clientService.getFullNameClient(pe.getClient().getClientId())}">Залогодатель</a>
+                   th:text="${@clientService.getFullNameClient(pe.getClient())}">Залогодатель</a>
             </li>
         </div>
     </ol>
@@ -407,7 +407,7 @@
                     <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
                        th:text="${loanAgreement.getNumLA() + ' от ' + #dates.format(loanAgreement.getDateBeginLA(), 'dd.MM.yyyy')}">№ КД</a>
                     <a th:href="@{/client(clientId=${loanAgreement.getClient().getClientId()})}" href="client.html"
-                       th:text="${@clientService.getFullNameClient(loanAgreement.getClient().getClientId())}">Заемщик</a>
+                       th:text="${@clientService.getFullNameClient(loanAgreement.getClient())}">Заемщик</a>
                 </li>
             </div>
         </div>
