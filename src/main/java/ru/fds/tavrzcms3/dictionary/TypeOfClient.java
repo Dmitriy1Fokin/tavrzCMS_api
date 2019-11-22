@@ -1,16 +1,23 @@
 package ru.fds.tavrzcms3.dictionary;
 
-public enum TypeOfClient {
-    INDIVIDUAL{
-        public String toStringRU(){
-            return "фл";
-        }
-    },
-    LEGAL_ENTITY{
-        public String toStringRU(){
-            return "юл";
-        }
-    };
+public enum TypeOfClient implements BasicEnum<String>{
+    INDIVIDUAL("фл"),
+    LEGAL_ENTITY("юл");
 
-    public abstract String toStringRU();
+    private String translate;
+
+    TypeOfClient(String translate){
+        this.translate = translate;
+    }
+
+    @Override
+    public String getTranslate(){
+        return translate;
+    }
+
+    public static class Converter extends EnumConverter<TypeOfClient, String>{
+        public Converter(){
+            super(TypeOfClient.class);
+        }
+    }
 }

@@ -1,26 +1,25 @@
 package ru.fds.tavrzcms3.dictionary;
 
-public enum TypeOfPledge {
-    RETURN{
-        public String toStringRU(){
-            return "возвратная";
-        }
-    },
-    LEVER{
-        public String toStringRU(){
-            return "рычаговая";
-        }
-    },
-    LIMITING{
-        public String toStringRU(){
-            return "ограничивающая";
-        }
-    },
-    INFORMATIONAL{
-        public String toStringRU(){
-            return "информационная";
-        }
-    };
+public enum TypeOfPledge implements BasicEnum<String>{
+    RETURN("возвратная"),
+    LEVER("рычаговая"),
+    LIMITING("ограничивающая"),
+    INFORMATIONAL("информационная");
 
-    public abstract String toStringRU();
+    private String translate;
+
+    TypeOfPledge(String translate){
+        this.translate = translate;
+    }
+
+    @Override
+    public String getTranslate() {
+        return translate;
+    }
+
+    public static class Converter extends EnumConverter<TypeOfPledge, String>{
+        public Converter(){
+            super(TypeOfPledge.class);
+        }
+    }
 }

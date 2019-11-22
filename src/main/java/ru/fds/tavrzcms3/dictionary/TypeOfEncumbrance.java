@@ -1,31 +1,26 @@
 package ru.fds.tavrzcms3.dictionary;
 
-public enum TypeOfEncumbrance {
-    PLEDGE{
-        public String toStringRU(){
-            return "залог";
-        }
-    },
-    ARREST{
-        public String toStringRU(){
-            return "арест";
-        }
-    },
-    LEASE{
-        public String toStringRU(){
-            return "аренда";
-        }
-    },
-    SERVITUDE{
-        public String toStringRU(){
-            return "сервитут";
-        }
-    },
-    TRUST_MANAGEMENT{
-        public String toStringRU(){
-            return "доверительное управление";
-        }
-    };
+public enum TypeOfEncumbrance implements BasicEnum<String>{
+    PLEDGE("залог"),
+    ARREST("арест"),
+    LEASE("аренда"),
+    SERVITUDE("сервитут"),
+    TRUST_MANAGEMENT("доверительное управление");
 
-    public abstract String toStringRU();
+    private String translate;
+
+    TypeOfEncumbrance(String translate){
+        this.translate = translate;
+    }
+
+    @Override
+    public String getTranslate() {
+        return translate;
+    }
+
+    public static class Converter extends EnumConverter<TypeOfEncumbrance, String>{
+        public Converter(){
+            super(TypeOfEncumbrance.class);
+        }
+    }
 }

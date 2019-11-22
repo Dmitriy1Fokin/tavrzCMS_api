@@ -1,26 +1,25 @@
 package ru.fds.tavrzcms3.dictionary;
 
-public enum  TypeOfLiquidity {
-    HIGH{
-        public String toStringRU(){
-            return "высокая";
-        }
-    },
-    AVERAGE{
-        public String toStringRU(){
-            return "средняя";
-        }
-    },
-    BELOW_AVERAGE{
-        public String toStringRU(){
-            return "ниже средней";
-        }
-    },
-    LOW{
-        public String toStringRU(){
-            return "низкая";
-        }
-    };
+public enum  TypeOfLiquidity implements BasicEnum<String>{
+    HIGH("высокая"),
+    AVERAGE("средняя"),
+    BELOW_AVERAGE("ниже средней"),
+    LOW("низкая");
 
-    public abstract String toStringRU();
+    private String translate;
+
+    TypeOfLiquidity(String translate){
+        this.translate = translate;
+    }
+
+    @Override
+    public String getTranslate() {
+        return translate;
+    }
+
+    public static class Converter extends EnumConverter<TypeOfLiquidity, String>{
+        public Converter(){
+            super(TypeOfLiquidity.class);
+        }
+    }
 }

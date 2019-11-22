@@ -1,51 +1,31 @@
 package ru.fds.tavrzcms3.dictionary;
 
-public enum TypeOfCollateral {
-    AUTO{
-        public String toStringRU(){
-            return "Авто/спецтехника";
-        }
-    },
-    EQUIPMENT{
-        public String toStringRU(){
-            return "Оборудование";
-        }
-    },
-    TBO{
-        public String toStringRU(){
-            return "ТМЦ";
-        }
-    },
-    SECURITIES{
-        public String toStringRU(){
-            return "Ценные бумаги";
-        }
-    },
-    LAND_OWNERSHIP{
-        public String toStringRU(){
-            return "Недвижимость - ЗУ - собственность";
-        }
-    },
-    LAND_LEASE{
-        public String toStringRU(){
-            return "Недвижимость - ЗУ - право аренды";
-        }
-    },
-    BUILDING{
-        public String toStringRU(){
-            return "Недвижимость - здание/сооружение";
-        }
-    },
-    PREMISE{
-        public String toStringRU(){
-            return "Недвижимость - помещение";
-        }
-    },
-    VESSEL{
-        public String toStringRU(){
-            return "Судно";
-        }
-    };
+public enum TypeOfCollateral implements BasicEnum<String>{
+    AUTO("Авто/спецтехника"),
+    EQUIPMENT("Оборудование"),
+    TBO("ТМЦ"),
+    SECURITIES("Ценные бумаги"),
+    LAND_OWNERSHIP("Недвижимость - ЗУ - собственность"),
+    LAND_LEASE("Недвижимость - ЗУ - право аренды"),
+    BUILDING("Недвижимость - здание/сооружение"),
+    PREMISE("Недвижимость - помещение"),
+    VESSEL("Судно");
 
-    public abstract String toStringRU();
+    private String translate;
+
+    TypeOfCollateral(String translate){
+        this.translate = translate;
+    }
+
+    @Override
+    public String getTranslate() {
+        return translate;
+    }
+
+    public static class Converter extends EnumConverter<TypeOfCollateral, String>{
+        public Converter(){
+            super(TypeOfCollateral.class);
+        }
+    }
+
 }

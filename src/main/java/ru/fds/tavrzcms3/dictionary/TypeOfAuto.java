@@ -1,71 +1,34 @@
 package ru.fds.tavrzcms3.dictionary;
 
-public enum TypeOfAuto {
-    BULLDOZER{
-        public String toStringRU(){
-            return "бульдозер";
-        }
-    },
-    EXCAVATOR{
-        public String toStringRU(){
-            return "экскаватор";
-        }
-    },
-    TRAILER{
-        public String toStringRU(){
-            return "прицеп";
-        }
-    },
-    LOADER{
-        public String toStringRU(){
-            return "погрузчик";
-        }
-    },
-    CRANE{
-        public String toStringRU(){
-            return "кран";
-        }
-    },
-    ROAD_CONSTRUCTION {
-        public String toStringRU(){
-            return "дорожно-строительная";
-        }
-    },
-    COMBINE{
-        public String toStringRU(){
-            return "комбайн";
-        }
-    },
-    TRACTOR{
-        public String toStringRU(){
-            return "трактор";
-        }
-    },
-    PASSENGER{
-        public String toStringRU(){
-            return "пассажирский транспорт";
-        }
-    },
-    CARGO{
-        public String toStringRU(){
-            return "грузовой транспорт";
-        }
-    },
-    PERSONAL{
-        public String toStringRU(){
-            return "легковой транспорт";
-        }
-    },
-    RAILWAY{
-        public String toStringRU(){
-            return "ж/д транспорт";
-        }
-    },
-    OTHER{
-        public String toStringRU(){
-            return "иное";
-        }
-    };
+public enum TypeOfAuto implements BasicEnum<String>{
+    BULLDOZER("бульдозер"),
+    EXCAVATOR("экскаватор"),
+    TRAILER("прицеп"),
+    LOADER("погрузчик"),
+    CRANE("кран"),
+    ROAD_CONSTRUCTION("дорожно-строительная"),
+    COMBINE("комбайн"),
+    TRACTOR("трактор"),
+    PASSENGER("пассажирский транспорт"),
+    CARGO("грузовой транспорт"),
+    PERSONAL("легковой транспорт"),
+    RAILWAY("ж/д транспорт"),
+    OTHER("иное");
 
-    public abstract String toStringRU();
+    private String translate;
+
+    TypeOfAuto(String translate){
+        this.translate = translate;
+    }
+
+    @Override
+    public String getTranslate(){
+        return translate;
+    }
+
+    public static class Converter extends EnumConverter<TypeOfAuto, String>{
+        public Converter(){
+            super(TypeOfAuto.class);
+        }
+    }
 }

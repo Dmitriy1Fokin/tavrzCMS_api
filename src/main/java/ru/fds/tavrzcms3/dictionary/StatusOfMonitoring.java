@@ -1,21 +1,24 @@
 package ru.fds.tavrzcms3.dictionary;
 
-public enum StatusOfMonitoring {
-    IN_STOCK{
-        public String toStringRU(){
-            return "в наличии";
-        }
-    },
-    LOSING{
-        public String toStringRU(){
-            return "утрата";
-        }
-    },
-    PARTIAL_LOSS{
-        public String toStringRU(){
-            return "частичная утрата";
-        }
-    };
+public enum StatusOfMonitoring implements BasicEnum<String>{
+    IN_STOCK("в наличии"),
+    LOSING("утрата"),
+    PARTIAL_LOSS("частичная утрата");
 
-    public abstract String toStringRU();
+    private String translate;
+
+    StatusOfMonitoring(String translate){
+        this.translate = translate;
+    }
+
+    @Override
+    public String getTranslate(){
+        return translate;
+    }
+
+    public static class Converter extends EnumConverter<StatusOfMonitoring, String>{
+        public Converter(){
+            super(StatusOfMonitoring.class);
+        }
+    }
 }

@@ -1,16 +1,23 @@
 package ru.fds.tavrzcms3.dictionary;
 
-public enum  TypeOfPledgeAgreement {
-    PERV{
-        public String toStringRU(){
-            return "перв";
-        }
-    },
-    POSL{
-        public String toStringRU(){
-            return "посл";
-        }
-    };
+public enum  TypeOfPledgeAgreement implements BasicEnum<String>{
+    PERV("перв"),
+    POSL("посл");
 
-    public abstract String toStringRU();
+    private String translate;
+
+    TypeOfPledgeAgreement(String translate){
+        this.translate = translate;
+    }
+
+    @Override
+    public String getTranslate() {
+        return translate;
+    }
+
+    public static class Converter extends EnumConverter<TypeOfPledgeAgreement, String>{
+        public Converter(){
+            super(TypeOfPledgeAgreement.class);
+        }
+    }
 }

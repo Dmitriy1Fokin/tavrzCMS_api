@@ -1,16 +1,23 @@
 package ru.fds.tavrzcms3.dictionary;
 
-public enum TypeOfMonitoring {
-    DOCUMENTARY{
-        public String toStringRU(){
-            return "документарный";
-        }
-    },
-    VISUAL{
-        public String toStringRU(){
-            return "визуальный";
-        }
-    };
+public enum TypeOfMonitoring implements BasicEnum<String>{
+    DOCUMENTARY("документарный"),
+    VISUAL("визуальный");
 
-    public abstract String toStringRU();
+    private String translate;
+
+    TypeOfMonitoring(String translate){
+        this.translate = translate;
+    }
+
+    @Override
+    public String getTranslate() {
+        return translate;
+    }
+
+    public static class Converter extends EnumConverter<TypeOfMonitoring, String>{
+        public Converter(){
+            super(TypeOfMonitoring.class);
+        }
+    }
 }
