@@ -259,16 +259,16 @@ public class PagesController {
         return "loan_agreement_detail";
     }
 
-    @GetMapping("cost_history")
-    public String costHistoryPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
-                                  Model model){
-        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
-        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(pledgeSubject);
-        model.addAttribute("pledgeSubject", pledgeSubject);
-        model.addAttribute("costHistoryList", costHistoryList);
-
-        return "cost_history";
-    }
+//    @GetMapping("cost_history")
+//    public String costHistoryPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+//                                  Model model){
+//        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+//        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(pledgeSubject);
+//        model.addAttribute("pledgeSubject", pledgeSubject);
+//        model.addAttribute("costHistoryList", costHistoryList);
+//
+//        return "cost_history";
+//    }
 
     @GetMapping("monitoring_pledge_subject")
     public String monitoringPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
@@ -320,20 +320,20 @@ public class PagesController {
         return "monitoring_pledge_agreements";
     }
 
-    @GetMapping("/conclusion_pledge_agreements")
-    public String conclusionPledgeAgreementsPage(@RequestParam("employeeId") long employeeId,
-                                                 Model model){
-
-        Employee employee = employeeService.getEmployeeById(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
-        List<PledgeAgreement> pledgeAgreementListWithConclusionNotDone = pledgeAgreementService.getPledgeAgreementWithConclusionNotDone(employee);
-        List<PledgeAgreement> pledgeAgreementListWithConclusionIsDone = pledgeAgreementService.getPledgeAgreementWithConclusionIsDone(employee);
-        List<PledgeAgreement> pledgeAgreementListWithConclusionOverdue = pledgeAgreementService.getPledgeAgreementWithConclusionOverDue(employee);
-        model.addAttribute("pledgeAgreementListWithConclusionNotDone", pledgeAgreementListWithConclusionNotDone);
-        model.addAttribute("pledgeAgreementListWithConclusionIsDone", pledgeAgreementListWithConclusionIsDone);
-        model.addAttribute("pledgeAgreementListWithConclusionOverdue", pledgeAgreementListWithConclusionOverdue);
-
-        return "conclusion_pledge_agreements";
-    }
+//    @GetMapping("/conclusion_pledge_agreements")
+//    public String conclusionPledgeAgreementsPage(@RequestParam("employeeId") long employeeId,
+//                                                 Model model){
+//
+//        Employee employee = employeeService.getEmployeeById(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
+//        List<PledgeAgreement> pledgeAgreementListWithConclusionNotDone = pledgeAgreementService.getPledgeAgreementWithConclusionNotDone(employee);
+//        List<PledgeAgreement> pledgeAgreementListWithConclusionIsDone = pledgeAgreementService.getPledgeAgreementWithConclusionIsDone(employee);
+//        List<PledgeAgreement> pledgeAgreementListWithConclusionOverdue = pledgeAgreementService.getPledgeAgreementWithConclusionOverDue(employee);
+//        model.addAttribute("pledgeAgreementListWithConclusionNotDone", pledgeAgreementListWithConclusionNotDone);
+//        model.addAttribute("pledgeAgreementListWithConclusionIsDone", pledgeAgreementListWithConclusionIsDone);
+//        model.addAttribute("pledgeAgreementListWithConclusionOverdue", pledgeAgreementListWithConclusionOverdue);
+//
+//        return "conclusion_pledge_agreements";
+//    }
 
     @GetMapping("/search")
     public String searchPage(){
@@ -505,33 +505,33 @@ public class PagesController {
     }
 
 
-    @GetMapping("/cost_history_card")
-    public String costHistoryCardGet(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
-                                     Model model){
-        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
-        CostHistory costHistory = new CostHistory();
-        costHistory.setPledgeSubject(pledgeSubject);
-        costHistory.setRsDz(pledgeSubject.getRsDz());
-        costHistory.setZsDz(pledgeSubject.getZsDz());
-        model.addAttribute("costHistory", costHistory);
-
-        return "cost_history_card";
-    }
-
-    @PostMapping("/cost_history_card")
-    public String costHistoryCardPost(@Valid CostHistory costHistory,
-                                      BindingResult bindingResult,
-                                      Model model){
-        if(bindingResult.hasErrors())
-            return "cost_history_card";
-
-        CostHistory costHistoryUpdated = costHistoryService.insertCostHistory(costHistory);
-        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(costHistoryUpdated.getPledgeSubject());
-        model.addAttribute("pledgeSubject", costHistoryUpdated.getPledgeSubject());
-        model.addAttribute("costHistoryList", costHistoryList);
-
-        return "cost_history";
-    }
+//    @GetMapping("/cost_history_card")
+//    public String costHistoryCardGet(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+//                                     Model model){
+//        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+//        CostHistory costHistory = new CostHistory();
+//        costHistory.setPledgeSubject(pledgeSubject);
+//        costHistory.setRsDz(pledgeSubject.getRsDz());
+//        costHistory.setZsDz(pledgeSubject.getZsDz());
+//        model.addAttribute("costHistory", costHistory);
+//
+//        return "cost_history_card";
+//    }
+//
+//    @PostMapping("/cost_history_card")
+//    public String costHistoryCardPost(@Valid CostHistory costHistory,
+//                                      BindingResult bindingResult,
+//                                      Model model){
+//        if(bindingResult.hasErrors())
+//            return "cost_history_card";
+//
+//        CostHistory costHistoryUpdated = costHistoryService.insertCostHistory(costHistory);
+//        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(costHistoryUpdated.getPledgeSubject());
+//        model.addAttribute("pledgeSubject", costHistoryUpdated.getPledgeSubject());
+//        model.addAttribute("costHistoryList", costHistoryList);
+//
+//        return "cost_history";
+//    }
 
     @GetMapping("/loan_agreement_card")
     public String loanAgreementCardPageGet(@RequestParam("loanAgreementId") Optional<Long> loanAgreementId,

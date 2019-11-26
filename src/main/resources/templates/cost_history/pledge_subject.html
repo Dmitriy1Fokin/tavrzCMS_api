@@ -27,12 +27,12 @@
 <h1 th:text="'История изменения стоимостей предмета залога:' + ${pledgeSubject.getName()}">История изменения стоимостей предмета залога</h1>
 
 <a th:href="@{/pledge_subject_detail(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
-   href="pledge_subject_detail.html"
+   href="../pledge_subject_detail.html"
    th:text="'Вернуться к предмету залога ' + ${pledgeSubject.getName()}">Вернуться к предмету залога</a>
 <br>
 <br>
-<a th:href="@{cost_history_card(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
-   href="cost_history_card.html"
+<a th:href="@{/cost_history/card(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
+   href="card.html"
    th:text="'Обновить стоимости предмета залога'">Обновить стоимости предмета залога</a>
 <br>
 <br>

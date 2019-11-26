@@ -18,7 +18,7 @@
 
 <h1 th:text="'Обновление cтоимостей предмета залога:' + ${costHistory.getPledgeSubject().getName()}">Обновление cтоимостей</h1>
 
-<form th:action="@{/cost_history_card}" th:method="post" th:object="${costHistory}" action="cost_history_card.html">
+<form th:action="@{/cost_history/insert}" th:method="post" th:object="${costHistory}" action="card.html">
     <input type="hidden", th:field="*{pledgeSubject}" th:value="${costHistory.getPledgeSubject()}">
 
     <div class="row">

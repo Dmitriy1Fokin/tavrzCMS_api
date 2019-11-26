@@ -308,32 +308,32 @@
     <br>
     <br>
     <label>Рыночноя стоимость по ДЗ:</label>
-    <a th:href="@{/cost_history(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history.html"
+    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history/pledge_subject.html"
        th:text="${#numbers.formatCurrency(pledgeSubject.getRsDz())}">н/д</a>
     <br>
     <br>
     <label>Рыночная стоимость по ЗЗ:</label>
-    <a th:href="@{/cost_history(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history.html"
+    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history/pledge_subject.html"
        th:text="${#numbers.formatCurrency(pledgeSubject.getRsZz())}">н/д</a>
     <br>
     <br>
     <label>Залоговая стоимость по ДЗ:</label>
-    <a th:href="@{/cost_history(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history.html"
+    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history/pledge_subject.html"
        th:text="${#numbers.formatCurrency(pledgeSubject.getZsDz())}">н/д</a>
     <br>
     <br>
     <label>Залоговая стоимость по ЗЗ:</label>
-    <a th:href="@{/cost_history(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history.html"
+    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history/pledge_subject.html"
        th:text="${#numbers.formatCurrency(pledgeSubject.getZsZz())}">н/д</a>
     <br>
     <br>
     <label>Справедливая стоимость:</label>
-    <a th:href="@{/cost_history(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history.html"
+    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history/pledge_subject.html"
        th:text="${#numbers.formatCurrency(pledgeSubject.getSs())}">н/д</a>
     <br>
     <br>
     <label>Дата ЗЗ:</label>
-    <a th:href="@{/cost_history(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history.html"
+    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}" href="cost_history/pledge_subject.html"
        th:text="${#dates.format(pledgeSubject.getDateConclusion(), 'dd.MM.yyyy')}">н/д</a>
     <br>
     <br>

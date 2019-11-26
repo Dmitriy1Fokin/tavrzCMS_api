@@ -47,8 +47,8 @@
     <li th:text="${'Выполненые: ' + countOfConclusionIsDone}">Выполненые</li>
     <li th:text="${'Просроченные: ' + countOfConclusionOverdue}">Просроченные</li>
 </ul>
-<a th:href="@{/conclusion_pledge_agreements(employeeId=${employee.employeeId})}"
-   href="conclusion_pledge_agreements.html"
+<a th:href="@{/cost_history/pledge_agreements(employeeId=${employee.employeeId})}"
+   href="cost_history/pledge_agreements.html"
    th:text="подробнее">подробнее</a>
 
 </body>
