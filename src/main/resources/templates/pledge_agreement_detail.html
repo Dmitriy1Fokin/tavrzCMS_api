@@ -26,7 +26,7 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<h1 th:text="'Договор залога: №' + ${pledgeAgreement.getNumPA()} + ' от ' + ${pledgeAgreement.getDateBeginPA()}">Договор залога</h1>
+<h1 th:text="'Договор залога: №' + ${pledgeAgreement.getNumPA()} + ' от ' + ${#dates.format(pledgeAgreement.getDateBeginPA(), 'dd.MM.yyyy')}">Договор залога</h1>
     <label>Ответственный сотрудник: </label>
     <span th:text="${pledgeAgreement.getClient().getEmployee().getSurname()} + ' ' + ${pledgeAgreement.getClient().getEmployee().name}"></span>
     <br>
@@ -53,9 +53,9 @@
     <br>
     <br>
     <label>Тип договора:</label>
-    <div th:switch="${pledgeAgreement.getPervPosl()}">
-        <div th:case="перв">Первичный</div>
-        <div th:case="посл">Последующий</div>
+    <div th:switch="${pledgeAgreement.getPervPosl().name()}">
+        <div th:case="PERV">Первичный</div>
+        <div th:case="POSL">Последующий</div>
     </div>
     <br>
     <br>
@@ -95,7 +95,7 @@
     <br>
     <br>
     <label>Статус:</label>
-    <span th:text="${pledgeAgreement.getStatusPA()}">н/д</span>
+    <span th:text="${pledgeAgreement.getStatusPA().getTranslate()}">н/д</span>
     <br>
     <br>
     <label>Комментарии:</label>

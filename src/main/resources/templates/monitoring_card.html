@@ -10,18 +10,8 @@
             <title th:text="'Обновление мониторинга предмета залога: ' + ${pledgeSubject.getName()}">Обновление мониторинга</title>
         </div>
         <div th:case="client">
-            <div th:switch="${client.getTypeOfClient()}">
-                <div th:case="юл">
-                    <title th:text="'Обновление мониторинга предмета залога по залогодателю: '
-                    + ${client.getClientLegalEntity().getOrganizationalForm()} + ' '
-                    + ${client.getClientLegalEntity().getName()}">Обновление мониторинга предмета залога по залогодателю ЮЛ</title>
-                </div>
-                <div th:case="фл">
-                    <title th:text="'Обновление мониторинга предмета залога по залогодателю: '
-                     + ${client.getClientIndividual().getSurname()} + ' '
-                        + ${client.getClientIndividual().getName()}">Обновление мониторинга предмета залога по залогодателю ФЛ</title>
-                </div>
-            </div>
+            <title th:text="'Обновление мониторинга предмета залога по залогодателю: '
+                    + ${@clientService.getFullNameClient(client)}">Обновление мониторинга предмета залога по залогодателю</title>
         </div>
         <div th:case="*">
             <title>Обновление мониторинга</title>
@@ -48,18 +38,8 @@
         <h1 th:text="'Обновление мониторинга предмета залога:' + ${pledgeSubject.getName()}">Обновление мониторинга</h1>
     </div>
     <div th:case="client">
-        <div th:switch="${client.getTypeOfClient()}">
-            <div th:case="юл">
-                <h1 th:text="'Обновление мониторинга предмета залога по залогодателю:'
-                    + ${client.getClientLegalEntity().getOrganizationalForm()} + ' '
-                    + ${client.getClientLegalEntity().getName()}">Обновление мониторинга предмета залога по залогодателю ЮЛ</h1>
-            </div>
-            <div th:case="фл">
-                <h1 th:text="'Обновление мониторинга предмета залога по залогодателю:'
-                     + ${client.getClientIndividual().getSurname()} + ' '
-                        + ${client.getClientIndividual().getName()}">Обновление мониторинга предмета залога по залогодателю ФЛ</h1>
-            </div>
-        </div>
+        <h1 th:text="'Обновление мониторинга предмета залога по залогодателю: '
+             + ${@clientService.getFullNameClient(client)}">Обновление мониторинга предмета залога по залогодателю ЮЛ</h1>
     </div>
     <div th:case="*">
         <h1>Обновление мониторинга</h1>
@@ -92,9 +72,8 @@
     <div class="row">
         <label>Вид мониторинга</label>
         <select required th:field="*{typeOfMonitoring}">
-            <!--<option></option>-->
-            <option value="документарный">документарный</option>
-            <option value="визуальный">визуальный</option>
+            <option value="DOCUMENTARY">документарный</option>
+            <option value="VISUAL">визуальный</option>
         </select>
         <div th:if="${#fields.hasErrors('typeOfMonitoring')}" th:errors="*{typeOfMonitoring}">Name Error</div>
     </div>
@@ -102,9 +81,9 @@
     <div class="row">
         <label>Результат мониторинга</label>
         <select required th:field="*{statusMonitoring}">
-            <option value="в наличии">в наличии</option>
-            <option value="утрата">утрата</option>
-            <option value="частичная утрата">частичная утрата</option>
+            <option value="IN_STOCK">в наличии</option>
+            <option value="LOSING">утрата</option>
+            <option value="PARTIAL_LOSS">частичная утрата</option>
         </select>
         <div th:if="${#fields.hasErrors('statusMonitoring')}" th:errors="*{statusMonitoring}">Name Error</div>
     </div>
@@ -136,9 +115,9 @@
         <h3 th:text="'Обновлены следующие предметы залога'">Обновлены следующие предметы</h3>
         <div th:each="mon, stat: ${monitoringList}">
             <h4 th:text="${stat.index + 1} + '. ' + ${mon.getPledgeSubject().getName()}"></h4>
-            <span th:text="'дата мониторинга: ' + ${mon.getDateMonitoring()} +
-            ', вид мониторинга: ' + ${mon.getTypeOfMonitoring()} +
-            ', результат: ' + ${mon.getStatusMonitoring()} +
+            <span th:text="'дата мониторинга: ' + ${#dates.format(mon.getDateMonitoring(), 'dd.MM.yyyy')} +
+            ', вид мониторинга: ' + ${mon.getTypeOfMonitoring().getTranslate()} +
+            ', результат: ' + ${mon.getStatusMonitoring().getTranslate()} +
             ', ответственный сотрудник: ' + ${mon.getEmployee()} +
             ', Залоговая стоимость (в случаи утраты): ' + ${mon.getCollateralValue()} +
             ', Комментарии: ' + ${mon.getNotice()}"></span>

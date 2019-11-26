@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.fds.tavrzcms3.dictionary.TypeOfEncumbrance;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -29,10 +30,9 @@ public class Encumbrance {
     @Column(name ="name")
     private String nameEncumbrance;
 
-    @Pattern(regexp = "залог|арест|аренда|сервитут|доверительное управление",
-            message = "Возможные варианты: залог, арест, аренда, сервитут, доверительное управление")
+    @Convert(converter = TypeOfEncumbrance.Converter.class)
     @Column(name ="type_of_encumbrance")
-    private String typeOfEncumbrance;
+    private TypeOfEncumbrance typeOfEncumbrance;
 
     @NotBlank(message = "Обязательно для заполнения")
     @Column(name ="in_favor_of_whom")

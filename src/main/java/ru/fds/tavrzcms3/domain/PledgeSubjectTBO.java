@@ -5,11 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
+import ru.fds.tavrzcms3.dictionary.TypeOfTBO;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
@@ -30,12 +29,9 @@ public class PledgeSubjectTBO extends PledgeSubject {
 	@Column(name ="carrying_amount")
 	private double carryingAmount;
 
-	@Pattern(regexp = "транспорт|запчасти|одежда|продукты питания|алкоголь|нефтехимия|металлопродукция|стройматериалы|" +
-			"крс|мрс|медикаменты|сантехника",
-			message = "Возможные варианты: транспорт, запчасти, одежда,продукты питания, алкоголь. нефтехимия, " +
-					"металлопродукция, стройматериалы, крс, мрс, медикаменты, сантехника")
+	@Convert(converter = TypeOfTBO.Converter.class)
 	@Column(name ="type_of_tbo")
-	private String typeOfTBO;
+	private TypeOfTBO typeOfTBO;
 
 	@Valid
 	@OneToOne(mappedBy = "pledgeSubjectTBO")
@@ -43,7 +39,7 @@ public class PledgeSubjectTBO extends PledgeSubject {
 	private PledgeSubject pledgeSubject;
 
 	public PledgeSubjectTBO(){
-		super.setTypeOfCollateral("ТМЦ");
+		super.setTypeOfCollateral(TypeOfCollateral.TBO);
 	}
 
     @Override

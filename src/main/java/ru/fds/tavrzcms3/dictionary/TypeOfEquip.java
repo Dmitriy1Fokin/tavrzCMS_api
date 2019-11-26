@@ -1,6 +1,6 @@
 package ru.fds.tavrzcms3.dictionary;
 
-public enum TypeOfEquipment implements BasicEnum<String>{
+public enum TypeOfEquip implements BasicEnum<String>{
 
     METALWORKING("металлообработка"),
     FOREST_PROCCESSING("лесообработка"),
@@ -28,7 +28,7 @@ public enum TypeOfEquipment implements BasicEnum<String>{
 
     private String translate;
 
-    TypeOfEquipment(String translate){
+    TypeOfEquip(String translate){
         this.translate = translate;
     }
 
@@ -37,9 +37,9 @@ public enum TypeOfEquipment implements BasicEnum<String>{
         return translate;
     }
 
-    public static class Converter extends EnumConverter<TypeOfEquipment, String>{
+    public static class Converter extends EnumConverter<TypeOfEquip, String>{
         public Converter(){
-            super(TypeOfEquipment.class);
+            super(TypeOfEquip.class);
         }
     }
 }

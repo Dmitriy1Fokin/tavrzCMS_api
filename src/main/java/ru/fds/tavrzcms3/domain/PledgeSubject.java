@@ -5,25 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.fds.tavrzcms3.dictionary.*;
 
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -47,10 +34,9 @@ public class PledgeSubject {
 	@Column(name ="name")
 	private String name;
 
-    @Pattern(regexp = "высокая|средняя|ниже средней|низкая",
-            message = "Возможные варианты: высокая, средняя, ниже средней, низкая")
+    @Convert(converter = Liquidity.Converter.class)
 	@Column(name ="liquidity")
-	private String liquidity;
+	private Liquidity liquidity;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
@@ -89,27 +75,21 @@ public class PledgeSubject {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateConclusion;
 
-    @Pattern(regexp = "в наличии|утрата|частичная утрата",
-            message = "Возможные варианты: в наличии, утрата, частичная утрата")
+    @Convert(converter = StatusOfMonitoring.Converter.class)
 	@Column(name ="status_monitoring")
-	private String statusMonitoring;
+	private StatusOfMonitoring statusMonitoring;
 
-    @Pattern(regexp = "Авто/спецтехника|Оборудование|ТМЦ|Ценные бумаги|Недвижимость - ЗУ - собственность|" +
-            "Недвижимость - ЗУ - право аренды|Недвижимость - здание/сооружение|Недвижимость - помещение|Судно",
-            message = "Возможные варианты: Авто/спецтехника, Оборудование, ТМЦ, Ценные бумаги, Недвижимость - ЗУ - собственность, " +
-                    "Недвижимость - ЗУ - право аренды, Недвижимость - здание/сооружение, Недвижимость - помещение, Судно")
+    @Convert(converter = TypeOfCollateral.Converter.class)
 	@Column(name ="type_of_collateral")
-	private String typeOfCollateral;
+	private TypeOfCollateral typeOfCollateral;
 
-    @Pattern(regexp = "возвратная|рычаговая|ограничивающая|информационная",
-            message = "Возможные варианты: возвратная, рычаговая, ограничивающая, информационная")
+    @Convert(converter = TypeOfPledge.Converter.class)
 	@Column(name ="type_of_pledge")
-	private String typeOfPledge;
+	private TypeOfPledge typeOfPledge;
 
-    @Pattern(regexp = "документарный|визуальный",
-            message = "Возможные варианты: документарный, визуальный")
+    @Convert(converter = TypeOfMonitoring.Converter.class)
 	@Column(name ="type_of_monitoring")
-	private String typeOfMonitoring;
+	private TypeOfMonitoring typeOfMonitoring;
 
     @NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="adress_region")

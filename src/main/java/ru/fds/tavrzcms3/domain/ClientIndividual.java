@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,7 +42,7 @@ public class ClientIndividual extends Client {
 	private Client client;
 
 	public ClientIndividual(){
-		super.setTypeOfClient("фл");
+		super.setTypeOfClient(TypeOfClient.INDIVIDUAL);
 
 	}
 

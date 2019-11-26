@@ -5,11 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
+import ru.fds.tavrzcms3.dictionary.TypeOfSecurities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -32,10 +31,9 @@ public class PledgeSubjectSecurities extends PledgeSubject{
 	@Column(name ="actual_value")
 	private double actualValue;
 
-	@Pattern(regexp = "доли в ук|акции|вексель|паи|",
-			message = "Возможные варианты: доли в ук, акции, вексель, паи")
+	@Convert(converter = TypeOfSecurities.Converter.class)
 	@Column(name ="type_of_securities")
-	private String typeOfSecurities;
+	private TypeOfSecurities typeOfSecurities;
 
 	@Valid
 	@OneToOne(mappedBy = "pledgeSubjectSecurities")
@@ -43,7 +41,7 @@ public class PledgeSubjectSecurities extends PledgeSubject{
 	private PledgeSubject pledgeSubject;
 
 	public PledgeSubjectSecurities(){
-		super.setTypeOfCollateral("Ценные бумаги");
+		super.setTypeOfCollateral(TypeOfCollateral.SECURITIES);
 	}
 
 	@Override

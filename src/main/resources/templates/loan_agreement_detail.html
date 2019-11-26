@@ -26,7 +26,7 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<h1 th:text="'Кредитный договор: №' + ${loanAgreement.getNumLA()} + ' от ' + ${loanAgreement.getDateBeginLA()}">Кредитный договор</h1>
+<h1 th:text="'Кредитный договор: №' + ${loanAgreement.getNumLA()} + ' от ' + ${#dates.format(loanAgreement.getDateBeginLA(), 'dd.MM.yyyy')}">Кредитный договор</h1>
 <label>Ответственный сотрудник: </label>
 <span th:text="${loanAgreement.getClient().getEmployee().getSurname()} + ' ' + ${loanAgreement.getClient().getEmployee().name}"></span>
 <br>
@@ -74,7 +74,7 @@
 <br>
 <br>
 <label>Статус договора:</label>
-<span th:text="${loanAgreement.getStatusLA()}">н/д</span>
+<span th:text="${loanAgreement.getStatusLA().getTranslate()}">н/д</span>
 <br>
 <br>
 <a th:href="@{loan_agreement_card(whatDo='changeLA', loanAgreementId=${loanAgreement.getLoanAgreementId()})}"

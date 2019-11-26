@@ -2,14 +2,12 @@ package ru.fds.tavrzcms3.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import ru.fds.tavrzcms3.dictionary.TypeOfAuto;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -47,12 +45,9 @@ public class PledgeSubjectAuto extends PledgeSubject {
 	@Column(name ="inventory_number")
 	private String inventoryNum;
 
-	@Pattern(regexp = "бульдозер|экскаватор|прицеп|погрузчик|кран|дорожно-строительная|комбайн|трактор|" +
-			"пассажирский транспорт|грузовой транспорт|легковой транспорт|ж/д транспорт|иное",
-			message = "Возможные варианты: бульдозе, экскаватор, прицеп, погрузчик, кран, дорожно-строительная, " +
-					"комбайн, трактор, пассажирский транспорт, грузовой транспорт, легковой транспорт, ж/д транспорт, иное")
+	@Convert(converter = TypeOfAuto.Converter.class)
 	@Column(name ="type_of_auto")
-	private String typeOfAuto;
+	private TypeOfAuto typeOfAuto;
 
 	@Positive(message = "Значение должно быть больше нуля")
 	@Column(name ="horsepower")
@@ -64,7 +59,7 @@ public class PledgeSubjectAuto extends PledgeSubject {
 	private PledgeSubject pledgeSubject;
 
 	public PledgeSubjectAuto(){
-		super.setTypeOfCollateral("Авто/спецтехника");
+		super.setTypeOfCollateral(TypeOfCollateral.AUTO);
 	}
 
 	@Override

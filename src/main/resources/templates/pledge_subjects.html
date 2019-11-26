@@ -38,15 +38,15 @@
     <form th:action="@{/pledge_subject_card_new}" th:method="get" action="pledge_subject_card_new.html">
         <input type="hidden" name="pledgeAgreementId" th:value="${pledgeAgreement.getPledgeAgreementId()}">
         <select required name="typeOfCollateral">
-            <option value="Авто/спецтехника">Авто/спецтехника</option>
-            <option value="Оборудование">Оборудование</option>
-            <option value="ТМЦ">ТМЦ</option>
-            <option value="Ценные бумаги">Ценные бумаги</option>
-            <option value="Недвижимость - ЗУ - собственность">Недвижимость - ЗУ - собственность</option>
-            <option value="Недвижимость - ЗУ - право аренды">Недвижимость - ЗУ - право аренды</option>
-            <option value="Недвижимость - здание/сооружение">Недвижимость - здание/сооружение</option>
-            <option value="Недвижимость - помещение">Недвижимость - помещение</option>
-            <option value="Судно">Судно</option>
+            <option value="AUTO">Авто/спецтехника</option>
+            <option value="EQUIPMENT">Оборудование</option>
+            <option value="TBO">ТМЦ</option>
+            <option value="SECURITIES">Ценные бумаги</option>
+            <option value="LAND_OWNERSHIP">Недвижимость - ЗУ - собственность</option>
+            <option value="LAND_LEASE">Недвижимость - ЗУ - право аренды</option>
+            <option value="BUILDING">Недвижимость - здание/сооружение</option>
+            <option value="PREMISE">Недвижимость - помещение</option>
+            <option value="VESSEL">Судно</option>
         </select>
         <button type="submit">Добавить</button>
     </form>

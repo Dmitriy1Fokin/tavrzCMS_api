@@ -30,11 +30,11 @@
     <div class="row">
         <label>Вид обременения</label>
         <select required th:field="*{typeOfEncumbrance}">
-            <option value="залог">залог</option>
-            <option value="арест">арест</option>
-            <option value="аренда">аренда</option>
-            <option value="сервитут">сервитут</option>
-            <option value="доверительное управление">доверительное управление</option>
+            <option value="PLEDGE">залог</option>
+            <option value="ARREST">арест</option>
+            <option value="LEASE">аренда</option>
+            <option value="SERVITUDE">сервитут</option>
+            <option value="TRUST_MANAGEMENT">доверительное управление</option>
         </select>
         <div th:if="${#fields.hasErrors('typeOfEncumbrance')}" th:errors="*{typeOfEncumbrance}">Name Error</div>
     </div>

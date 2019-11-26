@@ -53,7 +53,7 @@
         <div th:each="encumbrance : ${encumbranceList}">
             <tr>
                 <td th:text="${encumbrance.getNameEncumbrance()}">н/д</td>
-                <td th:text="${encumbrance.getTypeOfEncumbrance()}">н/д</td>
+                <td th:text="${encumbrance.getTypeOfEncumbrance().getTranslate()}">н/д</td>
                 <td th:text="${encumbrance.getInFavorOfWhom()}">н/д</td>
                 <td th:text="${#dates.format(encumbrance.getDateBegin(), 'dd.MM.yyyy')}">н/д</td>
                 <td th:text="${#dates.format(encumbrance.getDateEnd(), 'dd.MM.yyyy')}">н/д</td>

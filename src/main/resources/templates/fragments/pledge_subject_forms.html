@@ -15,27 +15,29 @@
     <div class="row">
         <label>Ликвидность</label>
         <select required th:field="*{liquidity}">
-            <option value="высокая">высокая</option>
-            <option value="средняя">средняя</option>
-            <option value="ниже средней">ниже средней</option>
-            <option value="низкая">низкая</option>
+            <option value="HIGH">высокая</option>
+            <option value="AVERAGE">средняя</option>
+            <option value="BELOW_AVERAGE">ниже средней</option>
+            <option value="LOW">низкая</option>
         </select>
         <div th:if="${#fields.hasErrors('liquidity')}" th:errors="*{liquidity}">Name Error</div>
     </div>
     <br>
     <div class="row">
-        <label>Вид обеспечения</label>
-        <input disabled="disabled" th:field="*{typeOfCollateral}" th:value="${pledgeSubject.getTypeOfCollateral()}"/>
+        <label>Вид обеспечения:</label>
+        <span disabled="disabled" th:field="*{typeOfCollateral}"
+                th:value="${pledgeSubject.getTypeOfCollateral().getTranslate()}"
+              th:text="${pledgeSubject.getTypeOfCollateral().getTranslate()}"></span>
         <div th:if="${#fields.hasErrors('typeOfCollateral')}" th:errors="*{typeOfCollateral}">Name Error</div>
     </div>
     <br>
     <div class="row">
         <label>Функция залога</label>
         <select required th:field="*{typeOfPledge}">
-            <option value="возвратная">возвратная</option>
-            <option value="рычаговая">рычаговая</option>
-            <option value="ограничивающая">ограничивающая</option>
-            <option value="информационная">информационная</option>
+            <option value="RETURN">возвратная</option>
+            <option value="LEVER">рычаговая</option>
+            <option value="LIMITING">ограничивающая</option>
+            <option value="INFORMATIONAL">информационная</option>
         </select>
         <div th:if="${#fields.hasErrors('typeOfPledge')}" th:errors="*{typeOfPledge}">Name Error</div>
     </div>
@@ -151,19 +153,19 @@
     <div class="row">
         <label>Вид транспорта</label>
         <select required th:field="*{typeOfAuto}">
-            <option value="бульдозер">бульдозер</option>
-            <option value="экскаватор">экскаватор</option>
-            <option value="прицеп">прицеп</option>
-            <option value="погрузчик">погрузчик</option>
-            <option value="кран">кран</option>
-            <option value="дорожно-строительная">дорожно-строительная</option>
-            <option value="комбайн">комбайн</option>
-            <option value="трактор">трактор</option>
-            <option value="пассажирский транспорт">пассажирский транспорт</option>
-            <option value="грузовой транспорт">грузовой транспорт</option>
-            <option value="легковой транспорт">легковой транспорт</option>
-            <option value="ж/д транспорт">ж/д транспорт</option>
-            <option value="иное">иное</option>
+            <option value="BULLDOZER">бульдозер</option>
+            <option value="EXCAVATOR">экскаватор</option>
+            <option value="TRAILER">прицеп</option>
+            <option value="LOADER">погрузчик</option>
+            <option value="CRANE">кран</option>
+            <option value="ROAD_CONSTRUCTION">дорожно-строительная</option>
+            <option value="COMBINE">комбайн</option>
+            <option value="TRACTOR">трактор</option>
+            <option value="PASSENGER">пассажирский транспорт</option>
+            <option value="CARGO">грузовой транспорт</option>
+            <option value="PERSONAL">легковой транспорт</option>
+            <option value="RAILWAY">ж/д транспорт</option>
+            <option value="OTHER">иное</option>
         </select>
         <div th:if="${#fields.hasErrors('typeOfAuto')}" th:errors="*{typeOfAuto}">Name Error</div>
     </div>
@@ -211,33 +213,32 @@
     <br>
     <div class="row">
         <label>Вид оборудования</label>
-        <select required th:field="*{typeOfquipment}">
-            <option selected value="">не выбрано</option>
-            <option value="металлообработка">металлообработка</option>
-            <option value="лесообработка">лесообработка</option>
-            <option value="торговое">торговое</option>
-            <option value="офисное">офисное</option>
-            <option value="сети ито">сети ито</option>
-            <option value="рекламное">рекламное</option>
-            <option value="пищевое">пищевое</option>
-            <option value="автомобильное">автомобильное</option>
-            <option value="азс">азс</option>
-            <option value="химическое">химическое</option>
-            <option value="измерительное">измерительное</option>
-            <option value="медицинское">медицинское</option>
-            <option value="нефте-газовое">нефте-газовое</option>
-            <option value="карьерное и горное">карьерное и горное</option>
-            <option value="подъемное">подъемное</option>
-            <option value="авиационное">авиационное</option>
-            <option value="строительое">строительое</option>
-            <option value="ресторанное">ресторанное</option>
-            <option value="транспортировка">транспортировка</option>
-            <option value="упаковачное">упаковачное</option>
-            <option value="хранение">хранение</option>
-            <option value="с/х назначения">с/х назначения</option>
-            <option value="иное">иное</option>
+        <select required th:field="*{typeOfEquipment}">
+            <option value="METALWORKING">металлообработка</option>
+            <option value="FOREST_PROCCESSING">лесообработка</option>
+            <option value="TRADING">торговое</option>
+            <option value="OFFICE">офисное</option>
+            <option value="ENGINEERING_NETWORKS">сети ито</option>
+            <option value="ADVERTISIING">рекламное</option>
+            <option value="FOOD">пищевое</option>
+            <option value="AUTOMOBILE">автомобильное</option>
+            <option value="GAS_STATION">азс</option>
+            <option value="CHEMICAL">химическое</option>
+            <option value="METRICAL">измерительное</option>
+            <option value="MEDICAL">медицинское</option>
+            <option value="OIL_GAS">нефте-газовое</option>
+            <option value="MINING">карьерное и горное</option>
+            <option value="LIFTING">подъемное</option>
+            <option value="AVIATION">авиационное</option>
+            <option value="BUILDING">строительое</option>
+            <option value="RESTAURANT">ресторанное</option>
+            <option value="TRANSPORTATION">транспортировка</option>
+            <option value="PACKAGING">упаковачное</option>
+            <option value="STORAGE">хранение</option>
+            <option value="AGRICULTURAL">с/х назначения</option>
+            <option value="OTHER">иное</option>
         </select>
-        <div th:if="${#fields.hasErrors('typeOfquipment')}" th:errors="*{typeOfquipment}">Name Error</div>
+        <div th:if="${#fields.hasErrors('typeOfEquipment')}" th:errors="*{typeOfEquipment}">Name Error</div>
     </div>
     <br>
     <div class="row">
@@ -277,10 +278,10 @@
     <div class="row">
         <label>Вид ценных бумаг</label>
         <select required th:field="*{typeOfSecurities}">
-            <option value="доли в ук">доли в ук</option>
-            <option value="акции">акции</option>
-            <option value="вексель">вексель</option>
-            <option value="паи">паи</option>
+            <option value="SHARE_IN_AUTHORIZED_CAPITAL">доли в ук</option>
+            <option value="STOCK">акции</option>
+            <option value="BILL">вексель</option>
+            <option value="SHARES">паи</option>
         </select>
         <div th:if="${#fields.hasErrors('typeOfSecurities')}" th:errors="*{typeOfSecurities}">Name Error</div>
     </div>
@@ -343,33 +344,33 @@
     <div class="row">
         <label>Вид судна</label>
         <select required th:field="*{vesselType}">
-            <option value="general cargo (gcd)">general cargo (gcd)</option>
-            <option value="container ship (con)">container ship (con)</option>
-            <option value="log carrier/timber (log)">log carrier/timber (log)</option>
-            <option value="ro-ro (r/r)">ro-ro (r/r)</option>
-            <option value="bulk carrier (b/c)">bulk carrier (b/c)</option>
-            <option value="ore/oil carrier (o/o)">ore/oil carrier (o/o)</option>
-            <option value="oil/bulk/ore carrier (obo)">oil/bulk/ore carrier (obo)</option>
-            <option value="tanker product (tnp)">tanker product (tnp)</option>
-            <option value="tanker crude (tnc)">tanker crude (tnc)</option>
-            <option value="tanker storage (tns)">tanker storage (tns)</option>
-            <option value="tanker vlcc/ulcc (tnv)">tanker vlcc/ulcc (tnv)</option>
-            <option value="chemical tanker (chm)">chemical tanker (chm)</option>
-            <option value="lpg/lng carrier (gas)">lpg/lng carrier (gas)</option>
-            <option value="offshore supply vessel (osv)">offshore supply vessel (osv)</option>
-            <option value="heavy lift vessel (hvl)">heavy lift vessel (hvl)</option>
-            <option value="survey vessel (srv)">survey vessel (srv)</option>
-            <option value="passenger ship (pas)">passenger ship (pas)</option>
-            <option value="reefer (rfg)">reefer (rfg)</option>
-            <option value="livestock carrier (liv)">livestock carrier (liv)</option>
-            <option value="tug">tug</option>
-            <option value="fishing trawler (fsh)">fishing trawler (fsh)</option>
-            <option value="dredger (drg)">dredger (drg)</option>
-            <option value="м">м</option>
-            <option value="м-сп">м-сп</option>
-            <option value="о">о</option>
-            <option value="р">р</option>
-            <option value="л">л</option>
+            <option value="GDC">general cargo (gcd)</option>
+            <option value="CON">container ship (con)</option>
+            <option value="LOG">log carrier/timber (log)</option>
+            <option value="R_R">ro-ro (r/r)</option>
+            <option value="B_C">bulk carrier (b/c)</option>
+            <option value="O_O">ore/oil carrier (o/o)</option>
+            <option value="OBO">oil/bulk/ore carrier (obo)</option>
+            <option value="TNP">tanker product (tnp)</option>
+            <option value="TNC">tanker crude (tnc)</option>
+            <option value="TNS">tanker storage (tns)</option>
+            <option value="TNV">tanker vlcc/ulcc (tnv)</option>
+            <option value="CHM">chemical tanker (chm)</option>
+            <option value="GAS">lpg/lng carrier (gas)</option>
+            <option value="OSV">offshore supply vessel (osv)</option>
+            <option value="HVL">heavy lift vessel (hvl)</option>
+            <option value="SRV">survey vessel (srv)</option>
+            <option value="PAS">passenger ship (pas)</option>
+            <option value="RFG">reefer (rfg)</option>
+            <option value="LIV">livestock carrier (liv)</option>
+            <option value="TUG">tug</option>
+            <option value="FSH">fishing trawler (fsh)</option>
+            <option value="DRG">dredger (drg)</option>
+            <option value="M">м</option>
+            <option value="M_SP">м-сп</option>
+            <option value="O">о</option>
+            <option value="R">р</option>
+            <option value="L">л</option>
         </select>
         <div th:if="${#fields.hasErrors('vesselType')}" th:errors="*{vesselType}">Name Error</div>
     </div>
@@ -396,18 +397,18 @@
     <div class="row">
         <label>Вид ТМЦ</label>
         <select required th:field="*{typeOfTBO}">
-            <option value="транспорт">транспорт</option>
-            <option value="запчасти">запчасти</option>
-            <option value="одежда">одежда</option>
-            <option value="продукты питания">продукты питания</option>
-            <option value="алкоголь">алкоголь</option>
-            <option value="нефтехимия">нефтехимия</option>
-            <option value="металлопродукция">металлопродукция</option>
-            <option value="стройматериалы">стройматериалы</option>
-            <option value="крс">крс</option>
-            <option value="мрс">мрс</option>
-            <option value="медикаменты">медикаменты</option>
-            <option value="сантехника">сантехника</option>
+            <option value="TRANSPORT">транспорт</option>
+            <option value="SPARE_PARTS">запчасти</option>
+            <option value="CLOTHES">одежда</option>
+            <option value="FOOD">продукты питания</option>
+            <option value="ALCOHOL">алкоголь</option>
+            <option value="PETROCHEMISTRY">нефтехимия</option>
+            <option value="METAL_PRODUCTS">металлопродукция</option>
+            <option value="BUILDING_MATERIALS">стройматериалы</option>
+            <option value="CATTLE">крс</option>
+            <option value="SMALL_CATTLE">мрс</option>
+            <option value="MEDICINES">медикаменты</option>
+            <option value="PLUMBING">сантехника</option>
         </select>
         <div th:if="${#fields.hasErrors('typeOfTBO')}" th:errors="*{typeOfTBO}">Name Error</div>
     </div>

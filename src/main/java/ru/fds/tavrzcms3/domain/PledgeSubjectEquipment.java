@@ -5,11 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
+import ru.fds.tavrzcms3.dictionary.TypeOfEquip;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -39,15 +38,9 @@ public class PledgeSubjectEquipment extends PledgeSubject {
 	@Column(name ="inventory_number")
 	private String inventoryNum;
 
-	@Pattern(regexp = "металлообработка|лесообработка|торговое|офисное|сети ито|рекламное|пищевое|автомобильное|азс|" +
-			"химическое|измерительное|медицинское|нефте-газовое|карьерное и горное|подъемное|авиационное|строительое|" +
-			"ресторанное|транспортировка|упаковачное|хранение|с/х назначения|иное",
-			message = "Возможные варианты: металлообработка, лесообработка, торговое, офисное, сети ито, рекламное, " +
-					"пищевое, автомобильное, азс, химическое, измерительное, медицинское, нефте-газовое, " +
-					"карьерное и горное, подъемное, авиационное, строительое, ресторанное, транспортировка, упаковачное, " +
-					"хранение, с/х назначения, иное")
+	@Convert(converter = TypeOfEquip.Converter.class)
 	@Column(name ="type_of_equipment")
-	private String typeOfquipment;
+	private TypeOfEquip typeOfEquipment;
 
 	@Positive(message = "Значение должно быть больше нуля")
 	@Column(name = "productivity")
@@ -62,7 +55,7 @@ public class PledgeSubjectEquipment extends PledgeSubject {
 	private PledgeSubject pledgeSubject;
 
 	public PledgeSubjectEquipment(){
-		super.setTypeOfCollateral("Оборудование");
+		super.setTypeOfCollateral(TypeOfCollateral.EQUIPMENT);
 	}
 
 	@Override
@@ -73,7 +66,7 @@ public class PledgeSubjectEquipment extends PledgeSubject {
 				", serialNum='" + serialNum + '\'' +
 				", yearOfManufacture=" + yearOfManufacture +
 				", inventoryNum='" + inventoryNum + '\'' +
-				", typeOfquipment='" + typeOfquipment + '\'' +
+				", typeOfquipment='" + typeOfEquipment + '\'' +
 				'}';
 	}
 }

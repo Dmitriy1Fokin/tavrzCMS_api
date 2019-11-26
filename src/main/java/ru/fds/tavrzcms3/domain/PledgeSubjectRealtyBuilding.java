@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,7 +50,7 @@ public class PledgeSubjectRealtyBuilding extends PledgeSubjectRealty {
 	private MarketSegment marketSegment;
 
 	public PledgeSubjectRealtyBuilding(){
-		super.setTypeOfCollateral("Недвижимость - здание/сооружение");
+		super.setTypeOfCollateral(TypeOfCollateral.BUILDING);
 	}
 
 	@Override

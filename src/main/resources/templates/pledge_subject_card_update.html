@@ -18,8 +18,8 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<div th:switch="${typeOfCollateral}">
-    <div th:case="'Авто/спецтехника'">
+<div th:switch="${typeOfCollateral.name()}">
+    <div th:case="AUTO">
         <form th:action="@{/update_pledge_subject_auto}" th:method="post" th:object="${pledgeSubjectAuto}" action="pledge_subject_card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectAuto.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectAuto.getZsDz()}">
@@ -45,7 +45,7 @@
             <button type="submit">Обновить</button>
         </form>
     </div>
-    <div th:case="'Оборудование'">
+    <div th:case="EQUIPMENT">
         <form th:action="@{/update_pledge_subject_equipment}" th:method="post" th:object="${pledgeSubjectEquipment}" action="pledge_subject_card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectEquipment.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectEquipment.getZsDz()}">
@@ -71,7 +71,7 @@
             <button type="submit">Обновить</button>
         </form>
     </div>
-    <div th:case="'Ценные бумаги'">
+    <div th:case="SECURITIES">
         <form th:action="@{/update_pledge_subject_securities}" th:method="post" th:object="${pledgeSubjectSecurities}" action="pledge_subject_card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectSecurities.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectSecurities.getZsDz()}">
@@ -97,7 +97,7 @@
             <button type="submit">Обновить</button>
         </form>
     </div>
-    <div th:case="'Судно'">
+    <div th:case="VESSEL">
         <form th:action="@{/update_pledge_subject_vessel}" th:method="post" th:object="${pledgeSubjectVessel}" action="pledge_subject_card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectVessel.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectVessel.getZsDz()}">
@@ -123,7 +123,7 @@
             <button type="submit">Обновить</button>
         </form>
     </div>
-    <div th:case="'ТМЦ'">
+    <div th:case="TBO">
         <form th:action="@{/update_pledge_subject_tbo}" th:method="post" th:object="${pledgeSubjectTBO}" action="pledge_subject_card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectTBO.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectTBO.getZsDz()}">
@@ -149,7 +149,7 @@
             <button type="submit">Обновить</button>
         </form>
     </div>
-    <div th:case="'Недвижимость - ЗУ - собственность'">
+    <div th:case="LAND_OWNERSHIP">
         <form th:action="@{/update_pledge_subject_landOwn}" th:method="post" th:object="${pledgeSubjectRealty}" action="pledge_subject_card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectRealty.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectRealty.getZsDz()}">
@@ -177,7 +177,7 @@
             <button type="submit">Обновить</button>
         </form>
     </div>
-    <div th:case="'Недвижимость - ЗУ - право аренды'">
+    <div th:case="LAND_LEASE">
         <form th:action="@{/update_pledge_subject_landLease}" th:method="post" th:object="${pledgeSubjectRealty}" action="pledge_subject_card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectRealty.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectRealty.getZsDz()}">
@@ -205,7 +205,7 @@
             <button type="submit">Обновить</button>
         </form>
     </div>
-    <div th:case="'Недвижимость - здание/сооружение'">
+    <div th:case="BUILDING">
         <form th:action="@{/update_pledge_subject_building}" th:method="post" th:object="${pledgeSubjectRealty}" action="pledge_subject_card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectRealty.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectRealty.getZsDz()}">
@@ -233,7 +233,7 @@
             <button type="submit">Обновить</button>
         </form>
     </div>
-    <div th:case="'Недвижимость - помещение'">
+    <div th:case="PREMISE">
         <form th:action="@{/update_pledge_subject_room}" th:method="post" th:object="${pledgeSubjectRealty}" action="pledge_subject_card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectRealty.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectRealty.getZsDz()}">

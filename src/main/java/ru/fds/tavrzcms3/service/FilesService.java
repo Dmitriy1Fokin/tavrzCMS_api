@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
+import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.ClientIndividual;
 import ru.fds.tavrzcms3.domain.ClientLegalEntity;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
@@ -346,7 +348,7 @@ public class FilesService {
                 if(isCellEmpty(row.getCell(numColumnPledgeAgreementPervPosl)))
                     throw new InvalidFormatException("Отсутствует тип договора в строке " + (i+1));
                 else if(row.getCell(numColumnPledgeAgreementPervPosl).getCellType()==CellType.STRING)
-                    pledgeAgreement.setPervPosl(row.getCell(numColumnPledgeAgreementPervPosl).getStringCellValue());
+                    pledgeAgreement.setPervPosl(TypeOfPledgeAgreement.valueOf(row.getCell(numColumnPledgeAgreementPervPosl).getStringCellValue()));
                 else
                     throw new InvalidFormatException("Неверный формат/значение типа договора в строке " + (i+1));
 
@@ -364,7 +366,7 @@ public class FilesService {
                 if(isCellEmpty(row.getCell(numColumnPledgeAgreementStatus)))
                     throw new InvalidFormatException("Отсутствует статус ДЗ в строке " + (i+1));
                 else if(row.getCell(numColumnPledgeAgreementStatus).getCellType()==CellType.STRING)
-                    pledgeAgreement.setStatusPA(row.getCell(numColumnPledgeAgreementStatus).getStringCellValue());
+                    pledgeAgreement.setStatusPA(StatusOfAgreement.valueOf(row.getCell(numColumnPledgeAgreementStatus).getStringCellValue()));
                 else
                     throw new InvalidFormatException("Неверный формат/значение статуса ДЗ в строке " + (i+1));
 

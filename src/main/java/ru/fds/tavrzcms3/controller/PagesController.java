@@ -11,6 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.fds.tavrzcms3.dictionary.TypeOfClient;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
+import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.service.*;
 import ru.fds.tavrzcms3.domain.*;
 
@@ -80,10 +83,10 @@ public class PagesController {
         int countOfPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee);
         model.addAttribute("countOfAllPledgeAgreement", countOfPA);
 
-        int countOfPervPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee, "перв");
+        int countOfPervPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee, TypeOfPledgeAgreement.PERV);
         model.addAttribute("countOfPervPledgeAgreements", countOfPervPA);
 
-        int countOfPoslPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee, "посл");
+        int countOfPoslPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee, TypeOfPledgeAgreement.POSL);
         model.addAttribute("countOfPoslPledgeAgreements", countOfPoslPA);
 
         int countOfLoanAgreements = loanAgreementService.countOfCurrentLoanAgreementsByEmployee(employee);
@@ -123,7 +126,10 @@ public class PagesController {
 
         Page<PledgeAgreement> pledgeAgreementList = null;
         if(pervPosl.isPresent())
-            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(employee, pervPosl.get(), pageable);
+            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(
+                    employee,
+                    TypeOfPledgeAgreement.valueOf(pervPosl.get()),
+                    pageable);
         else
             pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(employee, pageable);
 
@@ -425,10 +431,10 @@ public class PagesController {
                 model.addAttribute("pledgeSubject", pledgeSubject);
                 model.addAttribute("monitoring", new Monitoring());
                 break;
-            case "pledgor":
-                Client pledgor = clientService.getClientById(pledgorId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
+            case "client":
+                Client client = clientService.getClientById(pledgorId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
                 model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
-                model.addAttribute("pledgor", pledgor);
+                model.addAttribute("client", client);
                 model.addAttribute("monitoring", new Monitoring());
                 break;
         }
@@ -456,10 +462,10 @@ public class PagesController {
                     model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
                     model.addAttribute("pledgeSubject", pledgeSubject);
                     break;
-                case "pledgor":
-                    Client pledgor = clientService.getClientById(pledgorId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
+                case "client":
+                    Client client = clientService.getClientById(pledgorId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
                     model.addAttribute("whereUpdateMonitoring", whereUpdateMonitoring);
-                    model.addAttribute("pledgor", pledgor);
+                    model.addAttribute("client", client);
                     break;
             }
             return "monitoring_card";
@@ -485,11 +491,11 @@ public class PagesController {
                 model.addAttribute("monitoringList", monitoringListForPS);
                 return "monitoring_pledge_subject";
 
-            case "pledgor":
-                Client pledgor = clientService.getClientById(pledgorId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
-                List<Monitoring> monitoringListForPledgor = monitoringService.insertMonitoringInPledgor(pledgor, monitoring);
+            case "client":
+                Client client = clientService.getClientById(pledgorId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
+                List<Monitoring> monitoringListForPledgor = monitoringService.insertMonitoringInPledgor(client, monitoring);
                 model.addAttribute("whereUpdateMonitoring", "responseSuccess");
-                model.addAttribute("pledgor", pledgor);
+                model.addAttribute("client", client);
                 model.addAttribute("monitoringList" , monitoringListForPledgor);
                 return "monitoring_card";
 
@@ -683,27 +689,27 @@ public class PagesController {
 
         PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreement(pledgeAgreementId.get()).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
 
-        if(typeOfCollateral.get().equals("Авто/спецтехника")) {
+        if(typeOfCollateral.get().equals(TypeOfCollateral.AUTO.name())) {
             PledgeSubjectAuto pledgeSubjectAuto = PledgeSubjectAuto.builder().pledgeAgreement(pledgeAgreement).build();
             model.addAttribute("pledgeSubjectAuto", pledgeSubjectAuto);
         }
-        else if(typeOfCollateral.get().equals("Оборудование")){
+        else if(typeOfCollateral.get().equals(TypeOfCollateral.EQUIPMENT.name())){
             PledgeSubjectEquipment pledgeSubjectEquipment = PledgeSubjectEquipment.builder().pledgeAgreement(pledgeAgreement).build();
             model.addAttribute("pledgeSubjectEquipment", pledgeSubjectEquipment);
         }
-        else if(typeOfCollateral.get().equals("Ценные бумаги")){
+        else if(typeOfCollateral.get().equals(TypeOfCollateral.SECURITIES.name())){
             PledgeSubjectSecurities pledgeSubjectSecurities = PledgeSubjectSecurities.builder().pledgeAgreement(pledgeAgreement).build();
             model.addAttribute("pledgeSubjectSecurities", pledgeSubjectSecurities);
         }
-        else if(typeOfCollateral.get().equals("Судно")){
+        else if(typeOfCollateral.get().equals(TypeOfCollateral.VESSEL.name())){
             PledgeSubjectVessel pledgeSubjectVessel = PledgeSubjectVessel.builder().pledgeAgreement(pledgeAgreement).build();
             model.addAttribute("pledgeSubjectVessel", pledgeSubjectVessel);
         }
-        else if(typeOfCollateral.get().equals("ТМЦ")){
+        else if(typeOfCollateral.get().equals(TypeOfCollateral.TBO.name())){
             PledgeSubjectTBO pledgeSubjectTBO = PledgeSubjectTBO.builder().pledgeAgreement(pledgeAgreement).build();
             model.addAttribute("pledgeSubjectTBO", pledgeSubjectTBO);
         }
-        else if(typeOfCollateral.get().equals("Недвижимость - ЗУ - собственность")){
+        else if(typeOfCollateral.get().equals(TypeOfCollateral.LAND_OWNERSHIP.name())){
             PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership = PledgeSubjectRealtyLandOwnership.builder()
                     .pledgeAgreement(pledgeAgreement)
                     .build();
@@ -711,7 +717,7 @@ public class PagesController {
             model.addAttribute("pledgeSubjectRealtyLandOwnership", pledgeSubjectRealtyLandOwnership);
             model.addAttribute("landCategoryList", landCategoryList);
         }
-        else if(typeOfCollateral.get().equals("Недвижимость - ЗУ - право аренды")){
+        else if(typeOfCollateral.get().equals(TypeOfCollateral.LAND_LEASE.name())){
             PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease = PledgeSubjectRealtyLandLease.builder()
                     .pledgeAgreement(pledgeAgreement)
                     .build();
@@ -719,7 +725,7 @@ public class PagesController {
             model.addAttribute("pledgeSubjectRealtyLandLease", pledgeSubjectRealtyLandLease);
             model.addAttribute("landCategoryList", landCategoryList);
         }
-        else if(typeOfCollateral.get().equals("Недвижимость - здание/сооружение")){
+        else if(typeOfCollateral.get().equals(TypeOfCollateral.BUILDING.name())){
             PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding = PledgeSubjectRealtyBuilding.builder()
                     .pledgeAgreement(pledgeAgreement)
                     .build();
@@ -727,7 +733,7 @@ public class PagesController {
             model.addAttribute("marketSegmentList", marketSegmentList);
             model.addAttribute("pledgeSubjectRealtyBuilding", pledgeSubjectRealtyBuilding);
         }
-        else if(typeOfCollateral.get().equals("Недвижимость - помещение")){
+        else if(typeOfCollateral.get().equals(TypeOfCollateral.PREMISE.name())){
             PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom = PledgeSubjectRealtyRoom.builder()
                     .pledgeAgreement(pledgeAgreement)
                     .build();
@@ -1364,17 +1370,19 @@ public class PagesController {
         List<ClientManager> clientManagerList = clientManagerService.getAllClientManager();
         List<Employee> employeeList = employeeService.getAllEmployee();
 
-        if(typeOfClient.equals("юл")){
+        if(typeOfClient.equals(TypeOfClient.LEGAL_ENTITY.name())){
             ClientLegalEntity clientLegalEntity = new ClientLegalEntity();
             model.addAttribute("clientLegalEntity", clientLegalEntity);
+            model.addAttribute("typeOfClient", clientLegalEntity.getTypeOfClient());
 
-        }else if(typeOfClient.equals("фл")){
+        }else if(typeOfClient.equals(TypeOfClient.INDIVIDUAL.name())){
             ClientIndividual clientIndividual = new ClientIndividual();
             model.addAttribute("clientIndividual", clientIndividual);
+            model.addAttribute("typeOfClient", clientIndividual.getTypeOfClient());
 
         }
 
-        model.addAttribute("typeOfClient", typeOfClient);
+
         model.addAttribute("clientManagerList", clientManagerList);
         model.addAttribute("employeeList", employeeList);
 

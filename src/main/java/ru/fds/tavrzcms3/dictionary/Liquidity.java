@@ -1,6 +1,6 @@
 package ru.fds.tavrzcms3.dictionary;
 
-public enum  TypeOfLiquidity implements BasicEnum<String>{
+public enum Liquidity implements BasicEnum<String>{
     HIGH("высокая"),
     AVERAGE("средняя"),
     BELOW_AVERAGE("ниже средней"),
@@ -8,7 +8,7 @@ public enum  TypeOfLiquidity implements BasicEnum<String>{
 
     private String translate;
 
-    TypeOfLiquidity(String translate){
+    Liquidity(String translate){
         this.translate = translate;
     }
 
@@ -17,9 +17,9 @@ public enum  TypeOfLiquidity implements BasicEnum<String>{
         return translate;
     }
 
-    public static class Converter extends EnumConverter<TypeOfLiquidity, String>{
+    public static class Converter extends EnumConverter<Liquidity, String>{
         public Converter(){
-            super(TypeOfLiquidity.class);
+            super(Liquidity.class);
         }
     }
 }

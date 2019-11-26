@@ -2,17 +2,20 @@ package ru.fds.tavrzcms3.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.fds.tavrzcms3.dictionary.*;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
 import ru.fds.tavrzcms3.specification.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +87,7 @@ public class PledgeSubjectService {
         if(!searchParam.get("namePS").isEmpty())
             builder.with("name", ":", searchParam.get("namePS"), false);
         if(!searchParam.get("liquidity").isEmpty())
-            builder.with("liquidity", ":", searchParam.get("liquidity"), false);
+            builder.with("liquidity", ":", Liquidity.valueOf(searchParam.get("liquidity")), false);
         if(!searchParam.get("rsDZ").isEmpty())
             builder.with("rsDz", searchParam.get("rsDZOption"), searchParam.get("rsDZ"), false);
         if(!searchParam.get("zsDZ").isEmpty())
@@ -114,9 +117,9 @@ public class PledgeSubjectService {
             }
         }
         if(!searchParam.get("resultOfMonitoring").isEmpty())
-            builder.with("statusMonitoring", ":", searchParam.get("resultOfMonitoring"), false);
+            builder.with("statusMonitoring", ":", StatusOfMonitoring.valueOf(searchParam.get("resultOfMonitoring")), false);
         if(!searchParam.get("typeOfPledge").isEmpty())
-            builder.with("typeOfPledge", ":", searchParam.get("typeOfPledge"), false);
+            builder.with("typeOfPledge", ":", TypeOfPledge.valueOf(searchParam.get("typeOfPledge")), false);
         if(!searchParam.get("adressRegion").isEmpty())
             builder.with("adressRegion", ":", searchParam.get("adressRegion"), false);
         if(!searchParam.get("adressDistrict").isEmpty())
@@ -135,7 +138,7 @@ public class PledgeSubjectService {
 
             return repositoryPledgeSubject.findAll(spec, pageable);
 
-        }else if(searchParam.get("typeOfCollateral").equals("auto")){
+        }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.AUTO.name())){
 
             if(!searchParam.get("brandAuto").isEmpty())
                 builder.with("brand", ":", searchParam.get("brandAuto"), false);
@@ -152,13 +155,13 @@ public class PledgeSubjectService {
             if(!searchParam.get("inventoryNumAuto").isEmpty())
                 builder.with("inventoryNum", ":", searchParam.get("inventoryNumAuto"), false);
             if(!searchParam.get("typeOfAuto").isEmpty())
-                builder.with("typeOfAuto", ":", searchParam.get("typeOfAuto"), false);
+                builder.with("typeOfAuto", ":", TypeOfAuto.valueOf(searchParam.get("typeOfAuto")), false);
 
             Specification<PledgeSubjectAuto> spec = builder.build();
 
             return repositoryPledgeSubjectAuto.findAll(spec, pageable);
 
-        }else if(searchParam.get("typeOfCollateral").equals("equip")){
+        }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.EQUIPMENT.name())){
 
             if(!searchParam.get("brandEquip").isEmpty())
                 builder.with("brand", ":", searchParam.get("brandEquip"), false);
@@ -171,37 +174,38 @@ public class PledgeSubjectService {
             if(!searchParam.get("inventoryNumEquip").isEmpty())
                 builder.with("inventoryNum", ":", searchParam.get("inventoryNumEquip"), false);
             if(!searchParam.get("typeOfEquip").isEmpty())
-                builder.with("typeOfquipment", ":", searchParam.get("typeOfEquip"), false);
+                builder.with("typeOfEquipment", ":", TypeOfEquip.valueOf(searchParam.get("typeOfEquip")), false);
 
             Specification<PledgeSubjectEquipment> spec = builder.build();
 
             return repositoryPledgeSubjectEquipment.findAll(spec, pageable);
 
-        }else if(searchParam.get("typeOfCollateral").equals("tbo")){
+        }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.TBO.name())){
 
             if(!searchParam.get("carryingAmount").isEmpty())
                 builder.with("carryingAmount", searchParam.get("carryingAmountOption"), searchParam.get("carryingAmount"), false);
             if(!searchParam.get("typeOfTbo").isEmpty())
-                builder.with("typeOfTBO", ":", searchParam.get("typeOfTbo"), false);
+                builder.with("typeOfTBO", ":", TypeOfTBO.valueOf(searchParam.get("typeOfTbo")), false);
 
             Specification<PledgeSubjectTBO> spec = builder.build();
 
             return repositoryPledgeSubjectTBO.findAll(spec, pageable);
 
-        }else if(searchParam.get("typeOfCollateral").equals("securities")){
+        }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.SECURITIES.name())){
 
             if(!searchParam.get("nominalValue").isEmpty())
                 builder.with("nominalValue", searchParam.get("nominalValueOption"), searchParam.get("nominalValue"), false);
             if(!searchParam.get("actuaValue").isEmpty())
                 builder.with("actualValue", searchParam.get("actuaValueOption"), searchParam.get("actuaValue"), false);
-            if(!searchParam.get("typeOfSecurities").isEmpty())
-                builder.with("typeOfSecurities", ":", searchParam.get("typeOfSecurities"), false);
+            if(!searchParam.get("typeOfSecurities").isEmpty()) {
+                builder.with("typeOfSecurities", ":", TypeOfSecurities.valueOf(searchParam.get("typeOfSecurities")), false);
+            }
 
             Specification<PledgeSubjectSecurities> spec = builder.build();
 
             return repositoryPledgeSubjectSecurities.findAll(spec, pageable);
 
-        }else if(searchParam.get("typeOfCollateral").equals("landOwn")){
+        }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.LAND_OWNERSHIP.name())){
 
             if(!searchParam.get("CadastralNum").isEmpty())
                 builder.with("cadastralNum", ":", searchParam.get("CadastralNum"), false);
@@ -224,7 +228,7 @@ public class PledgeSubjectService {
 
             return repositoryPledgeSubjectRealtyLandOwnership.findAll(spec, pageable);
 
-        }else if(searchParam.get("typeOfCollateral").equals("landLease")){
+        }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.LAND_LEASE.name())){
 
             if(!searchParam.get("CadastralNum").isEmpty())
                 builder.with("cadastralNum", ":", searchParam.get("CadastralNum"), false);
@@ -266,7 +270,7 @@ public class PledgeSubjectService {
             return repositoryPledgeSubjectRealtyLandLease.findAll(spec, pageable);
 
 
-        }else if(searchParam.get("typeOfCollateral").equals("build")){
+        }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.BUILDING.name())){
 
             if(!searchParam.get("CadastralNum").isEmpty())
                 builder.with("cadastralNum", ":", searchParam.get("CadastralNum"), false);
@@ -287,7 +291,7 @@ public class PledgeSubjectService {
 
             return repositoryPledgeSubjectRealtyBuilding.findAll(spec, pageable);
 
-        }else if(searchParam.get("typeOfCollateral").equals("room")){
+        }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.PREMISE.name())){
 
             if(!searchParam.get("CadastralNum").isEmpty())
                 builder.with("cadastralNum", ":", searchParam.get("CadastralNum"), false);
@@ -310,12 +314,12 @@ public class PledgeSubjectService {
 
             return repositoryPledgeSubjectRealtyRoom.findAll(spec, pageable);
 
-        }else if(searchParam.get("typeOfCollateral").equals("vessel")){
+        }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.VESSEL.name())){
 
             if(!searchParam.get("imo").isEmpty())
                 builder.with("imo", ":", searchParam.get("imo"), false);
             if(!searchParam.get("typeOfVessel").isEmpty())
-                builder.with("vesselType", ":", searchParam.get("typeOfVessel"), false);
+                builder.with("vesselType", ":", TypeOfVessel.valueOf(searchParam.get("typeOfVessel")), false);
             if(!searchParam.get("grossTonnage").isEmpty())
                 builder.with("grossTonnage", searchParam.get("grossTonnageOption"), searchParam.get("grossTonnage"), false);
             if(!searchParam.get("deadweight").isEmpty())
@@ -329,7 +333,7 @@ public class PledgeSubjectService {
 
         }else{
 
-            return  null;
+            return new PageImpl<PledgeSubject>(new ArrayList<>());
         }
     }
 

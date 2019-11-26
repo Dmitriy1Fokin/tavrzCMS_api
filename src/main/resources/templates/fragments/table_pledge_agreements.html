@@ -79,7 +79,9 @@
                 <div th:unless="${pa.getPledgeSubjects()== null}" th:text="${pa.getPledgeSubjects().size()}"></div>
             </td>
 
-            <td th:text="${@pledgeAgreementService.getTypeOfCollateral(pa)}">н/д</td>
+            <td>
+                <div th:each="typeOfCollateral : ${@pledgeAgreementService.getTypeOfCollateral(pa)}" th:text="${typeOfCollateral}"></div>
+            </td>
 
             <td th:text="${#numbers.formatCurrency(pa.getRsDz())}">0.00</td>
 

@@ -35,8 +35,8 @@
     <span th:text="${pledgeSubject.getName()}">н/д</span>
     <br>
     <br>
-    <div th:switch="${pledgeSubject.getTypeOfCollateral()}">
-        <div th:case="'Авто/спецтехника'">
+    <div th:switch="${pledgeSubject.getTypeOfCollateral().name()}">
+        <div th:case="AUTO">
             <label>Марка:</label>
             <span th:text="${pledgeSubject.getPledgeSubjectAuto().getBrand()}">н/д</span>
             <br>
@@ -70,11 +70,11 @@
             <br>
             <br>
             <label>Вид транспорта:</label>
-            <span th:text="${pledgeSubject.getPledgeSubjectAuto().getTypeOfAuto()}">н/д</span>
+            <span th:text="${pledgeSubject.getPledgeSubjectAuto().getTypeOfAuto().getTranslate()}">н/д</span>
             <br>
             <br>
         </div>
-        <div th:case="Оборудование">
+        <div th:case="EQUIPMENT">
             <label>Марка:</label>
             <span th:text="${pledgeSubject.getPledgeSubjectEquipment().getBrand()}">н/д</span>
             <br>
@@ -96,7 +96,7 @@
             <br>
             <br>
             <label>Вид оборудования:</label>
-            <span th:text="${pledgeSubject.getPledgeSubjectEquipment().getTypeOfquipment()}">н/д</span>
+            <span th:text="${pledgeSubject.getPledgeSubjectEquipment().getTypeOfEquipment().getTranslate()}">н/д</span>
             <br>
             <br>
             <label>Производительность:</label>
@@ -109,7 +109,7 @@
             <br>
         </div>
 
-        <div th:case="'Ценные бумаги'">
+        <div th:case="SECURITIES">
             <label>Номинальная стоимость:</label>
             <span th:text="${pledgeSubject.getPledgeSubjectSecurities().getNominalValue()}">н/д</span>
             <br>
@@ -119,12 +119,12 @@
             <br>
             <br>
             <label>Вид ценных бумаг:</label>
-            <span th:text="${pledgeSubject.getPledgeSubjectSecurities().getTypeOfSecurities()}">н/д</span>
+            <span th:text="${pledgeSubject.getPledgeSubjectSecurities().getTypeOfSecurities().getTranslate()}">н/д</span>
             <br>
             <br>
         </div>
 
-        <div th:case="Судно">
+        <div th:case="VESSEL">
             <label>ИМО:</label>
             <span th:text="${pledgeSubject.getPledgeSubjectVessel().getImo()}">н/д</span>
             <br>
@@ -138,7 +138,7 @@
             <br>
             <br>
             <label>Вид судна:</label>
-            <span th:text="${pledgeSubject.getPledgeSubjectVessel().getVesselType()}">н/д</span>
+            <span th:text="${pledgeSubject.getPledgeSubjectVessel().getVesselType().getTranslate()}">н/д</span>
             <br>
             <br>
             <label>Валовый тоннаж:</label>
@@ -159,7 +159,7 @@
             <br>
         </div>
 
-        <div th:case="ТМЦ">
+        <div th:case="TBO">
             <label>Количество:</label>
             <span th:text="${pledgeSubject.getPledgeSubjectTBO().getCountOfTBO()}">н/д</span>
             <br>
@@ -169,12 +169,12 @@
             <br>
             <br>
             <label>Вид ТМЦ:</label>
-            <span th:text="${pledgeSubject.getPledgeSubjectTBO().getTypeOfTBO()}">н/д</span>
+            <span th:text="${pledgeSubject.getPledgeSubjectTBO().getTypeOfTBO().getTranslate()}">н/д</span>
             <br>
             <br>
         </div>
 
-        <div th:case="'Недвижимость - ЗУ - собственность'">
+        <div th:case="LAND_OWNERSHIP">
             <label>Площадь:</label>
             <span th:text="${pledgeSubject.getPledgeSubjectRealty().getArea()}">н/д</span>
             <br>
@@ -206,7 +206,7 @@
             <br>
         </div>
 
-        <div th:case="'Недвижимость - ЗУ - право аренды'">
+        <div th:case="LAND_LEASE">
             <label>Площадь:</label>
             <span th:text="${pledgeSubject.getPledgeSubjectRealty().getArea()}">н/д</span>
             <br>
@@ -246,7 +246,7 @@
             <br>
         </div>
 
-        <div th:case="'Недвижимость - здание/сооружение'">
+        <div th:case="BUILDING">
             <label>Площадь:</label>
             <span th:text="${pledgeSubject.getPledgeSubjectRealty().getArea()}">н/д</span>
             <br>
@@ -274,7 +274,7 @@
             <br>
         </div>
 
-        <div th:case="'Недвижимость - помещение'">
+        <div th:case="PREMISE">
             <label>Площадь:</label>
             <span th:text="${pledgeSubject.getPledgeSubjectRealty().getArea()}">н/д</span>
             <br>
@@ -304,7 +304,7 @@
     </div>
 
     <label>Ликвидность:</label>
-    <span th:text="${pledgeSubject.getLiquidity()}">н/д</span>
+    <span th:text="${pledgeSubject.getLiquidity().getTranslate()}">н/д</span>
     <br>
     <br>
     <label>Рыночноя стоимость по ДЗ:</label>
@@ -343,19 +343,19 @@
     <br>
     <br>
     <label>Вид мониторинга:</label>
-    <span th:text="${pledgeSubject.getTypeOfMonitoring()}">н/д</span>
+    <span th:text="${pledgeSubject.getTypeOfMonitoring().getTranslate()}">н/д</span>
     <br>
     <br>
     <label>Результат мониторинга:</label>
-    <span th:text="${pledgeSubject.getStatusMonitoring()}">н/д</span>
+    <span th:text="${pledgeSubject.getStatusMonitoring().getTranslate()}">н/д</span>
     <br>
     <br>
     <label>Вид обеспечения:</label>
-    <span th:text="${pledgeSubject.getTypeOfCollateral()}">н/д</span>
+    <span th:text="${pledgeSubject.getTypeOfCollateral().getTranslate()}">н/д</span>
     <br>
     <br>
     <label>Функция залога:</label>
-    <span th:text="${pledgeSubject.getTypeOfPledge()}">н/д</span>
+    <span th:text="${pledgeSubject.getTypeOfPledge().getTranslate()}">н/д</span>
     <br>
     <br>
     <label>Адрес:</label>

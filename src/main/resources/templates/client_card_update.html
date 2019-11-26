@@ -17,8 +17,8 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<div th:switch="${typeOfClient}">
-    <div th:case="юл">
+<div th:switch="${typeOfClient.name()}">
+    <div th:case="LEGAL_ENTITY">
         <form th:action="@{/update_client_le}" th:method="post" th:object="${clientLegalEntity}" action="client_card_update.html">
             <input type="hidden", th:field="*{clientId}" th:value="${clientLegalEntity.getClientId()}">
             <input type="hidden", th:field="*{loanAgreements}" th:value="${clientLegalEntity.getLoanAgreements()}">
@@ -31,7 +31,7 @@
             <button type="submit">Обновить</button>
         </form>
     </div>
-    <div th:case="фл">
+    <div th:case="INDIVIDUAL">
         <form th:action="@{/update_client_ind}" th:method="post" th:object="${clientIndividual}" action="client_card_update.html">
             <input type="hidden", th:field="*{clientId}" th:value="${clientIndividual.getClientId()}">
             <input type="hidden", th:field="*{loanAgreements}" th:value="${clientIndividual.getLoanAgreements()}">

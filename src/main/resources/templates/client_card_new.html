@@ -15,8 +15,8 @@
 <body>
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<div th:switch="${typeOfClient}">
-    <div th:case="юл">
+<div th:switch="${typeOfClient.name()}">
+    <div th:case="LEGAL_ENTITY">
         <form th:action="@{/insert_client_le}" th:method="post" th:object="${clientLegalEntity}" action="client_card_new.html">
             <div th:replace="fragments/client_forms :: generalProperty(${clientLegalEntity}, ${employeeList}, ${clientManagerList})"></div>
             <br>
@@ -25,7 +25,7 @@
             <button type="submit">Обновить</button>
         </form>
     </div>
-    <div th:case="фл">
+    <div th:case="INDIVIDUAL">
         <form th:action="@{/insert_client_ind}" th:method="post" th:object="${clientIndividual}" action="client_card_new.html">
             <div th:replace="fragments/client_forms :: generalProperty(${clientIndividual}, ${employeeList}, ${clientManagerList})"></div>
             <br>

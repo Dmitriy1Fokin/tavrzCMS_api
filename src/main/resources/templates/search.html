@@ -128,8 +128,8 @@
     <div class="row">
         <label>Статус КД</label>
         <select name="statusLA">
-            <option selected value="открыт">открыт</option>
-            <option value="закрыт">закрыт</option>
+            <option selected value="OPEN">открыт</option>
+            <option value="CLOSED">закрыт</option>
         </select>
     </div>
     <br>
@@ -183,10 +183,10 @@
     <br>
     <div class="row">
         <label>Перв/посл</label>
-        <select name="pervPslOption">
-            <option selected value="all">Все</option>
-            <option value="перв">Первичный</option>
-            <option value="посл">Последующий</option>
+        <select name="pervPosl">
+            <option selected value="">Все</option>
+            <option value="PERV">Первичный</option>
+            <option value="POSL">Последующий</option>
         </select>
     </div>
     <br>
@@ -253,8 +253,8 @@
     <div class="row">
         <label>Статус ДЗ</label>
         <select name="statusPA">
-            <option selected value="открыт">открыт</option>
-            <option value="закрыт">закрыт</option>
+            <option selected value="OPEN">открыт</option>
+            <option value="CLOSED">закрыт</option>
         </select>
     </div>
     <br>
@@ -271,8 +271,8 @@
         <label>Клиент</label>
         <input name="clientName" type="text"/>
         <select id="whatSearchClient" onchange="choiseClient()" name="clientOption">
-            <option selected value="юл">ЮЛ</option>
-            <option value="фл">ФЛ</option>
+            <option selected value="LEGAL_ENTITY">ЮЛ</option>
+            <option value="INDIVIDUAL">ФЛ</option>
         </select>
     </div>
     <br>
@@ -298,10 +298,10 @@
         <label>Ликвидность</label>
         <select name="liquidity">
             <option selected value="">не выбрано</option>
-            <option value="высокая">высокая</option>
-            <option value="средняя">средняя</option>
-            <option value="ниже средней">ниже средней</option>
-            <option value="низкая">низкая</option>
+            <option value="HIGH">высокая</option>
+            <option value="AVERAGE">средняя</option>
+            <option value="BELOW_AVERAGE">ниже средней</option>
+            <option value="LOW">низкая</option>
         </select>
     </div>
     <br>
@@ -393,9 +393,9 @@
         <label>Результат мониторинга</label>
         <select name="resultOfMonitoring">
             <option selected value="">не выбрано</option>
-            <option value="в наличии">в наличии</option>
-            <option value="частичная утрата">частичная утрата</option>
-            <option value="утрата">утрата</option>
+            <option value="IN_STOCK">в наличии</option>
+            <option value="PARTIAL_LOSS">частичная утрата</option>
+            <option value="LOSING">утрата</option>
         </select>
     </div>
     <br>
@@ -403,10 +403,10 @@
         <label>Функция залога</label>
         <select name="typeOfPledge">
             <option selected value="">не выбрано</option>
-            <option value="возвратная">возвратная</option>
-            <option value="рычаговая">рычаговая</option>
-            <option value="ограничивающая">ограничивающая</option>
-            <option value="информационная">информационная</option>
+            <option value="RETURN">возвратная</option>
+            <option value="LEVER">рычаговая</option>
+            <option value="LIMITING">ограничивающая</option>
+            <option value="INFORMATIONAL">информационная</option>
         </select>
     </div>
     <br>
@@ -444,15 +444,15 @@
         <label>Вид обеспечения</label>
         <select id="whatSearchPS" onchange="choisePS()" name="typeOfCollateral">
             <option selected value="">Не выбрано</option>
-            <option value="auto">Авто/спецтехника</option>
-            <option value="equip">Оборудование</option>
-            <option value="tbo">ТМЦ</option>
-            <option value="securities">Ценные бумаги</option>
-            <option value="landOwn">Недвижимость - ЗУ - собственность</option>
-            <option value="landLease">Недвижимость - ЗУ - право аренды</option>
-            <option value="build">Недвижимость - здание/сооружение</option>
-            <option value="room">Недвижимость - помещение</option>
-            <option value="vessel">Судно</option>
+            <option value="AUTO">Авто/спецтехника</option>
+            <option value="EQUIPMENT">Оборудование</option>
+            <option value="TBO">ТМЦ</option>
+            <option value="SECURITIES">Ценные бумаги</option>
+            <option value="LAND_OWNERSHIP">Недвижимость - ЗУ - собственность</option>
+            <option value="LAND_LEASE">Недвижимость - ЗУ - право аренды</option>
+            <option value="BUILDING">Недвижимость - здание/сооружение</option>
+            <option value="PREMISE">Недвижимость - помещение</option>
+            <option value="VESSEL">Судно</option>
         </select>
     </div>
     <br>
@@ -479,7 +479,7 @@
     function choiseClient() {
         var n = document.getElementById("whatSearchClient").options.selectedIndex;
         var choise = document.getElementById("whatSearchClient").options[n].value;
-        if(choise == 'юл'){
+        if(choise == 'LEGAL_ENTITY'){
             var codeInner = '<div class="row">\n' +
                 '        <label>ИНН</label>\n' +
                 '        <input name="inn" type="text"/>\n' +
@@ -487,7 +487,7 @@
                 '    <br>';
             elementClient.innerHTML = '';
             elementClient.insertAdjacentHTML('afterbegin', codeInner);
-        }else if(choise == 'фл'){
+        }else if(choise == 'INDIVIDUAL'){
             var codeInner = '<div class="row">\n' +
                 '        <label>№ паспорта</label>\n' +
                 '        <input name="pasportNum" type="text"/>\n' +
@@ -504,7 +504,7 @@
         var choise = document.getElementById("whatSearchPS").options[n].value;
         if(choise == ''){
             elementPS.innerHTML = '';
-        }else if(choise == 'auto'){
+        }else if(choise == 'AUTO'){
             var codeInner = '<div class="row">\n' +
                 '<label>Марка</label>\n' +
                 '<input name="brandAuto" type="text"/>\n' +
@@ -551,25 +551,25 @@
                 '<label>Вид транспорта</label>\n' +
                 '<select name="typeOfAuto">\n' +
                 '<option selected value="">не выбрано</option>\n' +
-                '<option value="бульдозер">бульдозер</option>\n' +
-                '<option value="экскаватор">экскаватор</option>\n' +
-                '<option value="прицеп">прицеп</option>\n' +
-                '<option value="погрузчик">погрузчик</option>\n' +
-                '<option value="кран">кран</option>\n' +
-                '<option value="дорожно-строительная">дорожно-строительная</option>\n' +
-                '<option value="комбайн">комбайн</option>\n' +
-                '<option value="трактор">трактор</option>\n' +
-                '<option value="пассажирский транспорт">пассажирский транспорт</option>\n' +
-                '<option value="грузовой транспорт">грузовой транспорт</option>\n' +
-                '<option value="легковой транспорт">легковой транспорт</option>\n' +
-                '<option value="ж/д транспорт">ж/д транспорт</option>\n' +
-                '<option value="иное">иное</option>\n' +
+                '<option value="BULLDOZER">бульдозер</option>\n' +
+                '<option value="EXCAVATOR">экскаватор</option>\n' +
+                '<option value="TRAILER">прицеп</option>\n' +
+                '<option value="LOADER">погрузчик</option>\n' +
+                '<option value="CRANE">кран</option>\n' +
+                '<option value="ROAD_CONSTRUCTION">дорожно-строительная</option>\n' +
+                '<option value="COMBINE">комбайн</option>\n' +
+                '<option value="TRACTOR">трактор</option>\n' +
+                '<option value="PASSENGER">пассажирский транспорт</option>\n' +
+                '<option value="CARGO">грузовой транспорт</option>\n' +
+                '<option value="PERSONAL">легковой транспорт</option>\n' +
+                '<option value="RAILWAY">ж/д транспорт</option>\n' +
+                '<option value="OTHER">иное</option>\n' +
                 '</select>\n' +
                 '</div>\n' +
                 '<br>';
             elementPS.innerHTML = '';
             elementPS.insertAdjacentHTML('afterbegin', codeInner);
-        }else if(choise == 'equip'){
+        }else if(choise == 'EQUIPMENT'){
             var codeInner = '<div class="row">\n' +
                 '    <label>Марка</label>\n' +
                 '    <input name="brandEquip" type="text"/>\n' +
@@ -606,35 +606,35 @@
                 '    <label>Вид оборудования</label>\n' +
                 '    <select name="typeOfEquip">\n' +
                 '        <option selected value="">не выбрано</option>\n' +
-                '        <option value="металлообработка">металлообработка</option>\n' +
-                '        <option value="лесообработка">лесообработка</option>\n' +
-                '        <option value="торговое">торговое</option>\n' +
-                '        <option value="офисное">офисное</option>\n' +
-                '        <option value="сети ито">сети ито</option>\n' +
-                '        <option value="рекламное">рекламное</option>\n' +
-                '        <option value="пищевое">пищевое</option>\n' +
-                '        <option value="автомобильное">автомобильное</option>\n' +
-                '        <option value="азс">азс</option>\n' +
-                '        <option value="химическое">химическое</option>\n' +
-                '        <option value="измерительное">измерительное</option>\n' +
-                '        <option value="медицинское">медицинское</option>\n' +
-                '        <option value="нефте-газовое">нефте-газовое</option>\n' +
-                '        <option value="карьерное и горное">карьерное и горное</option>\n' +
-                '        <option value="подъемное">подъемное</option>\n' +
-                '        <option value="авиационное">авиационное</option>\n' +
-                '        <option value="строительое">строительое</option>\n' +
-                '        <option value="ресторанное">ресторанное</option>\n' +
-                '        <option value="транспортировка">транспортировка</option>\n' +
-                '        <option value="упаковачное">упаковачное</option>\n' +
-                '        <option value="хранение">хранение</option>\n' +
-                '        <option value="с/х назначения">с/х назначения</option>\n' +
-                '        <option value="иное">иное</option>\n' +
+                '        <option value="METALWORKING">металлообработка</option>\n' +
+                '        <option value="FOREST_PROCCESSING">лесообработка</option>\n' +
+                '        <option value="TRADING">торговое</option>\n' +
+                '        <option value="OFFICE">офисное</option>\n' +
+                '        <option value="ENGINEERING_NETWORKS">сети ито</option>\n' +
+                '        <option value="ADVERTISIING">рекламное</option>\n' +
+                '        <option value="FOOD">пищевое</option>\n' +
+                '        <option value="AUTOMOBILE">автомобильное</option>\n' +
+                '        <option value="GAS_STATION">азс</option>\n' +
+                '        <option value="CHEMICAL">химическое</option>\n' +
+                '        <option value="METRICAL">измерительное</option>\n' +
+                '        <option value="MEDICAL">медицинское</option>\n' +
+                '        <option value="OIL_GAS">нефте-газовое</option>\n' +
+                '        <option value="MINING">карьерное и горное</option>\n' +
+                '        <option value="LIFTING">подъемное</option>\n' +
+                '        <option value="AVIATION">авиационное</option>\n' +
+                '        <option value="BUILDING">строительое</option>\n' +
+                '        <option value="RESTAURANT">ресторанное</option>\n' +
+                '        <option value="TRANSPORTATION">транспортировка</option>\n' +
+                '        <option value="PACKAGING">упаковачное</option>\n' +
+                '        <option value="STORAGE">хранение</option>\n' +
+                '        <option value="AGRICULTURAL">с/х назначения</option>\n' +
+                '        <option value="OTHER">иное</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>';
             elementPS.innerHTML = '';
             elementPS.insertAdjacentHTML('afterbegin', codeInner);
-        }else if(choise == 'tbo'){
+        }else if(choise == 'TBO'){
             var codeInner = '<div class="row">\n' +
                 '    <label>Баланс. стоимость</label>\n' +
                 '    <input type="number" min="0" step="0.01" name="carryingAmount"/>\n' +
@@ -651,24 +651,24 @@
                 '    <label>Вид ТМЦ</label>\n' +
                 '    <select name="typeOfTbo">\n' +
                 '        <option selected value="">не выбрано</option>\n' +
-                '        <option value="транспорт">транспорт</option>\n' +
-                '        <option value="запчасти">запчасти</option>\n' +
-                '        <option value="одежда">одежда</option>\n' +
-                '        <option value="продукты питания">продукты питания</option>\n' +
-                '        <option value="алкоголь">алкоголь</option>\n' +
-                '        <option value="нефтехимия">нефтехимия</option>\n' +
-                '        <option value="металлопродукция">металлопродукция</option>\n' +
-                '        <option value="стройматериалы">стройматериалы</option>\n' +
-                '        <option value="крс">крс</option>\n' +
-                '        <option value="мрс">мрс</option>\n' +
-                '        <option value="медикаменты">медикаменты</option>\n' +
-                '        <option value="сантехника">сантехника</option>\n' +
+                '        <option value="TRANSPORT">транспорт</option>\n' +
+                '        <option value="SPARE_PARTS">запчасти</option>\n' +
+                '        <option value="CLOTHES">одежда</option>\n' +
+                '        <option value="FOOD">продукты питания</option>\n' +
+                '        <option value="ALCOHOL">алкоголь</option>\n' +
+                '        <option value="PETROCHEMISTRY">нефтехимия</option>\n' +
+                '        <option value="METAL_PRODUCTS">металлопродукция</option>\n' +
+                '        <option value="BUILDING_MATERIALS">стройматериалы</option>\n' +
+                '        <option value="CATTLE">крс</option>\n' +
+                '        <option value="SMALL_CATTLE">мрс</option>\n' +
+                '        <option value="MEDICINES">медикаменты</option>\n' +
+                '        <option value="PLUMBING">сантехника</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>';
             elementPS.innerHTML = '';
             elementPS.insertAdjacentHTML('afterbegin', codeInner);
-        }else if(choise == 'securities'){
+        }else if(choise == 'SECURITIES'){
             var codeInner = '<div class="row">\n' +
                 '    <label>Номинал. стоимость</label>\n' +
                 '    <input type="number" min="0" step="0.01" name="nominalValue"/>\n' +
@@ -697,16 +697,16 @@
                 '    <label>Вид ценных бумаг</label>\n' +
                 '    <select name="typeOfSecurities">\n' +
                 '        <option selected value="">не выбрано</option>\n' +
-                '        <option value="доли в ук">доли в ук</option>\n' +
-                '        <option value="акции">акции</option>\n' +
-                '        <option value="вексель">вексель</option>\n' +
-                '        <option value="паи">паи</option>\n' +
+                '        <option value="SHARE_IN_AUTHORIZED_CAPITAL">доли в ук</option>\n' +
+                '        <option value="STOCK">акции</option>\n' +
+                '        <option value="BILL">вексель</option>\n' +
+                '        <option value="SHARES">паи</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>';
             elementPS.innerHTML = '';
             elementPS.insertAdjacentHTML('afterbegin', codeInner);
-        }else if(choise == 'landOwn'){
+        }else if(choise == 'LAND_OWNERSHIP'){
             var codeInner = '<div class="row">\n' +
                 '    <label>Кад №</label>\n' +
                 '    <input name="CadastralNum" type="text"/>\n' +
@@ -764,7 +764,7 @@
                 '<br>';
             elementPS.innerHTML = '';
             elementPS.insertAdjacentHTML('afterbegin', codeInner);
-        }else if(choise == 'landLease'){
+        }else if(choise == 'LAND_LEASE'){
             var codeInner = '<div class="row">\n' +
                 '    <label>Кад №</label>\n' +
                 '    <input name="CadastralNum" type="text"/>\n' +
@@ -846,7 +846,7 @@
                 '<br>';
             elementPS.innerHTML = '';
             elementPS.insertAdjacentHTML('afterbegin', codeInner);
-        }else if(choise == 'build'){
+        }else if(choise == 'BUILDING'){
             var codeInner = '<div class="row">\n' +
                 '    <label>Кад №</label>\n' +
                 '    <input name="CadastralNum" type="text"/>\n' +
@@ -915,7 +915,7 @@
                 '<br>';
             elementPS.innerHTML = '';
             elementPS.insertAdjacentHTML('afterbegin', codeInner);
-        }else if(choise == 'room'){
+        }else if(choise == 'PREMISE'){
             var codeInner = '<div class="row">\n' +
                 '    <label>Кад №</label>\n' +
                 '    <input name="CadastralNum" type="text"/>\n' +
@@ -992,7 +992,7 @@
                 '<br>';
             elementPS.innerHTML = '';
             elementPS.insertAdjacentHTML('afterbegin', codeInner);
-        }else if(choise == 'vessel'){
+        }else if(choise == 'VESSEL'){
             var codeInner = '';
             elementPS.innerHTML = '<div class="row">\n' +
                 '    <label>IMO</label>\n' +
@@ -1003,33 +1003,33 @@
                 '    <label>Вид судна</label>\n' +
                 '    <select name="typeOfVessel">\n' +
                 '        <option selected value="">не выбрано</option>\n' +
-                '        <option value="general cargo (gcd)">general cargo (gcd)</option>\n' +
-                '        <option value="container ship (con)">container ship (con)</option>\n' +
-                '        <option value="log carrier/timber (log)">log carrier/timber (log)</option>\n' +
-                '        <option value="ro-ro (r/r)">ro-ro (r/r)</option>\n' +
-                '        <option value="bulk carrier (b/c)">bulk carrier (b/c)</option>\n' +
-                '        <option value="ore/oil carrier (o/o)">ore/oil carrier (o/o)</option>\n' +
-                '        <option value="oil/bulk/ore carrier (obo)">oil/bulk/ore carrier (obo)</option>\n' +
-                '        <option value="tanker product (tnp)">tanker product (tnp)</option>\n' +
-                '        <option value="tanker crude (tnc)">tanker crude (tnc)</option>\n' +
-                '        <option value="tanker storage (tns)">tanker storage (tns)</option>\n' +
-                '        <option value="tanker vlcc/ulcc (tnv)">tanker vlcc/ulcc (tnv)</option>\n' +
-                '        <option value="chemical tanker (chm)">chemical tanker (chm)</option>\n' +
-                '        <option value="lpg/lng carrier (gas)">lpg/lng carrier (gas)</option>\n' +
-                '        <option value="offshore supply vessel (osv)">offshore supply vessel (osv)</option>\n' +
-                '        <option value="heavy lift vessel (hvl)">heavy lift vessel (hvl)</option>\n' +
-                '        <option value="survey vessel (srv)">survey vessel (srv)</option>\n' +
-                '        <option value="passenger ship (pas)">passenger ship (pas)</option>\n' +
-                '        <option value="reefer (rfg)">reefer (rfg)</option>\n' +
-                '        <option value="livestock carrier (liv)">livestock carrier (liv)</option>\n' +
-                '        <option value="tug">tug</option>\n' +
-                '        <option value="fishing trawler (fsh)">fishing trawler (fsh)</option>\n' +
-                '        <option value="dredger (drg)">dredger (drg)</option>\n' +
-                '        <option value="м">м</option>\n' +
-                '        <option value="м-сп">м-сп</option>\n' +
-                '        <option value="о">о</option>\n' +
-                '        <option value="р">р</option>\n' +
-                '        <option value="л">л</option>\n' +
+                '        <option value="GDC">general cargo (gcd)</option>\n' +
+                '        <option value="CON">container ship (con)</option>\n' +
+                '        <option value="LOG">log carrier/timber (log)</option>\n' +
+                '        <option value="R_R">ro-ro (r/r)</option>\n' +
+                '        <option value="B_C">bulk carrier (b/c)</option>\n' +
+                '        <option value="O_O">ore/oil carrier (o/o)</option>\n' +
+                '        <option value="OBO">oil/bulk/ore carrier (obo)</option>\n' +
+                '        <option value="TNP">tanker product (tnp)</option>\n' +
+                '        <option value="TNC">tanker crude (tnc)</option>\n' +
+                '        <option value="TNS">tanker storage (tns)</option>\n' +
+                '        <option value="TNV">tanker vlcc/ulcc (tnv)</option>\n' +
+                '        <option value="CHM">chemical tanker (chm)</option>\n' +
+                '        <option value="GAS">lpg/lng carrier (gas)</option>\n' +
+                '        <option value="OSV">offshore supply vessel (osv)</option>\n' +
+                '        <option value="HVL">heavy lift vessel (hvl)</option>\n' +
+                '        <option value="SRV">survey vessel (srv)</option>\n' +
+                '        <option value="PAS">passenger ship (pas)</option>\n' +
+                '        <option value="RFG">reefer (rfg)</option>\n' +
+                '        <option value="LIV">livestock carrier (liv)</option>\n' +
+                '        <option value="TUG">tug</option>\n' +
+                '        <option value="FSH">fishing trawler (fsh)</option>\n' +
+                '        <option value="DRG">dredger (drg)</option>\n' +
+                '        <option value="M">м</option>\n' +
+                '        <option value="M_SP">м-сп</option>\n' +
+                '        <option value="O">о</option>\n' +
+                '        <option value="R">р</option>\n' +
+                '        <option value="L">л</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +

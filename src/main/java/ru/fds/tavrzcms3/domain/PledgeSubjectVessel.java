@@ -5,11 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
+import ru.fds.tavrzcms3.dictionary.TypeOfVessel;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -35,19 +34,9 @@ public class PledgeSubjectVessel extends PledgeSubject {
 	@Column(name ="flag")
 	private String flag;
 
-	@Pattern(regexp = "general cargo \\(gcd\\)|container ship \\(con\\)|log carrier/timber \\(log\\)|ro-ro \\(r/r\\)|bulk carrier \\(b/c\\)|" +
-			"ore/oil carrier \\(o/o\\)|oil/bulk/ore carrier \\(obo\\)|tanker product \\(tnp\\)|tanker crude \\(tnc\\)|" +
-			"tanker storage \\(tns\\)|tanker vlcc/ulcc \\(tnv\\)|chemical tanker \\(chm\\)|lpg/lng carrier \\(gas\\)|" +
-			"offshore supply vessel \\(osv\\)|heavy lift vessel \\(hvl\\)|survey vessel \\(srv\\)|passenger ship \\(pas\\)|" +
-			"reefer \\(rfg\\)|livestock carrier \\(liv\\)|tug|fishing trawler \\(fsh\\)|dredger \\(drg\\)|м|м-сп|о|р|л",
-			message = "Возможные варианты: general cargo (gcd), container ship (con), log carrier/timber (log), " +
-					"ro-ro (r/r), bulk carrier (b/c), ore/oil carrier (o/o), oil/bulk/ore carrier (obo), " +
-					"tanker product (tnp), tanker crude (tnc), tanker storage (tns), tanker vlcc/ulcc (tnv), " +
-					"chemical tanker (chm), lpg/lng carrier (gas), offshore supply vessel (osv), heavy lift vessel (hvl), " +
-					"survey vessel (srv), passenger ship (pas), reefer (rfg), livestock carrier (liv), tug, " +
-					"fishing trawler (fsh), dredger (drg), м, м-сп, о, р, л")
+	@Convert(converter = TypeOfVessel.Converter.class)
 	@Column(name ="vessel_type")
-	private String vesselType;
+	private TypeOfVessel vesselType;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@Positive(message = "Значение должно быть больше нуля")
@@ -75,7 +64,7 @@ public class PledgeSubjectVessel extends PledgeSubject {
 	private PledgeSubject pledgeSubject;
 
 	public PledgeSubjectVessel(){
-		super.setTypeOfCollateral("Судно");
+		super.setTypeOfCollateral(TypeOfCollateral.VESSEL);
 	}
 
 	@Override

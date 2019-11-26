@@ -94,8 +94,8 @@
             <div class="row">
                 <label>Статус договора</label>
                 <select id="statusSelection" required th:field="*{statusLA}">
-                    <option value="открыт">открыт</option>
-                    <option value="закрыт">закрыт</option>
+                    <option value="OPEN">открыт</option>
+                    <option value="CLOSED">закрыт</option>
                 </select>
                 <div th:if="${#fields.hasErrors('statusLA')}" th:errors="*{statusLA}">Name Error</div>
             </div>
@@ -171,8 +171,8 @@
             <div class="row">
                 <label>Статус договора</label>
                 <select required th:field="*{statusLA}">
-                    <option selected value="открыт">открыт</option>
-                    <option value="закрыт">закрыт</option>
+                    <option selected value="OPEN">открыт</option>
+                    <option value="CLOSED">закрыт</option>
                 </select>
                 <div th:if="${#fields.hasErrors('statusLA')}" th:errors="*{statusLA}">Name Error</div>
             </div>

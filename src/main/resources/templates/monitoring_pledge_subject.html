@@ -55,8 +55,8 @@
             <tr>
                 <td th:text="${#dates.format(monitoring.getDateMonitoring(), 'dd.MM.yyyy')}">н/д</td>
                 <td th:text="${monitoring.getEmployee()}">н/д</td>
-                <td th:text="${monitoring.getStatusMonitoring()}">н/д</td>
-                <td th:text="${monitoring.getTypeOfMonitoring()}">н/д</td>
+                <td th:text="${monitoring.getStatusMonitoring().getTranslate()}">н/д</td>
+                <td th:text="${monitoring.getTypeOfMonitoring().getTranslate()}">н/д</td>
                 <td th:text="${#numbers.formatCurrency(monitoring.getCollateralValue())}">н/д</td>
                 <td th:text="${monitoring.getNotice()}">н/д</td>
             </tr>

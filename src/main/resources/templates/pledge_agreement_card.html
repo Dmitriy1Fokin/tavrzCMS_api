@@ -53,8 +53,8 @@
             <div class="row">
                 <label>Тип договора</label>
                 <select required th:field="*{pervPosl}">
-                    <option value="перв">Первичный</option>
-                    <option value="посл">Последующий</option>
+                    <option value="PERV">Первичный</option>
+                    <option value="POSL">Последующий</option>
                 </select>
                 <div th:if="${#fields.hasErrors('pervPosl')}" th:errors="*{pervPosl}">Name Error</div>
             </div>
@@ -62,8 +62,8 @@
             <div class="row">
                 <label>Статус</label>
                 <select required th:field="*{statusPA}">
-                    <option value="открыт">открыт</option>
-                    <option value="закрыт">закрыт</option>
+                    <option value="OPEN">открыт</option>
+                    <option value="CLOSED">закрыт</option>
                 </select>
                 <div th:if="${#fields.hasErrors('statusPA')}" th:errors="*{statusPA}">Name Error</div>
             </div>
@@ -104,8 +104,8 @@
                 <label>Тип договора</label>
                 <select required th:field="*{pervPosl}">
                     <option selected value="">не выбрано</option>
-                    <option value="перв">Первичный</option>
-                    <option value="посл">Последующий</option>
+                    <option value="PERV">Первичный</option>
+                    <option value="POSL">Последующий</option>
                 </select>
                 <div th:if="${#fields.hasErrors('pervPosl')}" th:errors="*{pervPosl}">Name Error</div>
             </div>
@@ -113,8 +113,8 @@
             <div class="row">
                 <label>Статус</label>
                 <select required th:field="*{statusPA}">
-                    <option selected value="открыт">открыт</option>
-                    <option value="закрыт">закрыт</option>
+                    <option selected value="OPEN">открыт</option>
+                    <option value="CLOSED">закрыт</option>
                 </select>
                 <div th:if="${#fields.hasErrors('statusPA')}" th:errors="*{statusPA}">Name Error</div>
             </div>

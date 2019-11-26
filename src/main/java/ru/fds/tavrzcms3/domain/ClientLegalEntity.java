@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -35,7 +36,7 @@ public class ClientLegalEntity extends Client {
 	private Client client;
 
 	public ClientLegalEntity(){
-		super.setTypeOfClient("юл");
+		super.setTypeOfClient(TypeOfClient.LEGAL_ENTITY);
 	}
 
 	@Override

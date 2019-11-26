@@ -27,14 +27,14 @@
                        th:text="${@clientService.getFullNameClient(client)}">Клиент</a>
                 </td>
 
-                <td th:text="${client.getTypeOfClient()}"></td>
+                <td th:text="${client.getTypeOfClient().getTranslate()}"></td>
 
                 <td>
-                    <div th:switch="${client.getTypeOfClient()}">
-                        <div th:case="юл">
+                    <div th:switch="${client.getTypeOfClient().name()}">
+                        <div th:case="LEGAL_ENTITY">
                             <span th:text="${client.getInn()}"></span>
                         </div>
-                        <div th:case="фл">
+                        <div th:case="INDIVIDUAL">
                             <span th:text="${client.getPasportNum()}"></span>
                         </div>
                     </div>

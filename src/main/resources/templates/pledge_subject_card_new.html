@@ -15,8 +15,8 @@
 <body>
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<div th:switch="${typeOfCollateral}">
-    <div th:case="'Авто/спецтехника'">
+<div th:switch="${typeOfCollateral.name()}">
+    <div th:case="AUTO">
         <form th:action="@{/insert_pledge_subject_auto}" th:method="post" th:object="${pledgeSubjectAuto}" action="pledge_subject_card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectAuto.getPledgeAgreements()}">
@@ -38,7 +38,7 @@
             <button type="submit">Добавить новый предмет</button>
         </form>
     </div>
-    <div th:case="'Оборудование'">
+    <div th:case="EQUIPMENT">
         <form th:action="@{/insert_pledge_subject_equipment}" th:method="post" th:object="${pledgeSubjectEquipment}" action="pledge_subject_card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectEquipment.getPledgeAgreements()}">
@@ -60,7 +60,7 @@
             <button type="submit">Добавить новый предмет</button>
         </form>
     </div>
-    <div th:case="'Ценные бумаги'">
+    <div th:case="SECURITIES">
         <form th:action="@{/insert_pledge_subject_securities}" th:method="post" th:object="${pledgeSubjectSecurities}" action="pledge_subject_card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectSecurities.getPledgeAgreements()}">
@@ -82,7 +82,7 @@
             <button type="submit">Добавить новый предмет</button>
         </form>
     </div>
-    <div th:case="'Судно'">
+    <div th:case="VESSEL">
         <form th:action="@{/insert_pledge_subject_vessel}" th:method="post" th:object="${pledgeSubjectVessel}" action="pledge_subject_card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectVessel.getPledgeAgreements()}">
@@ -104,7 +104,7 @@
             <button type="submit">Добавить новый предмет</button>
         </form>
     </div>
-    <div th:case="'ТМЦ'">
+    <div th:case="TBO">
         <form th:action="@{/insert_pledge_subject_tbo}" th:method="post" th:object="${pledgeSubjectTBO}" action="pledge_subject_card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectTBO.getPledgeAgreements()}">
@@ -126,7 +126,7 @@
             <button type="submit">Добавить новый предмет</button>
         </form>
     </div>
-    <div th:case="'Недвижимость - ЗУ - собственность'">
+    <div th:case="LAND_OWNERSHIP">
         <form th:action="@{/insert_pledge_subject_landOwn}" th:method="post" th:object="${pledgeSubjectRealtyLandOwnership}" action="pledge_subject_card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectRealtyLandOwnership.getPledgeAgreements()}">
@@ -150,7 +150,7 @@
             <button type="submit">Добавить новый предмет</button>
         </form>
     </div>
-    <div th:case="'Недвижимость - ЗУ - право аренды'">
+    <div th:case="LAND_LEASE">
         <form th:action="@{/insert_pledge_subject_landLease}" th:method="post" th:object="${pledgeSubjectRealtyLandLease}" action="pledge_subject_card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectRealtyLandLease.getPledgeAgreements()}">
@@ -174,7 +174,7 @@
             <button type="submit">Добавить новый предмет</button>
         </form>
     </div>
-    <div th:case="'Недвижимость - здание/сооружение'">
+    <div th:case="BUILDING">
         <form th:action="@{/insert_pledge_subject_building}" th:method="post" th:object="${pledgeSubjectRealtyBuilding}" action="pledge_subject_card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectRealtyBuilding.getPledgeAgreements()}">
@@ -198,7 +198,7 @@
             <button type="submit">Добавить новый предмет</button>
         </form>
     </div>
-    <div th:case="'Недвижимость - помещение'">
+    <div th:case="PREMISE">
         <form th:action="@{/insert_pledge_subject_room}" th:method="post" th:object="${pledgeSubjectRealtyRoom}" action="pledge_subject_card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectRealtyRoom.getPledgeAgreements()}">
