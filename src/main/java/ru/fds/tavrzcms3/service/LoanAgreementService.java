@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
+import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
 import ru.fds.tavrzcms3.specification.SpecificationBuilder;
@@ -31,45 +33,45 @@ public class LoanAgreementService {
     }
 
     public int countOfCurrentLoanAgreementsByPledgeAgreement(PledgeAgreement pledgeAgreement){
-        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, "открыт");
+        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, StatusOfAgreement.OPEN);
     }
 
     public List<LoanAgreement> getCurrentLoanAgreementsByPledgeAgreement(PledgeAgreement pledgeAgreement){
-        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, "открыт");
+        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, StatusOfAgreement.OPEN);
     }
 
     public int countOfClosedLoanAgreementsByPledgeAgreement(PledgeAgreement pledgeAgreement){
-        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, "закрыт");
+        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, StatusOfAgreement.CLOSED);
     }
 
     public List<LoanAgreement> getClosedLoanAgreementsByPledgeAgreement(PledgeAgreement pledgeAgreement){
-        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, "закрыт");
+        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, StatusOfAgreement.CLOSED);
     }
 
     public int countOfCurrentLoanAgreementsByEmployee(Employee employee){
         List<Client> loaners = clientService.getClientByEmployee(employee);
-        return repositoryLoanAgreement.countAllByClientInAndStatusLAEquals(loaners, "открыт");
+        return repositoryLoanAgreement.countAllByClientInAndStatusLAEquals(loaners, StatusOfAgreement.OPEN);
     }
 
     public Page<LoanAgreement> getCurrentLoanAgreementsByEmployee(Pageable pageable, Employee employee){
         List<Client> clientList = repositoryClient.findByEmployee(employee);
-        return repositoryLoanAgreement.findByClientInAndStatusLAEquals(clientList, "открыт", pageable);
+        return repositoryLoanAgreement.findByClientInAndStatusLAEquals(clientList, StatusOfAgreement.OPEN, pageable);
     }
 
     public int countOfCurrentLoanAgreementsByLoaner(Client client){
-        return repositoryLoanAgreement.countAllByClientAndStatusLAEquals(client, "открыт");
+        return repositoryLoanAgreement.countAllByClientAndStatusLAEquals(client, StatusOfAgreement.OPEN);
     }
 
     public List<LoanAgreement> getCurrentLoanAgreementsByLoaner(Client client){
-        return repositoryLoanAgreement.findByClientAndStatusLAEquals(client, "открыт");
+        return repositoryLoanAgreement.findByClientAndStatusLAEquals(client, StatusOfAgreement.OPEN);
     }
 
     public int countOfClosedLoanAgreementsByLoaner(Client client){
-        return repositoryLoanAgreement.countAllByClientAndStatusLAEquals(client, "закрыт");
+        return repositoryLoanAgreement.countAllByClientAndStatusLAEquals(client, StatusOfAgreement.CLOSED);
     }
 
     public List<LoanAgreement> getClosedLoanAgreementsByLoaner(Client client){
-        return repositoryLoanAgreement.findByClientAndStatusLAEquals(client, "закрыт");
+        return repositoryLoanAgreement.findByClientAndStatusLAEquals(client, StatusOfAgreement.CLOSED);
     }
 
     public Page<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){
@@ -130,7 +132,7 @@ public class LoanAgreementService {
             builder.with("debtLA", searchParam.get("debtOption"), searchParam.get("debt"), false);
         if(!searchParam.get("interestRate").isEmpty())
             builder.with("interestRateLA", searchParam.get("interestRateOption"), searchParam.get("interestRate"), false);
-        builder.with("statusLA", ":", searchParam.get("statusLA"), false);
+        builder.with("statusLA", ":", StatusOfAgreement.valueOf(searchParam.get("statusLA")), false);
 
         Specification<LoanAgreement> spec = builder.build();
 

@@ -3,22 +3,13 @@ package ru.fds.tavrzcms3.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
+import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -52,15 +43,13 @@ public class PledgeAgreement {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateEndPA;
 
-	@Pattern(regexp = "перв|посл",
-			message = "Возможные варианты: перв, посл")
+	@Convert(converter = TypeOfPledgeAgreement.Converter.class)
 	@Column(name ="perv_posl")
-	private String pervPosl;
+	private TypeOfPledgeAgreement pervPosl;
 
-	@Pattern(regexp = "открыт|закрыт",
-			message = "Возможные варианты: открыт, закрыт")
+	@Convert(converter = StatusOfAgreement.Converter.class)
 	@Column(name ="status")
-	private String statusPA;
+	private StatusOfAgreement statusPA;
 	
 	@Column(name ="notice")
 	private String noticePA;

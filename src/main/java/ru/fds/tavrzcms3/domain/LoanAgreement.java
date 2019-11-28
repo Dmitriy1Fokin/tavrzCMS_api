@@ -2,23 +2,12 @@ package ru.fds.tavrzcms3.domain;
 
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.*;
 
 @Data
@@ -50,10 +39,9 @@ public class LoanAgreement {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateEndLA;
 
-	@Pattern(regexp = "открыт|закрыт",
-			message = "Возможные варианты: открыт, закрыт")
+	@Convert(converter = StatusOfAgreement.Converter.class)
 	@Column(name ="status")
-	private String statusLA;
+	private StatusOfAgreement statusLA;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")

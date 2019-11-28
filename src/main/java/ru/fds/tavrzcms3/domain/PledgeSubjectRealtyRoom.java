@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +19,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @AllArgsConstructor
 @SuperBuilder
@@ -43,7 +46,7 @@ public class PledgeSubjectRealtyRoom extends PledgeSubjectRealty {
 	private MarketSegment marketSegmentBuilding;
 
 	public PledgeSubjectRealtyRoom(){
-		super.setTypeOfCollateral("Недвижимость - помещение");
+		super.setTypeOfCollateral(TypeOfCollateral.PREMISE);
 	}
 
 	@Override

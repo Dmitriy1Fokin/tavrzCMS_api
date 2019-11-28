@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Length;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,12 +17,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @SuperBuilder
 @Entity
@@ -33,8 +36,9 @@ public class PledgeSubjectRealtyBuilding extends PledgeSubjectRealty {
 	private int readinessDegree;
 
 	@NotNull(message = "Обязательно для заполнения")
-	@Min(value = 1000, message = "Неверное значение")
-	@Max(value = 9999, message = "Неверное значение")
+	@Min(value = 1800, message = "Неверное значение")
+	@Max(value = 2100, message = "Неверное значение")
+	@Length(min = 4, max = 4, message = "Неверное значение")
 	@Column(name ="year_of_construction")
 	private int yearOfConstruction;
 
@@ -49,7 +53,7 @@ public class PledgeSubjectRealtyBuilding extends PledgeSubjectRealty {
 	private MarketSegment marketSegment;
 
 	public PledgeSubjectRealtyBuilding(){
-		super.setTypeOfCollateral("Недвижимость - здание/сооружение");
+		super.setTypeOfCollateral(TypeOfCollateral.BUILDING);
 	}
 
 	@Override

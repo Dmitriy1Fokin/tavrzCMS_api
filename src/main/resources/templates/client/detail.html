@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Клиент</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        .containerTable{
+            width: 3000px;
+        }
+        .customTable, .customTable td {
+            border: 1px solid lightgray;
+            padding: 5px;
+            table-layout: fixed;
+        }
+        .nav-item{
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="fragments/nav :: user_nav_bar"></div>
+
+<h1 th:text="'Клиент: ' + ${@clientService.getFullNameClient(client)}">Клиент ЮЛ</h1>
+<div th:switch="${client.getTypeOfClient().name()}">
+    <div th:case="LEGAL_ENTITY">
+        <label>ИНН:</label>
+        <span th:text="${client.getInn()}"></span>
+    </div>
+    <div th:case="INDIVIDUAL">
+        <label>Паспорт:</label>
+        <span th:text="${client.getPasportNum()}"></span>
+    </div>
+</div>
+<br>
+
+<label>Ответственный сотрудник: </label>
+<span th:text="${client.getEmployee().getSurname()} + ' ' + ${client.getEmployee().name}"></span>
+<br>
+<br>
+<label>Клиентский менеджер: </label>
+<span th:text="${client.getClientManager().getSurname()} + ' ' + ${client.getClientManager().getName()}"></span>
+<br>
+<br>
+<label>Id клиента:</label>
+<span th:text="${client.getClientId()}"></span>
+<br>
+<br>
+<a th:href="@{client/client_card_update(clientId=${client.getClientId()})}"
+   href="client/card_update.html"
+   th:text="'Изменить данные клиента'">Изменить данные клиента</a>
+<br>
+<br>
+<a th:href="@{pledge_agreement/card(whatDo='newPA', clientId=${client.getClientId()})}"
+   href="../pledge_agreement/card.html"
+   th:text="'Добавить новый договор залога'">Добавить новый договор залога</a>
+<br>
+<br>
+<a th:href="@{loan_agreement/card(whatDo='newLA', clientId=${client.getClientId()})}"
+   href="../loan_agreement/card.html"
+   th:text="'Добавить новый кредитный договор'">Добавить новый кредитный договор</a>
+<br>
+<br>
+
+<div th:if="${@pledgeAgreementService.countOfCurrentPledgeAgreementsByPledgor(client) &gt; 0}">
+    <a th:href="@{monitoring/card(whereUpdateMonitoring='pledgor', pledgorId=${client.getClientId()})}"
+       href="../monitoring/card.html"
+       th:text="'Обновить мониторинг предметов залога по всем договорам залога залогодателя'">Обновить мониторинг предметов залога по всем договорам залога залогодателя</a>
+    <br>
+    <br>
+
+    <h2>Действующее договоры залога</h2>
+    <div class="containerTable">
+        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${@pledgeAgreementService.getCurrentPledgeAgreementsByPledgor(client)})"></div>
+    </div>
+    <br>
+    <br>
+</div>
+
+<div th:if="${@pledgeAgreementService.countOfClosedPledgeAgreementsByPledgor(client) &gt; 0}">
+    <h2>Закрытые договоры залога</h2>
+    <div class="containerTable">
+        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${@pledgeAgreementService.getClosedPledgeAgreementsByPledgor(client)})"></div>
+    </div>
+    <br>
+    <br>
+</div>
+
+
+<div th:if="${@loanAgreementService.countOfCurrentLoanAgreementsByLoaner(client) &gt; 0}">
+    <h2>Действующее кредитные договоры</h2>
+    <div class="containerTable">
+        <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@loanAgreementService.getCurrentLoanAgreementsByLoaner(client)})"></div>
+    </div>
+    <br>
+    <br>
+</div>
+<div th:if="${@loanAgreementService.countOfClosedLoanAgreementsByLoaner(client) &gt; 0}">
+    <h2>Закрытые кредитные договоры</h2>
+    <div class="containerTable">
+        <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@loanAgreementService.getClosedLoanAgreementsByLoaner(client)})"></div>
+    </div>
+    <br>
+    <br>
+</div>
+
+</body>
+</html>

@@ -1,12 +1,13 @@
 package ru.fds.tavrzcms3.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 
 import java.util.Date;
 
@@ -25,6 +26,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @SuperBuilder
 @Entity
@@ -67,7 +69,7 @@ public class PledgeSubjectRealtyLandLease extends PledgeSubjectRealty {
 	private LandCategory landCategory;
 
 	public PledgeSubjectRealtyLandLease(){
-		super.setTypeOfCollateral("Недвижимость - ЗУ - право аренды");
+		super.setTypeOfCollateral(TypeOfCollateral.LAND_LEASE);
 	}
 
 	@Override

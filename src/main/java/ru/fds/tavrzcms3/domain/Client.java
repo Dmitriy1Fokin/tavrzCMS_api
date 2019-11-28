@@ -2,6 +2,7 @@ package ru.fds.tavrzcms3.domain;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 
 import java.util.List;
 
@@ -22,9 +23,9 @@ public class Client {
 	@Column(name ="client_id")
 	private long clientId;
 
-	@Pattern(regexp = "юл|фл", message = "Возможные варианты: юл, фл")
+	@Convert(converter = TypeOfClient.Converter.class)
 	@Column(name = "type_of_client")
-	private String typeOfClient;
+	private TypeOfClient typeOfClient;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "client_manager_id")

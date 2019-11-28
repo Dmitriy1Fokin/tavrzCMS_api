@@ -4,16 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Length;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
+import ru.fds.tavrzcms3.dictionary.TypeOfEquip;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @SuperBuilder
 @Entity
@@ -31,23 +33,18 @@ public class PledgeSubjectEquipment extends PledgeSubject {
 	@Column(name ="serial_number")
 	private String serialNum;
 
-	@Min(value = 1000, message = "Неверное значение")
-	@Max(value = 9999, message = "Неверное значение")
+	@Min(value = 1900, message = "Неверное значение")
+	@Max(value = 2100, message = "Неверное значение")
+	@Length(min = 4, max = 4, message = "Неверное значение")
 	@Column(name ="year_of_manufacture")
 	private Integer yearOfManufacture;
 	
 	@Column(name ="inventory_number")
 	private String inventoryNum;
 
-	@Pattern(regexp = "металлообработка|лесообработка|торговое|офисное|сети ито|рекламное|пищевое|автомобильное|азс|" +
-			"химическое|измерительное|медицинское|нефте-газовое|карьерное и горное|подъемное|авиационное|строительое|" +
-			"ресторанное|транспортировка|упаковачное|хранение|с/х назначения|иное",
-			message = "Возможные варианты: металлообработка, лесообработка, торговое, офисное, сети ито, рекламное, " +
-					"пищевое, автомобильное, азс, химическое, измерительное, медицинское, нефте-газовое, " +
-					"карьерное и горное, подъемное, авиационное, строительое, ресторанное, транспортировка, упаковачное, " +
-					"хранение, с/х назначения, иное")
+	@Convert(converter = TypeOfEquip.Converter.class)
 	@Column(name ="type_of_equipment")
-	private String typeOfquipment;
+	private TypeOfEquip typeOfEquipment;
 
 	@Positive(message = "Значение должно быть больше нуля")
 	@Column(name = "productivity")
@@ -62,7 +59,7 @@ public class PledgeSubjectEquipment extends PledgeSubject {
 	private PledgeSubject pledgeSubject;
 
 	public PledgeSubjectEquipment(){
-		super.setTypeOfCollateral("Оборудование");
+		super.setTypeOfCollateral(TypeOfCollateral.EQUIPMENT);
 	}
 
 	@Override
@@ -73,7 +70,7 @@ public class PledgeSubjectEquipment extends PledgeSubject {
 				", serialNum='" + serialNum + '\'' +
 				", yearOfManufacture=" + yearOfManufacture +
 				", inventoryNum='" + inventoryNum + '\'' +
-				", typeOfquipment='" + typeOfquipment + '\'' +
+				", typeOfquipment='" + typeOfEquipment + '\'' +
 				'}';
 	}
 }

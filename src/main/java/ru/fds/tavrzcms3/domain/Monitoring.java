@@ -3,26 +3,20 @@ package ru.fds.tavrzcms3.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.fds.tavrzcms3.dictionary.StatusOfMonitoring;
+import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
@@ -40,17 +34,17 @@ public class Monitoring {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateMonitoring;
 
-	@Pattern(regexp = "в наличии|утрата|частичная утрата", message = "Возможные варианты: в наличии, утрата, частичная утрата")
+	@Convert(converter = StatusOfMonitoring.Converter.class)
 	@Column(name ="status")
-	private String statusMonitoring;
+	private StatusOfMonitoring statusMonitoring;
 
 	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="employee")
 	private String employee;
 
-	@Pattern(regexp = "документарный|визуальный", message = "Возможные варианты: документарный, визуальный")
+	@Convert(converter = TypeOfMonitoring.Converter.class)
 	@Column(name ="type")
-	private String typeOfMonitoring;
+	private TypeOfMonitoring typeOfMonitoring;
 
 	@Column(name = "notice")
 	private String notice;
@@ -61,10 +55,6 @@ public class Monitoring {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pledge_subject_id")
 	private PledgeSubject pledgeSubject;
-
-	public Monitoring(){
-
-	}
 
 	public Monitoring(Monitoring monitoring){
 		this.monitoringId = monitoring.monitoringId;

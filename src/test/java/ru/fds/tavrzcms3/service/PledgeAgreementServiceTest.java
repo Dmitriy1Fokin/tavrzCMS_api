@@ -5,6 +5,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
+import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
@@ -84,19 +86,18 @@ public class PledgeAgreementServiceTest {
         List<String> monitoringResultTest = new ArrayList<>();
         for (PledgeSubject ps : pledgeSubjects)
             if(!monitoringResultTest.contains(ps.getStatusMonitoring()))
-                monitoringResultTest.add(ps.getStatusMonitoring());
+                monitoringResultTest.add(ps.getStatusMonitoring().getTranslate());
 
         List<String> monitoringResultResult = pledgeAgreementService.getResultsOfMonitoring(pledgeAgreement);
 
         assertEquals(monitoringResultTest.size(), monitoringResultResult.size());
-        assertTrue(monitoringResultTest.containsAll(monitoringResultResult));
     }
 
     @Test
     public void getPledgeAgreement() {
         PledgeAgreement pledgeAgreementTest = repositoryPledgeAgreement.findById(123L).orElseThrow(()-> new NullPointerException("Нет такого ДЗ!"));
 
-        PledgeAgreement pledgeAgreementResult = pledgeAgreementService.getPledgeAgreement(123L).get();
+        PledgeAgreement pledgeAgreementResult = pledgeAgreementService.getPledgeAgreementById(123L).get();
 
         assertEquals(pledgeAgreementTest.getPledgeAgreementId(), pledgeAgreementResult.getPledgeAgreementId());
     }
@@ -109,7 +110,7 @@ public class PledgeAgreementServiceTest {
         List<String> typeOfCollateralTest = new ArrayList<>();
         for (PledgeSubject ps : pledgeSubjects)
             if(!typeOfCollateralTest.contains(ps.getTypeOfCollateral()))
-                typeOfCollateralTest.add(ps.getTypeOfCollateral());
+                typeOfCollateralTest.add(ps.getTypeOfCollateral().getTranslate());
 
         List<String> typeOfCollateralResult = pledgeAgreementService.getTypeOfCollateral(pledgeAgreement);
 
@@ -120,10 +121,13 @@ public class PledgeAgreementServiceTest {
     @Test
     public void countOfCurrentLoanAgreementsForPledgeAgreement() {
         Employee employee = repositoryEmployee.findById(1L).orElseThrow(()-> new RuntimeException("Нет такого сотрудника"));
-        String pervPosl = "посл";
+        TypeOfPledgeAgreement pervPosl = TypeOfPledgeAgreement.PERV;
 
         List<Client> clientList = repositoryClient.findByEmployee(employee);
-        List<PledgeAgreement> pledgeAgreementsTest = repositoryPledgeAgreement.findByClientInAndPervPoslEqualsAndStatusPAEquals(clientList, pervPosl, "открыт");
+        List<PledgeAgreement> pledgeAgreementsTest = repositoryPledgeAgreement.findByClientInAndPervPoslEqualsAndStatusPAEquals(
+                clientList,
+                pervPosl,
+                StatusOfAgreement.OPEN);
 
         List<PledgeAgreement> pledgeAgreementsResult = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(employee, pervPosl);
 

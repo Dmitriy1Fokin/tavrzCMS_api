@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Добавить договор страхования'">Добавить договор страхования</title>
+    <style type="text/css">
+        .nav-item{
+            display: inline;
+        }
+        .row{
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="fragments/nav :: user_nav_bar"></div>
+
+<h1 th:text="'Добавить договор страхования'">Добавить договор страхования</h1>
+
+<form th:action="@{/insurance/insert}" th:method="post" th:object="${insurance}" action="card.html">
+    <input type="hidden", th:field="*{pledgeSubject}" th:value="${insurance.getPledgeSubject()}">
+
+    <div class="row">
+        <label>№ договора страхования</label>
+        <input required th:field="*{numInsurance}" type="text"/>
+        <div th:if="${#fields.hasErrors('numInsurance')}" th:errors="*{numInsurance}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дата договора страхования</label>
+        <input required th:field="*{dateInsuranceContract}" type="date"/>
+        <div th:if="${#fields.hasErrors('dateInsuranceContract')}" th:errors="*{dateInsuranceContract}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дата начала страхования</label>
+        <input required th:field="*{dateBeginInsurance}" type="date"/>
+        <div th:if="${#fields.hasErrors('dateBeginInsurance')}" th:errors="*{dateBeginInsurance}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Дата окончания страхования</label>
+        <input required th:field="*{dateEndInsurance}" type="date"/>
+        <div th:if="${#fields.hasErrors('dateEndInsurance')}" th:errors="*{dateEndInsurance}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Страховая сумма</label>
+        <input type="number" step="0.01" required th:field="*{sumInsured}"/>
+        <div th:if="${#fields.hasErrors('sumInsured')}" th:errors="*{sumInsured}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Оплата страховой премии</label>
+        <select required th:field="*{paymentOfInsurancePremium}">
+            <option value="нет">нет</option>
+            <option value="да">да</option>
+        </select>
+        <div th:if="${#fields.hasErrors('paymentOfInsurancePremium')}" th:errors="*{paymentOfInsurancePremium}">Name Error</div>
+    </div>
+    <br>
+    <div class="row">
+        <label>Размер франшизы</label>
+        <input type="number" step="0.01" required th:field="*{franchiseAmount}"/>
+        <div th:if="${#fields.hasErrors('franchiseAmount')}" th:errors="*{franchiseAmount}">Name Error</div>
+        <!--<div th:if="${#fields.hasErrors('franchiseAmount')}"-->
+             <!--th:text="'Неверное значение франшизы'">Неверное значение франшизы</div>-->
+    </div>
+    <br>
+
+    <button type="submit">Обновить</button>
+</form>
+
+</body>
+</html>

@@ -14,7 +14,7 @@ import java.util.List;
 public interface RepositoryPledgeSubject extends JpaRepository<PledgeSubject, Long>, JpaSpecificationExecutor<PledgeSubject> {
     PledgeSubject findByPledgeSubjectId(long id);
     List<PledgeSubject> findByPledgeAgreementsIn(List<PledgeAgreement> pledgeAgreements);
-    List<PledgeSubject> findByPledgeAgreements(PledgeAgreement pledgeEgreements);
+    List<PledgeSubject> findByPledgeAgreements(PledgeAgreement pledgeAgreements);
     boolean existsByPledgeAgreementsAndDateMonitoringBetween(PledgeAgreement pledgeAgreement, Date firstDate, Date secondDate);
     boolean existsByPledgeAgreementsAndDateMonitoringBefore(PledgeAgreement pledgeAgreement, Date beforeDate);
     boolean existsByPledgeAgreementsAndDateConclusionBetween(PledgeAgreement pledgeAgreement, Date firstDate, Date secondDate);

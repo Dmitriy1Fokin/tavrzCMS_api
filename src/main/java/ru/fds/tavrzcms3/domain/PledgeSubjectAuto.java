@@ -2,18 +2,19 @@ package ru.fds.tavrzcms3.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Length;
+import ru.fds.tavrzcms3.dictionary.TypeOfAuto;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @SuperBuilder
 @Entity
@@ -39,20 +40,18 @@ public class PledgeSubjectAuto extends PledgeSubject {
 	@Column(name ="num_of_pts")
 	private String numOfPTS;
 
-	@Min(value = 1000, message = "Неверное значение")
-	@Max(value = 9999, message = "Неверное значение")
+	@Min(value = 1900, message = "Неверное значение")
+	@Max(value = 2100, message = "Неверное значение")
+	@Length(min = 4, max = 4, message = "Неверное значение")
 	@Column(name ="year_of_manufacture")
 	private Integer yearOfManufacture;
 	
 	@Column(name ="inventory_number")
 	private String inventoryNum;
 
-	@Pattern(regexp = "бульдозер|экскаватор|прицеп|погрузчик|кран|дорожно-строительная|комбайн|трактор|" +
-			"пассажирский транспорт|грузовой транспорт|легковой транспорт|ж/д транспорт|иное",
-			message = "Возможные варианты: бульдозе, экскаватор, прицеп, погрузчик, кран, дорожно-строительная, " +
-					"комбайн, трактор, пассажирский транспорт, грузовой транспорт, легковой транспорт, ж/д транспорт, иное")
+	@Convert(converter = TypeOfAuto.Converter.class)
 	@Column(name ="type_of_auto")
-	private String typeOfAuto;
+	private TypeOfAuto typeOfAuto;
 
 	@Positive(message = "Значение должно быть больше нуля")
 	@Column(name ="horsepower")
@@ -64,7 +63,7 @@ public class PledgeSubjectAuto extends PledgeSubject {
 	private PledgeSubject pledgeSubject;
 
 	public PledgeSubjectAuto(){
-		super.setTypeOfCollateral("Авто/спецтехника");
+		super.setTypeOfCollateral(TypeOfCollateral.AUTO);
 	}
 
 	@Override

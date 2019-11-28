@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
 import ru.fds.tavrzcms3.specification.SpecificationBuilder;
@@ -48,12 +49,19 @@ public class ClientService {
     }
 
     public String getFullNameClient(Client client){
-        if(client.getClass() == ClientIndividual.class){
+        if(client instanceof ClientIndividual){
+            System.out.println("INDIVIDUAL");
+        }else if(client instanceof ClientLegalEntity){
+            System.out.println("LEGAL ENTITY");
+        }
+
+
+        if(client.getTypeOfClient() == TypeOfClient.INDIVIDUAL){
             ClientIndividual clientIndividual = repositoryClientIndividual.findByClient(client);
 
             return clientIndividual.getSurname() + " " + clientIndividual.getName() + " " + clientIndividual.getPatronymic();
 
-        }else if(client.getClass() == ClientLegalEntity.class){
+        }else if(client.getTypeOfClient() == TypeOfClient.LEGAL_ENTITY){
             ClientLegalEntity clientLegalEntity = repositoryClientLegalEntity.findByClient(client);
 
             return clientLegalEntity.getOrganizationalForm() + " " + clientLegalEntity.getName();
@@ -69,7 +77,7 @@ public class ClientService {
 
         SpecificationBuilder builder = new SpecificationBuilderImpl();
 
-        if(searchParam.get("clientOption").equals("юл")){
+        if(searchParam.get("clientOption").equals(TypeOfClient.LEGAL_ENTITY.name())){
             if(!searchParam.get("clientName").isEmpty())
                 builder.with("name", ":", searchParam.get("clientName"), false);
             if(!searchParam.get("inn").isEmpty())
