@@ -284,12 +284,12 @@ public class PledgeAgreementService {
             }
             else{
                 String[] words = searchParam.get("client").split("\\s");
-                List<ClientIndividual> pledgors = new ArrayList<>();
+                List<ClientIndividual> pledgors = clientService.getClientIndividualByFio(words);
 
-                if(words.length == 1)
-                    pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCase(words[0]);
-                else if(words.length > 1)
-                    pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(words[0], words[1]);
+//                if(words.length == 1)
+//                    pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCase(words[0]);
+//                else if(words.length > 1)
+//                    pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(words[0], words[1]);
 
                 if(pledgors.isEmpty())
                     builder.with("client", ":", null, false);

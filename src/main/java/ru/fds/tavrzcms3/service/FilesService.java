@@ -264,20 +264,20 @@ public class FilesService {
                 if(isCellEmpty(row.getCell(numColumnIndividualSurname)))
                     throw new InvalidFormatException("Отсутствует фамилия в строке " + (i+1));
                 else if(row.getCell(numColumnIndividualSurname).getCellType()==CellType.STRING)
-                    clientIndividual.setSurname(row.getCell(numColumnIndividualSurname).getStringCellValue());
+                    clientIndividual.getPersonContact().setSurname(row.getCell(numColumnIndividualSurname).getStringCellValue());
                 else
                     throw new InvalidFormatException("Неверный формат/значение фамилии в строке " + (i+1));
 
                 if(isCellEmpty(row.getCell(numColumnIndividualName)))
                     throw new InvalidFormatException("Отсутствует имя в строке " + (i+1));
                 else if(row.getCell(numColumnIndividualName).getCellType()==CellType.STRING)
-                    clientIndividual.setName(row.getCell(numColumnIndividualName).getStringCellValue());
+                    clientIndividual.getPersonContact().setName(row.getCell(numColumnIndividualName).getStringCellValue());
                 else
                     throw new InvalidFormatException("Неверный формат/значение имени в строке " + (i+1));
 
                 if(isCellEmpty(row.getCell(numColumnIndividualPatronymic))){}
                 else if(row.getCell(numColumnIndividualPatronymic).getCellType()==CellType.STRING)
-                    clientIndividual.setPatronymic(row.getCell(numColumnIndividualPatronymic).getStringCellValue());
+                    clientIndividual.getPersonContact().setPatronymic(row.getCell(numColumnIndividualPatronymic).getStringCellValue());
                 else
                     throw new InvalidFormatException("Неверный формат/значение отчества в строке " + (i+1));
 

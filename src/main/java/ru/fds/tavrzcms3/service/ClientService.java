@@ -1,7 +1,6 @@
 package ru.fds.tavrzcms3.service;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 import ru.fds.tavrzcms3.domain.*;
+import ru.fds.tavrzcms3.domain.embed.PersonContact;
 import ru.fds.tavrzcms3.repository.*;
 import ru.fds.tavrzcms3.specification.SpecificationBuilder;
 import ru.fds.tavrzcms3.specification.SpecificationBuilderImpl;
@@ -18,12 +18,18 @@ import java.util.*;
 @Service
 public class ClientService {
 
-    @Autowired
-    RepositoryClient repositoryClient;
-    @Autowired
-    RepositoryClientLegalEntity repositoryClientLegalEntity;
-    @Autowired
-    RepositoryClientIndividual repositoryClientIndividual;
+    private final RepositoryClient repositoryClient;
+    private final RepositoryClientLegalEntity repositoryClientLegalEntity;
+    private final RepositoryClientIndividual repositoryClientIndividual;
+
+    public ClientService(RepositoryClient repositoryClient,
+                         RepositoryClientLegalEntity repositoryClientLegalEntity,
+                         RepositoryClientIndividual repositoryClientIndividual) {
+        this.repositoryClient = repositoryClient;
+        this.repositoryClientLegalEntity = repositoryClientLegalEntity;
+        this.repositoryClientIndividual = repositoryClientIndividual;
+    }
+
 
     public Optional<Client> getClientById(long clientId){
         return repositoryClient.findById(clientId);
@@ -38,14 +44,24 @@ public class ClientService {
     }
 
     public List<ClientIndividual> getClientIndividualByFio(String[] fio){
-        if(fio.length == 1)
-            return repositoryClientIndividual.findBySurnameContainingIgnoreCase(fio[0]);
-        else if(fio.length == 2)
-            return repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(fio[0], fio[1]);
-        else if(fio.length > 2)
-            return repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCaseAndPatronymicContainingIgnoreCase(fio[0], fio[1], fio[2]);
-        else
+        SpecificationBuilder builder = new SpecificationBuilderImpl();
+
+        if(fio.length == 1){
+            builder.with("PersonContactSurname", ":", fio[0], false);
+        }else if(fio.length == 2){
+            builder.with("PersonContactSurname",":", fio[0], false);
+            builder.with("PersonContactName",":", fio[1],false);
+        }else if(fio.length > 2){
+            builder.with("PersonContactSurname",":", fio[0], false);
+            builder.with("PersonContactName",":", fio[1],false);
+            builder.with("PersonContactPatronymic", ":", fio[2],false);
+        }else {
             return new ArrayList<>();
+        }
+
+        Specification<ClientIndividual> specification = builder.build();
+
+        return repositoryClientIndividual.findAll(specification);
     }
 
     public String getFullNameClient(Client client){
@@ -59,7 +75,7 @@ public class ClientService {
         if(client.getTypeOfClient() == TypeOfClient.INDIVIDUAL){
             ClientIndividual clientIndividual = repositoryClientIndividual.findByClient(client);
 
-            return clientIndividual.getSurname() + " " + clientIndividual.getName() + " " + clientIndividual.getPatronymic();
+            return clientIndividual.getPersonContact().getSurname() + " " + clientIndividual.getPersonContact().getName() + " " + clientIndividual.getPersonContact().getPatronymic();
 
         }else if(client.getTypeOfClient() == TypeOfClient.LEGAL_ENTITY){
             ClientLegalEntity clientLegalEntity = repositoryClientLegalEntity.findByClient(client);
@@ -93,15 +109,15 @@ public class ClientService {
                 String[] words = searchParam.get("clientName").split("\\s");
 
                 if(words.length == 1) {
-                    builder.with("surname",":", words[0], false);
+                    builder.with("PersonContactSurname",":", words[0], false);
                 }
                 else if(words.length == 2){
-                    builder.with("surname",":", words[0], false);
-                    builder.with("name",":", words[1],false);
+                    builder.with("PersonContactSurname",":", words[0], false);
+                    builder.with("PersonContactName",":", words[1],false);
                 }else if(words.length >= 3){
-                    builder.with("surname",":", words[0], false);
-                    builder.with("name",":", words[1],false);
-                    builder.with("patronymic", ":", words[2],false);
+                    builder.with("PersonContactSurname",":", words[0], false);
+                    builder.with("PersonContactName",":", words[1],false);
+                    builder.with("PersonContactPatronymic", ":", words[2],false);
                 }
             }
             if(!searchParam.get("pasportNum").isEmpty())
