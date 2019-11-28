@@ -55,7 +55,7 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.getResultsOfMonitoring(pledgeAgreement.getPledgeAgreementId());
     }
 
-    public Optional<PledgeAgreement> getPledgeAgreement(long pledgeAgreementId){
+    public Optional<PledgeAgreement> getPledgeAgreementById(long pledgeAgreementId){
         return repositoryPledgeAgreement.findById(pledgeAgreementId);
     }
 

@@ -3,7 +3,9 @@ package ru.fds.tavrzcms3.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Length;
 import ru.fds.tavrzcms3.dictionary.TypeOfAuto;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 
@@ -12,6 +14,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @SuperBuilder
 @Entity
@@ -37,8 +40,9 @@ public class PledgeSubjectAuto extends PledgeSubject {
 	@Column(name ="num_of_pts")
 	private String numOfPTS;
 
-	@Min(value = 1000, message = "Неверное значение")
-	@Max(value = 9999, message = "Неверное значение")
+	@Min(value = 1900, message = "Неверное значение")
+	@Max(value = 2100, message = "Неверное значение")
+	@Length(min = 4, max = 4, message = "Неверное значение")
 	@Column(name ="year_of_manufacture")
 	private Integer yearOfManufacture;
 	

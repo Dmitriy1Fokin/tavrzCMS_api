@@ -28,14 +28,14 @@
 
 <h1 th:text="'Предметы залога по договору залога №' + ${pledgeAgreement.getNumPA()}">Предметы залога</h1>
 <span th:text="${pledgeAgreement.getPledgeAgreementId()}" id="pledgeAgreementId" hidden></span>
-<a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
+<a th:href="@{/pledge_agreement/detail(pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}" href="detail.html"
    th:text="'Вернуться к договору залога №' + ${pledgeAgreement.getNumPA()}">Вернуться к договору залога</a>
 <br>
 <br>
 <a href="javascript:setVisible('searchBarNewPS');">Добавить новый предмет залога</a>
 <div id="searchBarNewPS" style="display:none">
     <br>
-    <form th:action="@{/pledge_subject_card_new}" th:method="get" action="pledge_subject_card_new.html">
+    <form th:action="@{/pledge_subject/card_new}" th:method="get" action="../pledge_subject/card_new.html">
         <input type="hidden" name="pledgeAgreementId" th:value="${pledgeAgreement.getPledgeAgreementId()}">
         <select required name="typeOfCollateral">
             <option value="AUTO">Авто/спецтехника</option>
@@ -92,8 +92,8 @@
 <br>
 <br>
 
-<a th:href="@{monitoring_card(whereUpdateMonitoring='pa', pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}"
-   href="monitoring_card.html"
+<a th:href="@{monitoring/card(whereUpdateMonitoring='pa', pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}"
+   href="../monitoring/card.html"
    th:text="'Обновить мониторинг по всем предметам договора залога №' + ${pledgeAgreement.getNumPA()}">Обновить мониторинг по всем предметам договора залога</a>
 <br>
 <br>

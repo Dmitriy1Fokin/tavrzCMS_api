@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 
@@ -19,6 +20,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @AllArgsConstructor
 @SuperBuilder

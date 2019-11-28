@@ -28,6 +28,8 @@ public class CostHistoryController {
     private final EmployeeService employeeService;
     private final PledgeAgreementService pledgeAgreementService;
 
+    private static final String MSG_WRONG_LINK = "Неверная ссылка";
+
     public CostHistoryController(PledgeSubjectService pledgeSubjectService,
                                  CostHistoryService costHistoryService,
                                  EmployeeService employeeService,
@@ -42,7 +44,7 @@ public class CostHistoryController {
     public String conclusionsPage(@RequestParam("employeeId") long employeeId,
                                                  Model model){
 
-        Employee employee = employeeService.getEmployeeById(employeeId).orElseThrow(() -> new RuntimeException("Неверная ссылка"));
+        Employee employee = employeeService.getEmployeeById(employeeId).orElseThrow(() -> new RuntimeException(MSG_WRONG_LINK));
         List<PledgeAgreement> pledgeAgreementListWithConclusionNotDone = pledgeAgreementService.getPledgeAgreementWithConclusionNotDone(employee);
         List<PledgeAgreement> pledgeAgreementListWithConclusionIsDone = pledgeAgreementService.getPledgeAgreementWithConclusionIsDone(employee);
         List<PledgeAgreement> pledgeAgreementListWithConclusionOverdue = pledgeAgreementService.getPledgeAgreementWithConclusionOverDue(employee);
@@ -56,7 +58,8 @@ public class CostHistoryController {
     @GetMapping("pledge_subject")
     public String costHistoryPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
                                   Model model){
-        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId)
+                .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
         List<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(pledgeSubject);
         model.addAttribute("pledgeSubject", pledgeSubject);
         model.addAttribute("costHistoryList", costHistoryList);
@@ -67,7 +70,8 @@ public class CostHistoryController {
     @GetMapping("/card")
     public String costHistoryCard(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
                                      Model model){
-        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId)
+                .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
         CostHistory costHistory = new CostHistory();
         costHistory.setPledgeSubject(pledgeSubject);
         costHistory.setRsDz(pledgeSubject.getRsDz());

@@ -26,13 +26,13 @@
 
 <h1 th:text="'Обременения для предмета залога:' + ${pledgeSubject.getName()}">Обременения для предмета залога</h1>
 
-<a th:href="@{/pledge_subject_detail(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
-   href="pledge_subject_detail.html"
+<a th:href="@{pledge_subject/detail(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
+   href="../pledge_subject/detail.html"
    th:text="'Вернуться к предмету залога ' + ${pledgeSubject.getName()}">Вернуться к предмету залога</a>
 <br>
 <br>
-<a th:href="@{encumbrance_card(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
-   href="encumbrance_card.html"
+<a th:href="@{encumbrance/card(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
+   href="card.html"
    th:text="'Добавить обременение'">Добавить обременение</a>
 <br>
 <br>

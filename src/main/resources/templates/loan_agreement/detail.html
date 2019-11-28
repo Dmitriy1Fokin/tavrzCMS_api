@@ -49,7 +49,7 @@
 <br>
 <br>
 <label>Заемщик:</label>
-<a th:href="@{/client(clientId=${loanAgreement.getClient().getClientId()})}" href="client.html"
+<a th:href="@{/client/detail(clientId=${loanAgreement.getClient().getClientId()})}" href="../client/detail.html"
    th:text="${@clientService.getFullNameClient(loanAgreement.getClient())}">Заемщик</a>
 <br>
 <br>
@@ -77,8 +77,8 @@
 <span th:text="${loanAgreement.getStatusLA().getTranslate()}">н/д</span>
 <br>
 <br>
-<a th:href="@{loan_agreement_card(whatDo='changeLA', loanAgreementId=${loanAgreement.getLoanAgreementId()})}"
-   href="loan_agreement_card.html"
+<a th:href="@{/loan_agreement/card(whatDo='changeLA', loanAgreementId=${loanAgreement.getLoanAgreementId()})}"
+   href="card.html"
    th:text="'Изменить данные'">Изменить данные</a>
 <br>
 <br>

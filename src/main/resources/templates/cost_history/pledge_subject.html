@@ -26,8 +26,8 @@
 
 <h1 th:text="'История изменения стоимостей предмета залога:' + ${pledgeSubject.getName()}">История изменения стоимостей предмета залога</h1>
 
-<a th:href="@{/pledge_subject_detail(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
-   href="../pledge_subject_detail.html"
+<a th:href="@{/pledge_subject/detail(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
+   href="../pledge_subject/detail.html"
    th:text="'Вернуться к предмету залога ' + ${pledgeSubject.getName()}">Вернуться к предмету залога</a>
 <br>
 <br>

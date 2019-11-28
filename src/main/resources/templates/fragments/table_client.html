@@ -23,7 +23,7 @@
                 <td th:text="${clientStat.count}"></td>
 
                 <td>
-                    <a th:href="@{/client(clientId=${client.getClientId()})}" href="client.html"
+                    <a th:href="@{/client/detail(clientId=${client.getClientId()})}" href="../client/detail.html"
                        th:text="${@clientService.getFullNameClient(client)}">Клиент</a>
                 </td>
 

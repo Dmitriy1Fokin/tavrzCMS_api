@@ -26,11 +26,11 @@
             <tr>
                 <td th:text="${countStat.index + 1}"></td>
                 <td>
-                    <a th:href="@{/loan_agreement_detail(loanAgreementId=${la.getLoanAgreementId()})}" href="loan_agreement_detail.html"
+                    <a th:href="@{/loan_agreement/detail(loanAgreementId=${la.getLoanAgreementId()})}" href="../loan_agreement/detail.html"
                        th:text="${la.getNumLA()}">№ КД</a>
                 </td>
                 <td>
-                    <a th:href="@{/client(clientId=${la.getClient().getClientId()})}" href="client.html"
+                    <a th:href="@{/client/detail(clientId=${la.getClient().getClientId()})}" href="../client/detail.html"
                        th:text="${@clientService.getFullNameClient(la.getClient())}"></a>
                 </td>
                 <td th:text="${#dates.format(la.getDateBeginLA(), 'dd.MM.yyyy')}">н/д</td>

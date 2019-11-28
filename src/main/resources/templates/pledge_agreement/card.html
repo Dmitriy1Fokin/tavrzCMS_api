@@ -25,7 +25,7 @@
 
 <div th:switch="${whatDo}">
     <div th:case="changePA">
-        <form th:action="@{/pledge_agreement_card}" th:method="post" th:object="${pledgeAgreement}" action="pledge_agreement_card.html">
+        <form th:action="@{/pledge_agreement/update_insert}" th:method="post" th:object="${pledgeAgreement}" action="card.html">
             <input type="hidden", name="whatDo" th:value="${whatDo}">
             <input type="hidden", th:field="*{pledgeAgreementId}" th:value="${pledgeAgreement.getPledgeAgreementId()}">
             <input type="hidden" , th:field="*{client}" th:value="${pledgeAgreement.getClient()}">
@@ -78,7 +78,7 @@
         </form>
     </div>
     <div th:case="newPA">
-        <form th:action="@{/pledge_agreement_card}" th:method="post" th:object="${pledgeAgreement}" action="pledge_agreement_card.html">
+        <form th:action="@{/pledge_agreement/update_insert}" th:method="post" th:object="${pledgeAgreement}" action="card.html">
             <input type="hidden", name="whatDo" th:value="${whatDo}">
             <input type="hidden" , th:field="*{client}" th:value="${pledgeAgreement.getClient()}">
 
@@ -130,7 +130,7 @@
     </div>
     <div th:case="responseSuccess">
         <h3>Успешно добавлен новый договор залога</h3>
-        <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
+        <a th:href="@{/pledge_agreement/detail(pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}" href="detail.html"
            th:text="'подробрее'">н/д</a>
     </div>
     <div th:case="responseError">

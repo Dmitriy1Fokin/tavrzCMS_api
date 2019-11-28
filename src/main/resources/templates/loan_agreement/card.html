@@ -25,7 +25,7 @@
 
 <div th:switch="${whatDo}">
     <div th:case="changeLA">
-        <form th:action="@{/loan_agreement_card}" th:method="post" th:object="${loanAgreement}" action="loan_agreement_card.html">
+        <form th:action="@{/loan_agreement/update_insert}" th:method="post" th:object="${loanAgreement}" action="card.html">
             <input type="hidden", name="whatDo" th:value="${whatDo}">
             <input type="hidden", th:field="*{loanAgreementId}" th:value="${loanAgreement.getLoanAgreementId()}">
             <input type="hidden" , th:field="*{client}" th:value="${loanAgreement.getClient()}">
@@ -104,7 +104,7 @@
         </form>
     </div>
     <div th:case="newLA">
-        <form th:action="@{/loan_agreement_card}" th:method="post" th:object="${loanAgreement}" action="loan_agreement_card.html">
+        <form th:action="@{/loan_agreement/update_insert}" th:method="post" th:object="${loanAgreement}" action="card.html">
             <input type="hidden", name="whatDo" th:value="${whatDo}">
             <input type="hidden" , th:field="*{client}" th:value="${loanAgreement.getClient()}">
 
@@ -182,7 +182,7 @@
     </div>
     <div th:case="responseSuccess">
         <h3>Успешно добавлен новый кредитный договор</h3>
-        <a th:href="@{/loan_agreement_detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="loan_agreement_detail.html"
+        <a th:href="@{/loan_agreement/detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="detail.html"
            th:text="'подробрее'">н/д</a>
     </div>
     <div th:case="responseError">

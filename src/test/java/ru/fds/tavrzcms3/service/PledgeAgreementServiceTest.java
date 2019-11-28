@@ -97,7 +97,7 @@ public class PledgeAgreementServiceTest {
     public void getPledgeAgreement() {
         PledgeAgreement pledgeAgreementTest = repositoryPledgeAgreement.findById(123L).orElseThrow(()-> new NullPointerException("Нет такого ДЗ!"));
 
-        PledgeAgreement pledgeAgreementResult = pledgeAgreementService.getPledgeAgreement(123L).get();
+        PledgeAgreement pledgeAgreementResult = pledgeAgreementService.getPledgeAgreementById(123L).get();
 
         assertEquals(pledgeAgreementTest.getPledgeAgreementId(), pledgeAgreementResult.getPledgeAgreementId());
     }

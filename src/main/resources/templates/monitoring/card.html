@@ -9,7 +9,7 @@
         <div th:case="ps">
             <title th:text="'Обновление мониторинга предмета залога: ' + ${pledgeSubject.getName()}">Обновление мониторинга</title>
         </div>
-        <div th:case="client">
+        <div th:case="pledgor">
             <title th:text="'Обновление мониторинга предмета залога по залогодателю: '
                     + ${@clientService.getFullNameClient(client)}">Обновление мониторинга предмета залога по залогодателю</title>
         </div>
@@ -37,7 +37,7 @@
     <div th:case="ps">
         <h1 th:text="'Обновление мониторинга предмета залога:' + ${pledgeSubject.getName()}">Обновление мониторинга</h1>
     </div>
-    <div th:case="client">
+    <div th:case="pledgor">
         <h1 th:text="'Обновление мониторинга предмета залога по залогодателю: '
              + ${@clientService.getFullNameClient(client)}">Обновление мониторинга предмета залога по залогодателю ЮЛ</h1>
     </div>
@@ -46,7 +46,7 @@
     </div>
 </div>
 
-<form th:action="@{/monitoring_card}" th:method="post" th:object="${monitoring}" action="monitoring_card.html">
+<form th:action="@{/monitoring/insert}" th:method="post" th:object="${monitoring}" action="card.html">
     <div th:switch="${whereUpdateMonitoring}">
         <div th:case="pa">
             <input type="hidden", name="whereUpdateMonitoring" th:value="${whereUpdateMonitoring}">
@@ -56,7 +56,7 @@
             <input type="hidden", name="whereUpdateMonitoring" th:value="${whereUpdateMonitoring}">
             <input type="hidden", name="pledgeSubjectId" th:value="${pledgeSubject.getPledgeSubjectId()}" value="0">
         </div>
-        <div th:case="client">
+        <div th:case="pledgor">
             <input type="hidden", name="whereUpdateMonitoring" th:value="${whereUpdateMonitoring}">
             <input type="hidden", name="pledgorId" th:value="${client.getClientId()}" value="0">
         </div>

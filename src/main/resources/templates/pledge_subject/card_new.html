@@ -17,7 +17,7 @@
 
 <div th:switch="${typeOfCollateral.name()}">
     <div th:case="AUTO">
-        <form th:action="@{/insert_pledge_subject_auto}" th:method="post" th:object="${pledgeSubjectAuto}" action="pledge_subject_card_new.html">
+        <form th:action="@{/pledge_subject/insert_pledge_subject_auto}" th:method="post" th:object="${pledgeSubjectAuto}" action="card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectAuto.getPledgeAgreements()}">
 
@@ -39,7 +39,7 @@
         </form>
     </div>
     <div th:case="EQUIPMENT">
-        <form th:action="@{/insert_pledge_subject_equipment}" th:method="post" th:object="${pledgeSubjectEquipment}" action="pledge_subject_card_new.html">
+        <form th:action="@{/pledge_subject/insert_pledge_subject_equipment}" th:method="post" th:object="${pledgeSubjectEquipment}" action="card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectEquipment.getPledgeAgreements()}">
 
@@ -61,7 +61,7 @@
         </form>
     </div>
     <div th:case="SECURITIES">
-        <form th:action="@{/insert_pledge_subject_securities}" th:method="post" th:object="${pledgeSubjectSecurities}" action="pledge_subject_card_new.html">
+        <form th:action="@{/pledge_subject/insert_pledge_subject_securities}" th:method="post" th:object="${pledgeSubjectSecurities}" action="card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectSecurities.getPledgeAgreements()}">
 
@@ -83,7 +83,7 @@
         </form>
     </div>
     <div th:case="VESSEL">
-        <form th:action="@{/insert_pledge_subject_vessel}" th:method="post" th:object="${pledgeSubjectVessel}" action="pledge_subject_card_new.html">
+        <form th:action="@{/pledge_subject/insert_pledge_subject_vessel}" th:method="post" th:object="${pledgeSubjectVessel}" action="card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectVessel.getPledgeAgreements()}">
 
@@ -105,7 +105,7 @@
         </form>
     </div>
     <div th:case="TBO">
-        <form th:action="@{/insert_pledge_subject_tbo}" th:method="post" th:object="${pledgeSubjectTBO}" action="pledge_subject_card_new.html">
+        <form th:action="@{/pledge_subject/insert_pledge_subject_tbo}" th:method="post" th:object="${pledgeSubjectTBO}" action="card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectTBO.getPledgeAgreements()}">
 
@@ -127,7 +127,7 @@
         </form>
     </div>
     <div th:case="LAND_OWNERSHIP">
-        <form th:action="@{/insert_pledge_subject_landOwn}" th:method="post" th:object="${pledgeSubjectRealtyLandOwnership}" action="pledge_subject_card_new.html">
+        <form th:action="@{/pledge_subject/insert_pledge_subject_landOwn}" th:method="post" th:object="${pledgeSubjectRealtyLandOwnership}" action="card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectRealtyLandOwnership.getPledgeAgreements()}">
 
@@ -151,7 +151,7 @@
         </form>
     </div>
     <div th:case="LAND_LEASE">
-        <form th:action="@{/insert_pledge_subject_landLease}" th:method="post" th:object="${pledgeSubjectRealtyLandLease}" action="pledge_subject_card_new.html">
+        <form th:action="@{/pledge_subject/insert_pledge_subject_landLease}" th:method="post" th:object="${pledgeSubjectRealtyLandLease}" action="card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectRealtyLandLease.getPledgeAgreements()}">
 
@@ -175,7 +175,7 @@
         </form>
     </div>
     <div th:case="BUILDING">
-        <form th:action="@{/insert_pledge_subject_building}" th:method="post" th:object="${pledgeSubjectRealtyBuilding}" action="pledge_subject_card_new.html">
+        <form th:action="@{/pledge_subject/insert_pledge_subject_building}" th:method="post" th:object="${pledgeSubjectRealtyBuilding}" action="card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectRealtyBuilding.getPledgeAgreements()}">
 
@@ -199,7 +199,7 @@
         </form>
     </div>
     <div th:case="PREMISE">
-        <form th:action="@{/insert_pledge_subject_room}" th:method="post" th:object="${pledgeSubjectRealtyRoom}" action="pledge_subject_card_new.html">
+        <form th:action="@{/pledge_subject/insert_pledge_subject_room}" th:method="post" th:object="${pledgeSubjectRealtyRoom}" action="card_new.html">
             <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
             <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectRealtyRoom.getPledgeAgreements()}">
 

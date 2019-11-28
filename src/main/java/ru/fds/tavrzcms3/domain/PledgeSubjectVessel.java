@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Length;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 import ru.fds.tavrzcms3.dictionary.TypeOfVessel;
 
@@ -13,20 +15,19 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @SuperBuilder
 @Entity
 @Table(name = "pledge_vessel")
 public class PledgeSubjectVessel extends PledgeSubject {
 
-	@Min(value = 1000000, message = "Неверное значение")
-	@Max(value = 9999999, message = "Неверное значение")
+	@Length(min = 7, max = 7, message = "Неверное значение")
 	@NotNull(message = "Обязательно для заполнения")
 	@Column(name ="imo")
 	private Integer imo;
 
-	@Min(value = 100000000, message = "Неверное значение")
-	@Max(value = 999999999, message = "Неверное значение")
+	@Length(min = 9, max = 9, message = "Неверное значение")
 	@Column(name ="mmsi")
 	private Integer mmsi;
 
@@ -48,8 +49,9 @@ public class PledgeSubjectVessel extends PledgeSubject {
 	@Column(name ="deadweight")
 	private int deadweight;
 
-	@Min(value = 1000, message = "Неверное значение")
-	@Max(value = 9999, message = "Неверное значение")
+	@Min(value = 1900, message = "Неверное значение")
+	@Max(value = 2100, message = "Неверное значение")
+	@Length(min = 4, max = 4, message = "Неверное значение")
 	@NotNull(message = "Обязательно для заполнения")
 	@Column(name ="year_built")
 	private int yearBuilt;

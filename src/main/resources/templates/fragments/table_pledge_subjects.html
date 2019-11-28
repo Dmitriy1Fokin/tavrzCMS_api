@@ -39,7 +39,7 @@
             <tr>
                 <td th:text="${stat.count}"></td>
                 <td>
-                    <a th:href="@{/pledge_subject_detail(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="pledge_subject_detail.html" th:text="${ps.getName()}">наименование</a>
+                    <a th:href="@{/pledge_subject/detail(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../pledge_subject/detail.html" th:text="${ps.getName()}">наименование</a>
                 </td>
 
                 <td th:text="${ps.getTypeOfCollateral().getTranslate()}">н/д</td>
@@ -102,34 +102,34 @@
 
 
                 <td>
-                    <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
                        th:text="${#numbers.formatCurrency(ps.getRsDz())}">н/д</a>
                 </td>
 
                 <td>
-                    <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
                        th:text="${#numbers.formatCurrency(ps.getZsDz())}">н/д</a>
                 </td>
 
                 <td>
-                    <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
                        th:text="${#numbers.formatCurrency(ps.getRsZz())}">н/д</a>
                 </td>
 
                 <td>
-                    <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
                        th:text="${#numbers.formatCurrency(ps.getZsZz())}">н/д</a>
                 </td>
 
                 <td>
-                    <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
                        th:text="${#numbers.formatCurrency(ps.getSs())}">н/д</a>
                 </td>
 
                 <td th:text="${#dates.format(ps.getDateConclusion(), 'dd.MM.yyyy')}"></td>
 
                 <td>
-                    <a th:href="@{/monitoring_pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="monitoring_pledge_subject.html"
+                    <a th:href="@{/monitoring/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../monitoring/pledge_subject.html"
                        th:text="${#dates.format(ps.getDateMonitoring(), 'dd.MM.yyyy')}">н/д</a>
                 </td>
 
@@ -144,7 +144,7 @@
                 <div th:switch="${ps.getInsuranceObligation()}">
                     <div th:case="да">
                         <td>
-                            <a th:href="@{/insurances(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="insurances.html" th:text="да">да</a>
+                            <a th:href="@{/insurance/insurances(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../insurance/insurances.html" th:text="да">да</a>
                         </td>
                     </div>
                     <div th:case="нет">
@@ -152,7 +152,7 @@
                     </div>
                 </div>
                 <td>
-                    <a th:href="@{/encumbrances(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="encumbrances.html" th:text="подробнее">подробнее</a>
+                    <a th:href="@{/encumbrance/encumbrances(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../encumbrance/encumbrances.html" th:text="подробнее">подробнее</a>
                 </td>
             </tr>
         </div>
@@ -194,7 +194,7 @@
             <tr>
                 <td th:text="${stat.count}"></td>
                 <td>
-                    <a th:href="@{/pledge_subject_detail(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="pledge_subject_detail.html" th:text="${ps.getName()}">наименование</a>
+                    <a th:href="@{/pledge_subject/detail(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../pledge_subject/detail.html" th:text="${ps.getName()}">наименование</a>
                 </td>
 
                 <td th:text="${ps.getTypeOfCollateral().getTranslate()}">н/д</td>
@@ -257,34 +257,34 @@
 
 
                 <td>
-                    <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
                        th:text="${#numbers.formatCurrency(ps.getRsDz())}">н/д</a>
                 </td>
 
                 <td>
-                    <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
                        th:text="${#numbers.formatCurrency(ps.getZsDz())}">н/д</a>
                 </td>
 
                 <td>
-                    <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
                        th:text="${#numbers.formatCurrency(ps.getRsZz())}">н/д</a>
                 </td>
 
                 <td>
-                    <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
                        th:text="${#numbers.formatCurrency(ps.getZsZz())}">н/д</a>
                 </td>
 
                 <td>
-                    <a th:href="@{/cost_history(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="cost_history.html"
+                    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
                        th:text="${#numbers.formatCurrency(ps.getSs())}">н/д</a>
                 </td>
 
                 <td th:text="${#dates.format(ps.getDateConclusion(), 'dd.MM.yyyy')}"></td>
 
                 <td>
-                    <a th:href="@{/monitoring_pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="monitoring_pledge_subject.html"
+                    <a th:href="@{/monitoring/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../monitoring/pledge_subject.html"
                        th:text="${#dates.format(ps.getDateMonitoring(), 'dd.MM.yyyy')}">н/д</a>
                 </td>
 
@@ -299,7 +299,7 @@
                 <div th:switch="${ps.getInsuranceObligation()}">
                     <div th:case="да">
                         <td>
-                            <a th:href="@{/insurances(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="insurances.html" th:text="да">да</a>
+                            <a th:href="@{/insurance/insurances(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../insurance/insurances.html" th:text="да">да</a>
                         </td>
                     </div>
                     <div th:case="нет">
@@ -308,7 +308,7 @@
                 </div>
 
                 <td>
-                    <a th:href="@{/encumbrances(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="encumbrances.html" th:text="подробнее">подробнее</a>
+                    <a th:href="@{/encumbrance/encumbrances(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../encumbrance/encumbrances.html" th:text="подробнее">подробнее</a>
                 </td>
 
                 <td>

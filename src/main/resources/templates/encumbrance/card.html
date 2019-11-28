@@ -18,7 +18,7 @@
 
 <h1 th:text="'Добавить обременение'">Добавить обременение</h1>
 
-<form th:action="@{/encumbrance_card}" th:method="post" th:object="${encumbrance}" action="encumbrance_card.html">
+<form th:action="@{encumbrance/insert}" th:method="post" th:object="${encumbrance}" action="card.html">
     <input type="hidden", th:field="*{pledgeSubject}" th:value="${encumbrance.getPledgeSubject()}">
 
     <div class="row">

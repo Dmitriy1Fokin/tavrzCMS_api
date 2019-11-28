@@ -15,10 +15,7 @@ import ru.fds.tavrzcms3.specification.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PledgeSubjectService {
@@ -60,9 +57,13 @@ public class PledgeSubjectService {
     @Autowired
     RepositoryInsurance repositoryInsurance;
 
-    public PledgeSubject getPledgeSubjectById(long id){
-        PledgeSubject pledgeSubject = repositoryPledgeSubject.findByPledgeSubjectId(id);
-        return  pledgeSubject;
+//    public PledgeSubject getPledgeSubjectById(long id){
+//        PledgeSubject pledgeSubject = repositoryPledgeSubject.findByPledgeSubjectId(id);
+//        return  pledgeSubject;
+//    }
+
+    public Optional<PledgeSubject> getPledgeSubjectById(long pledgeSubjectId){
+        return repositoryPledgeSubject.findById(pledgeSubjectId);
     }
 
     public List<PledgeSubject> getPledgeSubjectsForPledgeAgreement(long pledgeAgreementId){

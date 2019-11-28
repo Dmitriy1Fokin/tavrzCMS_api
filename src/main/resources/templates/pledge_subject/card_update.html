@@ -20,7 +20,7 @@
 
 <div th:switch="${typeOfCollateral.name()}">
     <div th:case="AUTO">
-        <form th:action="@{/update_pledge_subject_auto}" th:method="post" th:object="${pledgeSubjectAuto}" action="pledge_subject_card_update.html">
+        <form th:action="@{/pledge_subject/update_pledge_subject_auto}" th:method="post" th:object="${pledgeSubjectAuto}" action="card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectAuto.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectAuto.getZsDz()}">
             <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectAuto.getZsZz()}">
@@ -46,7 +46,7 @@
         </form>
     </div>
     <div th:case="EQUIPMENT">
-        <form th:action="@{/update_pledge_subject_equipment}" th:method="post" th:object="${pledgeSubjectEquipment}" action="pledge_subject_card_update.html">
+        <form th:action="@{/pledge_subject/update_pledge_subject_equipment}" th:method="post" th:object="${pledgeSubjectEquipment}" action="card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectEquipment.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectEquipment.getZsDz()}">
             <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectEquipment.getZsZz()}">
@@ -72,7 +72,7 @@
         </form>
     </div>
     <div th:case="SECURITIES">
-        <form th:action="@{/update_pledge_subject_securities}" th:method="post" th:object="${pledgeSubjectSecurities}" action="pledge_subject_card_update.html">
+        <form th:action="@{/pledge_subject/update_pledge_subject_securities}" th:method="post" th:object="${pledgeSubjectSecurities}" action="card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectSecurities.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectSecurities.getZsDz()}">
             <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectSecurities.getZsZz()}">
@@ -98,7 +98,7 @@
         </form>
     </div>
     <div th:case="VESSEL">
-        <form th:action="@{/update_pledge_subject_vessel}" th:method="post" th:object="${pledgeSubjectVessel}" action="pledge_subject_card_update.html">
+        <form th:action="@{/pledge_subject/update_pledge_subject_vessel}" th:method="post" th:object="${pledgeSubjectVessel}" action="card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectVessel.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectVessel.getZsDz()}">
             <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectVessel.getZsZz()}">
@@ -124,7 +124,7 @@
         </form>
     </div>
     <div th:case="TBO">
-        <form th:action="@{/update_pledge_subject_tbo}" th:method="post" th:object="${pledgeSubjectTBO}" action="pledge_subject_card_update.html">
+        <form th:action="@{/pledge_subject/update_pledge_subject_tbo}" th:method="post" th:object="${pledgeSubjectTBO}" action="card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectTBO.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectTBO.getZsDz()}">
             <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectTBO.getZsZz()}">
@@ -150,7 +150,7 @@
         </form>
     </div>
     <div th:case="LAND_OWNERSHIP">
-        <form th:action="@{/update_pledge_subject_landOwn}" th:method="post" th:object="${pledgeSubjectRealty}" action="pledge_subject_card_update.html">
+        <form th:action="@{/pledge_subject/update_pledge_subject_landOwn}" th:method="post" th:object="${pledgeSubjectRealty}" action="card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectRealty.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectRealty.getZsDz()}">
             <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectRealty.getZsZz()}">
@@ -178,7 +178,7 @@
         </form>
     </div>
     <div th:case="LAND_LEASE">
-        <form th:action="@{/update_pledge_subject_landLease}" th:method="post" th:object="${pledgeSubjectRealty}" action="pledge_subject_card_update.html">
+        <form th:action="@{/pledge_subject/update_pledge_subject_landLease}" th:method="post" th:object="${pledgeSubjectRealty}" action="card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectRealty.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectRealty.getZsDz()}">
             <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectRealty.getZsZz()}">
@@ -206,7 +206,7 @@
         </form>
     </div>
     <div th:case="BUILDING">
-        <form th:action="@{/update_pledge_subject_building}" th:method="post" th:object="${pledgeSubjectRealty}" action="pledge_subject_card_update.html">
+        <form th:action="@{/pledge_subject/update_pledge_subject_building}" th:method="post" th:object="${pledgeSubjectRealty}" action="card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectRealty.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectRealty.getZsDz()}">
             <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectRealty.getZsZz()}">
@@ -234,7 +234,7 @@
         </form>
     </div>
     <div th:case="PREMISE">
-        <form th:action="@{/update_pledge_subject_room}" th:method="post" th:object="${pledgeSubjectRealty}" action="pledge_subject_card_update.html">
+        <form th:action="@{/pledge_subject/update_pledge_subject_room}" th:method="post" th:object="${pledgeSubjectRealty}" action="card_update.html">
             <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectRealty.getPledgeSubjectId()}">
             <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectRealty.getZsDz()}">
             <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectRealty.getZsZz()}">

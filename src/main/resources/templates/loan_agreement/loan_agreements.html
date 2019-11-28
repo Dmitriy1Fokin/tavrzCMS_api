@@ -31,7 +31,7 @@
     <div th:if="${loanAgreementList.totalPages > 1}" >
         <span th:text="'Страница: '"></span>
         <div th:each="pageNumber : ${pageNumbers}" style="display: inline">
-            <a th:href="@{/loan_agreements(size=${loanAgreementList.size}, page=${pageNumber}-1, employeeId=${employeeId})}"
+            <a th:href="@{/loan_agreement/loan_agreements(size=${loanAgreementList.size}, page=${pageNumber}-1, employeeId=${employeeId})}"
                th:text="${pageNumber}"
                th:class="${pageNumber==loanAgreementList.number + 1} ? active"></a>
         </div>

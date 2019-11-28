@@ -48,7 +48,7 @@
     <br>
     <br>
     <label>Залогодатель:</label>
-    <a th:href="@{/client(clientId=${pledgeAgreement.getClient().getClientId()})}" href="client.html"
+    <a th:href="@{/client/detail(clientId=${pledgeAgreement.getClient().getClientId()})}" href="../client/detail.html"
        th:text="${@clientService.getFullNameClient(pledgeAgreement.getClient())}">Залогодатель</a>
     <br>
     <br>
@@ -70,7 +70,7 @@
     <br>
     <label>Количество предметов залога:</label>
     <span th:text="${pledgeAgreement.getPledgeSubjects().size()}">н/д</span>
-    <a th:href="@{/pledge_subjects(pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}" href="pledge_subjects.html"
+    <a th:href="@{/pledge_agreement/pledge_subjects(pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}" href="pledge_agreement/pledge_subjects.html"
        th:text="подробнее">подробнее</a>
     <br>
     <br>
@@ -102,8 +102,8 @@
     <span th:text="${pledgeAgreement.getNoticePA()}">н/д</span>
     <br>
     <br>
-    <a th:href="@{pledge_agreement_card(whatDo='changePA', pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}"
-       href="pledge_agreement_card.html.html"
+    <a th:href="@{/pledge_agreement/card(whatDo='changePA', pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}"
+       href="card.html"
        th:text="'Изменить данные'">Изменить данные</a>
     <br>
     <br>

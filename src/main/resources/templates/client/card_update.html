@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Создание нового клиента'">Создание нового КД</title>
+    <title th:text="'Изменить данные клиента'">Изменить данные</title>
+
     <style type="text/css">
         .nav-item{
             display: inline;
@@ -13,11 +14,16 @@
     </style>
 </head>
 <body>
+
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
 <div th:switch="${typeOfClient.name()}">
     <div th:case="LEGAL_ENTITY">
-        <form th:action="@{/insert_client_le}" th:method="post" th:object="${clientLegalEntity}" action="client_card_new.html">
+        <form th:action="@{client/update_client_le}" th:method="post" th:object="${clientLegalEntity}" action="client/card_update.html">
+            <input type="hidden", th:field="*{clientId}" th:value="${clientLegalEntity.getClientId()}">
+            <input type="hidden", th:field="*{loanAgreements}" th:value="${clientLegalEntity.getLoanAgreements()}">
+            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${clientLegalEntity.getPledgeAgreements()}">
+
             <div th:replace="fragments/client_forms :: generalProperty(${clientLegalEntity}, ${employeeList}, ${clientManagerList})"></div>
             <br>
             <div th:replace="fragments/client_forms :: legalEntitylProperty(${clientLegalEntity})"></div>
@@ -26,7 +32,11 @@
         </form>
     </div>
     <div th:case="INDIVIDUAL">
-        <form th:action="@{/insert_client_ind}" th:method="post" th:object="${clientIndividual}" action="client_card_new.html">
+        <form th:action="@{client/update_client_ind}" th:method="post" th:object="${clientIndividual}" action="client/card_update.html">
+            <input type="hidden", th:field="*{clientId}" th:value="${clientIndividual.getClientId()}">
+            <input type="hidden", th:field="*{loanAgreements}" th:value="${clientIndividual.getLoanAgreements()}">
+            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${clientIndividual.getPledgeAgreements()}">
+
             <div th:replace="fragments/client_forms :: generalProperty(${clientIndividual}, ${employeeList}, ${clientManagerList})"></div>
             <br>
             <div th:replace="fragments/client_forms :: individualProperty(${clientIndividual})"></div>

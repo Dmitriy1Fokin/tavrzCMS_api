@@ -32,7 +32,7 @@
         <tr th:each="pa : ${pledgeAgreementList}">
             <td th:text="${paStat.count}"></td>
             <td>
-                <a th:href="@{/pledge_agreement_detail(pledgeAgreementId=${pa.getPledgeAgreementId()})}" href="pledge_agreement_detail.html"
+                <a th:href="@{/pledge_agreement/detail(pledgeAgreementId=${pa.getPledgeAgreementId()})}" href="../pledge_agreement/detail.html"
                    th:text="${pa.getNumPA()}">н/д</a>
             </td>
 
@@ -41,7 +41,7 @@
             <td th:text="${#dates.format(pa.getDateEndPA(), 'dd.MM.yyyy')}"></td>
 
             <td>
-                <a th:href="@{/client(clientId=${pa.getClient().getClientId()})}" href="client.html"
+                <a th:href="@{/client/detail(clientId=${pa.getClient().getClientId()})}" href="../client/detail.html"
                    th:text="${@clientService.getFullNameClient(pa.getClient())}"></a>
             </td>
 
@@ -52,8 +52,8 @@
                             <div th:each="ps, countStat: ${pa.getPledgeSubjects()}">
                                 <div th:if="${countStat.index &lt; 5}" th:remove="tag">
                                     <li>
-                                        <a th:href="@{/pledge_subject_detail(pledgeSubjectId=${ps.getPledgeSubjectId()})}"
-                                           href="pledge_subject_detail.html" th:text="${ps.getName()}">наименование</a>
+                                        <a th:href="@{/pledge_subject/detail(pledgeSubjectId=${ps.getPledgeSubjectId()})}"
+                                           href="../pledge_subject/detail.html" th:text="${ps.getName()}">наименование</a>
                                     </li>
                                 </div>
                             </div>
@@ -62,17 +62,17 @@
                         <div th:unless="${pa.getPledgeSubjects().size() &gt; 5}">
                             <div th:each="ps : ${pa.getPledgeSubjects()}">
                                 <li>
-                                    <a th:href="@{/pledge_subject_detail(pledgeSubjectId=${ps.getPledgeSubjectId()})}"
-                                       href="pledge_subject_detail.html" th:text="${ps.getName()}">наименование</a>
+                                    <a th:href="@{/pledge_subject/detail(pledgeSubjectId=${ps.getPledgeSubjectId()})}"
+                                       href="../pledge_subject/detail.html" th:text="${ps.getName()}">наименование</a>
                                 </li>
                             </div>
                         </div>
                     </div>
 
                 </ol>
-                <a th:href="@{/pledge_subjects(pledgeAgreementId=${pa.getPledgeAgreementId()})}"
+                <a th:href="@{/pledge_agreement/pledge_subjects(pledgeAgreementId=${pa.getPledgeAgreementId()})}"
                    th:unless="${#lists.isEmpty(pa.getPledgeSubjects())}"
-                   href="pledge_subjects.html">подробнее</a>
+                   href="..pledge_agreement/pledge_subjects.html">подробнее</a>
             </td>
 
             <td>
