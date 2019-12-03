@@ -25,7 +25,7 @@ public class PledgeAgreement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="dz_id")
-	private long pledgeAgreementId;
+	private Long pledgeAgreementId;
 
 	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="num_dz")

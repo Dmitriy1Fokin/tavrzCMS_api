@@ -22,7 +22,7 @@ public class ClientManager {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="client_manager_id")
-	private long clientManagerId;
+	private Long clientManagerId;
 	
 	@Column(name = "surname")
 	private String surname;

@@ -21,7 +21,7 @@ public class LoanAgreement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="kd_id")
-	private long loanAgreementId;
+	private Long loanAgreementId;
 
 	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="num_kd")

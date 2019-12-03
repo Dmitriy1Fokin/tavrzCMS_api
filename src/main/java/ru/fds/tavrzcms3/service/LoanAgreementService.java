@@ -32,6 +32,18 @@ public class LoanAgreementService {
         return repositoryLoanAgreement.findById(loanAgreementId);
     }
 
+    public List<LoanAgreement> getLoanAgreementsByIds(List<Long> ids){
+        return repositoryLoanAgreement.findAllByLoanAgreementIdIn(ids);
+    }
+
+    public List<LoanAgreement> getAllLoanAgreementsByLoaner(Client client){
+        return repositoryLoanAgreement.findAllByClient(client);
+    }
+
+    public List<LoanAgreement> getAllLoanAgreementByPledgeAgreement(PledgeAgreement pledgeAgreement){
+        return repositoryLoanAgreement.findAllByPledgeAgreements(pledgeAgreement);
+    }
+
     public int countOfCurrentLoanAgreementsByPledgeAgreement(PledgeAgreement pledgeAgreement){
         return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, StatusOfAgreement.OPEN);
     }
@@ -73,6 +85,8 @@ public class LoanAgreementService {
     public List<LoanAgreement> getClosedLoanAgreementsByLoaner(Client client){
         return repositoryLoanAgreement.findByClientAndStatusLAEquals(client, StatusOfAgreement.CLOSED);
     }
+
+
 
     public Page<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){
 

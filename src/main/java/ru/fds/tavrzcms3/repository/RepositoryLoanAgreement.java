@@ -13,12 +13,14 @@ import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import java.util.List;
 
 public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Long>, JpaSpecificationExecutor<LoanAgreement> {
-    LoanAgreement findByLoanAgreementId(long loanAgreementId);
+    List<LoanAgreement> findAllByLoanAgreementIdIn(List<Long> ids);
+    List<LoanAgreement> findAllByPledgeAgreements(PledgeAgreement pledgeAgreement);
     List<LoanAgreement> findByPledgeAgreementsAndStatusLAEquals(PledgeAgreement pledgeAgreement, StatusOfAgreement statusLA);
     int countAllByPledgeAgreementsAndStatusLAEquals(PledgeAgreement pledgeAgreement, StatusOfAgreement statusLA);
     int countAllByClientAndStatusLAEquals(Client client, StatusOfAgreement statusLA);
     int countAllByClientInAndStatusLAEquals(List<Client> clients, StatusOfAgreement statusLA);
     List<LoanAgreement> findByClientAndStatusLAEquals(Client client, StatusOfAgreement statusLA);
+    List<LoanAgreement> findAllByClient(Client client);
     Page<LoanAgreement> findByClientInAndStatusLAEquals(List<Client> clients, StatusOfAgreement statusLA, Pageable pageable);
     Page<LoanAgreement> findAll(Specification specification, Pageable pageable);
 

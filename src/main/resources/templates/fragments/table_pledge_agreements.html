@@ -41,46 +41,43 @@
             <td th:text="${#dates.format(pa.getDateEndPA(), 'dd.MM.yyyy')}"></td>
 
             <td>
-                <a th:href="@{/client/detail(clientId=${pa.getClient().getClientId()})}" href="../client/detail.html"
-                   th:text="${@clientService.getFullNameClient(pa.getClient())}"></a>
+                <a th:href="@{/client/detail(clientId=${pa.getClientId()})}" href="../client/detail.html"
+                   th:text="${@clientService.getFullNameClient(pa.getClientId())}"></a>
             </td>
 
             <td>
                 <ol>
-                    <div th:unless="${pa.getPledgeSubjects()==null}">
-                        <div th:if="${pa.getPledgeSubjects().size() &gt; 5}">
-                            <div th:each="ps, countStat: ${pa.getPledgeSubjects()}">
+                    <div th:unless="${pa.getPledgeSubjectsIds()==null}">
+                        <div th:if="${pa.getPledgeSubjectsIds().size() &gt; 5}">
+                            <div th:each="briefInfoAboutCollateral, countStat: ${pa.getBriefInfoAboutCollateral()}">
                                 <div th:if="${countStat.index &lt; 5}" th:remove="tag">
                                     <li>
-                                        <a th:href="@{/pledge_subject/detail(pledgeSubjectId=${ps.getPledgeSubjectId()})}"
-                                           href="../pledge_subject/detail.html" th:text="${ps.getName()}">наименование</a>
+                                        <span th:text="${briefInfoAboutCollateral}">наименование</span>
                                     </li>
                                 </div>
                             </div>
                             <span>...</span>
                         </div>
-                        <div th:unless="${pa.getPledgeSubjects().size() &gt; 5}">
-                            <div th:each="ps : ${pa.getPledgeSubjects()}">
+                        <div th:unless="${pa.getPledgeSubjectsIds().size() &gt; 5}">
+                            <div th:each="briefInfoAboutCollateral : ${pa.getBriefInfoAboutCollateral()}">
                                 <li>
-                                    <a th:href="@{/pledge_subject/detail(pledgeSubjectId=${ps.getPledgeSubjectId()})}"
-                                       href="../pledge_subject/detail.html" th:text="${ps.getName()}">наименование</a>
+                                    <span th:text="${briefInfoAboutCollateral}">наименование</span>
                                 </li>
                             </div>
                         </div>
                     </div>
-
                 </ol>
                 <a th:href="@{/pledge_agreement/pledge_subjects(pledgeAgreementId=${pa.getPledgeAgreementId()})}"
-                   th:unless="${#lists.isEmpty(pa.getPledgeSubjects())}"
+                   th:unless="${#lists.isEmpty(pa.getPledgeSubjectsIds())}"
                    href="..pledge_agreement/pledge_subjects.html">подробнее</a>
             </td>
 
             <td>
-                <div th:unless="${pa.getPledgeSubjects()== null}" th:text="${pa.getPledgeSubjects().size()}"></div>
+                <div th:unless="${pa.getPledgeSubjectsIds()== null}" th:text="${pa.getPledgeSubjectsIds().size()}"></div>
             </td>
 
             <td>
-                <div th:each="typeOfCollateral : ${@pledgeAgreementService.getTypeOfCollateral(pa)}" th:text="${typeOfCollateral}"></div>
+                <div th:each="typeOfCollateral : ${pa.getTypesOfCollateral()}" th:text="${typeOfCollateral}"></div>
             </td>
 
             <td th:text="${#numbers.formatCurrency(pa.getRsDz())}">0.00</td>
@@ -94,19 +91,19 @@
             <td th:text="${#numbers.formatCurrency(pa.getSs())}">0.00</td>
 
             <td>
-                <div th:each="dateOfConclusion : ${@pledgeAgreementService.getDatesOfConclusion(pa)}">
+                <div th:each="dateOfConclusion : ${pa.getDatesOfConclusions()}">
                     <span th:text="${#dates.format(dateOfConclusion, 'dd.MM.yyyy')}">н/д</span>
                 </div>
             </td>
 
             <td>
-                <div th:each="dateOfMonitoring : ${@pledgeAgreementService.getDatesOfMonitoring(pa)}">
+                <div th:each="dateOfMonitoring : ${pa.getDatesOfMonitoring()}">
                     <span th:text="${#dates.format(dateOfMonitoring, 'dd.MM.yyyy')}">н/д</span>
                 </div>
             </td>
 
             <td>
-                <div th:each="resultsOfMonitoring : ${@pledgeAgreementService.getResultsOfMonitoring(pa)}">
+                <div th:each="resultsOfMonitoring : ${pa.getResultsOfMonitoring()}">
                     <span th:text="${resultsOfMonitoring}">н/д</span>
                 </div>
             </td>

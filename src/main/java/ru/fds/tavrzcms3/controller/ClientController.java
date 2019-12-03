@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 import ru.fds.tavrzcms3.domain.*;
-import ru.fds.tavrzcms3.service.ClientManagerService;
-import ru.fds.tavrzcms3.service.ClientService;
-import ru.fds.tavrzcms3.service.EmployeeService;
+import ru.fds.tavrzcms3.dto.*;
+import ru.fds.tavrzcms3.mapper.*;
+import ru.fds.tavrzcms3.service.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -24,6 +24,15 @@ public class ClientController {
     private final ClientService clientService;
     private final ClientManagerService clientManagerService;
     private final EmployeeService employeeService;
+    private final PledgeAgreementService pledgeAgreementService;
+    private final LoanAgreementService loanAgreementService;
+
+    private final ClientIndividualMapper clientIndividualMapper;
+    private final ClientLegalEntityMapper clientLegalEntityMapper;
+    private final EmployeeMapper employeeMapper;
+    private final ClientManagerMapper clientManagerMapper;
+    private final PledgeAgreementMapper pledgeAgreementMapper;
+    private final LoanAgreementMapper loanAgreementMapper;
 
     private static final String PAGE_CARD_UPDATE = "client/card_update";
     private static final String PAGE_CARD_NEW = "client/card_new";
@@ -37,18 +46,68 @@ public class ClientController {
 
     public ClientController(ClientService clientService,
                             ClientManagerService clientManagerService,
-                            EmployeeService employeeService) {
+                            EmployeeService employeeService,
+                            PledgeAgreementService pledgeAgreementService,
+                            LoanAgreementService loanAgreementService,
+                            ClientIndividualMapper clientIndividualMapper,
+                            ClientLegalEntityMapper clientLegalEntityMapper,
+                            EmployeeMapper employeeMapper,
+                            ClientManagerMapper clientManagerMapper,
+                            PledgeAgreementMapper pledgeAgreementMapper,
+                            LoanAgreementMapper loanAgreementMapper) {
         this.clientService = clientService;
         this.clientManagerService = clientManagerService;
         this.employeeService = employeeService;
+        this.pledgeAgreementService = pledgeAgreementService;
+        this.loanAgreementService = loanAgreementService;
+        this.clientIndividualMapper = clientIndividualMapper;
+        this.clientLegalEntityMapper = clientLegalEntityMapper;
+        this.employeeMapper = employeeMapper;
+        this.clientManagerMapper = clientManagerMapper;
+        this.pledgeAgreementMapper = pledgeAgreementMapper;
+        this.loanAgreementMapper = loanAgreementMapper;
     }
 
     @GetMapping("/detail")
     public String clientDetailPage(@RequestParam("clientId") long clientId,
                                     Model model){
+
         Client client = clientService.getClientById(clientId)
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
-        model.addAttribute(ATTR_CLIENT, client);
+        ClientDto clientDto;
+        if(client instanceof ClientLegalEntity){
+            clientDto = clientLegalEntityMapper.toDto(clientService.getClientLegalEntityByClient(client));
+        }else{
+            clientDto = clientIndividualMapper.toDto(clientService.getClientIndividualByClient(client));
+        }
+
+        ClientManagerDto clientManagerDto = clientManagerMapper.toDto(clientManagerService
+                .getClientManager(clientDto.getClientManagerId())
+                .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)));
+
+        EmployeeDto employeeDto = employeeMapper.toDto(employeeService
+                .getEmployeeById(clientDto.getEmployeeId())
+                .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)));
+
+        List<PledgeAgreementDto> pledgeAgreementCurrentDtoList = pledgeAgreementMapper
+                .toDto(pledgeAgreementService.getCurrentPledgeAgreementsByPledgor(client));
+
+        List<PledgeAgreementDto> pledgeAgreementClosedDtoList = pledgeAgreementMapper
+                .toDto(pledgeAgreementService.getClosedPledgeAgreementsByPledgor(client));
+
+        List<LoanAgreementDto> loanAgreementCurrentDtoList = loanAgreementMapper
+                .toDto(loanAgreementService.getCurrentLoanAgreementsByLoaner(client));
+
+        List<LoanAgreementDto> loanAgreementClosedDtoList = loanAgreementMapper
+                .toDto(loanAgreementService.getClosedLoanAgreementsByLoaner(client));
+
+        model.addAttribute(ATTR_CLIENT, clientDto);
+        model.addAttribute("clientManager", clientManagerDto);
+        model.addAttribute("employee", employeeDto);
+        model.addAttribute("pledgeAgreementCurrentList", pledgeAgreementCurrentDtoList);
+        model.addAttribute("pledgeAgreementClosedList", pledgeAgreementClosedDtoList);
+        model.addAttribute("loanAgreementCurrentList", loanAgreementCurrentDtoList);
+        model.addAttribute("loanAgreementClosedList", loanAgreementClosedDtoList);
 
         return PAGE_DETAIL;
     }
@@ -57,21 +116,24 @@ public class ClientController {
     public String clientCardUpdatePage(@RequestParam("clientId") Optional<Long> clientId,
                                        Model model){
 
-        List<ClientManager> clientManagerList = clientManagerService.getAllClientManager();
-        List<Employee> employeeList = employeeService.getAllEmployee();
-
         Client client = clientService.getClientById(clientId
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
-        if(client.getClass()==ClientLegalEntity.class){
-            model.addAttribute("clientLegalEntity", client);
-        }else if(client.getClass()==ClientIndividual.class){
-            model.addAttribute("clientIndividual", client);
+        if(client instanceof ClientLegalEntity){
+            ClientLegalEntityDto clientLegalEntityDto = clientLegalEntityMapper.toDto(clientService.getClientLegalEntityByClient(client));
+            model.addAttribute("clientLegalEntity", clientLegalEntityDto);
+        }else{
+            ClientIndividualDto clientIndividualDto = clientIndividualMapper.toDto(clientService.getClientIndividualByClient(client));
+            model.addAttribute("clientIndividual", clientIndividualDto);
         }
 
-        model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerList);
-        model.addAttribute(ATTR_EMPLOYEE_LIST, employeeList);
+        List<ClientManagerDto> clientManagerDtoList = clientManagerMapper.toDto(clientManagerService.getAllClientManager());
+
+        List<EmployeeDto> employeeDtoList = employeeMapper.toDto(employeeService.getAllEmployee());
+
+        model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
+        model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);
         model.addAttribute(ATTR_TYPE_OF_CLIENT, client.getTypeOfClient());
 
         return PAGE_CARD_UPDATE;
@@ -81,23 +143,30 @@ public class ClientController {
     public String clientCardNewPage(@RequestParam("typeOfClient") String typeOfClient,
                                     Model model){
 
-        List<ClientManager> clientManagerList = clientManagerService.getAllClientManager();
-        List<Employee> employeeList = employeeService.getAllEmployee();
-
         if(typeOfClient.equals(TypeOfClient.LEGAL_ENTITY.name())){
-            ClientLegalEntity clientLegalEntity = new ClientLegalEntity();
-            model.addAttribute("clientLegalEntity", clientLegalEntity);
-            model.addAttribute(ATTR_TYPE_OF_CLIENT, clientLegalEntity.getTypeOfClient());
+            ClientLegalEntityDto clientLegalEntityDto = ClientLegalEntityDto.builder()
+                    .typeOfClient(TypeOfClient.LEGAL_ENTITY)
+                    .build();
+//            ClientLegalEntity clientLegalEntity = new ClientLegalEntity();
+            model.addAttribute("clientLegalEntity", clientLegalEntityDto);
+            model.addAttribute(ATTR_TYPE_OF_CLIENT, clientLegalEntityDto.getTypeOfClient());
 
         }else if(typeOfClient.equals(TypeOfClient.INDIVIDUAL.name())){
-            ClientIndividual clientIndividual = new ClientIndividual();
-            model.addAttribute("clientIndividual", clientIndividual);
-            model.addAttribute(ATTR_TYPE_OF_CLIENT, clientIndividual.getTypeOfClient());
+            ClientIndividualDto clientIndividualDto = ClientIndividualDto.builder()
+                    .typeOfClient(TypeOfClient.INDIVIDUAL)
+                    .build();
+//            ClientIndividual clientIndividual = new ClientIndividual();
+            model.addAttribute("clientIndividual", clientIndividualDto);
+            model.addAttribute(ATTR_TYPE_OF_CLIENT, clientIndividualDto.getTypeOfClient());
 
         }
 
-        model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerList);
-        model.addAttribute(ATTR_EMPLOYEE_LIST, employeeList);
+        List<ClientManagerDto> clientManagerDtoList = clientManagerMapper.toDto(clientManagerService.getAllClientManager());
+
+        List<EmployeeDto> employeeDtoList = employeeMapper.toDto(employeeService.getAllEmployee());
+
+        model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
+        model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);
 
         return PAGE_CARD_NEW;
     }

@@ -66,13 +66,25 @@ public class PledgeSubjectService {
         return repositoryPledgeSubject.findById(pledgeSubjectId);
     }
 
+    public List<PledgeSubject> getPledgeSubjectByIds(List<Long> ids){
+        return repositoryPledgeSubject.findAllByPledgeSubjectIdIn(ids);
+    }
+
     public List<PledgeSubject> getPledgeSubjectsForPledgeAgreement(long pledgeAgreementId){
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
         return repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
     }
 
+    public List<PledgeSubject> getPledgeSubjectByPledgeAgreement(PledgeAgreement pledgeAgreement){
+        return repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
+    }
+
     public List<PledgeSubject> getPledgeSubjectsForPledgeAgreements(List<PledgeAgreement> pledgeAgreementList){
         return repositoryPledgeSubject.findByPledgeAgreementsIn(pledgeAgreementList);
+    }
+
+    public Optional<PledgeSubject> getPledgeSubjectByCostHistory(CostHistory costHistory){
+        return repositoryPledgeSubject.findByCostHistories(costHistory);
     }
 
     public Page<PledgeSubject> getPledgeSubjectsFromSearch(Map<String, String> searchParam){

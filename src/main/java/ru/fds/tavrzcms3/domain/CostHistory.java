@@ -33,7 +33,7 @@ public class CostHistory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="cost_history_id")
-	private long costHistoryId;
+	private Long costHistoryId;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@Column(name ="date")

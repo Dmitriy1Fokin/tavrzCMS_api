@@ -39,6 +39,10 @@ public class PledgeAgreementService {
 
     private static final Sort sortByClient = new Sort(Sort.Direction.ASC,"client");
 
+    public List<PledgeAgreement> getPledgeAgreementsByIds(List<Long> ids){
+        return repositoryPledgeAgreement.findAllByPledgeAgreementIdIn(ids);
+    }
+
     public List<PledgeAgreement> getPledgeAgreementsByNumPA(String numPA){
         return repositoryPledgeAgreement.findAllByNumPAContainingIgnoreCase(numPA);
     }
@@ -47,12 +51,24 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.getDatesOfConclusion(pledgeAgreement.getPledgeAgreementId());
     }
 
+    public List<Date> getDatesOfConclusion(long pledgeAgreementId){
+        return repositoryPledgeAgreement.getDatesOfConclusion(pledgeAgreementId);
+    }
+
     public List<Date> getDatesOfMonitoring(PledgeAgreement pledgeAgreement){
         return repositoryPledgeAgreement.getDatesOMonitorings(pledgeAgreement.getPledgeAgreementId());
     }
 
+    public List<Date> getDatesOfMonitoring(long pledgeAgreementId){
+        return repositoryPledgeAgreement.getDatesOMonitorings(pledgeAgreementId);
+    }
+
     public List<String> getResultsOfMonitoring(PledgeAgreement pledgeAgreement){
         return repositoryPledgeAgreement.getResultsOfMonitoring(pledgeAgreement.getPledgeAgreementId());
+    }
+
+    public List<String> getResultsOfMonitoring(long pledgeAgreementId){
+        return repositoryPledgeAgreement.getResultsOfMonitoring(pledgeAgreementId);
     }
 
     public Optional<PledgeAgreement> getPledgeAgreementById(long pledgeAgreementId){
@@ -61,6 +77,10 @@ public class PledgeAgreementService {
 
     public List<String> getTypeOfCollateral(PledgeAgreement pledgeAgreement){
         return  repositoryPledgeAgreement.getTypeOfCollateral(pledgeAgreement.getPledgeAgreementId());
+    }
+
+    public List<String> getTypeOfCollateral(long pledgeAgreementId){
+        return  repositoryPledgeAgreement.getTypeOfCollateral(pledgeAgreementId);
     }
 
     public List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(Employee employee, TypeOfPledgeAgreement pervPosl){
@@ -392,6 +412,11 @@ public class PledgeAgreementService {
 
     public List<PledgeAgreement> getAllPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){
         return repositoryPledgeAgreement.findByLoanAgreements(loanAgreement);
+    }
+
+    public List<PledgeAgreement> getAllPledgeAgreementsByPledgor(Client client){
+//        Client client = clientService.getClientById(pledgorId).orElse(null);
+        return repositoryPledgeAgreement.findAllByClient(client);
     }
 
     @Transactional

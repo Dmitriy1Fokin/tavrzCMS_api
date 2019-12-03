@@ -29,12 +29,28 @@ public class ClientService {
         return repositoryClient.findById(clientId);
     }
 
+    public List<Client> getClientsByIds(List<Long> ids){
+        return repositoryClient.findAllByClientIdIn(ids);
+    }
+
     public List<Client> getClientByEmployee(Employee employee){
         return repositoryClient.findByEmployee(employee);
     }
 
+    public List<Client> getAllClientsByClientManager(ClientManager clientManager){
+        return repositoryClient.findAllByClientManager(clientManager);
+    }
+
     public List<ClientLegalEntity> getClientLegalEntityByName(String name){
         return repositoryClientLegalEntity.findByNameContainingIgnoreCase(name);
+    }
+
+    public ClientIndividual getClientIndividualByClient(Client client){
+        return repositoryClientIndividual.findByClient(client);
+    }
+
+    public ClientLegalEntity getClientLegalEntityByClient(Client client){
+        return repositoryClientLegalEntity.findByClient(client);
     }
 
     public List<ClientIndividual> getClientIndividualByFio(String[] fio){
@@ -67,6 +83,27 @@ public class ClientService {
             return clientLegalEntity.getOrganizationalForm() + " " + clientLegalEntity.getName();
         }else
             return "";
+    }
+
+    public String getFullNameClient(long clientId){
+        Optional<Client> client = repositoryClient.findById(clientId);
+
+        if(client.isPresent()){
+            if(client.get() instanceof ClientLegalEntity){
+                ClientLegalEntity clientLegalEntity = repositoryClientLegalEntity.findByClient(client.get());
+
+                return clientLegalEntity.getOrganizationalForm() + " " + clientLegalEntity.getName();
+            }else if(client.get() instanceof ClientIndividual){
+                ClientIndividual clientIndividual = repositoryClientIndividual.findByClient(client.get());
+
+                return clientIndividual.getSurname() + " " + clientIndividual.getName() + " " + clientIndividual.getPatronymic();
+            }else {
+                return "";
+            }
+
+        }else {
+            return "";
+        }
     }
 
     public Page<Client> getClientFromSearch(Map<String, String> searchParam){

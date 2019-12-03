@@ -7,7 +7,6 @@ import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 import java.util.List;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 
 @Data
 @NoArgsConstructor
@@ -21,17 +20,17 @@ public class Client {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="client_id")
-	private long clientId;
+	private Long clientId;
 
 	@Convert(converter = TypeOfClient.Converter.class)
 	@Column(name = "type_of_client")
 	private TypeOfClient typeOfClient;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
 	@JoinColumn(name = "client_manager_id")
 	private ClientManager clientManager;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
 	@JoinColumn(name = "employee_id")
 	private Employee employee;
 

@@ -15,6 +15,7 @@ import ru.fds.tavrzcms3.repository.RepositoryAppUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AppUserDetailsService implements UserDetailsService {
@@ -40,5 +41,9 @@ public class AppUserDetailsService implements UserDetailsService {
         UserDetails userDetails = (UserDetails) new User(appUser.getName(), appUser.getPassword(), authorityList);
 
         return userDetails;
+    }
+
+    public Optional<AppUser> getAppUserByEmployeeId(Long employeeId){
+        return repositoryAppUser.findByEmployeeEmployeeId(employeeId);
     }
 }

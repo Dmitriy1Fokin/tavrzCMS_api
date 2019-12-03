@@ -17,8 +17,8 @@ import java.util.Date;
 import java.util.List;
 
 public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement, Long>, JpaSpecificationExecutor<PledgeAgreement> {
-    PledgeAgreement findByPledgeAgreementId(long pledgeAgreementId);
-    List<PledgeAgreement> findByClient(Client client);
+    List<PledgeAgreement> findAllByPledgeAgreementIdIn(List<Long> ids);
+    List<PledgeAgreement> findAllByClient(Client client);
     int countAllByClientInAndStatusPAEquals(List<Client> clients, StatusOfAgreement statusPA);
     int countAllByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, TypeOfPledgeAgreement perv, StatusOfAgreement statusPA);
     int countAllByClientAndStatusPAEquals(Client client, StatusOfAgreement statusPA);
