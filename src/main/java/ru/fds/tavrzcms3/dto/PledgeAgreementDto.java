@@ -2,22 +2,32 @@ package ru.fds.tavrzcms3.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 @Builder
 public class PledgeAgreementDto {
 
     private Long pledgeAgreementId;
 
+    @NotBlank(message = "Обязательно для заполнения")
     private String numPA;
 
+    @NotNull(message = "Обязательно для заполнения")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateBeginPA;
 
+    @NotNull(message = "Обязательно для заполнения")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateEndPA;
 
     private TypeOfPledgeAgreement pervPosl;

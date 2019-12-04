@@ -26,7 +26,7 @@ public class Monitoring {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="monitoring_id")
-	private long monitoringId;
+	private Long monitoringId;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@Column(name ="date")

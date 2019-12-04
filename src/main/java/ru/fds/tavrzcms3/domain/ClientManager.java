@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
@@ -23,10 +24,12 @@ public class ClientManager {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="client_manager_id")
 	private Long clientManagerId;
-	
+
+	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name = "surname")
 	private String surname;
-	
+
+	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name = "name")
 	private String name;
 	

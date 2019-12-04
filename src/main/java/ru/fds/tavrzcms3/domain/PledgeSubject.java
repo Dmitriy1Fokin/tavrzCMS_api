@@ -28,7 +28,7 @@ public class PledgeSubject {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="pledge_subject_id")
-	private long pledgeSubjectId;
+	private Long pledgeSubjectId;
 
     @NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="name")

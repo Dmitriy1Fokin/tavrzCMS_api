@@ -24,7 +24,7 @@ public class Encumbrance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="encumbrance_id")
-    private long encumbranceId;
+    private Long encumbranceId;
 
     @NotBlank(message = "Обязательно для заполнения")
     @Column(name ="name")

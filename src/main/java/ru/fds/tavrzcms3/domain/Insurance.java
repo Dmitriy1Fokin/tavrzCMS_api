@@ -35,7 +35,7 @@ public class Insurance {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="insurance_id")
-	private long insuranceId;
+	private Long insuranceId;
 
 	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="num_insurance")

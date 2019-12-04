@@ -5,6 +5,7 @@ import lombok.*;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
@@ -18,10 +19,12 @@ public class Employee {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="employee_id")
 	private Long employeeId;
-	
+
+	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="surname")
 	private String surname;
-	
+
+	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="name")
 	private String name;
 	
