@@ -17,19 +17,21 @@
 
 <div th:switch="${typeOfClient.name()}">
     <div th:case="LEGAL_ENTITY">
-        <form th:action="@{client/insert_client_le}" th:method="post" th:object="${clientLegalEntity}" action="client/card_new.html">
-            <div th:replace="fragments/client_forms :: generalProperty(${clientLegalEntity}, ${employeeList}, ${clientManagerList})"></div>
+        <form th:action="@{/client/insert_client_le}" th:method="post" th:object="${clientLegalEntityDto}" action="client/card_new.html">
+            <input type="hidden", th:field="*{typeOfClient}" th:value="${clientLegalEntityDto.typeOfClient}">
+            <div th:replace="fragments/client_forms :: generalProperty(${clientLegalEntityDto}, ${employeeList}, ${clientManagerList})"></div>
             <br>
-            <div th:replace="fragments/client_forms :: legalEntitylProperty(${clientLegalEntity})"></div>
+            <div th:replace="fragments/client_forms :: legalEntitylProperty(${clientLegalEntityDto})"></div>
             <br>
             <button type="submit">Обновить</button>
         </form>
     </div>
     <div th:case="INDIVIDUAL">
-        <form th:action="@{client/insert_client_ind}" th:method="post" th:object="${clientIndividual}" action="client/card_new.html">
-            <div th:replace="fragments/client_forms :: generalProperty(${clientIndividual}, ${employeeList}, ${clientManagerList})"></div>
+        <form th:action="@{/client/insert_client_ind}" th:method="post" th:object="${clientIndividualDto}" action="client/card_new.html">
+            <input type="hidden", th:field="*{typeOfClient}" th:value="${clientIndividualDto.typeOfClient}">
+            <div th:replace="fragments/client_forms :: generalProperty(${clientIndividualDto}, ${employeeList}, ${clientManagerList})"></div>
             <br>
-            <div th:replace="fragments/client_forms :: individualProperty(${clientIndividual})"></div>
+            <div th:replace="fragments/client_forms :: individualProperty(${clientIndividualDto})"></div>
             <br>
             <button type="submit">Обновить</button>
         </form>

@@ -8,22 +8,22 @@
 <div th:fragment="generalProperty(client, employeeList, clientManagerList)">
     <div class="row">
         <label>Ответственный сотрудник</label>
-        <select required th:field="*{employee}">
+        <select required th:field="*{employeeId}">
             <div th:each="emp : ${employeeList}">
-                <option th:value="${emp.getEmployeeId()}" th:text="${emp.getSurname() + ' ' + emp.getName()}"></option>
+                <option th:value="${emp.getEmployeeId()}" th:text="${emp.getFullName()}"></option>
             </div>
         </select>
-        <div th:if="${#fields.hasErrors('employee')}" th:errors="*{employee}">Name Error</div>
+        <div th:if="${#fields.hasErrors('employeeId')}" th:errors="*{employeeId}">Name Error</div>
     </div>
     <br>
     <div class="row">
         <label>Клиентский менеджер</label>
-        <select required th:field="*{clientManager}">
+        <select required th:field="*{clientManagerId}">
             <div th:each="cm : ${clientManagerList}">
-                <option th:value="${cm.clientManagerId}" th:text="${cm.getSurname() + ' ' + cm.getName()}"></option>
+                <option th:value="${cm.clientManagerId}" th:text="${cm.getFullName()}"></option>
             </div>
         </select>
-        <div th:if="${#fields.hasErrors('clientManager')}" th:errors="*{clientManager}">Name Error</div>
+        <div th:if="${#fields.hasErrors('clientManagerId')}" th:errors="*{clientManagerId}">Name Error</div>
     </div>
 </div>
 

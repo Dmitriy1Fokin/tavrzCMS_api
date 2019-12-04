@@ -5,8 +5,6 @@ import ru.fds.tavrzcms3.domain.ClientLegalEntity;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.dto.ClientLegalEntityDto;
-import ru.fds.tavrzcms3.dto.LoanAgreementDto;
-import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
 import ru.fds.tavrzcms3.service.ClientManagerService;
 import ru.fds.tavrzcms3.service.EmployeeService;
 import ru.fds.tavrzcms3.service.LoanAgreementService;
@@ -22,27 +20,26 @@ public class ClientLegalEntityMapper implements Mapper<ClientLegalEntity, Client
     private final EmployeeService employeeService;
     private final PledgeAgreementService pledgeAgreementService;
     private final LoanAgreementService loanAgreementService;
-    private final LoanAgreementMapper loanAgreementMapper;
-    private final PledgeAgreementMapper pledgeAgreementMapper;
 
     public ClientLegalEntityMapper(ClientManagerService clientManagerService,
                                    EmployeeService employeeService,
                                    PledgeAgreementService pledgeAgreementService,
-                                   LoanAgreementService loanAgreementService,
-                                   LoanAgreementMapper loanAgreementMapper,
-                                   PledgeAgreementMapper pledgeAgreementMapper) {
+                                   LoanAgreementService loanAgreementService) {
         this.clientManagerService = clientManagerService;
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.loanAgreementService = loanAgreementService;
-        this.loanAgreementMapper = loanAgreementMapper;
-        this.pledgeAgreementMapper = pledgeAgreementMapper;
     }
 
     @Override
     public ClientLegalEntity toEntity(ClientLegalEntityDto dto) {
-        List<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementsByIds(dto.getLoanAgreementsIds());
-        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementsByIds(dto.getPledgeAgreementsIds());
+        List<LoanAgreement> loanAgreementList = new ArrayList<>();
+        if(dto.getLoanAgreementsIds() != null)
+            loanAgreementList = loanAgreementService.getLoanAgreementsByIds(dto.getLoanAgreementsIds());
+
+        List<PledgeAgreement> pledgeAgreementList = new ArrayList<>();
+        if(dto.getPledgeAgreementsIds() != null)
+                pledgeAgreementList = pledgeAgreementService.getPledgeAgreementsByIds(dto.getPledgeAgreementsIds());
 
         return ClientLegalEntity.builder()
                 .clientId(dto.getClientId())
