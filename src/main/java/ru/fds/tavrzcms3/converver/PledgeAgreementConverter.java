@@ -1,4 +1,4 @@
-package ru.fds.tavrzcms3.mapper;
+package ru.fds.tavrzcms3.converver;
 
 import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
@@ -15,17 +15,17 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class PledgeAgreementMapper implements Mapper<PledgeAgreement, PledgeAgreementDto> {
+public class PledgeAgreementConverter implements Converter<PledgeAgreement, PledgeAgreementDto> {
 
     private final ClientService clientService;
     private final LoanAgreementService loanAgreementService;
     private final PledgeSubjectService pledgeSubjectService;
     private final PledgeAgreementService pledgeAgreementService;
 
-    public PledgeAgreementMapper(ClientService clientService,
-                                 LoanAgreementService loanAgreementService,
-                                 PledgeSubjectService pledgeSubjectService,
-                                 PledgeAgreementService pledgeAgreementService) {
+    public PledgeAgreementConverter(ClientService clientService,
+                                    LoanAgreementService loanAgreementService,
+                                    PledgeSubjectService pledgeSubjectService,
+                                    PledgeAgreementService pledgeAgreementService) {
         this.clientService = clientService;
         this.loanAgreementService = loanAgreementService;
         this.pledgeSubjectService = pledgeSubjectService;

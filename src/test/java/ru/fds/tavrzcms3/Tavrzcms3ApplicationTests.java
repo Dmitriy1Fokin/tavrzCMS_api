@@ -10,9 +10,9 @@ import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 import ru.fds.tavrzcms3.dictionary.TypeOfSecurities;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.dto.ClientDto;
-import ru.fds.tavrzcms3.mapper.ClientLegalEntityMapper;
-import ru.fds.tavrzcms3.mapper.ClientMapper;
-import ru.fds.tavrzcms3.mapper.LoanAgreementMapper;
+import ru.fds.tavrzcms3.converver.ClientLegalEntityConverter;
+import ru.fds.tavrzcms3.converver.ClientConverter;
+import ru.fds.tavrzcms3.converver.LoanAgreementConverter;
 import ru.fds.tavrzcms3.repository.RepositoryClient;
 import ru.fds.tavrzcms3.repository.RepositoryClientLegalEntity;
 import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
@@ -26,13 +26,13 @@ public class Tavrzcms3ApplicationTests {
     @Autowired
     RepositoryClientLegalEntity repositoryClientLegalEntity;
     @Autowired
-    ClientLegalEntityMapper clientLegalEntityMapper;
+    ClientLegalEntityConverter clientLegalEntityConverter;
     @Autowired
-    ClientMapper clientMapper;
+    ClientConverter clientConverter;
     @Autowired
     RepositoryLoanAgreement repositoryLoanAgreement;
     @Autowired
-    LoanAgreementMapper loanAgreementMapper;
+    LoanAgreementConverter loanAgreementConverter;
 
 
     @Test
@@ -66,10 +66,10 @@ public class Tavrzcms3ApplicationTests {
         Client client = repositoryClient.findById(246L).get();
         System.out.println(client);
 
-        ClientDto clientDto = clientMapper.toDto(client);
+        ClientDto clientDto = clientConverter.toDto(client);
         System.out.println(clientDto);
 
-        Client client1 = clientMapper.toEntity(clientDto);
+        Client client1 = clientConverter.toEntity(clientDto);
         System.out.println(client1);
 
     }

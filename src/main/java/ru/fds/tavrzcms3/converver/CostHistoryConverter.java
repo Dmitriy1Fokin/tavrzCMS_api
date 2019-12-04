@@ -1,17 +1,14 @@
-package ru.fds.tavrzcms3.mapper;
+package ru.fds.tavrzcms3.converver;
 
 import ru.fds.tavrzcms3.domain.CostHistory;
-import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.CostHistoryDto;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 
-import java.util.Optional;
-
-public class CostHistoryMapper implements Mapper<CostHistory, CostHistoryDto> {
+public class CostHistoryConverter implements Converter<CostHistory, CostHistoryDto> {
 
     private final PledgeSubjectService pledgeSubjectService;
 
-    public CostHistoryMapper(PledgeSubjectService pledgeSubjectService) {
+    public CostHistoryConverter(PledgeSubjectService pledgeSubjectService) {
         this.pledgeSubjectService = pledgeSubjectService;
     }
 

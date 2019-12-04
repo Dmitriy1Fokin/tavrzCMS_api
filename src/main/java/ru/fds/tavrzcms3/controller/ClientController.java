@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.dto.*;
-import ru.fds.tavrzcms3.mapper.*;
+import ru.fds.tavrzcms3.converver.*;
 import ru.fds.tavrzcms3.service.*;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
@@ -27,12 +27,12 @@ public class ClientController {
     private final PledgeAgreementService pledgeAgreementService;
     private final LoanAgreementService loanAgreementService;
 
-    private final ClientIndividualMapper clientIndividualMapper;
-    private final ClientLegalEntityMapper clientLegalEntityMapper;
-    private final EmployeeMapper employeeMapper;
-    private final ClientManagerMapper clientManagerMapper;
-    private final PledgeAgreementMapper pledgeAgreementMapper;
-    private final LoanAgreementMapper loanAgreementMapper;
+    private final ClientIndividualConverter clientIndividualConverter;
+    private final ClientLegalEntityConverter clientLegalEntityConverter;
+    private final EmployeeConverter employeeConverter;
+    private final ClientManagerConverter clientManagerConverter;
+    private final PledgeAgreementConverter pledgeAgreementConverter;
+    private final LoanAgreementConverter loanAgreementConverter;
 
     private final ValidatorEntity validatorEntity;
 
@@ -54,24 +54,24 @@ public class ClientController {
                             EmployeeService employeeService,
                             PledgeAgreementService pledgeAgreementService,
                             LoanAgreementService loanAgreementService,
-                            ClientIndividualMapper clientIndividualMapper,
-                            ClientLegalEntityMapper clientLegalEntityMapper,
-                            EmployeeMapper employeeMapper,
-                            ClientManagerMapper clientManagerMapper,
-                            PledgeAgreementMapper pledgeAgreementMapper,
-                            LoanAgreementMapper loanAgreementMapper,
+                            ClientIndividualConverter clientIndividualConverter,
+                            ClientLegalEntityConverter clientLegalEntityConverter,
+                            EmployeeConverter employeeConverter,
+                            ClientManagerConverter clientManagerConverter,
+                            PledgeAgreementConverter pledgeAgreementConverter,
+                            LoanAgreementConverter loanAgreementConverter,
                             ValidatorEntity validatorEntity) {
         this.clientService = clientService;
         this.clientManagerService = clientManagerService;
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.loanAgreementService = loanAgreementService;
-        this.clientIndividualMapper = clientIndividualMapper;
-        this.clientLegalEntityMapper = clientLegalEntityMapper;
-        this.employeeMapper = employeeMapper;
-        this.clientManagerMapper = clientManagerMapper;
-        this.pledgeAgreementMapper = pledgeAgreementMapper;
-        this.loanAgreementMapper = loanAgreementMapper;
+        this.clientIndividualConverter = clientIndividualConverter;
+        this.clientLegalEntityConverter = clientLegalEntityConverter;
+        this.employeeConverter = employeeConverter;
+        this.clientManagerConverter = clientManagerConverter;
+        this.pledgeAgreementConverter = pledgeAgreementConverter;
+        this.loanAgreementConverter = loanAgreementConverter;
         this.validatorEntity = validatorEntity;
     }
 
@@ -83,29 +83,29 @@ public class ClientController {
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
         ClientDto clientDto;
         if(client instanceof ClientLegalEntity){
-            clientDto = clientLegalEntityMapper.toDto(clientService.getClientLegalEntityByClient(client));
+            clientDto = clientLegalEntityConverter.toDto(clientService.getClientLegalEntityByClient(client));
         }else{
-            clientDto = clientIndividualMapper.toDto(clientService.getClientIndividualByClient(client));
+            clientDto = clientIndividualConverter.toDto(clientService.getClientIndividualByClient(client));
         }
 
-        ClientManagerDto clientManagerDto = clientManagerMapper.toDto(clientManagerService
+        ClientManagerDto clientManagerDto = clientManagerConverter.toDto(clientManagerService
                 .getClientManager(clientDto.getClientManagerId())
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)));
 
-        EmployeeDto employeeDto = employeeMapper.toDto(employeeService
+        EmployeeDto employeeDto = employeeConverter.toDto(employeeService
                 .getEmployeeById(clientDto.getEmployeeId())
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)));
 
-        List<PledgeAgreementDto> pledgeAgreementCurrentDtoList = pledgeAgreementMapper
+        List<PledgeAgreementDto> pledgeAgreementCurrentDtoList = pledgeAgreementConverter
                 .toDto(pledgeAgreementService.getCurrentPledgeAgreementsByPledgor(client));
 
-        List<PledgeAgreementDto> pledgeAgreementClosedDtoList = pledgeAgreementMapper
+        List<PledgeAgreementDto> pledgeAgreementClosedDtoList = pledgeAgreementConverter
                 .toDto(pledgeAgreementService.getClosedPledgeAgreementsByPledgor(client));
 
-        List<LoanAgreementDto> loanAgreementCurrentDtoList = loanAgreementMapper
+        List<LoanAgreementDto> loanAgreementCurrentDtoList = loanAgreementConverter
                 .toDto(loanAgreementService.getCurrentLoanAgreementsByLoaner(client));
 
-        List<LoanAgreementDto> loanAgreementClosedDtoList = loanAgreementMapper
+        List<LoanAgreementDto> loanAgreementClosedDtoList = loanAgreementConverter
                 .toDto(loanAgreementService.getClosedLoanAgreementsByLoaner(client));
 
         model.addAttribute(ATTR_CLIENT, clientDto);
@@ -128,16 +128,16 @@ public class ClientController {
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
         if(client instanceof ClientLegalEntity){
-            ClientLegalEntityDto clientLegalEntityDto = clientLegalEntityMapper.toDto(clientService.getClientLegalEntityByClient(client));
+            ClientLegalEntityDto clientLegalEntityDto = clientLegalEntityConverter.toDto(clientService.getClientLegalEntityByClient(client));
             model.addAttribute(ATTR_CLIENT_LEGAL_ENTITY, clientLegalEntityDto);
         }else{
-            ClientIndividualDto clientIndividualDto = clientIndividualMapper.toDto(clientService.getClientIndividualByClient(client));
+            ClientIndividualDto clientIndividualDto = clientIndividualConverter.toDto(clientService.getClientIndividualByClient(client));
             model.addAttribute(ATTR_CLIENT_INDIVIDUAL, clientIndividualDto);
         }
 
-        List<ClientManagerDto> clientManagerDtoList = clientManagerMapper.toDto(clientManagerService.getAllClientManager());
+        List<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
 
-        List<EmployeeDto> employeeDtoList = employeeMapper.toDto(employeeService.getAllEmployee());
+        List<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
 
         model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
         model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);
@@ -166,9 +166,9 @@ public class ClientController {
 
         }
 
-        List<ClientManagerDto> clientManagerDtoList = clientManagerMapper.toDto(clientManagerService.getAllClientManager());
+        List<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
 
-        List<EmployeeDto> employeeDtoList = employeeMapper.toDto(employeeService.getAllEmployee());
+        List<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
 
         model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
         model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);
@@ -181,8 +181,8 @@ public class ClientController {
                                           BindingResult bindingResult,
                                           Model model){
         if(bindingResult.hasErrors()){
-            List<ClientManagerDto> clientManagerDtoList = clientManagerMapper.toDto(clientManagerService.getAllClientManager());
-            List<EmployeeDto> employeeDtoList = employeeMapper.toDto(employeeService.getAllEmployee());
+            List<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
+            List<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
             model.addAttribute(ATTR_CLIENT_LEGAL_ENTITY, clientLegalEntityDto);
             model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
             model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);
@@ -191,7 +191,7 @@ public class ClientController {
             return PAGE_CARD_UPDATE;
         }
 
-        ClientLegalEntity clientLegalEntity = clientLegalEntityMapper.toEntity(clientLegalEntityDto);
+        ClientLegalEntity clientLegalEntity = clientLegalEntityConverter.toEntity(clientLegalEntityDto);
 
         Set<ConstraintViolation<ClientLegalEntity>> violations = validatorEntity.validateEntity(clientLegalEntity);
         if(!violations.isEmpty())
@@ -207,8 +207,8 @@ public class ClientController {
                                          BindingResult bindingResult,
                                          Model model){
         if(bindingResult.hasErrors()){
-            List<ClientManagerDto> clientManagerDtoList = clientManagerMapper.toDto(clientManagerService.getAllClientManager());
-            List<EmployeeDto> employeeDtoList = employeeMapper.toDto(employeeService.getAllEmployee());
+            List<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
+            List<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
             model.addAttribute(ATTR_CLIENT_INDIVIDUAL, clientIndividualDto);
             model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
             model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);
@@ -217,7 +217,7 @@ public class ClientController {
             return PAGE_CARD_UPDATE;
         }
 
-        ClientIndividual clientIndividual = clientIndividualMapper.toEntity(clientIndividualDto);
+        ClientIndividual clientIndividual = clientIndividualConverter.toEntity(clientIndividualDto);
 
         Set<ConstraintViolation<ClientIndividual>> violations =  validatorEntity.validateEntity(clientIndividual);
         if(!violations.isEmpty())
@@ -233,8 +233,8 @@ public class ClientController {
                                              BindingResult bindingResult,
                                              Model model){
         if(bindingResult.hasErrors()){
-            List<ClientManagerDto> clientManagerDtoList = clientManagerMapper.toDto(clientManagerService.getAllClientManager());
-            List<EmployeeDto> employeeDtoList = employeeMapper.toDto(employeeService.getAllEmployee());
+            List<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
+            List<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
             model.addAttribute(ATTR_CLIENT_LEGAL_ENTITY, clientLegalEntityDto);
             model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
             model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);
@@ -243,7 +243,7 @@ public class ClientController {
             return PAGE_CARD_NEW;
         }
 
-        ClientLegalEntity clientLegalEntity = clientLegalEntityMapper.toEntity(clientLegalEntityDto);
+        ClientLegalEntity clientLegalEntity = clientLegalEntityConverter.toEntity(clientLegalEntityDto);
 
         Set<ConstraintViolation<ClientLegalEntity>> violations = validatorEntity.validateEntity(clientLegalEntity);
         if(!violations.isEmpty())
@@ -259,8 +259,8 @@ public class ClientController {
                                             BindingResult bindingResult,
                                             Model model){
         if(bindingResult.hasErrors()){
-            List<ClientManagerDto> clientManagerDtoList = clientManagerMapper.toDto(clientManagerService.getAllClientManager());
-            List<EmployeeDto> employeeDtoList = employeeMapper.toDto(employeeService.getAllEmployee());
+            List<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
+            List<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
             model.addAttribute(ATTR_CLIENT_INDIVIDUAL, clientIndividualDto);
             model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
             model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);
@@ -269,7 +269,7 @@ public class ClientController {
             return PAGE_CARD_NEW;
         }
 
-        ClientIndividual clientIndividual = clientIndividualMapper.toEntity(clientIndividualDto);
+        ClientIndividual clientIndividual = clientIndividualConverter.toEntity(clientIndividualDto);
 
         Set<ConstraintViolation<ClientIndividual>> violations = validatorEntity.validateEntity(clientIndividual);
         if(!violations.isEmpty())

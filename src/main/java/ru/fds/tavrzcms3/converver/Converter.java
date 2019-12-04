@@ -1,9 +1,9 @@
-package ru.fds.tavrzcms3.mapper;
+package ru.fds.tavrzcms3.converver;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public interface Mapper<E, D> {
+public interface Converter<E, D> {
 
     E toEntity(D dto);
     D toDto(E entity);

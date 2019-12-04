@@ -1,12 +1,10 @@
-package ru.fds.tavrzcms3.mapper;
+package ru.fds.tavrzcms3.converver;
 
 import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.dto.ClientDto;
-import ru.fds.tavrzcms3.dto.LoanAgreementDto;
-import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
 import ru.fds.tavrzcms3.service.ClientManagerService;
 import ru.fds.tavrzcms3.service.EmployeeService;
 import ru.fds.tavrzcms3.service.LoanAgreementService;
@@ -16,27 +14,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ClientMapper implements Mapper<Client,ClientDto> {
+public class ClientConverter implements Converter<Client,ClientDto> {
 
     private final ClientManagerService clientManagerService;
     private final EmployeeService employeeService;
     private final PledgeAgreementService pledgeAgreementService;
     private final LoanAgreementService loanAgreementService;
-    private final LoanAgreementMapper loanAgreementMapper;
-    private final PledgeAgreementMapper pledgeAgreementMapper;
+    private final LoanAgreementConverter loanAgreementConverter;
+    private final PledgeAgreementConverter pledgeAgreementConverter;
 
-    public ClientMapper(ClientManagerService clientManagerService,
-                        EmployeeService employeeService,
-                        PledgeAgreementService pledgeAgreementService,
-                        LoanAgreementService loanAgreementService,
-                        LoanAgreementMapper loanAgreementMapper,
-                        PledgeAgreementMapper pledgeAgreementMapper) {
+    public ClientConverter(ClientManagerService clientManagerService,
+                           EmployeeService employeeService,
+                           PledgeAgreementService pledgeAgreementService,
+                           LoanAgreementService loanAgreementService,
+                           LoanAgreementConverter loanAgreementConverter,
+                           PledgeAgreementConverter pledgeAgreementConverter) {
         this.clientManagerService = clientManagerService;
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.loanAgreementService = loanAgreementService;
-        this.loanAgreementMapper = loanAgreementMapper;
-        this.pledgeAgreementMapper = pledgeAgreementMapper;
+        this.loanAgreementConverter = loanAgreementConverter;
+        this.pledgeAgreementConverter = pledgeAgreementConverter;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package ru.fds.tavrzcms3.mapper;
+package ru.fds.tavrzcms3.converver;
 
 import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.domain.Client;
@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class ClientManagerMapper implements Mapper<ClientManager, ClientManagerDto> {
+public class ClientManagerConverter implements Converter<ClientManager, ClientManagerDto> {
 
     private final ClientService clientService;
 
-    public ClientManagerMapper(ClientService clientService) {
+    public ClientManagerConverter(ClientService clientService) {
         this.clientService = clientService;
     }
 
