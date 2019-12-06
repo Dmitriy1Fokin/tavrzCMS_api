@@ -58,6 +58,7 @@ public class LoanAgreementConverter implements Converter<LoanAgreement, LoanAgre
                 .debtLA(entity.getDebtLA())
                 .interestRateLA(entity.getInterestRateLA())
                 .pfo(entity.getPfo())
+                .qualityCategory(entity.getQualityCategory())
                 .clientId(entity.getClient().getClientId())
                 .pledgeAgreementsIds(pledgeAgreementDtoList)
                 .build();
