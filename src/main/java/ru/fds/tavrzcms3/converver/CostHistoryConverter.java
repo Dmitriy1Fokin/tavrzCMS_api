@@ -1,9 +1,11 @@
 package ru.fds.tavrzcms3.converver;
 
+import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.domain.CostHistory;
 import ru.fds.tavrzcms3.dto.CostHistoryDto;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 
+@Component
 public class CostHistoryConverter implements Converter<CostHistory, CostHistoryDto> {
 
     private final PledgeSubjectService pledgeSubjectService;

@@ -20,21 +20,15 @@ public class ClientConverter implements Converter<Client,ClientDto> {
     private final EmployeeService employeeService;
     private final PledgeAgreementService pledgeAgreementService;
     private final LoanAgreementService loanAgreementService;
-    private final LoanAgreementConverter loanAgreementConverter;
-    private final PledgeAgreementConverter pledgeAgreementConverter;
 
     public ClientConverter(ClientManagerService clientManagerService,
                            EmployeeService employeeService,
                            PledgeAgreementService pledgeAgreementService,
-                           LoanAgreementService loanAgreementService,
-                           LoanAgreementConverter loanAgreementConverter,
-                           PledgeAgreementConverter pledgeAgreementConverter) {
+                           LoanAgreementService loanAgreementService) {
         this.clientManagerService = clientManagerService;
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.loanAgreementService = loanAgreementService;
-        this.loanAgreementConverter = loanAgreementConverter;
-        this.pledgeAgreementConverter = pledgeAgreementConverter;
     }
 
     @Override

@@ -74,7 +74,7 @@ public class ClientLegalEntityConverter implements Converter<ClientLegalEntity, 
                 .organizationalForm(entity.getOrganizationalForm())
                 .name(entity.getName())
                 .inn(entity.getInn())
-                .fullName(entity.getOrganizationalForm() + "\"" + entity.getName() + "\"")
+                .fullName(entity.getOrganizationalForm() + " \"" + entity.getName() + "\"")
                 .build();
     }
 }

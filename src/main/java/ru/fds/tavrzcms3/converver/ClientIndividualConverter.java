@@ -68,11 +68,11 @@ public class ClientIndividualConverter implements Converter<ClientIndividual, Cl
 
         StringBuilder fullName = new StringBuilder();
         if(Objects.nonNull(entity.getSurname()) && !entity.getSurname().isEmpty())
-            fullName.append(entity.getName());
+            fullName.append(entity.getSurname());
         if(Objects.nonNull(entity.getName()) && !entity.getName().isEmpty())
-            fullName.append(" " + entity.getName());
+            fullName.append(" ").append(entity.getName());
         if(Objects.nonNull(entity.getPatronymic()) && !entity.getPatronymic().isEmpty())
-            fullName.append(" " + entity.getPatronymic());
+            fullName.append(" ").append(entity.getPatronymic());
 
 
         return ClientIndividualDto.builder()
