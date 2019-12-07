@@ -8,16 +8,12 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.PositiveOrZero;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -25,9 +21,23 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 @SuperBuilder
 @Table(name = "pledge_realty_land_ownership")
-public class PledgeSubjectRealtyLandOwnership extends PledgeSubjectRealty {
+@SecondaryTable(name = "pledge_realty_prime", pkJoinColumns = @PrimaryKeyJoinColumn(name = "pledge_subject_id"))
+public class PledgeSubjectRealtyLandOwnership extends PledgeSubject {
 
-	@NotBlank(message = "Обязательно для заполнения")
+    @NotNull(message = "Обязательно для заполнения")
+    @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
+    @Column(name ="area", table = "pledge_realty_prime")
+    private double area;
+
+    @Pattern(regexp = "[0-9]{2}:[0-9]{2}:[0-9]{3,7}:[0-9]+",
+            message = "Неверное значение")
+    @Column(name ="cadastral_num", table = "pledge_realty_prime")
+    private String cadastralNum;
+
+    @Column(name ="conditional_num", table = "pledge_realty_prime")
+    private String conditionalNum;
+
+    @NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="permitted_use")
 	private String permittedUse;
 
@@ -43,7 +53,7 @@ public class PledgeSubjectRealtyLandOwnership extends PledgeSubjectRealty {
 	@Valid
 	@OneToOne(mappedBy = "pledgeSubjectRealtyLandOwnership")
 	@JsonIgnore
-	private PledgeSubjectRealty pledgeSubjectRealty;
+	private PledgeSubject pledgeSubject;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "land_category_id")

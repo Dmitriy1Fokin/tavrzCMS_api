@@ -269,7 +269,7 @@ public class PledgeSubjectController {
     }
 
     @PostMapping("update_pledge_subject_landOwn")
-    public String updatePledgeSubjectLandOwnership(@Valid PledgeSubjectRealty pledgeSubjectRealtyLandOwnership,
+    public String updatePledgeSubjectLandOwnership(@Valid PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership,
                                                    BindingResult bindingResult,
                                                    Model model){
         if(bindingResult.hasErrors()) {
@@ -288,7 +288,7 @@ public class PledgeSubjectController {
     }
 
     @PostMapping("update_pledge_subject_landLease")
-    public String updatePledgeSubjectLandLease(@Valid PledgeSubjectRealty pledgeSubjectRealtyLandLease,
+    public String updatePledgeSubjectLandLease(@Valid PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease,
                                                BindingResult bindingResult,
                                                Model model){
         if(bindingResult.hasErrors()) {
@@ -307,7 +307,7 @@ public class PledgeSubjectController {
     }
 
     @PostMapping("update_pledge_subject_building")
-    public String updatePledgeSubjectBuilding(@Valid PledgeSubjectRealty pledgeSubjectRealtyBuilding,
+    public String updatePledgeSubjectBuilding(@Valid PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding,
                                               BindingResult bindingResult,
                                               Model model){
         if(bindingResult.hasErrors()) {
@@ -326,7 +326,7 @@ public class PledgeSubjectController {
     }
 
     @PostMapping("update_pledge_subject_room")
-    public String updatePledgeSubjectRoom(@Valid PledgeSubjectRealty pledgeSubjectRealtyRoom,
+    public String updatePledgeSubjectRoom(@Valid PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom,
                                           BindingResult bindingResult,
                                           Model model){
         if(bindingResult.hasErrors()) {

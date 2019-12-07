@@ -149,11 +149,26 @@ public class PledgeSubject {
 	@JoinColumn(name = "pledgeSubject_id")
     @JsonIgnore
 	private PledgeSubjectEquipment pledgeSubjectEquipment;
-	
+
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
-    @JsonIgnore
-	private PledgeSubjectRealty pledgeSubjectRealty;
+	@JsonIgnore
+	private PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding;
+
+	@OneToOne
+	@JoinColumn(name = "pledgeSubject_id")
+	@JsonIgnore
+	private PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease;
+
+	@OneToOne
+	@JoinColumn(name = "pledgeSubject_id")
+	@JsonIgnore
+	private PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership;
+
+	@OneToOne
+	@JoinColumn(name = "pledgeSubject_id")
+	@JsonIgnore
+	private PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom;
 	
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")

@@ -9,17 +9,9 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -27,9 +19,23 @@ import javax.validation.constraints.NotNull;
 @SuperBuilder
 @Entity
 @Table(name = "pledge_realty_building")
-public class PledgeSubjectRealtyBuilding extends PledgeSubjectRealty {
+@SecondaryTable(name = "pledge_realty_prime", pkJoinColumns = @PrimaryKeyJoinColumn(name = "pledge_subject_id"))
+public class PledgeSubjectRealtyBuilding extends PledgeSubject {
 
-	@NotNull(message = "Обязательно для заполнения")
+    @NotNull(message = "Обязательно для заполнения")
+    @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
+    @Column(name ="area", table = "pledge_realty_prime")
+    private double area;
+
+    @Pattern(regexp = "[0-9]{2}:[0-9]{2}:[0-9]{3,7}:[0-9]+",
+            message = "Неверное значение")
+    @Column(name ="cadastral_num", table = "pledge_realty_prime")
+    private String cadastralNum;
+
+    @Column(name ="conditional_num", table = "pledge_realty_prime")
+    private String conditionalNum;
+
+    @NotNull(message = "Обязательно для заполнения")
 	@Min(value = 1, message = "Неверное значение")
 	@Max(value = 100, message = "Неверное значение")
 	@Column(name ="readiness_degree")
@@ -42,10 +48,10 @@ public class PledgeSubjectRealtyBuilding extends PledgeSubjectRealty {
 	@Column(name ="year_of_construction")
 	private int yearOfConstruction;
 
-	@Valid
-	@OneToOne(mappedBy = "pledgeSubjectRealtyBuilding")
-	@JsonIgnore
-	private PledgeSubjectRealty pledgeSubjectRealty;
+    @Valid
+    @OneToOne(mappedBy = "pledgeSubjectRealtyBuilding")
+    @JsonIgnore
+    private PledgeSubject pledgeSubject;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "market_segment_id")

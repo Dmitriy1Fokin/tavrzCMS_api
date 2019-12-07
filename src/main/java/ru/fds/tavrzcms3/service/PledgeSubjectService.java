@@ -27,8 +27,6 @@ public class PledgeSubjectService {
     @Autowired
     RepositoryPledgeSubjectEquipment repositoryPledgeSubjectEquipment;
     @Autowired
-    RepositoryPledgeSubjectRealty repositoryPledgeSubjectRealty;
-    @Autowired
     RepositoryPledgeSubjectRealtyBuilding repositoryPledgeSubjectRealtyBuilding;
     @Autowired
     RepositoryPledgeSubjectRealtyLandLease repositoryPledgeSubjectRealtyLandLease;
@@ -56,11 +54,6 @@ public class PledgeSubjectService {
     RepositoryEncumbrance repositoryEncumbrance;
     @Autowired
     RepositoryInsurance repositoryInsurance;
-
-//    public PledgeSubject getPledgeSubjectById(long id){
-//        PledgeSubject pledgeSubject = repositoryPledgeSubject.findByPledgeSubjectId(id);
-//        return  pledgeSubject;
-//    }
 
     public Optional<PledgeSubject> getPledgeSubjectById(long pledgeSubjectId){
         return repositoryPledgeSubject.findById(pledgeSubjectId);
@@ -416,7 +409,13 @@ public class PledgeSubjectService {
 
 
     public List<PledgeSubject> getPledgeSubjectByCadastralNum(String cadastralNum){
-        return repositoryPledgeSubjectRealty.findAllByCadastralNumContainingIgnoreCase(cadastralNum);
+        List<PledgeSubject> pledgeSubjectList = new ArrayList<>();
+        pledgeSubjectList.addAll(repositoryPledgeSubjectRealtyBuilding.findAllByCadastralNumContainingIgnoreCase(cadastralNum));
+        pledgeSubjectList.addAll(repositoryPledgeSubjectRealtyLandLease.findAllByCadastralNumContainingIgnoreCase(cadastralNum));
+        pledgeSubjectList.addAll(repositoryPledgeSubjectRealtyLandOwnership.findAllByCadastralNumContainingIgnoreCase(cadastralNum));
+        pledgeSubjectList.addAll(repositoryPledgeSubjectRealtyRoom.findAllByCadastralNumContainingIgnoreCase(cadastralNum));
+
+        return pledgeSubjectList;
     }
 
     public List<PledgeSubject> getPledgeSubjectByName(String name){
