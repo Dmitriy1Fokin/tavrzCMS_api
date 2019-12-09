@@ -13,6 +13,7 @@ import ru.fds.tavrzcms3.service.EncumbranceService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -34,7 +35,7 @@ public class EncumbranceController {
                                    Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId)
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
-        List<Encumbrance> encumbranceList = encumbranceService.getEncumbranceByPledgeSubject(pledgeSubject);
+        Collection<Encumbrance> encumbranceList = encumbranceService.getEncumbranceByPledgeSubject(pledgeSubject);
         model.addAttribute("pledgeSubject", pledgeSubject);
         model.addAttribute("encumbranceList", encumbranceList);
 
@@ -63,7 +64,7 @@ public class EncumbranceController {
             return "encumbrance/card";
 
         Encumbrance encumbranceInserted = encumbranceService.updateInsertEncumbrance(encumbrance);
-        List<Encumbrance> encumbranceList = encumbranceService.getEncumbranceByPledgeSubject(encumbranceInserted.getPledgeSubject());
+        Collection<Encumbrance> encumbranceList = encumbranceService.getEncumbranceByPledgeSubject(encumbranceInserted.getPledgeSubject());
         model.addAttribute("pledgeSubject", encumbranceInserted.getPledgeSubject());
         model.addAttribute("encumbranceList", encumbranceList);
 

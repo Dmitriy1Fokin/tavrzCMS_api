@@ -17,6 +17,7 @@ import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -60,7 +61,7 @@ public class CostHistoryController {
                                   Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId)
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
-        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(pledgeSubject);
+        Collection<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(pledgeSubject);
         model.addAttribute("pledgeSubject", pledgeSubject);
         model.addAttribute("costHistoryList", costHistoryList);
 
@@ -89,7 +90,7 @@ public class CostHistoryController {
             return "cost_history/card";
 
         CostHistory costHistoryUpdated = costHistoryService.insertCostHistory(costHistory);
-        List<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(costHistoryUpdated.getPledgeSubject());
+        Collection<CostHistory> costHistoryList = costHistoryService.getCostHistoryPledgeSubject(costHistoryUpdated.getPledgeSubject());
         model.addAttribute("pledgeSubject", costHistoryUpdated.getPledgeSubject());
         model.addAttribute("costHistoryList", costHistoryList);
 

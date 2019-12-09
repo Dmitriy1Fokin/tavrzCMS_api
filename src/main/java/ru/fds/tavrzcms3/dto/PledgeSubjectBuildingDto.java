@@ -35,5 +35,5 @@ public class PledgeSubjectBuildingDto extends PledgeSubjectDto{
     @Length(min = 4, max = 4, message = "Неверное значение")
     private int yearOfConstruction;
 
-    private Long marketSegmentId;
+    private Integer marketSegmentId;
 }

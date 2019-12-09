@@ -13,7 +13,7 @@ import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
@@ -27,12 +27,12 @@ public class ClientController {
     private final PledgeAgreementService pledgeAgreementService;
     private final LoanAgreementService loanAgreementService;
 
-    private final ClientIndividualConverter clientIndividualConverter;
-    private final ClientLegalEntityConverter clientLegalEntityConverter;
-    private final EmployeeConverter employeeConverter;
-    private final ClientManagerConverter clientManagerConverter;
-    private final PledgeAgreementConverter pledgeAgreementConverter;
-    private final LoanAgreementConverter loanAgreementConverter;
+    private final ClientIndividualConverterDto clientIndividualConverter;
+    private final ClientLegalEntityConverterDto clientLegalEntityConverter;
+    private final EmployeeConverterDto employeeConverter;
+    private final ClientManagerConverterDto clientManagerConverter;
+    private final PledgeAgreementConverterDto pledgeAgreementConverter;
+    private final LoanAgreementConverterDto loanAgreementConverter;
 
     private final ValidatorEntity validatorEntity;
 
@@ -54,12 +54,12 @@ public class ClientController {
                             EmployeeService employeeService,
                             PledgeAgreementService pledgeAgreementService,
                             LoanAgreementService loanAgreementService,
-                            ClientIndividualConverter clientIndividualConverter,
-                            ClientLegalEntityConverter clientLegalEntityConverter,
-                            EmployeeConverter employeeConverter,
-                            ClientManagerConverter clientManagerConverter,
-                            PledgeAgreementConverter pledgeAgreementConverter,
-                            LoanAgreementConverter loanAgreementConverter,
+                            ClientIndividualConverterDto clientIndividualConverter,
+                            ClientLegalEntityConverterDto clientLegalEntityConverter,
+                            EmployeeConverterDto employeeConverter,
+                            ClientManagerConverterDto clientManagerConverter,
+                            PledgeAgreementConverterDto pledgeAgreementConverter,
+                            LoanAgreementConverterDto loanAgreementConverter,
                             ValidatorEntity validatorEntity) {
         this.clientService = clientService;
         this.clientManagerService = clientManagerService;
@@ -96,16 +96,16 @@ public class ClientController {
                 .getEmployeeById(clientDto.getEmployeeId())
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)));
 
-        List<PledgeAgreementDto> pledgeAgreementCurrentDtoList = pledgeAgreementConverter
+        Collection<PledgeAgreementDto> pledgeAgreementCurrentDtoList = pledgeAgreementConverter
                 .toDto(pledgeAgreementService.getCurrentPledgeAgreementsByPledgor(client));
 
-        List<PledgeAgreementDto> pledgeAgreementClosedDtoList = pledgeAgreementConverter
+        Collection<PledgeAgreementDto> pledgeAgreementClosedDtoList = pledgeAgreementConverter
                 .toDto(pledgeAgreementService.getClosedPledgeAgreementsByPledgor(client));
 
-        List<LoanAgreementDto> loanAgreementCurrentDtoList = loanAgreementConverter
+        Collection<LoanAgreementDto> loanAgreementCurrentDtoList = loanAgreementConverter
                 .toDto(loanAgreementService.getCurrentLoanAgreementsByLoaner(client));
 
-        List<LoanAgreementDto> loanAgreementClosedDtoList = loanAgreementConverter
+        Collection<LoanAgreementDto> loanAgreementClosedDtoList = loanAgreementConverter
                 .toDto(loanAgreementService.getClosedLoanAgreementsByLoaner(client));
 
         model.addAttribute(ATTR_CLIENT, clientDto);
@@ -135,9 +135,9 @@ public class ClientController {
             model.addAttribute(ATTR_CLIENT_INDIVIDUAL, clientIndividualDto);
         }
 
-        List<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
+        Collection<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
 
-        List<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
+        Collection<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
 
         model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
         model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);
@@ -166,9 +166,9 @@ public class ClientController {
 
         }
 
-        List<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
+        Collection<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
 
-        List<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
+        Collection<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
 
         model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
         model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);
@@ -181,8 +181,8 @@ public class ClientController {
                                           BindingResult bindingResult,
                                           Model model){
         if(bindingResult.hasErrors()){
-            List<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
-            List<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
+            Collection<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
+            Collection<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
             model.addAttribute(ATTR_CLIENT_LEGAL_ENTITY, clientLegalEntityDto);
             model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
             model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);
@@ -207,8 +207,8 @@ public class ClientController {
                                          BindingResult bindingResult,
                                          Model model){
         if(bindingResult.hasErrors()){
-            List<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
-            List<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
+            Collection<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
+            Collection<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
             model.addAttribute(ATTR_CLIENT_INDIVIDUAL, clientIndividualDto);
             model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
             model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);
@@ -233,8 +233,8 @@ public class ClientController {
                                              BindingResult bindingResult,
                                              Model model){
         if(bindingResult.hasErrors()){
-            List<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
-            List<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
+            Collection<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
+            Collection<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
             model.addAttribute(ATTR_CLIENT_LEGAL_ENTITY, clientLegalEntityDto);
             model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
             model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);
@@ -259,8 +259,8 @@ public class ClientController {
                                             BindingResult bindingResult,
                                             Model model){
         if(bindingResult.hasErrors()){
-            List<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
-            List<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
+            Collection<ClientManagerDto> clientManagerDtoList = clientManagerConverter.toDto(clientManagerService.getAllClientManager());
+            Collection<EmployeeDto> employeeDtoList = employeeConverter.toDto(employeeService.getAllEmployee());
             model.addAttribute(ATTR_CLIENT_INDIVIDUAL, clientIndividualDto);
             model.addAttribute(ATTR_CLIENT_MANAGER_LIST, clientManagerDtoList);
             model.addAttribute(ATTR_EMPLOYEE_LIST, employeeDtoList);

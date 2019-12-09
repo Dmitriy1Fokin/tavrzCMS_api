@@ -27,10 +27,10 @@ public class LandCategory {
 	private String name;
 
 	@OneToMany(mappedBy = "landCategory")
-	private List<PledgeSubjectRealtyLandLease> pledgeSubjectRealtyLandLeases;
+	private List<PledgeSubjectLandLease> pledgeSubjectLandLeases;
 
 	@OneToMany(mappedBy = "landCategory")
-	private List<PledgeSubjectRealtyLandOwnership> pledgeSubjectRealtyLandOwnerships;
+	private List<PledgeSubjectLandOwnership> pledgeSubjectLandOwnerships;
 
 	@Override
 	public String toString() {

@@ -13,6 +13,8 @@ import ru.fds.tavrzcms3.service.InsuranceService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -35,6 +37,7 @@ public class InsuranceController {
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId)
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
         List<Insurance> insuranceList = insuranceService.getInsurancesByPledgeSubject(pledgeSubject);
+        ArrayList<Insurance> insurances = new ArrayList<>(insuranceList);
         model.addAttribute("pledgeSubject", pledgeSubject);
         model.addAttribute("insuranceList", insuranceList);
 
@@ -63,6 +66,7 @@ public class InsuranceController {
 
         Insurance insuranceInserted = insuranceService.updateInsertInsurance(insurance);
         List <Insurance> insuranceList = insuranceService.getInsurancesByPledgeSubject(insuranceInserted.getPledgeSubject());
+        ArrayList<Insurance> insurances = new ArrayList<>(insuranceList);
         model.addAttribute("pledgeSubject", insuranceInserted.getPledgeSubject());
         model.addAttribute("insuranceList", insuranceList);
 

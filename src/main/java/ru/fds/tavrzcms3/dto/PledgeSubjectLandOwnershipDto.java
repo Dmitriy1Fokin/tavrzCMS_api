@@ -36,5 +36,5 @@ public class PledgeSubjectLandOwnershipDto extends PledgeSubjectDto{
             message = "Неверное значение. Если несколько кад№, указывать через \";\"")
     private String cadastralNumOfBuilding;
 
-    private Long landCategoryId;
+    private Integer landCategoryId;
 }

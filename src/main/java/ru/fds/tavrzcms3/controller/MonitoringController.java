@@ -11,6 +11,7 @@ import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.service.*;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +49,7 @@ public class MonitoringController {
     public String monitoringPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
                                  Model model){
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId).orElseThrow(() -> new RuntimeException(MSG_WRONG_LINK));
-        List<Monitoring> monitoringList = monitoringService.getMonitoringByPledgeSubject(pledgeSubject);
+        Collection<Monitoring> monitoringList = monitoringService.getMonitoringByPledgeSubject(pledgeSubject);
         model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubject);
         model.addAttribute(ATTR_MONITORING_LIST, monitoringList);
 
@@ -165,7 +166,7 @@ public class MonitoringController {
 
             monitoring.setPledgeSubject(pledgeSubject);
             monitoringService.insertMonitoringInPledgeSubject(monitoring);
-            List<Monitoring> monitoringListForPS = monitoringService.getMonitoringByPledgeSubject(pledgeSubject);
+            Collection<Monitoring> monitoringListForPS = monitoringService.getMonitoringByPledgeSubject(pledgeSubject);
 
             model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubject);
             model.addAttribute(ATTR_MONITORING_LIST, monitoringListForPS);

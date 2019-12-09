@@ -29,7 +29,7 @@ public class PledgeSubjectRoomDto extends PledgeSubjectDto{
     @NotBlank(message = "Обязательно для заполнения")
     private String floorLocation;
 
-    private Long marketSegmentRoom;
+    private Integer marketSegmentRoom;
 
-    private Long marketSegmentBuilding;
+    private Integer marketSegmentBuilding;
 }

@@ -1,6 +1,5 @@
 package ru.fds.tavrzcms3.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -153,22 +152,22 @@ public class PledgeSubject {
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
 	@JsonIgnore
-	private PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding;
+	private PledgeSubjectBuilding pledgeSubjectBuilding;
 
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
 	@JsonIgnore
-	private PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease;
+	private PledgeSubjectLandLease pledgeSubjectLandLease;
 
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
 	@JsonIgnore
-	private PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership;
+	private PledgeSubjectLandOwnership pledgeSubjectLandOwnership;
 
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")
 	@JsonIgnore
-	private PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom;
+	private PledgeSubjectRoom pledgeSubjectRoom;
 	
 	@OneToOne
 	@JoinColumn(name = "pledgeSubject_id")

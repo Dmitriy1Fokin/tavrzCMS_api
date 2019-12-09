@@ -1,6 +1,5 @@
 package ru.fds.tavrzcms3.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,24 +21,36 @@ import java.util.*;
 @Service
 public class PledgeAgreementService {
 
-    @Autowired
-    RepositoryPledgeAgreement repositoryPledgeAgreement;
-    @Autowired
-    RepositoryPledgeSubject repositoryPledgeSubject;
-    @Autowired
-    RepositoryLoanAgreement repositoryLoanAgreement;
-    @Autowired
-    RepositoryClientLegalEntity repositoryClientLegalEntity;
-    @Autowired
-    RepositoryClientIndividual repositoryClientIndividual;
-    @Autowired
-    EmployeeService employeeService;
-    @Autowired
-    ClientService clientService;
+    private final RepositoryPledgeAgreement repositoryPledgeAgreement;
+    private final RepositoryPledgeSubject repositoryPledgeSubject;
+    private final RepositoryLoanAgreement repositoryLoanAgreement;
+    private final RepositoryClientLegalEntity repositoryClientLegalEntity;
+    private final RepositoryClientIndividual repositoryClientIndividual;
+    private final EmployeeService employeeService;
+    private final ClientService clientService;
+    private final PledgeSubjectService pledgeSubjectService;
 
     private static final Sort sortByClient = new Sort(Sort.Direction.ASC,"client");
 
-    public List<PledgeAgreement> getPledgeAgreementsByIds(List<Long> ids){
+    public PledgeAgreementService(RepositoryPledgeAgreement repositoryPledgeAgreement,
+                                  RepositoryPledgeSubject repositoryPledgeSubject,
+                                  RepositoryLoanAgreement repositoryLoanAgreement,
+                                  RepositoryClientLegalEntity repositoryClientLegalEntity,
+                                  RepositoryClientIndividual repositoryClientIndividual,
+                                  EmployeeService employeeService,
+                                  ClientService clientService,
+                                  PledgeSubjectService pledgeSubjectService) {
+        this.repositoryPledgeAgreement = repositoryPledgeAgreement;
+        this.repositoryPledgeSubject = repositoryPledgeSubject;
+        this.repositoryLoanAgreement = repositoryLoanAgreement;
+        this.repositoryClientLegalEntity = repositoryClientLegalEntity;
+        this.repositoryClientIndividual = repositoryClientIndividual;
+        this.employeeService = employeeService;
+        this.clientService = clientService;
+        this.pledgeSubjectService = pledgeSubjectService;
+    }
+
+    public List<PledgeAgreement> getPledgeAgreementsByIds(Collection<Long> ids){
         return repositoryPledgeAgreement.findAllByPledgeAgreementIdIn(ids);
     }
 
@@ -73,6 +84,10 @@ public class PledgeAgreementService {
 
     public Optional<PledgeAgreement> getPledgeAgreementById(long pledgeAgreementId){
         return repositoryPledgeAgreement.findById(pledgeAgreementId);
+    }
+
+    public Collection<PledgeAgreement> getAllPledgeAgreementByPLedgeSubject(PledgeSubject pledgeSubject){
+        return repositoryPledgeAgreement.findAllByPledgeSubjects(pledgeSubject);
     }
 
     public List<String> getTypeOfCollateral(PledgeAgreement pledgeAgreement){

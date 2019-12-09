@@ -87,4 +87,6 @@ public class PledgeSubjectDto {
     private Collection<Long> encumbrancesIds;
 
     private Collection<Long> insurancesIds;
+
+    private String fullAddress;
 }

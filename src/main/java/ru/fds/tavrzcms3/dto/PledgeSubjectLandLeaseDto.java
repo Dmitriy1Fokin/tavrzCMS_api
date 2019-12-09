@@ -46,5 +46,5 @@ public class PledgeSubjectLandLeaseDto extends PledgeSubjectDto{
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateEndLease;
 
-    private Long landCategoryId;
+    private Integer landCategoryId;
 }

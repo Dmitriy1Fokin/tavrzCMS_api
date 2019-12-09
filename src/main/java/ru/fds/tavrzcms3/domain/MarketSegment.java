@@ -27,13 +27,13 @@ public class MarketSegment {
 	private String name;
 
 	@OneToMany(mappedBy = "marketSegment")
-	private List<PledgeSubjectRealtyBuilding> pledgeSubjectRealtyBuildings;
+	private List<PledgeSubjectBuilding> pledgeSubjectBuildings;
 
 	@OneToMany(mappedBy = "marketSegmentRoom")
-	private List<PledgeSubjectRealtyRoom> pledgeSubjectRealtyRooms;
+	private List<PledgeSubjectRoom> pledgeSubjectRooms;
 
 	@OneToMany(mappedBy = "marketSegmentBuilding")
-	private List<PledgeSubjectRealtyRoom> pledgeSubjectRealtyRoomBuilding;
+	private List<PledgeSubjectRoom> pledgeSubjectRoomBuilding;
 
 	@Override
 	public String toString() {

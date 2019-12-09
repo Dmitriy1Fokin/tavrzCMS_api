@@ -26,7 +26,7 @@
 
 <h1 th:text="'Обременения для предмета залога:' + ${pledgeSubject.getName()}">Обременения для предмета залога</h1>
 
-<a th:href="@{pledge_subject/detail(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
+<a th:href="@{/pledge_subject/detail(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
    href="../pledge_subject/detail.html"
    th:text="'Вернуться к предмету залога ' + ${pledgeSubject.getName()}">Вернуться к предмету залога</a>
 <br>

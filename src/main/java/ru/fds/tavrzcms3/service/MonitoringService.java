@@ -1,6 +1,5 @@
 package ru.fds.tavrzcms3.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,23 +9,31 @@ import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.repository.RepositoryMonitoring;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class MonitoringService {
 
-    @Autowired
-    RepositoryMonitoring repositoryMonitoring;
-    @Autowired
-    PledgeSubjectService pledgeSubjectService;
-    @Autowired
-    PledgeAgreementService pledgeAgreementService;
+    private final RepositoryMonitoring repositoryMonitoring;
+    private final PledgeSubjectService pledgeSubjectService;
+    private final PledgeAgreementService pledgeAgreementService;
+
+    public MonitoringService(RepositoryMonitoring repositoryMonitoring,
+                             PledgeSubjectService pledgeSubjectService,
+                             PledgeAgreementService pledgeAgreementService) {
+        this.repositoryMonitoring = repositoryMonitoring;
+        this.pledgeSubjectService = pledgeSubjectService;
+        this.pledgeAgreementService = pledgeAgreementService;
+    }
 
 
     public List<Monitoring> getMonitoringByPledgeSubject(PledgeSubject pledgeSubject){
         Sort sortByDateMonitoring = new Sort(Sort.Direction.DESC, "dateMonitoring");
         return repositoryMonitoring.findByPledgeSubject(pledgeSubject, sortByDateMonitoring);
+    }
+
+    public List<Monitoring> getMonitoringByIds(Collection<Long> ids){
+        return repositoryMonitoring.findAllByMonitoringIdIn(ids);
     }
 
     @Transactional

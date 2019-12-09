@@ -12,12 +12,15 @@ import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
+import ru.fds.tavrzcms3.domain.PledgeSubject;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement, Long>, JpaSpecificationExecutor<PledgeAgreement> {
-    List<PledgeAgreement> findAllByPledgeAgreementIdIn(List<Long> ids);
+    List<PledgeAgreement> findAllByPledgeAgreementIdIn(Collection<Long> ids);
+    List<PledgeAgreement> findAllByPledgeSubjects(PledgeSubject pledgeSubject);
     List<PledgeAgreement> findAllByClient(Client client);
     int countAllByClientInAndStatusPAEquals(List<Client> clients, StatusOfAgreement statusPA);
     int countAllByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, TypeOfPledgeAgreement perv, StatusOfAgreement statusPA);

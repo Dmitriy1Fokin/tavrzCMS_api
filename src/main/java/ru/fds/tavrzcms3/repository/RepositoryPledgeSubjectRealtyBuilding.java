@@ -6,11 +6,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
-import ru.fds.tavrzcms3.domain.PledgeSubjectRealtyBuilding;
+import ru.fds.tavrzcms3.domain.PledgeSubjectBuilding;
 
 import java.util.List;
 
-public interface RepositoryPledgeSubjectRealtyBuilding extends JpaRepository<PledgeSubjectRealtyBuilding, Long>, JpaSpecificationExecutor<PledgeSubjectRealtyBuilding> {
+public interface RepositoryPledgeSubjectRealtyBuilding extends JpaRepository<PledgeSubjectBuilding, Long>, JpaSpecificationExecutor<PledgeSubjectBuilding> {
     Page<PledgeSubject> findAll(Specification specification, Pageable pageable);
     List<PledgeSubject> findAllByCadastralNumContainingIgnoreCase(String cadastralNum);
 }

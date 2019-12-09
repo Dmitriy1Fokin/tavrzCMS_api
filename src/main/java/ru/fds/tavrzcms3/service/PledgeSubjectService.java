@@ -230,7 +230,7 @@ public class PledgeSubjectService {
             if(!searchParam.get("cadastralNumOfBuilding").isEmpty())
                 builder.with("cadastralNumOfBuilding", ":", searchParam.get("cadastralNumOfBuilding"), false);
 
-            Specification<PledgeSubjectRealtyLandOwnership> spec = builder.build();
+            Specification<PledgeSubjectLandOwnership> spec = builder.build();
 
             return repositoryPledgeSubjectRealtyLandOwnership.findAll(spec, pageable);
 
@@ -271,7 +271,7 @@ public class PledgeSubjectService {
                 }
             }
 
-            Specification<PledgeSubjectRealtyLandLease> spec = builder.build();
+            Specification<PledgeSubjectLandLease> spec = builder.build();
 
             return repositoryPledgeSubjectRealtyLandLease.findAll(spec, pageable);
 
@@ -293,7 +293,7 @@ public class PledgeSubjectService {
             if(!searchParam.get("yearOfConstructionBuilding").isEmpty())
                 builder.with("yearOfConstruction", searchParam.get("yearOfConstructionBuildingOption"), searchParam.get("yearOfConstructionBuilding"), false);
 
-            Specification<PledgeSubjectRealtyBuilding> spec= builder.build();
+            Specification<PledgeSubjectBuilding> spec= builder.build();
 
             return repositoryPledgeSubjectRealtyBuilding.findAll(spec, pageable);
 
@@ -316,7 +316,7 @@ public class PledgeSubjectService {
             if(!searchParam.get("floorLocation").isEmpty())
                 builder.with("floorLocation", searchParam.get("floorLocationOption"), searchParam.get("floorLocation"), false);
 
-            Specification<PledgeSubjectRealtyRoom> spec= builder.build();
+            Specification<PledgeSubjectRoom> spec= builder.build();
 
             return repositoryPledgeSubjectRealtyRoom.findAll(spec, pageable);
 
@@ -350,14 +350,14 @@ public class PledgeSubjectService {
             return repositoryPledgeSubjectAuto.save((PledgeSubjectAuto) pledgeSubject);
         else if (pledgeSubject.getClass() == PledgeSubjectEquipment.class)
             return repositoryPledgeSubjectEquipment.save((PledgeSubjectEquipment) pledgeSubject);
-        else if (pledgeSubject.getClass() == PledgeSubjectRealtyBuilding.class)
-            return repositoryPledgeSubjectRealtyBuilding.save((PledgeSubjectRealtyBuilding) pledgeSubject);
-        else if (pledgeSubject.getClass() == PledgeSubjectRealtyLandLease.class)
-            return repositoryPledgeSubjectRealtyLandLease.save((PledgeSubjectRealtyLandLease) pledgeSubject);
-        else if (pledgeSubject.getClass() == PledgeSubjectRealtyLandOwnership.class)
-            return repositoryPledgeSubjectRealtyLandOwnership.save((PledgeSubjectRealtyLandOwnership) pledgeSubject);
-        else if (pledgeSubject.getClass() == PledgeSubjectRealtyRoom.class)
-            return repositoryPledgeSubjectRealtyRoom.save((PledgeSubjectRealtyRoom) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectBuilding.class)
+            return repositoryPledgeSubjectRealtyBuilding.save((PledgeSubjectBuilding) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectLandLease.class)
+            return repositoryPledgeSubjectRealtyLandLease.save((PledgeSubjectLandLease) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectLandOwnership.class)
+            return repositoryPledgeSubjectRealtyLandOwnership.save((PledgeSubjectLandOwnership) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectRoom.class)
+            return repositoryPledgeSubjectRealtyRoom.save((PledgeSubjectRoom) pledgeSubject);
         else if (pledgeSubject.getClass() == PledgeSubjectSecurities.class)
             return repositoryPledgeSubjectSecurities.save((PledgeSubjectSecurities) pledgeSubject);
         else if (pledgeSubject.getClass() == PledgeSubjectTBO.class)
@@ -384,14 +384,14 @@ public class PledgeSubjectService {
             pledgeSubject = repositoryPledgeSubjectAuto.save((PledgeSubjectAuto) pledgeSubject);
         else if (pledgeSubject.getClass() == PledgeSubjectEquipment.class)
             pledgeSubject = repositoryPledgeSubjectEquipment.save((PledgeSubjectEquipment) pledgeSubject);
-        else if (pledgeSubject.getClass() == PledgeSubjectRealtyBuilding.class)
-            pledgeSubject = repositoryPledgeSubjectRealtyBuilding.save((PledgeSubjectRealtyBuilding) pledgeSubject);
-        else if (pledgeSubject.getClass() == PledgeSubjectRealtyLandLease.class)
-            pledgeSubject = repositoryPledgeSubjectRealtyLandLease.save((PledgeSubjectRealtyLandLease) pledgeSubject);
-        else if (pledgeSubject.getClass() == PledgeSubjectRealtyLandOwnership.class)
-            pledgeSubject = repositoryPledgeSubjectRealtyLandOwnership.save((PledgeSubjectRealtyLandOwnership) pledgeSubject);
-        else if (pledgeSubject.getClass() == PledgeSubjectRealtyRoom.class)
-            pledgeSubject = repositoryPledgeSubjectRealtyRoom.save((PledgeSubjectRealtyRoom) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectBuilding.class)
+            pledgeSubject = repositoryPledgeSubjectRealtyBuilding.save((PledgeSubjectBuilding) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectLandLease.class)
+            pledgeSubject = repositoryPledgeSubjectRealtyLandLease.save((PledgeSubjectLandLease) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectLandOwnership.class)
+            pledgeSubject = repositoryPledgeSubjectRealtyLandOwnership.save((PledgeSubjectLandOwnership) pledgeSubject);
+        else if (pledgeSubject.getClass() == PledgeSubjectRoom.class)
+            pledgeSubject = repositoryPledgeSubjectRealtyRoom.save((PledgeSubjectRoom) pledgeSubject);
         else if (pledgeSubject.getClass() == PledgeSubjectSecurities.class)
             pledgeSubject = repositoryPledgeSubjectSecurities.save((PledgeSubjectSecurities) pledgeSubject);
         else if (pledgeSubject.getClass() == PledgeSubjectTBO.class)

@@ -40,10 +40,10 @@ public class PledgeSubjectController {
     private static final String ATTR_PS_SECURITIES = "pledgeSubjectSecurities";
     private static final String ATTR_PS_VESSEL = "pledgeSubjectVessel";
     private static final String ATTR_PS_TBO = "pledgeSubjectTBO";
-    private static final String ATTR_PS_LAND_OWNERSHIP = "pledgeSubjectRealtyLandOwnership";
-    private static final String ATTR_PS_LAND_LEASE = "pledgeSubjectRealtyLandLease";
-    private static final String ATTR_PS_BUILDING = "pledgeSubjectRealtyBuilding";
-    private static final String ATTR_PS_ROOM = "pledgeSubjectRealtyRoom";
+    private static final String ATTR_PS_LAND_OWNERSHIP = "pledgeSubjectLandOwnership";
+    private static final String ATTR_PS_LAND_LEASE = "pledgeSubjectLandLease";
+    private static final String ATTR_PS_BUILDING = "pledgeSubjectBuilding";
+    private static final String ATTR_PS_ROOM = "pledgeSubjectRoom";
     private static final String ATTR_PS_REALTY = "pledgeSubjectRealty";
     private static final String ATTR_LAND_CATEGORY_LIST = "landCategoryList";
     private static final String ATTR_TYPE_OF_COLLATERAL = "typeOfCollateral";
@@ -88,13 +88,13 @@ public class PledgeSubjectController {
             model.addAttribute(ATTR_PS_VESSEL, pledgeSubject);
         }else if(pledgeSubject.getClass()==PledgeSubjectTBO.class){
             model.addAttribute(ATTR_PS_TBO, pledgeSubject);
-        }else if(pledgeSubject.getClass()==PledgeSubjectRealtyLandOwnership.class ||
-                pledgeSubject.getClass()==PledgeSubjectRealtyLandLease.class){
+        }else if(pledgeSubject.getClass()==PledgeSubjectLandOwnership.class ||
+                pledgeSubject.getClass()==PledgeSubjectLandLease.class){
             List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
             model.addAttribute(ATTR_LAND_CATEGORY_LIST, landCategoryList);
             model.addAttribute(ATTR_PS_REALTY, pledgeSubject);
-        }else if(pledgeSubject.getClass()==PledgeSubjectRealtyBuilding.class ||
-                pledgeSubject.getClass()==PledgeSubjectRealtyRoom.class){
+        }else if(pledgeSubject.getClass()==PledgeSubjectBuilding.class ||
+                pledgeSubject.getClass()==PledgeSubjectRoom.class){
             List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
             model.addAttribute(ATTR_MARKET_SEGMENT_LIST, marketSegmentList);
             model.addAttribute(ATTR_PS_REALTY, pledgeSubject);
@@ -138,36 +138,36 @@ public class PledgeSubjectController {
             model.addAttribute(ATTR_PS_TBO, pledgeSubjectTBO);
         }
         else if(typeOfCollateral.get().equals(TypeOfCollateral.LAND_OWNERSHIP.name())){
-            PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership = PledgeSubjectRealtyLandOwnership.builder()
+            PledgeSubjectLandOwnership pledgeSubjectLandOwnership = PledgeSubjectLandOwnership.builder()
                     .pledgeAgreement(pledgeAgreement)
                     .build();
             List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
-            model.addAttribute(ATTR_PS_LAND_OWNERSHIP, pledgeSubjectRealtyLandOwnership);
+            model.addAttribute(ATTR_PS_LAND_OWNERSHIP, pledgeSubjectLandOwnership);
             model.addAttribute(ATTR_LAND_CATEGORY_LIST, landCategoryList);
         }
         else if(typeOfCollateral.get().equals(TypeOfCollateral.LAND_LEASE.name())){
-            PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease = PledgeSubjectRealtyLandLease.builder()
+            PledgeSubjectLandLease pledgeSubjectLandLease = PledgeSubjectLandLease.builder()
                     .pledgeAgreement(pledgeAgreement)
                     .build();
             List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
-            model.addAttribute(ATTR_PS_LAND_LEASE, pledgeSubjectRealtyLandLease);
+            model.addAttribute(ATTR_PS_LAND_LEASE, pledgeSubjectLandLease);
             model.addAttribute(ATTR_LAND_CATEGORY_LIST, landCategoryList);
         }
         else if(typeOfCollateral.get().equals(TypeOfCollateral.BUILDING.name())){
-            PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding = PledgeSubjectRealtyBuilding.builder()
+            PledgeSubjectBuilding pledgeSubjectBuilding = PledgeSubjectBuilding.builder()
                     .pledgeAgreement(pledgeAgreement)
                     .build();
             List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
             model.addAttribute(ATTR_MARKET_SEGMENT_LIST, marketSegmentList);
-            model.addAttribute(ATTR_PS_BUILDING, pledgeSubjectRealtyBuilding);
+            model.addAttribute(ATTR_PS_BUILDING, pledgeSubjectBuilding);
         }
         else if(typeOfCollateral.get().equals(TypeOfCollateral.PREMISE.name())){
-            PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom = PledgeSubjectRealtyRoom.builder()
+            PledgeSubjectRoom pledgeSubjectRoom = PledgeSubjectRoom.builder()
                     .pledgeAgreement(pledgeAgreement)
                     .build();
             List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
             model.addAttribute(ATTR_MARKET_SEGMENT_LIST, marketSegmentList);
-            model.addAttribute(ATTR_PS_ROOM, pledgeSubjectRealtyRoom);
+            model.addAttribute(ATTR_PS_ROOM, pledgeSubjectRoom);
         }
 
         CostHistory costHistory = new CostHistory();
@@ -269,18 +269,18 @@ public class PledgeSubjectController {
     }
 
     @PostMapping("update_pledge_subject_landOwn")
-    public String updatePledgeSubjectLandOwnership(@Valid PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership,
+    public String updatePledgeSubjectLandOwnership(@Valid PledgeSubjectLandOwnership pledgeSubjectLandOwnership,
                                                    BindingResult bindingResult,
                                                    Model model){
         if(bindingResult.hasErrors()) {
             List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
             model.addAttribute(ATTR_LAND_CATEGORY_LIST, landCategoryList);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyLandOwnership.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectLandOwnership.getTypeOfCollateral());
 
             return PAGE_CARD_UPDATE;
         }
 
-        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectRealtyLandOwnership);
+        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectLandOwnership);
 
         model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubjectUpdated);
 
@@ -288,18 +288,18 @@ public class PledgeSubjectController {
     }
 
     @PostMapping("update_pledge_subject_landLease")
-    public String updatePledgeSubjectLandLease(@Valid PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease,
+    public String updatePledgeSubjectLandLease(@Valid PledgeSubjectLandLease pledgeSubjectLandLease,
                                                BindingResult bindingResult,
                                                Model model){
         if(bindingResult.hasErrors()) {
             List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
             model.addAttribute(ATTR_LAND_CATEGORY_LIST, landCategoryList);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyLandLease.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectLandLease.getTypeOfCollateral());
 
             return PAGE_CARD_UPDATE;
         }
 
-        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectRealtyLandLease);
+        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectLandLease);
 
         model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubjectUpdated);
 
@@ -307,18 +307,18 @@ public class PledgeSubjectController {
     }
 
     @PostMapping("update_pledge_subject_building")
-    public String updatePledgeSubjectBuilding(@Valid PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding,
+    public String updatePledgeSubjectBuilding(@Valid PledgeSubjectBuilding pledgeSubjectBuilding,
                                               BindingResult bindingResult,
                                               Model model){
         if(bindingResult.hasErrors()) {
             List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
             model.addAttribute(ATTR_MARKET_SEGMENT_LIST, marketSegmentList);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyBuilding.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectBuilding.getTypeOfCollateral());
 
             return PAGE_CARD_UPDATE;
         }
 
-        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectRealtyBuilding);
+        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectBuilding);
 
         model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubjectUpdated);
 
@@ -326,18 +326,18 @@ public class PledgeSubjectController {
     }
 
     @PostMapping("update_pledge_subject_room")
-    public String updatePledgeSubjectRoom(@Valid PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom,
+    public String updatePledgeSubjectRoom(@Valid PledgeSubjectRoom pledgeSubjectRoom,
                                           BindingResult bindingResult,
                                           Model model){
         if(bindingResult.hasErrors()) {
             List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
             model.addAttribute(ATTR_MARKET_SEGMENT_LIST, marketSegmentList);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyRoom.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRoom.getTypeOfCollateral());
 
             return PAGE_CARD_UPDATE;
         }
 
-        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectRealtyRoom);
+        PledgeSubject pledgeSubjectUpdated = pledgeSubjectService.updatePledgeSubject(pledgeSubjectRoom);
 
         model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubjectUpdated);
 
@@ -560,7 +560,7 @@ public class PledgeSubjectController {
     }
 
     @PostMapping("insert_pledge_subject_landOwn")
-    public String insertNewPledgeSubjectLandOwnership(@Valid PledgeSubjectRealtyLandOwnership pledgeSubjectRealtyLandOwnership,
+    public String insertNewPledgeSubjectLandOwnership(@Valid PledgeSubjectLandOwnership pledgeSubjectLandOwnership,
                                                       BindingResult bindingResultLandOwn,
                                                       @Valid CostHistory costHistory,
                                                       BindingResult bindingResultCostHistory,
@@ -575,32 +575,32 @@ public class PledgeSubjectController {
             model.addAttribute(ATTR_COST_HISTORY, costHistory);
             model.addAttribute(ATTR_MONITORING, monitoring);
             model.addAttribute(ATTR_PLEDGE_AGREEMENT_ID, pledgeAgreementId);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyLandOwnership.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectLandOwnership.getTypeOfCollateral());
 
             return PAGE_CARD_NEW;
 
         }else if(bindingResultCostHistory.hasErrors()){
             List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
             model.addAttribute(ATTR_LAND_CATEGORY_LIST, landCategoryList);
-            model.addAttribute(ATTR_PS_LAND_OWNERSHIP, pledgeSubjectRealtyLandOwnership);
+            model.addAttribute(ATTR_PS_LAND_OWNERSHIP, pledgeSubjectLandOwnership);
             model.addAttribute(ATTR_MONITORING, monitoring);
             model.addAttribute(ATTR_PLEDGE_AGREEMENT_ID, pledgeAgreementId);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyLandOwnership.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectLandOwnership.getTypeOfCollateral());
 
             return PAGE_CARD_NEW;
 
         }else if(bindingResultMonitoring.hasErrors()){
             List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
             model.addAttribute(ATTR_LAND_CATEGORY_LIST, landCategoryList);
-            model.addAttribute(ATTR_PS_LAND_OWNERSHIP, pledgeSubjectRealtyLandOwnership);
+            model.addAttribute(ATTR_PS_LAND_OWNERSHIP, pledgeSubjectLandOwnership);
             model.addAttribute(ATTR_COST_HISTORY, costHistory);
             model.addAttribute(ATTR_PLEDGE_AGREEMENT_ID, pledgeAgreementId);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyLandOwnership.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectLandOwnership.getTypeOfCollateral());
 
             return PAGE_CARD_NEW;
         }
 
-        pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyLandOwnership, costHistory, monitoring);
+        pledgeSubjectService.insertPledgeSubject(pledgeSubjectLandOwnership, costHistory, monitoring);
         PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
                 .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
         model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreement);
@@ -609,7 +609,7 @@ public class PledgeSubjectController {
     }
 
     @PostMapping("insert_pledge_subject_landLease")
-    public String insertNewPledgeSubjectLandLease(@Valid PledgeSubjectRealtyLandLease pledgeSubjectRealtyLandLease,
+    public String insertNewPledgeSubjectLandLease(@Valid PledgeSubjectLandLease pledgeSubjectLandLease,
                                                   BindingResult bindingResultLandLease,
                                                   @Valid CostHistory costHistory,
                                                   BindingResult bindingResultCostHistory,
@@ -624,32 +624,32 @@ public class PledgeSubjectController {
             model.addAttribute(ATTR_COST_HISTORY, costHistory);
             model.addAttribute(ATTR_MONITORING, monitoring);
             model.addAttribute(ATTR_PLEDGE_AGREEMENT_ID, pledgeAgreementId);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyLandLease.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectLandLease.getTypeOfCollateral());
 
             return PAGE_CARD_NEW;
 
         }else if(bindingResultCostHistory.hasErrors()){
             List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
             model.addAttribute(ATTR_LAND_CATEGORY_LIST, landCategoryList);
-            model.addAttribute(ATTR_PS_LAND_LEASE, pledgeSubjectRealtyLandLease);
+            model.addAttribute(ATTR_PS_LAND_LEASE, pledgeSubjectLandLease);
             model.addAttribute(ATTR_MONITORING, monitoring);
             model.addAttribute(ATTR_PLEDGE_AGREEMENT_ID, pledgeAgreementId);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyLandLease.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectLandLease.getTypeOfCollateral());
 
             return PAGE_CARD_NEW;
 
         }else if(bindingResultMonitoring.hasErrors()){
             List<LandCategory> landCategoryList = landCategoryService.getAllLandCategory();
             model.addAttribute(ATTR_LAND_CATEGORY_LIST, landCategoryList);
-            model.addAttribute(ATTR_PS_LAND_LEASE, pledgeSubjectRealtyLandLease);
+            model.addAttribute(ATTR_PS_LAND_LEASE, pledgeSubjectLandLease);
             model.addAttribute(ATTR_COST_HISTORY, costHistory);
             model.addAttribute(ATTR_PLEDGE_AGREEMENT_ID, pledgeAgreementId);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyLandLease.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectLandLease.getTypeOfCollateral());
 
             return PAGE_CARD_NEW;
         }
 
-        pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyLandLease, costHistory, monitoring);
+        pledgeSubjectService.insertPledgeSubject(pledgeSubjectLandLease, costHistory, monitoring);
         PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
                 .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
         model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreement);
@@ -658,7 +658,7 @@ public class PledgeSubjectController {
     }
 
     @PostMapping("insert_pledge_subject_building")
-    public String insertNewPledgeSubjectBuilding(@Valid PledgeSubjectRealtyBuilding pledgeSubjectRealtyBuilding,
+    public String insertNewPledgeSubjectBuilding(@Valid PledgeSubjectBuilding pledgeSubjectBuilding,
                                                  BindingResult bindingResultBuilding,
                                                  @Valid CostHistory costHistory,
                                                  BindingResult bindingResultCostHistory,
@@ -673,32 +673,32 @@ public class PledgeSubjectController {
             model.addAttribute(ATTR_COST_HISTORY, costHistory);
             model.addAttribute(ATTR_MONITORING, monitoring);
             model.addAttribute(ATTR_PLEDGE_AGREEMENT_ID, pledgeAgreementId);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyBuilding.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectBuilding.getTypeOfCollateral());
 
             return PAGE_CARD_NEW;
 
         }else if(bindingResultCostHistory.hasErrors()){
             List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
             model.addAttribute(ATTR_MARKET_SEGMENT_LIST, marketSegmentList);
-            model.addAttribute(ATTR_PS_BUILDING, pledgeSubjectRealtyBuilding);
+            model.addAttribute(ATTR_PS_BUILDING, pledgeSubjectBuilding);
             model.addAttribute(ATTR_MONITORING, monitoring);
             model.addAttribute(ATTR_PLEDGE_AGREEMENT_ID, pledgeAgreementId);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyBuilding.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectBuilding.getTypeOfCollateral());
 
             return PAGE_CARD_NEW;
 
         }else if(bindingResultMonitoring.hasErrors()){
             List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
             model.addAttribute(ATTR_MARKET_SEGMENT_LIST, marketSegmentList);
-            model.addAttribute(ATTR_PS_BUILDING, pledgeSubjectRealtyBuilding);
+            model.addAttribute(ATTR_PS_BUILDING, pledgeSubjectBuilding);
             model.addAttribute(ATTR_COST_HISTORY, costHistory);
             model.addAttribute(ATTR_PLEDGE_AGREEMENT_ID, pledgeAgreementId);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyBuilding.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectBuilding.getTypeOfCollateral());
 
             return PAGE_CARD_NEW;
         }
 
-        pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyBuilding, costHistory, monitoring);
+        pledgeSubjectService.insertPledgeSubject(pledgeSubjectBuilding, costHistory, monitoring);
         PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
                 .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
         model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreement);
@@ -707,7 +707,7 @@ public class PledgeSubjectController {
     }
 
     @PostMapping("insert_pledge_subject_room")
-    public String insertNewPledgeSubjectRoom(@Valid PledgeSubjectRealtyRoom pledgeSubjectRealtyRoom,
+    public String insertNewPledgeSubjectRoom(@Valid PledgeSubjectRoom pledgeSubjectRoom,
                                              BindingResult bindingResultRoom,
                                              @Valid CostHistory costHistory,
                                              BindingResult bindingResultCostHistory,
@@ -722,32 +722,32 @@ public class PledgeSubjectController {
             model.addAttribute(ATTR_COST_HISTORY, costHistory);
             model.addAttribute(ATTR_MONITORING, monitoring);
             model.addAttribute(ATTR_PLEDGE_AGREEMENT_ID, pledgeAgreementId);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyRoom.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRoom.getTypeOfCollateral());
 
             return PAGE_CARD_NEW;
 
         }else if(bindingResultCostHistory.hasErrors()){
             List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
             model.addAttribute(ATTR_MARKET_SEGMENT_LIST, marketSegmentList);
-            model.addAttribute(ATTR_PS_ROOM, pledgeSubjectRealtyRoom);
+            model.addAttribute(ATTR_PS_ROOM, pledgeSubjectRoom);
             model.addAttribute(ATTR_MONITORING, monitoring);
             model.addAttribute(ATTR_PLEDGE_AGREEMENT_ID, pledgeAgreementId);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyRoom.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRoom.getTypeOfCollateral());
 
             return PAGE_CARD_NEW;
 
         }else if(bindingResultMonitoring.hasErrors()){
             List<MarketSegment> marketSegmentList = marketSegmentService.getAllMarketSegment();
             model.addAttribute(ATTR_MARKET_SEGMENT_LIST, marketSegmentList);
-            model.addAttribute(ATTR_PS_ROOM, pledgeSubjectRealtyRoom);
+            model.addAttribute(ATTR_PS_ROOM, pledgeSubjectRoom);
             model.addAttribute(ATTR_COST_HISTORY, costHistory);
             model.addAttribute(ATTR_PLEDGE_AGREEMENT_ID, pledgeAgreementId);
-            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRealtyRoom.getTypeOfCollateral());
+            model.addAttribute(ATTR_TYPE_OF_COLLATERAL, pledgeSubjectRoom.getTypeOfCollateral());
 
             return PAGE_CARD_NEW;
         }
 
-        pledgeSubjectService.insertPledgeSubject(pledgeSubjectRealtyRoom, costHistory, monitoring);
+        pledgeSubjectService.insertPledgeSubject(pledgeSubjectRoom, costHistory, monitoring);
         PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
                 .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
         model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreement);
