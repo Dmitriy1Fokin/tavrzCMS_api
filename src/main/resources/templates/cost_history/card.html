@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Обновление cтоимостей предмета залога: ' + ${costHistory.getPledgeSubject().getName()}">Обновление cтоимостей</title>
+    <title th:text="'Обновление cтоимостей предмета залога: ' + ${pledgeSubjectName}">Обновление cтоимостей</title>
     <style type="text/css">
         .nav-item{
             display: inline;
@@ -16,10 +16,11 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<h1 th:text="'Обновление cтоимостей предмета залога:' + ${costHistory.getPledgeSubject().getName()}">Обновление cтоимостей</h1>
+<h1 th:text="'Обновление cтоимостей предмета залога:' + ${pledgeSubjectName}">Обновление cтоимостей</h1>
 
-<form th:action="@{/cost_history/insert}" th:method="post" th:object="${costHistory}" action="card.html">
-    <input type="hidden", th:field="*{pledgeSubject}" th:value="${costHistory.getPledgeSubject()}">
+<form th:action="@{/cost_history/insert}" th:method="post" th:object="${costHistoryDto}" action="card.html">
+    <input type="hidden", name="pledgeSubjectName" th:value="${pledgeSubjectName}">
+    <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${costHistoryDto.getPledgeSubjectId()}">
 
     <div class="row">
         <label>Дата заключения</label>
@@ -29,13 +30,13 @@
     <br>
     <div class="row">
         <label>РС по ДЗ</label>
-        <input type="number" step="0.01" required th:field="*{rsDz}" th:value="${costHistory.getRsDz()}"/>
+        <input type="number" step="0.01" required th:field="*{rsDz}" th:value="${costHistoryDto.getRsDz()}"/>
         <div th:if="${#fields.hasErrors('rsDz')}" th:errors="*{rsDz}">Name Error</div>
     </div>
     <br>
     <div class="row">
         <label>ЗС по ДЗ</label>
-        <input type="number" step="0.01"  required th:field="*{zsDz}" th:value="${costHistory.getZsDz()}"/>
+        <input type="number" step="0.01"  required th:field="*{zsDz}" th:value="${costHistoryDto.getZsDz()}"/>
         <div th:if="${#fields.hasErrors('zsDz')}" th:errors="*{zsDz}">Name Error</div>
     </div>
     <br>

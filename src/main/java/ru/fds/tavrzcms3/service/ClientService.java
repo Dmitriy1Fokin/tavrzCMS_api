@@ -90,13 +90,26 @@ public class ClientService {
 
         if(client.isPresent()){
             if(client.get() instanceof ClientLegalEntity){
+
                 ClientLegalEntity clientLegalEntity = repositoryClientLegalEntity.findByClient(client.get());
 
                 return clientLegalEntity.getOrganizationalForm() + " " + clientLegalEntity.getName();
+
             }else if(client.get() instanceof ClientIndividual){
+
                 ClientIndividual clientIndividual = repositoryClientIndividual.findByClient(client.get());
 
-                return clientIndividual.getSurname() + " " + clientIndividual.getName() + " " + clientIndividual.getPatronymic();
+                StringBuilder fullName = new StringBuilder();
+
+                if(Objects.nonNull(clientIndividual.getSurname()) && !clientIndividual.getSurname().isEmpty())
+                    fullName.append(clientIndividual.getSurname());
+                if(Objects.nonNull(clientIndividual.getName()) && !clientIndividual.getName().isEmpty())
+                    fullName.append(" ").append(clientIndividual.getName());
+                if(Objects.nonNull(clientIndividual.getPatronymic()) && !clientIndividual.getPatronymic().isEmpty())
+                    fullName.append(" ").append(clientIndividual.getPatronymic());
+
+                return fullName.toString();
+
             }else {
                 return "";
             }
