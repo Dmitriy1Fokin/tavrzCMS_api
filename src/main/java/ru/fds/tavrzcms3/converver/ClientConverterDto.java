@@ -5,13 +5,11 @@ import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.dto.ClientDto;
-import ru.fds.tavrzcms3.service.ClientManagerService;
-import ru.fds.tavrzcms3.service.EmployeeService;
-import ru.fds.tavrzcms3.service.LoanAgreementService;
-import ru.fds.tavrzcms3.service.PledgeAgreementService;
+import ru.fds.tavrzcms3.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class ClientConverterDto implements ConverterDto<Client,ClientDto> {
@@ -20,15 +18,18 @@ public class ClientConverterDto implements ConverterDto<Client,ClientDto> {
     private final EmployeeService employeeService;
     private final PledgeAgreementService pledgeAgreementService;
     private final LoanAgreementService loanAgreementService;
+    private final ClientService clientService;
 
     public ClientConverterDto(ClientManagerService clientManagerService,
                               EmployeeService employeeService,
                               PledgeAgreementService pledgeAgreementService,
-                              LoanAgreementService loanAgreementService) {
+                              LoanAgreementService loanAgreementService,
+                              ClientService clientService) {
         this.clientManagerService = clientManagerService;
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.loanAgreementService = loanAgreementService;
+        this.clientService = clientService;
     }
 
     @Override
@@ -63,7 +64,9 @@ public class ClientConverterDto implements ConverterDto<Client,ClientDto> {
                 .employeeId(entity.getEmployee().getEmployeeId())
                 .loanAgreementsIds(loanAgreementDtoList)
                 .pledgeAgreementsIds(pledgeAgreementDtoList)
+                .fullName(clientService.getFullNameClient(entity.getClientId()))
                 .build();
     }
+
 
 }

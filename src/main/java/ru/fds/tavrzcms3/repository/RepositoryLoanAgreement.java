@@ -22,6 +22,7 @@ public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Lo
     List<LoanAgreement> findByClientAndStatusLAEquals(Client client, StatusOfAgreement statusLA);
     List<LoanAgreement> findAllByClient(Client client);
     Page<LoanAgreement> findByClientInAndStatusLAEquals(List<Client> clients, StatusOfAgreement statusLA, Pageable pageable);
+    List<LoanAgreement> findByClientInAndStatusLAEquals(List<Client> clients, StatusOfAgreement statusLA);
     Page<LoanAgreement> findAll(Specification specification, Pageable pageable);
 
 }

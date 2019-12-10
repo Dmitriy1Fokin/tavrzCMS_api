@@ -38,4 +38,8 @@ public class EmployeeService {
     public Employee getEmployeeByLoanAgreement(long loanAgreementId){
         return repositoryEmployee.getEmployeeByLoanAgreement(loanAgreementId);
     }
+
+    public Employee getEmployeeByPledgeAgreement(long pledgeAgreementId){
+        return repositoryEmployee.getEmployeeByPledgeAgreement(pledgeAgreementId);
+    }
 }

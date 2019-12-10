@@ -23,7 +23,4 @@ public class ClientLegalEntityDto extends ClientDto{
     @Pattern(regexp = "^$|[0-9]{10}",
             message = "Неверное значение")
     private String inn;
-
-    private String fullName;
-
 }

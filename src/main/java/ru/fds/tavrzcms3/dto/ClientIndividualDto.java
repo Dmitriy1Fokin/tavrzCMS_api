@@ -26,6 +26,4 @@ public class ClientIndividualDto extends ClientDto{
             message = "Неверное значение")
     private String pasportNum;
 
-    private String fullName;
-
 }

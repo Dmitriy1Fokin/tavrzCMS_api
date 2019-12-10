@@ -23,4 +23,6 @@ public class ClientDto{
     private List<Long> loanAgreementsIds;
 
     private List<Long> pledgeAgreementsIds;
+
+    private String fullName;
 }
