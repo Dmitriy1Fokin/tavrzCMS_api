@@ -31,7 +31,7 @@
                 </td>
                 <td>
                     <a th:href="@{/client/detail(clientId=${la.getClientId()})}" href="../client/detail.html"
-                       th:text="${@clientService.getFullNameClient(la.getClientId())}"></a>
+                       th:text="${la.getClientName()}"></a>
                 </td>
                 <td th:text="${#dates.format(la.getDateBeginLA(), 'dd.MM.yyyy')}">н/д</td>
                 <td th:text="${#dates.format(la.getDateEndLA(), 'dd.MM.yyyy')}">н/д</td>

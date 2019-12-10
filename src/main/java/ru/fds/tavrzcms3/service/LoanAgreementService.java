@@ -70,6 +70,11 @@ public class LoanAgreementService {
         return repositoryLoanAgreement.findByClientInAndStatusLAEquals(clientList, StatusOfAgreement.OPEN, pageable);
     }
 
+    public List<LoanAgreement> getCurrentLoanAgreementsByEmployee(Employee employee){
+        List<Client> clientList = repositoryClient.findByEmployee(employee);
+        return repositoryLoanAgreement.findByClientInAndStatusLAEquals(clientList, StatusOfAgreement.OPEN);
+    }
+
     public int countOfCurrentLoanAgreementsByLoaner(Client client){
         return repositoryLoanAgreement.countAllByClientAndStatusLAEquals(client, StatusOfAgreement.OPEN);
     }

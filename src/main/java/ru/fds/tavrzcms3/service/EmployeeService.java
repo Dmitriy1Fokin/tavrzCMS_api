@@ -34,4 +34,8 @@ public class EmployeeService {
         Sort sortByDateSurname = new Sort(Sort.Direction.ASC, "surname");
         return repositoryEmployee.findAll(sortByDateSurname);
     }
+
+    public Employee getEmployeeByLoanAgreement(long loanAgreementId){
+        return repositoryEmployee.getEmployeeByLoanAgreement(loanAgreementId);
+    }
 }

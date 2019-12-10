@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <div th:switch="${whatDo}">
         <div th:case="changeLA">
-            <title th:text="'Обновление данных КД№' + ${loanAgreement.getNumLA()}">Обновление данных</title>
+            <title th:text="'Обновление данных КД№' + ${loanAgreementDto.getNumLA()}">Обновление данных</title>
         </div>
         <div th:case="newLA">
             <title th:text="'Создание нового КД'">Создание нового КД</title>
@@ -25,45 +25,45 @@
 
 <div th:switch="${whatDo}">
     <div th:case="changeLA">
-        <form th:action="@{/loan_agreement/update_insert}" th:method="post" th:object="${loanAgreement}" action="card.html">
+        <form th:action="@{/loan_agreement/update_insert}" th:method="post" th:object="${loanAgreementDto}" action="card.html">
             <input type="hidden", name="whatDo" th:value="${whatDo}">
-            <input type="hidden", th:field="*{loanAgreementId}" th:value="${loanAgreement.getLoanAgreementId()}">
-            <input type="hidden" , th:field="*{client}" th:value="${loanAgreement.getClient()}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${loanAgreement.getPledgeAgreements()}">
+            <input type="hidden", th:field="*{loanAgreementId}" th:value="${loanAgreementDto.getLoanAgreementId()}">
+            <input type="hidden" , th:field="*{clientId}" th:value="${loanAgreementDto.getClientId()}">
+            <input type="hidden", th:field="*{pledgeAgreementsIds}" th:value="${loanAgreementDto.getPledgeAgreementsIds()}">
 
             <div class="row">
                 <label>№ КД:</label>
-                <input required th:field="*{numLA}" type="text" th:value="${loanAgreement.getNumLA()}"/>
+                <input required th:field="*{numLA}" type="text" th:value="${loanAgreementDto.getNumLA()}"/>
                 <div th:if="${#fields.hasErrors('numLA')}" th:errors="*{numLA}">Name Error</div>
             </div>
             <br>
             <div class="row">
                 <label>Дата начала КД</label>
-                <input required th:field="*{dateBeginLA}" type="date" th:value="${loanAgreement.getDateBeginLA()}"/>
+                <input required th:field="*{dateBeginLA}" type="date" th:value="${loanAgreementDto.getDateBeginLA()}"/>
                 <div th:if="${#fields.hasErrors('dateBeginLA')}" th:errors="*{dateBeginLA}">Name Error</div>
             </div>
             <br>
             <div class="row">
                 <label>Дата окончания КД</label>
-                <input required th:field="*{dateEndLA}" type="date" th:value="${loanAgreement.getDateEndLA()}"/>
+                <input required th:field="*{dateEndLA}" type="date" th:value="${loanAgreementDto.getDateEndLA()}"/>
                 <div th:if="${#fields.hasErrors('dateEndLA')}" th:errors="*{dateEndLA}">Name Error</div>
             </div>
             <br>
             <div class="row">
                 <label>Сумма договора:</label>
-                <input type="number" step="0.01" required th:field="*{amountLA}" th:value="${loanAgreement.getAmountLA()}"/>
+                <input type="number" step="0.01" required th:field="*{amountLA}" th:value="${loanAgreementDto.getAmountLA()}"/>
                 <div th:if="${#fields.hasErrors('amountLA')}" th:errors="*{amountLA}">Name Error</div>
             </div>
             <br>
             <div class="row">
                 <label>Задолженность:</label>
-                <input type="number" step="0.01" required th:field="*{debtLA}" th:value="${loanAgreement.getDebtLA()}"/>
+                <input type="number" step="0.01" required th:field="*{debtLA}" th:value="${loanAgreementDto.getDebtLA()}"/>
                 <div th:if="${#fields.hasErrors('debtLA')}" th:errors="*{debtLA}">Name Error</div>
             </div>
             <br>
             <div class="row">
                 <label>%:</label>
-                <input type="number" min="0" max="1" step="0.0001" required th:field="*{interestRateLA}" th:value="${loanAgreement.getInterestRateLA()}"/>
+                <input type="number" min="0" max="1" step="0.0001" required th:field="*{interestRateLA}" th:value="${loanAgreementDto.getInterestRateLA()}"/>
                 <div th:if="${#fields.hasErrors('interestRateLA')}" th:errors="*{interestRateLA}">Name Error</div>
             </div>
             <br>
@@ -104,9 +104,9 @@
         </form>
     </div>
     <div th:case="newLA">
-        <form th:action="@{/loan_agreement/update_insert}" th:method="post" th:object="${loanAgreement}" action="card.html">
+        <form th:action="@{/loan_agreement/update_insert}" th:method="post" th:object="${loanAgreementDto}" action="card.html">
             <input type="hidden", name="whatDo" th:value="${whatDo}">
-            <input type="hidden" , th:field="*{client}" th:value="${loanAgreement.getClient()}">
+            <input type="hidden" , th:field="*{clientId}" th:value="${loanAgreementDto.getClientId()}">
 
             <div class="row">
                 <label>№ КД:</label>
@@ -182,7 +182,7 @@
     </div>
     <div th:case="responseSuccess">
         <h3>Успешно добавлен новый кредитный договор</h3>
-        <a th:href="@{/loan_agreement/detail(loanAgreementId=${loanAgreement.getLoanAgreementId()})}" href="detail.html"
+        <a th:href="@{/loan_agreement/detail(loanAgreementId=${loanAgreementDto.getLoanAgreementId()})}" href="detail.html"
            th:text="'подробрее'">н/д</a>
     </div>
     <div th:case="responseError">

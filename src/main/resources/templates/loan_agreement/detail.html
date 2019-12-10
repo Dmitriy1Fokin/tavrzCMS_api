@@ -26,58 +26,58 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<h1 th:text="'Кредитный договор: №' + ${loanAgreement.getNumLA()} + ' от ' + ${#dates.format(loanAgreement.getDateBeginLA(), 'dd.MM.yyyy')}">Кредитный договор</h1>
+<h1 th:text="'Кредитный договор: №' + ${loanAgreementDto.getNumLA()} + ' от ' + ${#dates.format(loanAgreementDto.getDateBeginLA(), 'dd.MM.yyyy')}">Кредитный договор</h1>
 <label>Ответственный сотрудник: </label>
-<span th:text="${loanAgreement.getClient().getEmployee().getSurname()} + ' ' + ${loanAgreement.getClient().getEmployee().name}"></span>
+<span th:text="${employeeDto.getFullName()}"></span>
 <br>
 <br>
 
 <label>Id кредитного договора:</label>
-<span th:text="${loanAgreement.getLoanAgreementId()}" id="loanAgreementId"></span>
+<span th:text="${loanAgreementDto.getLoanAgreementId()}" id="loanAgreementId"></span>
 <br>
 <br>
 <label>Номер кредитного договора:</label>
-<span th:text="${loanAgreement.getNumLA()}">н/д</span>
+<span th:text="${loanAgreementDto.getNumLA()}">н/д</span>
 <br>
 <br>
 <label>Дата начала КД:</label>
-<span th:text="${#dates.format(loanAgreement.getDateBeginLA(), 'dd.MM.yyyy')}">н/д</span>
+<span th:text="${#dates.format(loanAgreementDto.getDateBeginLA(), 'dd.MM.yyyy')}">н/д</span>
 <br>
 <br>
 <label>Дата окончания КД:</label>
-<span th:text="${#dates.format(loanAgreement.getDateEndLA(), 'dd.MM.yyyy')}">н/д</span>
+<span th:text="${#dates.format(loanAgreementDto.getDateEndLA(), 'dd.MM.yyyy')}">н/д</span>
 <br>
 <br>
 <label>Заемщик:</label>
-<a th:href="@{/client/detail(clientId=${loanAgreement.getClient().getClientId()})}" href="../client/detail.html"
-   th:text="${@clientService.getFullNameClient(loanAgreement.getClient())}">Заемщик</a>
+<a th:href="@{/client/detail(clientId=${loanAgreementDto.getClientId()})}" href="../client/detail.html"
+   th:text="${loanAgreementDto.getClientName()}">Заемщик</a>
 <br>
 <br>
 <label>Сумма договора:</label>
-<span th:text="${#numbers.formatCurrency(loanAgreement.getAmountLA())}">н/д</span>
+<span th:text="${#numbers.formatCurrency(loanAgreementDto.getAmountLA())}">н/д</span>
 <br>
 <br>
 <label>%:</label>
-<span th:text="${#numbers.formatPercent(loanAgreement.getInterestRateLA(), 0, 2)}">н/д</span>
+<span th:text="${#numbers.formatPercent(loanAgreementDto.getInterestRateLA(), 0, 2)}">н/д</span>
 <br>
 <br>
 <label>Задолженность:</label>
-<span th:text="${#numbers.formatCurrency(loanAgreement.getDebtLA())}">н/д</span>
+<span th:text="${#numbers.formatCurrency(loanAgreementDto.getDebtLA())}">н/д</span>
 <br>
 <br>
 <label>ПФО:</label>
-<span th:text="${loanAgreement.getPfo()}">н/д</span>
+<span th:text="${loanAgreementDto.getPfo()}">н/д</span>
 <br>
 <br>
 <label>Кат.кач.:</label>
-<span th:text="${loanAgreement.getQualityCategory()}">н/д</span>
+<span th:text="${loanAgreementDto.getQualityCategory()}">н/д</span>
 <br>
 <br>
 <label>Статус договора:</label>
-<span th:text="${loanAgreement.getStatusLA().getTranslate()}">н/д</span>
+<span th:text="${loanAgreementDto.getStatusLA().getTranslate()}">н/д</span>
 <br>
 <br>
-<a th:href="@{/loan_agreement/card(whatDo='changeLA', loanAgreementId=${loanAgreement.getLoanAgreementId()})}"
+<a th:href="@{/loan_agreement/card(whatDo='changeLA', loanAgreementId=${loanAgreementDto.getLoanAgreementId()})}"
    href="card.html"
    th:text="'Изменить данные'">Изменить данные</a>
 <br>
@@ -113,18 +113,18 @@
 
 <br>
 <br>
-<div th:if="${@pledgeAgreementService.countOfCurrentPledgeAgreementsByLoanAgreement(loanAgreement) &gt; 0}">
+<div th:unless="${currentPledgeAgreementDtoList.isEmpty()}">
     <label>Действующее обеспечение:</label>
     <div class="containerTable">
-        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${@pledgeAgreementService.getCurrentPledgeAgreementsByLoanAgreement(loanAgreement)})"></div>
+        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${currentPledgeAgreementDtoList})"></div>
     </div>
     <br>
     <br>
 </div>
-    <div th:if="${@pledgeAgreementService.countOfClosedPledgeAgreementsByLoanAgreement(loanAgreement) &gt; 0}">
+    <div th:unless="${closedPledgeAgreementDtoList.isEmpty()}">
     <label>Закрытые договоры залога:</label>
     <div class="containerTable">
-        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${@pledgeAgreementService.getClosedPledgeAgreementsByLoanAgreement(loanAgreement)})"></div>
+        <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${closedPledgeAgreementDtoList})"></div>
     </div>
 </div>
 

@@ -8,6 +8,7 @@ import ru.fds.tavrzcms3.service.ClientService;
 import ru.fds.tavrzcms3.service.PledgeAgreementService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -24,7 +25,11 @@ public class LoanAgreementConverterDto implements ConverterDto<LoanAgreement, Lo
 
     @Override
     public LoanAgreement toEntity(LoanAgreementDto dto) {
-        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementsByIds(dto.getPledgeAgreementsIds());
+        List<PledgeAgreement> pledgeAgreementList;
+        if(dto.getPledgeAgreementsIds() != null)
+            pledgeAgreementList = pledgeAgreementService.getPledgeAgreementsByIds(dto.getPledgeAgreementsIds());
+        else
+            pledgeAgreementList = Collections.emptyList();
 
         return LoanAgreement.builder()
                 .loanAgreementId(dto.getLoanAgreementId())
@@ -61,6 +66,7 @@ public class LoanAgreementConverterDto implements ConverterDto<LoanAgreement, Lo
                 .qualityCategory(entity.getQualityCategory())
                 .clientId(entity.getClient().getClientId())
                 .pledgeAgreementsIds(pledgeAgreementDtoList)
+                .clientName(clientService.getFullNameClient(entity.getClient().getClientId()))
                 .build();
     }
 }

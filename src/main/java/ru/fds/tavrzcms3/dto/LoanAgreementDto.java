@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 
-import javax.persistence.TemporalType;
 import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.List;
@@ -59,4 +58,6 @@ public class LoanAgreementDto {
     private Long clientId;
 
     private List<Long> pledgeAgreementsIds;
+
+    private String clientName;
 }
