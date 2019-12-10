@@ -21,7 +21,7 @@ public class ValidatorEntity {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("Ошибка валидации: ");
             for (ConstraintViolation<T> c : violations)
-                stringBuilder.append(c.getMessage() + "(" + c.getInvalidValue() + ") в поле: \"" + c.getPropertyPath() + "\". ");
+                stringBuilder.append(c.getMessage()).append("(").append(c.getInvalidValue()).append(") в поле: \"").append(c.getPropertyPath()).append("\". ");
 
             errorMessage = stringBuilder.toString();
         }

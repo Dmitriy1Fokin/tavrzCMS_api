@@ -31,7 +31,7 @@
    th:text="'Вернуться к предмету залога ' + ${pledgeSubject.getName()}">Вернуться к предмету залога</a>
 <br>
 <br>
-<a th:href="@{encumbrance/card(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
+<a th:href="@{/encumbrance/card(pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
    href="card.html"
    th:text="'Добавить обременение'">Добавить обременение</a>
 <br>
