@@ -68,7 +68,7 @@ function insertPA() {
             location.reload();
         },
         error: function () {
-            alert("!!!!!!!!!!!!!!!!!");
+            alert("Ошибка при добавлении ДЗ!");
         }
     });
 }

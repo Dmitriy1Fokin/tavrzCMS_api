@@ -92,34 +92,9 @@ public class PagesController {
         return PAGE_UPDATE;
     }
 
-    @PostMapping("searchPA")
-    public @ResponseBody List<PledgeAgreement> searchPA(@RequestParam("numPA") String numPA){
-        return pledgeAgreementService.getPledgeAgreementsByNumPA(numPA);
-    }
-
-    @PostMapping("insertPA")
-    public @ResponseBody int insertPA(@RequestParam("pledgeAgreementIdArray[]") long[] pledgeAgreementIdArray,
-                                      @RequestParam("loanAgreementId") long loanAgreementId){
-
-        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId)
-                .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
-
-        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getAllPledgeAgreementsByLoanAgreement(loanAgreement);
-        int countPABeforeUpdate = pledgeAgreementList.size();
-        for(int i = 0; i < pledgeAgreementIdArray.length; i++){
-            pledgeAgreementList.add(pledgeAgreementService.getPledgeAgreementById(pledgeAgreementIdArray[i])
-                    .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK)));
-        }
-
-        int countPAAfterUpdate = pledgeAgreementList.size();
-        System.out.println(countPAAfterUpdate - countPABeforeUpdate);
 
 
-        loanAgreement.setPledgeAgreements(pledgeAgreementList);
-        loanAgreementService.updateInsertLoanAgreement(loanAgreement);
 
-        return countPAAfterUpdate - countPABeforeUpdate;
-    }
 
     @PostMapping("searchPS")
     public @ResponseBody List<PledgeSubject> searchPS(@RequestParam("cadastralNum") Optional<String> cadastralNum,

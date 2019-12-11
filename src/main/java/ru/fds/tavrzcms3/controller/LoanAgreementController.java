@@ -6,15 +6,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.fds.tavrzcms3.converver.EmployeeConverterDto;
 import ru.fds.tavrzcms3.converver.LoanAgreementConverterDto;
 import ru.fds.tavrzcms3.converver.PledgeAgreementConverterDto;
 import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
+import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.dto.EmployeeDto;
 import ru.fds.tavrzcms3.dto.LoanAgreementDto;
 import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
@@ -184,4 +182,37 @@ public class LoanAgreementController {
 
         return loanAgreementDetailPage(loanAgreement.getLoanAgreementId(), model);
     }
+
+    @PostMapping("searchPA")
+    public @ResponseBody List<PledgeAgreementDto> searchPA(@RequestParam("numPA") String numPA){
+
+        return pledgeAgreementConverterDto
+                .toDto(pledgeAgreementService.getPledgeAgreementsByNumPA(numPA));
+    }
+
+    @PostMapping("insertPA")
+    public @ResponseBody int insertPA(@RequestParam("pledgeAgreementIdArray[]") long[] pledgeAgreementIdArray,
+                                      @RequestParam("loanAgreementId") long loanAgreementId){
+
+        LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId)
+                .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
+
+        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getAllPledgeAgreementsByLoanAgreement(loanAgreement);
+        int countPABeforeUpdate = pledgeAgreementList.size();
+        for(int i = 0; i < pledgeAgreementIdArray.length; i++){
+            pledgeAgreementList.add(pledgeAgreementService.getPledgeAgreementById(pledgeAgreementIdArray[i])
+                    .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK)));
+        }
+
+        int countPAAfterUpdate = pledgeAgreementList.size();
+        System.out.println(countPAAfterUpdate - countPABeforeUpdate);
+
+        loanAgreement.setPledgeAgreements(pledgeAgreementList);
+
+        loanAgreementService.updateInsertLoanAgreement(loanAgreement);
+
+        return countPAAfterUpdate - countPABeforeUpdate;
+    }
+
+
 }
