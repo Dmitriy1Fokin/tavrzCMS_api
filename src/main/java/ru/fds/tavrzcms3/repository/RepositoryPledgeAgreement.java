@@ -30,9 +30,8 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     int countAllByLoanAgreementsAndStatusPAEquals(LoanAgreement loanAgreement, StatusOfAgreement statusPA);
     List<PledgeAgreement> findByLoanAgreementsAndStatusPAEquals(LoanAgreement loanAgreement, StatusOfAgreement statusPA);
     List<PledgeAgreement> findByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, TypeOfPledgeAgreement pervPosl, StatusOfAgreement statusPA);
-    Page<PledgeAgreement> findByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, TypeOfPledgeAgreement pervPosl, StatusOfAgreement statusPA, Pageable pageable);
     List<PledgeAgreement> findByClientInAndStatusPAEquals(List<Client> clients, StatusOfAgreement statusPA, Sort sort);
-    Page<PledgeAgreement> findByClientInAndStatusPAEquals(List<Client> clients, StatusOfAgreement statusPA, Pageable pageable);
+    List<PledgeAgreement> findByClientInAndStatusPAEquals(List<Client> clients, StatusOfAgreement statusPA);
     Page<PledgeAgreement> findAll(Specification specification, Pageable pageable);
     List<PledgeAgreement> findAllByNumPAContainingIgnoreCase(String numPA);
 
@@ -73,5 +72,14 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
                                         "and emp.employee_id = ?1 " +
                                         "order by d.pledgor_id")
     List<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(long employee, String pervPosl);
+
+    @Query(nativeQuery = true, value = "select d.* " +
+            "from employee as emp " +
+            "join client_prime as cp on cp.employee_id = emp.employee_id " +
+            "join dz as d on d.pledgor_id = cp.client_id " +
+            "where d.status = 'открыт' " +
+            "and emp.employee_id = ?1 " +
+            "order by d.pledgor_id")
+    List<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(long employee);
 
 }

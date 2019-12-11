@@ -63,4 +63,6 @@ public class PledgeAgreementDto {
     private List<Date> datesOfMonitoring;
 
     private List<String> resultsOfMonitoring;
+
+    private String clientName;
 }

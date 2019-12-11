@@ -1,25 +1,35 @@
 package ru.fds.tavrzcms3.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.fds.tavrzcms3.converver.EmployeeConverterDto;
+import ru.fds.tavrzcms3.converver.LoanAgreementConverterDto;
+import ru.fds.tavrzcms3.converver.PledgeAgreementConverterDto;
+import ru.fds.tavrzcms3.converver.PledgeSubjectConverterDto;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
-import ru.fds.tavrzcms3.domain.Client;
-import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
-import ru.fds.tavrzcms3.service.ClientService;
+import ru.fds.tavrzcms3.dto.EmployeeDto;
+import ru.fds.tavrzcms3.dto.LoanAgreementDto;
+import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
+import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.service.EmployeeService;
+import ru.fds.tavrzcms3.service.LoanAgreementService;
 import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
+import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -27,23 +37,41 @@ import java.util.stream.IntStream;
 @RequestMapping("/pledge_agreement")
 public class PledgeAgreementController {
 
-    private final EmployeeService employeeService;
     private final PledgeAgreementService pledgeAgreementService;
-    private final ClientService clientService;
     private final PledgeSubjectService pledgeSubjectService;
+    private final EmployeeService employeeService;
+    private final LoanAgreementService loanAgreementService;
+
+    private final PledgeAgreementConverterDto pledgeAgreementConverterDto;
+    private final PledgeSubjectConverterDto pledgeSubjectConverterDto;
+    private final EmployeeConverterDto employeeConverterDto;
+    private final LoanAgreementConverterDto loanAgreementConverterDto;
+
+    private final ValidatorEntity validatorEntity;
 
     private static final String MSG_WRONG_LINK = "Неверная ссылка";
+    private static final String PAGE_CARD = "pledge_agreement/card";
     private static final String ATTR_WHAT_DO = "whatDo";
-    private static final String ATTR_PLEDGE_AGREEMENT = "pledgeAgreement";
+    private static final String ATTR_PLEDGE_AGREEMENT = "pledgeAgreementDto";
 
-    public PledgeAgreementController(EmployeeService employeeService,
-                                     PledgeAgreementService pledgeAgreementService,
-                                     ClientService clientService,
-                                     PledgeSubjectService pledgeSubjectService) {
-        this.employeeService = employeeService;
+    public PledgeAgreementController(PledgeAgreementService pledgeAgreementService,
+                                     PledgeSubjectService pledgeSubjectService,
+                                     EmployeeService employeeService,
+                                     LoanAgreementService loanAgreementService,
+                                     PledgeAgreementConverterDto pledgeAgreementConverterDto,
+                                     PledgeSubjectConverterDto pledgeSubjectConverterDto,
+                                     EmployeeConverterDto employeeConverterDto,
+                                     LoanAgreementConverterDto loanAgreementConverterDto,
+                                     ValidatorEntity validatorEntity) {
         this.pledgeAgreementService = pledgeAgreementService;
-        this.clientService = clientService;
         this.pledgeSubjectService = pledgeSubjectService;
+        this.employeeService = employeeService;
+        this.loanAgreementService = loanAgreementService;
+        this.pledgeAgreementConverterDto = pledgeAgreementConverterDto;
+        this.pledgeSubjectConverterDto = pledgeSubjectConverterDto;
+        this.employeeConverterDto = employeeConverterDto;
+        this.loanAgreementConverterDto = loanAgreementConverterDto;
+        this.validatorEntity = validatorEntity;
     }
 
     @GetMapping("/pledge_agreements")
@@ -52,27 +80,37 @@ public class PledgeAgreementController {
                                       @RequestParam("page") Optional<Integer> page,
                                       @RequestParam("size") Optional<Integer> size,
                                       Model model) {
-        Employee employee = employeeService.getEmployeeById(employeeId).orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
         int currentPage = page.orElse(0);
         int pageSize = size.orElse(50);
-        Pageable pageable = PageRequest.of(currentPage, pageSize);
+        int startItem = currentPage * pageSize;
 
-        Page<PledgeAgreement> pledgeAgreementList = null;
+        List<PledgeAgreement> pledgeAgreementList;
         if(pervPosl.isPresent())
             pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(
-                    employee,
-                    TypeOfPledgeAgreement.valueOf(pervPosl.get()),
-                    pageable);
+                    employeeId,
+                    TypeOfPledgeAgreement.valueOf(pervPosl.get()));
         else
-            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(employee, pageable);
+            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(employeeId);
 
+        List<PledgeAgreement> pledgeAgreementListForPage;
+        if(pledgeAgreementList.size() < startItem){
+            pledgeAgreementListForPage = Collections.emptyList();
+        }else {
+            int toIndex = Math.min(startItem+pageSize, pledgeAgreementList.size());
+            pledgeAgreementListForPage = pledgeAgreementList.subList(startItem, toIndex);
+        }
 
+        Page<PledgeAgreementDto> pledgeAgreementDtoPage = new PageImpl<>(
+                pledgeAgreementConverterDto.toDto(pledgeAgreementListForPage),
+                PageRequest.of(currentPage, pageSize),
+                pledgeAgreementList.size()
+        );
 
-        model.addAttribute("pledgeAgreementList", pledgeAgreementList);
+        model.addAttribute("pledgeAgreementList", pledgeAgreementDtoPage);
         model.addAttribute("pervPosl", pervPosl.orElse(""));
         model.addAttribute("employeeId", employeeId);
 
-        int totalPages = pledgeAgreementList.getTotalPages();
+        int totalPages = pledgeAgreementDtoPage.getTotalPages();
         if(totalPages > 0){
             List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
             model.addAttribute("pageNumbers", pageNumbers);
@@ -84,8 +122,17 @@ public class PledgeAgreementController {
     @GetMapping("/pledge_subjects")
     public String pledgeSubjectsPage(@RequestParam("pledgeAgreementId") long pledgeAgreementId,
                                      Model model){
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId).orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
-        model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreement);
+
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
+                .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
+
+        PledgeAgreementDto pledgeAgreementDto = pledgeAgreementConverterDto.toDto(pledgeAgreement);
+
+        List<PledgeSubjectDto> pledgeSubjectDtoList = pledgeSubjectConverterDto
+                .toDto(pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId));
+
+        model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreementDto);
+        model.addAttribute("pledgeSubjectDtoList", pledgeSubjectDtoList);
 
         return "pledge_agreement/pledge_subjects";
     }
@@ -93,38 +140,58 @@ public class PledgeAgreementController {
     @GetMapping("/detail")
     public String pledgeAgreementDetailPage(@RequestParam("pledgeAgreementId") long pledgeAgreementId,
                                             Model model){
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId).orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
-        model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreement);
+
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
+                .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
+
+        PledgeAgreementDto pledgeAgreementDto = pledgeAgreementConverterDto.toDto(pledgeAgreement);
+
+        EmployeeDto employeeDto = employeeConverterDto
+                .toDto(employeeService.getEmployeeByPledgeAgreement(pledgeAgreementId));
+
+        List<LoanAgreementDto> currentLoanAgreementDtoList = loanAgreementConverterDto
+                .toDto(loanAgreementService.getCurrentLoanAgreementsByPledgeAgreement(pledgeAgreement));
+
+        List<LoanAgreementDto> closedLoanAgreementDtoList = loanAgreementConverterDto
+                .toDto(loanAgreementService.getClosedLoanAgreementsByPledgeAgreement(pledgeAgreement));
+
+
+        model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreementDto);
+        model.addAttribute("employeeDto", employeeDto);
+        model.addAttribute("currentLoanAgreementDtoList",currentLoanAgreementDtoList);
+        model.addAttribute("closedLoanAgreementDtoList", closedLoanAgreementDtoList);
 
         return "pledge_agreement/detail";
     }
 
     @GetMapping("/card")
     public String pledgeAgreementCard(@RequestParam("pledgeAgreementId") Optional<Long> pledgeAgreementId,
-                                         @RequestParam("clientId") Optional<Long> clientId,
-                                         @RequestParam("whatDo") String whatDo,
-                                         Model model){
+                                      @RequestParam("clientId") Optional<Long> clientId,
+                                      @RequestParam("whatDo") String whatDo,
+                                      Model model){
         if(whatDo.equals("changePA")){
+
             PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId
                     .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK)))
                     .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
 
-            model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreement);
+            PledgeAgreementDto pledgeAgreementDto = pledgeAgreementConverterDto.toDto(pledgeAgreement);
+
+            model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreementDto);
             model.addAttribute(ATTR_WHAT_DO, whatDo);
 
-            return "pledge_agreement/card";
+            return PAGE_CARD;
 
         }else if(whatDo.equals("newPA")){
-            PledgeAgreement pledgeAgreement = new PledgeAgreement();
-            Client client = clientService.getClientById(clientId
-                    .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK)))
-                    .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
-            pledgeAgreement.setClient(client);
 
-            model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreement);
+            PledgeAgreementDto pledgeAgreementDto = PledgeAgreementDto.builder()
+                    .clientId(clientId.orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK)))
+                    .build();
+
+            model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreementDto);
             model.addAttribute(ATTR_WHAT_DO, whatDo);
 
-            return "pledge_agreement/card";
+            return PAGE_CARD;
 
         }else
             throw new IllegalArgumentException(MSG_WRONG_LINK);
@@ -132,32 +199,25 @@ public class PledgeAgreementController {
     }
 
     @PostMapping("/update_insert")
-    public String updateInsertPledgeAgreement(@Valid PledgeAgreement pledgeAgreement,
-                                          BindingResult bindingResult,
-                                          @RequestParam("whatDo") String whatDo,
-                                          Model model){
+    public String updateInsertPledgeAgreement(@Valid PledgeAgreementDto pledgeAgreementDto,
+                                              BindingResult bindingResult,
+                                              @RequestParam("whatDo") String whatDo,
+                                              Model model){
 
         if(bindingResult.hasErrors()){
             model.addAttribute(ATTR_WHAT_DO, whatDo);
-            return "pledge_agreement/card";
+            return PAGE_CARD;
         }
 
-        if(whatDo.equals("changePA")){
-            PledgeAgreement pa = pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
+        PledgeAgreement pledgeAgreement = pledgeAgreementConverterDto.toEntity(pledgeAgreementDto);
 
-            model.addAttribute(ATTR_PLEDGE_AGREEMENT, pa);
+        Set<ConstraintViolation<PledgeAgreement>> violations =  validatorEntity.validateEntity(pledgeAgreement);
+        if(!violations.isEmpty())
+            throw new IllegalArgumentException(validatorEntity.getErrorMessage());
 
-            return "pledge_agreement/detail";
-        }else {
-            PledgeAgreement pa = pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
+        pledgeAgreement = pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
 
-            model.addAttribute(ATTR_PLEDGE_AGREEMENT, pa);
-            model.addAttribute(ATTR_WHAT_DO, "responseSuccess");
-
-            return "pledge_agreement/card";
-        }
-
-
+        return pledgeAgreementDetailPage(pledgeAgreement.getPledgeAgreementId(), model);
     }
 
     @PostMapping("withdrawFromDepositPledgeSubject")
@@ -166,11 +226,17 @@ public class PledgeAgreementController {
                                          @RequestParam("pledgeAgreementId") long pledgeAgreementId,
                                          Model model){
 
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId).orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
+                .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
+
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId);
-        pledgeSubjectList.remove(pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId));
-        pledgeAgreement.setPledgeSubjects(pledgeSubjectList);
-        pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
+
+        Optional<PledgeSubject> pledgeSubjectToRemove = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+        if(pledgeSubjectToRemove.isPresent()){
+            pledgeSubjectList.remove(pledgeSubjectToRemove.get());
+            pledgeAgreement.setPledgeSubjects(pledgeSubjectList);
+            pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
+        }
 
         return pledgeSubjectList.size();
     }

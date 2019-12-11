@@ -11,6 +11,7 @@ import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -34,9 +35,17 @@ public class PledgeAgreementConverterDto implements ConverterDto<PledgeAgreement
 
     @Override
     public PledgeAgreement toEntity(PledgeAgreementDto dto) {
-        List<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementsByIds(dto.getLoanAgreementsIds());
+        List<LoanAgreement> loanAgreementList;
+        if(dto.getLoanAgreementsIds() != null)
+            loanAgreementList = loanAgreementService.getLoanAgreementsByIds(dto.getLoanAgreementsIds());
+        else
+            loanAgreementList = Collections.emptyList();
 
-        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectByIds(dto.getPledgeSubjectsIds());
+        List<PledgeSubject> pledgeSubjectList;
+        if(dto.getPledgeSubjectsIds() != null)
+            pledgeSubjectList = pledgeSubjectService.getPledgeSubjectByIds(dto.getPledgeSubjectsIds());
+        else
+            pledgeSubjectList = Collections.emptyList();
 
         return PledgeAgreement.builder()
                 .pledgeAgreementId(dto.getPledgeAgreementId())
@@ -102,6 +111,7 @@ public class PledgeAgreementConverterDto implements ConverterDto<PledgeAgreement
                 .datesOfConclusions(datesOfConclusions)
                 .datesOfMonitoring(datesOfMonitoring)
                 .resultsOfMonitoring(resultsOfMonitoring)
+                .clientName(clientService.getFullNameClient(entity.getClient().getClientId()))
                 .build();
     }
 }

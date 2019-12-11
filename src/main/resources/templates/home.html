@@ -22,11 +22,11 @@
 
 <p>Договоров залога на сопровождении:</p>
 <label>Всего:</label>
-<a th:href="@{/pledge_agreement/pledge_agreements(size=50, page=0, employeeId=${employee.employeeId})}" href="pledge_agreement/pledge_agreements.html" th:text="${countOfAllPledgeAgreement}">0</a>
+<a th:href="@{/pledge_agreement/pledge_agreements(size=50, employeeId=${employee.employeeId})}" href="pledge_agreement/pledge_agreements.html" th:text="${countOfAllPledgeAgreement}">0</a>
 <label>Первичных:</label>
-<a th:href="@{/pledge_agreement/pledge_agreements(size=50, page=0, employeeId=${employee.employeeId}, pervPosl='PERV')}" href="pledge_agreement/pledge_agreements.html" th:text="${countOfPervPledgeAgreements}">0</a>
+<a th:href="@{/pledge_agreement/pledge_agreements(size=50, employeeId=${employee.employeeId}, pervPosl='PERV')}" href="pledge_agreement/pledge_agreements.html" th:text="${countOfPervPledgeAgreements}">0</a>
 <label>Последующих:</label>
-<a th:href="@{/pledge_agreement/pledge_agreements(size=50, page=0, employeeId=${employee.employeeId}, pervPosl='POSL')}" href="pledge_agreement/pledge_agreements.html" th:text="${countOfPoslPledgeAgreements}">0</a>
+<a th:href="@{/pledge_agreement/pledge_agreements(size=50, employeeId=${employee.employeeId}, pervPosl='POSL')}" href="pledge_agreement/pledge_agreements.html" th:text="${countOfPoslPledgeAgreements}">0</a>
 
 <p>Кредитных договоров на сопровождении:</p>
 <a th:href="@{/loan_agreement/loan_agreements(size=50, employeeId=${employee.employeeId})}" href="loan_agreement/loan_agreements.html" th:text="${countOfLoanAgreements}">0</a>

@@ -4,7 +4,7 @@
     <script th:src="@{/js/jquery-3.4.1.min.js}" src="/js/jquery-3.4.1.min.js"></script>
     <script th:src="@{/js/scripts.js}" src="/js/testScript.js"></script>
     <meta charset="UTF-8">
-    <title th:text="'Договор залога: №' + ${pledgeAgreement.getNumPA()}">Договор залога</title>
+    <title th:text="'Договор залога: №' + ${pledgeAgreementDto.getNumPA()}">Договор залога</title>
     <style type="text/css">
         body {
             padding: 50px;
@@ -26,34 +26,34 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<h1 th:text="'Договор залога: №' + ${pledgeAgreement.getNumPA()} + ' от ' + ${#dates.format(pledgeAgreement.getDateBeginPA(), 'dd.MM.yyyy')}">Договор залога</h1>
+<h1 th:text="'Договор залога: №' + ${pledgeAgreementDto.getNumPA()} + ' от ' + ${#dates.format(pledgeAgreementDto.getDateBeginPA(), 'dd.MM.yyyy')}">Договор залога</h1>
     <label>Ответственный сотрудник: </label>
-    <span th:text="${pledgeAgreement.getClient().getEmployee().getSurname()} + ' ' + ${pledgeAgreement.getClient().getEmployee().name}"></span>
+    <span th:text="${employeeDto.getFullName()}"></span>
     <br>
     <br>
     <label>Id договора залога:</label>
-    <span th:text="${pledgeAgreement.getPledgeAgreementId()}"></span>
+    <span th:text="${pledgeAgreementDto.getPledgeAgreementId()}"></span>
     <br>
     <br>
     <label>Номер договора залога:</label>
-    <span th:text="${pledgeAgreement.getNumPA()}">н/д</span>
+    <span th:text="${pledgeAgreementDto.getNumPA()}">н/д</span>
     <br>
     <br>
     <label>Дата начала ДЗ:</label>
-    <span th:text="${#dates.format(pledgeAgreement.getDateBeginPA(), 'dd.MM.yyyy')}">н/д</span>
+    <span th:text="${#dates.format(pledgeAgreementDto.getDateBeginPA(), 'dd.MM.yyyy')}">н/д</span>
     <br>
     <br>
     <label>Дата окончания ДЗ:</label>
-    <span th:text="${#dates.format(pledgeAgreement.getDateEndPA(), 'dd.MM.yyyy')}">н/д</span>
+    <span th:text="${#dates.format(pledgeAgreementDto.getDateEndPA(), 'dd.MM.yyyy')}">н/д</span>
     <br>
     <br>
     <label>Залогодатель:</label>
-    <a th:href="@{/client/detail(clientId=${pledgeAgreement.getClient().getClientId()})}" href="../client/detail.html"
-       th:text="${@clientService.getFullNameClient(pledgeAgreement.getClient())}">Залогодатель</a>
+    <a th:href="@{/client/detail(clientId=${pledgeAgreementDto.getClientId()})}" href="../client/detail.html"
+       th:text="${pledgeAgreementDto.getClientName()}">Залогодатель</a>
     <br>
     <br>
     <label>Тип договора:</label>
-    <div th:switch="${pledgeAgreement.getPervPosl().name()}">
+    <div th:switch="${pledgeAgreementDto.getPervPosl().name()}">
         <div th:case="PERV">Первичный</div>
         <div th:case="POSL">Последующий</div>
     </div>
@@ -61,7 +61,7 @@
     <br>
 
     <label>Вид залогового обеспечения:</label>
-    <div th:each="typeOfCollateral : ${@pledgeAgreementService.getTypeOfCollateral(pledgeAgreement)}">
+    <div th:each="typeOfCollateral : ${pledgeAgreementDto.getTypesOfCollateral()}">
         <ul>
             <li th:text="${typeOfCollateral}">н/д</li>
         </ul>
@@ -69,55 +69,56 @@
     <br>
     <br>
     <label>Количество предметов залога:</label>
-    <span th:text="${pledgeAgreement.getPledgeSubjects().size()}">н/д</span>
-    <a th:href="@{/pledge_agreement/pledge_subjects(pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}" href="pledge_agreement/pledge_subjects.html"
+    <span th:text="${pledgeAgreementDto.getPledgeSubjectsIds().size()}">н/д</span>
+    <a th:href="@{/pledge_agreement/pledge_subjects(pledgeAgreementId=${pledgeAgreementDto.getPledgeAgreementId()})}"
+       href="pledge_agreement/pledge_subjects.html"
        th:text="подробнее">подробнее</a>
     <br>
     <br>
     <label>Рыночная стоимость по ДЗ:</label>
-    <span th:text="${#numbers.formatCurrency(pledgeAgreement.getRsDz())}">0.00</span>
+    <span th:text="${#numbers.formatCurrency(pledgeAgreementDto.getRsDz())}">0.00</span>
     <br>
     <br>
     <label>Залоговая стоимость:</label>
-    <span th:text="${#numbers.formatCurrency(pledgeAgreement.getZsDz())}">0.00</span>
+    <span th:text="${#numbers.formatCurrency(pledgeAgreementDto.getZsDz())}">0.00</span>
     <br>
     <br>
     <label>Рыночная стоимость по ЗЗ:</label>
-    <span th:text="${#numbers.formatCurrency(pledgeAgreement.getRsZz())}">0.00</span>
+    <span th:text="${#numbers.formatCurrency(pledgeAgreementDto.getRsZz())}">0.00</span>
     <br>
     <br>
     <label>Залоговая стоимость по ЗЗ:</label>
-    <span th:text="${#numbers.formatCurrency(pledgeAgreement.getZsZz())}">0.00</span>
+    <span th:text="${#numbers.formatCurrency(pledgeAgreementDto.getZsZz())}">0.00</span>
     <br>
     <br>
     <label>Справедливая стоимость:</label>
-    <span th:text="${#numbers.formatCurrency(pledgeAgreement.getSs())}">0.00</span>
+    <span th:text="${#numbers.formatCurrency(pledgeAgreementDto.getSs())}">0.00</span>
     <br>
     <br>
     <label>Статус:</label>
-    <span th:text="${pledgeAgreement.getStatusPA().getTranslate()}">н/д</span>
+    <span th:text="${pledgeAgreementDto.getStatusPA().getTranslate()}">н/д</span>
     <br>
     <br>
     <label>Комментарии:</label>
-    <span th:text="${pledgeAgreement.getNoticePA()}">н/д</span>
+    <span th:text="${pledgeAgreementDto.getNoticePA()}">н/д</span>
     <br>
     <br>
-    <a th:href="@{/pledge_agreement/card(whatDo='changePA', pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}"
+    <a th:href="@{/pledge_agreement/card(whatDo='changePA', pledgeAgreementId=${pledgeAgreementDto.getPledgeAgreementId()})}"
        href="card.html"
        th:text="'Изменить данные'">Изменить данные</a>
     <br>
     <br>
-    <div th:if="${@loanAgreementService.countOfCurrentLoanAgreementsByPledgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
+    <div th:if="${currentLoanAgreementDtoList.size() &gt; 0}">
         <label>Действующие кредитные договоры:</label>
         <div class="containerTable">
-            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@loanAgreementService.getCurrentLoanAgreementsByPledgeAgreement(pledgeAgreement.getPledgeAgreementId())})"></div>
+            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${currentLoanAgreementDtoList})"></div>
         </div>
     </div>
 
-    <div th:if="${@loanAgreementService.countOfClosedLoanAgreementsByPledgeAgreement(pledgeAgreement.getPledgeAgreementId()) &gt; 0}">
+    <div th:if="${closedLoanAgreementDtoList.size() &gt; 0}">
         <label>Закрытые кредитные договоры:</label>
         <div class="containerTable">
-            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${@loanAgreementService.getClosedLoanAgreementsByPledgeAgreement(pledgeAgreement.getPledgeAgreementId())})"></div>
+            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${closedLoanAgreementDtoList})"></div>
         </div>
     </div>
 

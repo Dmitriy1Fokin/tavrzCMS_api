@@ -129,7 +129,7 @@ public class PledgeAgreementServiceTest {
                 pervPosl,
                 StatusOfAgreement.OPEN);
 
-        List<PledgeAgreement> pledgeAgreementsResult = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(employee, pervPosl);
+        List<PledgeAgreement> pledgeAgreementsResult = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(employee.getEmployeeId(), pervPosl);
 
         assertEquals(pledgeAgreementsTest.size(), pledgeAgreementsResult.size());
     }

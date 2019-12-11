@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <div th:switch="${whatDo}">
         <div th:case="changePA">
-            <title th:text="'Обновление данных ДЗ№' + ${pledgeAgreement.getNumPA()}">Обновление данных</title>
+            <title th:text="'Обновление данных ДЗ№' + ${pledgeAgreementDto.getNumPA()}">Обновление данных</title>
         </div>
         <div th:case="newPA">
             <title th:text="'Создание нового ДЗ'">Создание нового ДЗ</title>
@@ -25,28 +25,28 @@
 
 <div th:switch="${whatDo}">
     <div th:case="changePA">
-        <form th:action="@{/pledge_agreement/update_insert}" th:method="post" th:object="${pledgeAgreement}" action="card.html">
+        <form th:action="@{/pledge_agreement/update_insert}" th:method="post" th:object="${pledgeAgreementDto}" action="card.html">
             <input type="hidden", name="whatDo" th:value="${whatDo}">
-            <input type="hidden", th:field="*{pledgeAgreementId}" th:value="${pledgeAgreement.getPledgeAgreementId()}">
-            <input type="hidden" , th:field="*{client}" th:value="${pledgeAgreement.getClient()}">
-            <input type="hidden", th:field="*{loanAgreements}" th:value="${pledgeAgreement.getLoanAgreements()}">
-            <input type="hidden", th:field="*{pledgeSubjects}" th:value="${pledgeAgreement.getPledgeSubjects()}">
+            <input type="hidden", th:field="*{pledgeAgreementId}" th:value="${pledgeAgreementDto.getPledgeAgreementId()}">
+            <input type="hidden" , th:field="*{clientId}" th:value="${pledgeAgreementDto.getClientId()}">
+            <input type="hidden", th:field="*{loanAgreementsIds}" th:value="${pledgeAgreementDto.getLoanAgreementsIds()}">
+            <input type="hidden", th:field="*{pledgeSubjectsIds}" th:value="${pledgeAgreementDto.getPledgeSubjectsIds()}">
 
             <div class="row">
                 <label>№ ДЗ:</label>
-                <input required th:field="*{numPA}" type="text" th:value="${pledgeAgreement.getNumPA()}"/>
+                <input required th:field="*{numPA}" type="text" th:value="${pledgeAgreementDto.getNumPA()}"/>
                 <div th:if="${#fields.hasErrors('numPA')}" th:errors="*{numPA}">Name Error</div>
             </div>
             <br>
             <div class="row">
                 <label>Дата начала ДЗ</label>
-                <input required th:field="*{dateBeginPA}" type="date" th:value="${pledgeAgreement.getDateBeginPA()}"/>
+                <input required th:field="*{dateBeginPA}" type="date" th:value="${pledgeAgreementDto.getDateBeginPA()}"/>
                 <div th:if="${#fields.hasErrors('dateBeginPA')}" th:errors="*{dateBeginPA}">Name Error</div>
             </div>
             <br>
             <div class="row">
                 <label>Дата окончания ДЗ</label>
-                <input required th:field="*{dateEndPA}" type="date" th:value="${pledgeAgreement.getDateEndPA()}"/>
+                <input required th:field="*{dateEndPA}" type="date" th:value="${pledgeAgreementDto.getDateEndPA()}"/>
                 <div th:if="${#fields.hasErrors('dateEndPA')}" th:errors="*{dateEndPA}">Name Error</div>
             </div>
             <br>
@@ -70,7 +70,7 @@
             <br>
             <div class="row">
                 <label>Комментарии:</label>
-                <input th:field="*{noticePA}" type="text" th:value="${pledgeAgreement.getNoticePA()}"/>
+                <input th:field="*{noticePA}" type="text" th:value="${pledgeAgreementDto.getNoticePA()}"/>
                 <div th:if="${#fields.hasErrors('noticePA')}" th:errors="*{noticePA}">Name Error</div>
             </div>
             <br>
@@ -78,9 +78,9 @@
         </form>
     </div>
     <div th:case="newPA">
-        <form th:action="@{/pledge_agreement/update_insert}" th:method="post" th:object="${pledgeAgreement}" action="card.html">
+        <form th:action="@{/pledge_agreement/update_insert}" th:method="post" th:object="${pledgeAgreementDto}" action="card.html">
             <input type="hidden", name="whatDo" th:value="${whatDo}">
-            <input type="hidden" , th:field="*{client}" th:value="${pledgeAgreement.getClient()}">
+            <input type="hidden" , th:field="*{clientId}" th:value="${pledgeAgreementDto.getClientId()}">
 
             <div class="row">
                 <label>№ ДЗ:</label>
@@ -128,13 +128,6 @@
             <button type="submit">Добавить</button>
         </form>
     </div>
-    <div th:case="responseSuccess">
-        <h3>Успешно добавлен новый договор залога</h3>
-        <a th:href="@{/pledge_agreement/detail(pledgeAgreementId=${pledgeAgreement.getPledgeAgreementId()})}" href="detail.html"
-           th:text="'подробрее'">н/д</a>
-    </div>
-    <div th:case="responseError">
-
     </div>
 </div>
 </body>

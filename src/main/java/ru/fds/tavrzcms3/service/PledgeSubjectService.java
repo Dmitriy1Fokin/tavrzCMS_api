@@ -55,7 +55,10 @@ public class PledgeSubjectService {
     @Autowired
     RepositoryInsurance repositoryInsurance;
 
-    public Optional<PledgeSubject> getPledgeSubjectById(long pledgeSubjectId){
+    public Optional<PledgeSubject> getPledgeSubjectById(Long pledgeSubjectId){
+        if(pledgeSubjectId == null)
+            return Optional.empty();
+        
         return repositoryPledgeSubject.findById(pledgeSubjectId);
     }
 
