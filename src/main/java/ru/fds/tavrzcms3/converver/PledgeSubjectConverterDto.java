@@ -2,11 +2,14 @@ package ru.fds.tavrzcms3.converver;
 
 import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.domain.*;
+import ru.fds.tavrzcms3.dto.MainCharacteristic;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
+import ru.fds.tavrzcms3.dto.PrimaryIdentifier;
 import ru.fds.tavrzcms3.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, PledgeSubjectDto> {
@@ -89,20 +92,6 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
         for(Insurance ins : insuranceService.getInsurancesByPledgeSubject(entity))
             insurancesIds.add(ins.getInsuranceId());
 
-        StringBuilder fullAddress = new StringBuilder();
-        if(!entity.getAdressRegion().isEmpty())
-            fullAddress.append(entity.getAdressRegion());
-        if(!entity.getAdressDistrict().isEmpty())
-            fullAddress.append(", ").append(entity.getAdressDistrict());
-        if(!entity.getAdressCity().isEmpty())
-            fullAddress.append(", ").append(entity.getAdressCity());
-        if(!entity.getAdressStreet().isEmpty())
-            fullAddress.append(", ").append(entity.getAdressStreet());
-        if(!entity.getAdressBuilbing().isEmpty())
-            fullAddress.append(", ").append(entity.getAdressBuilbing());
-        if(!entity.getAdressPemises().isEmpty())
-            fullAddress.append(", ").append(entity.getAdressPemises());
-
         return PledgeSubjectDto.builder()
                 .pledgeSubjectId(entity.getPledgeSubjectId())
                 .name(entity.getName())
@@ -130,7 +119,112 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
                 .monitoringIds(monitoringIds)
                 .encumbrancesIds(encumbrancesIds)
                 .insurancesIds(insurancesIds)
-                .fullAddress(fullAddress.toString())
+                .fullAddress(getFullAddress(entity))
+                .mainCharacteristic(getMainCharacteristic(entity))
+                .primaryIdentifier(getPrimaryIdentifier(entity))
                 .build();
+    }
+
+    private String getFullAddress(PledgeSubject entity){
+        StringBuilder fullAddress = new StringBuilder();
+        if(Objects.nonNull(entity.getAdressRegion()) && !entity.getAdressRegion().isEmpty())
+            fullAddress.append(entity.getAdressRegion());
+        if(Objects.nonNull(entity.getAdressDistrict()) && !entity.getAdressDistrict().isEmpty())
+            fullAddress.append(", ").append(entity.getAdressDistrict());
+        if(Objects.nonNull(entity.getAdressCity()) && !entity.getAdressCity().isEmpty())
+            fullAddress.append(", ").append(entity.getAdressCity());
+        if(Objects.nonNull(entity.getAdressStreet()) && !entity.getAdressStreet().isEmpty())
+            fullAddress.append(", ").append(entity.getAdressStreet());
+        if(Objects.nonNull(entity.getAdressBuilbing()) && !entity.getAdressBuilbing().isEmpty())
+            fullAddress.append(", ").append(entity.getAdressBuilbing());
+        if(Objects.nonNull(entity.getAdressPemises()) && !entity.getAdressPemises().isEmpty())
+            fullAddress.append(", ").append(entity.getAdressPemises());
+
+        return fullAddress.toString();
+    }
+
+    private MainCharacteristic getMainCharacteristic(PledgeSubject entity){
+        String mainCharacteristic = "-";
+        String typeOfMainCharacteristic = "-";
+        String typeOfMainCharacteristicForRealty = "кв.м.";
+
+        if(entity instanceof PledgeSubjectAuto){
+            if(Objects.nonNull(((PledgeSubjectAuto) entity).getHorsepower()))
+                mainCharacteristic = String.valueOf(((PledgeSubjectAuto) entity).getHorsepower());
+            typeOfMainCharacteristic = "л.с.";
+
+        }else if(entity instanceof PledgeSubjectEquipment){
+            if(Objects.nonNull(((PledgeSubjectEquipment) entity).getProductivity()))
+                mainCharacteristic = String.valueOf(((PledgeSubjectEquipment) entity).getProductivity());
+            if(Objects.nonNull(((PledgeSubjectEquipment) entity).getTypeOfProductivity())
+                    && !((PledgeSubjectEquipment) entity).getTypeOfProductivity().isEmpty())
+                typeOfMainCharacteristic = ((PledgeSubjectEquipment) entity).getTypeOfProductivity();
+
+        }else if(entity instanceof PledgeSubjectBuilding){
+            mainCharacteristic = String.valueOf(((PledgeSubjectBuilding) entity).getArea());
+            typeOfMainCharacteristic = typeOfMainCharacteristicForRealty;
+
+        }else if(entity instanceof PledgeSubjectLandLease){
+            mainCharacteristic = String.valueOf(((PledgeSubjectLandLease) entity).getArea());
+            typeOfMainCharacteristic = typeOfMainCharacteristicForRealty;
+
+        }else if(entity instanceof PledgeSubjectLandOwnership){
+            mainCharacteristic = String.valueOf(((PledgeSubjectLandOwnership) entity).getArea());
+            typeOfMainCharacteristic = typeOfMainCharacteristicForRealty;
+
+        }else if(entity instanceof PledgeSubjectRoom){
+            mainCharacteristic = String.valueOf(((PledgeSubjectRoom) entity).getArea());
+            typeOfMainCharacteristic = typeOfMainCharacteristicForRealty;
+
+        }else if(entity instanceof PledgeSubjectTBO){
+            if(Objects.nonNull(((PledgeSubjectTBO) entity).getCountOfTBO()))
+                mainCharacteristic = String.valueOf(((PledgeSubjectTBO) entity).getCountOfTBO());
+            typeOfMainCharacteristic = "кол-во";
+
+        }else if(entity instanceof PledgeSubjectVessel){
+            mainCharacteristic = String.valueOf(((PledgeSubjectVessel) entity).getDeadweight());
+            typeOfMainCharacteristic = "дейдвейт";
+        }
+
+        return new MainCharacteristic(mainCharacteristic, typeOfMainCharacteristic);
+    }
+
+    private PrimaryIdentifier getPrimaryIdentifier(PledgeSubject entity){
+        String primaryIdentifier = "-";
+        String typeOfPrimaryIdentifier = "-";
+        String typeOfPrimaryIdentifierForRealty = "Кад№";
+
+        if(entity instanceof PledgeSubjectAuto){
+            primaryIdentifier = String.valueOf(((PledgeSubjectAuto) entity).getVin());
+            typeOfPrimaryIdentifier = "VIN";
+
+        }else if(entity instanceof PledgeSubjectEquipment){
+            if(Objects.nonNull(((PledgeSubjectEquipment) entity).getSerialNum())
+                    && !((PledgeSubjectEquipment) entity).getSerialNum().isEmpty())
+                primaryIdentifier = String.valueOf(((PledgeSubjectEquipment) entity).getSerialNum());
+            typeOfPrimaryIdentifier = "Завод№";
+
+        }else if(entity instanceof PledgeSubjectBuilding){
+            primaryIdentifier = String.valueOf(((PledgeSubjectBuilding) entity).getCadastralNum());
+            typeOfPrimaryIdentifier = typeOfPrimaryIdentifierForRealty;
+
+        }else if(entity instanceof PledgeSubjectLandLease){
+            primaryIdentifier = String.valueOf(((PledgeSubjectLandLease) entity).getCadastralNum());
+            typeOfPrimaryIdentifier = typeOfPrimaryIdentifierForRealty;
+
+        }else if(entity instanceof PledgeSubjectLandOwnership){
+            primaryIdentifier = String.valueOf(((PledgeSubjectLandOwnership) entity).getCadastralNum());
+            typeOfPrimaryIdentifier = typeOfPrimaryIdentifierForRealty;
+
+        }else if(entity instanceof PledgeSubjectRoom){
+            primaryIdentifier = String.valueOf(((PledgeSubjectRoom) entity).getCadastralNum());
+            typeOfPrimaryIdentifier = typeOfPrimaryIdentifierForRealty;
+
+        }else if(entity instanceof PledgeSubjectVessel){
+            primaryIdentifier = String.valueOf(((PledgeSubjectVessel) entity).getImo());
+            typeOfPrimaryIdentifier = "IMO";
+        }
+
+        return new PrimaryIdentifier(primaryIdentifier, typeOfPrimaryIdentifier);
     }
 }

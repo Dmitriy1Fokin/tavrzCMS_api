@@ -1,20 +1,23 @@
 package ru.fds.tavrzcms3.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
 import ru.fds.tavrzcms3.dictionary.TypeOfVessel;
 
 import javax.persistence.Column;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @NoArgsConstructor
-@SuperBuilder
-public class PledgeSubjectVesselDto extends PledgeSubjectDto{
+@AllArgsConstructor
+@Builder
+public class PledgeSubjectVesselDto{
+
+    @Valid
+    private PledgeSubjectDto pledgeSubjectDto;
 
     @Length(min = 7, max = 7, message = "Неверное значение")
     @NotNull(message = "Обязательно для заполнения")

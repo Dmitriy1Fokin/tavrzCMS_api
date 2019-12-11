@@ -1,18 +1,21 @@
 package ru.fds.tavrzcms3.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import ru.fds.tavrzcms3.dictionary.TypeOfTBO;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @NoArgsConstructor
-@SuperBuilder
-public class PledgeSubjectTboDto extends PledgeSubjectDto{
+@AllArgsConstructor
+@Builder
+public class PledgeSubjectTboDto {
+
+    @Valid
+    private PledgeSubjectDto pledgeSubjectDto;
 
     @Positive(message = "Значение должно быть больше нуля")
     private int countOfTBO;

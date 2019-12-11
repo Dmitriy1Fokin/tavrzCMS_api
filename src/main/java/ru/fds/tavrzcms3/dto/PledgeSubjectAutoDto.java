@@ -1,19 +1,22 @@
 package ru.fds.tavrzcms3.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
 import ru.fds.tavrzcms3.dictionary.TypeOfAuto;
 
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @NoArgsConstructor
-@SuperBuilder
-public class PledgeSubjectAutoDto extends PledgeSubjectDto{
+@AllArgsConstructor
+@Builder
+public class PledgeSubjectAutoDto{
+
+    @Valid
+    private PledgeSubjectDto pledgeSubjectDto;
 
     @NotBlank(message = "Обязательно для заполнения")
     private String brand;

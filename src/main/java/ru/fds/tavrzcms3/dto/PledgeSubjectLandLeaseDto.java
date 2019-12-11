@@ -1,11 +1,10 @@
 package ru.fds.tavrzcms3.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -13,10 +12,14 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.Date;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @NoArgsConstructor
-@SuperBuilder
-public class PledgeSubjectLandLeaseDto extends PledgeSubjectDto{
+@AllArgsConstructor
+@Builder
+public class PledgeSubjectLandLeaseDto {
+
+    @Valid
+    private PledgeSubjectDto pledgeSubjectDto;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")

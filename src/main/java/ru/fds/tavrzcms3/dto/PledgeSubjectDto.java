@@ -1,9 +1,6 @@
 package ru.fds.tavrzcms3.dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Singular;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.*;
 
@@ -11,12 +8,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
-@SuperBuilder
+@AllArgsConstructor
+@Builder
 public class PledgeSubjectDto {
 
     private Long pledgeSubjectId;
@@ -78,15 +76,25 @@ public class PledgeSubjectDto {
     @Pattern(regexp = "да|нет", message = "Возможные варианты: да, нет")
     private String insuranceObligation;
 
-    private Collection<Long> pledgeAgreementsIds;
 
-    private Collection<Long> costHistoriesIds;
+    @Singular
+    private List<Long> pledgeAgreementsIds;
 
-    private Collection<Long> monitoringIds;
+    @Singular
+    private List<Long> costHistoriesIds;
 
-    private Collection<Long> encumbrancesIds;
+    @Singular
+    private List<Long> monitoringIds;
 
-    private Collection<Long> insurancesIds;
+    @Singular
+    private List<Long> encumbrancesIds;
+
+    @Singular
+    private List<Long> insurancesIds;
 
     private String fullAddress;
+
+    private MainCharacteristic mainCharacteristic;
+
+    private PrimaryIdentifier primaryIdentifier;
 }
