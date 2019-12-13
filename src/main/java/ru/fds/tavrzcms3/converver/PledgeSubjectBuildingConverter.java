@@ -1,11 +1,13 @@
 package ru.fds.tavrzcms3.converver;
 
+import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.dto.PledgeSubjectBuildingDto;
 import ru.fds.tavrzcms3.service.*;
 
 import java.util.List;
 
+@Component
 public class PledgeSubjectBuildingConverter implements ConverterDto<PledgeSubjectBuilding, PledgeSubjectBuildingDto> {
 
     private final PledgeAgreementService pledgeAgreementService;
@@ -39,7 +41,6 @@ public class PledgeSubjectBuildingConverter implements ConverterDto<PledgeSubjec
         List<Monitoring> monitoringCollection = monitoringService.getMonitoringByIds(dto.getPledgeSubjectDto().getMonitoringIds());
         List<Encumbrance> encumbranceCollection = encumbranceService.getEncumbranceByIds(dto.getPledgeSubjectDto().getEncumbrancesIds());
         List<Insurance> insuranceCollection = insuranceService.getInsurancesByIds(dto.getPledgeSubjectDto().getInsurancesIds());
-        MarketSegment marketSegment = marketSegmentService.getMarketSegmentById(dto.getMarketSegmentId()).orElse(null);
 
         return PledgeSubjectBuilding.builder()
                 .pledgeSubjectId(dto.getPledgeSubjectDto().getPledgeSubjectId())
@@ -73,7 +74,7 @@ public class PledgeSubjectBuildingConverter implements ConverterDto<PledgeSubjec
                 .conditionalNum(dto.getConditionalNum())
                 .readinessDegree(dto.getReadinessDegree())
                 .yearOfConstruction(dto.getYearOfConstruction())
-                .marketSegment(marketSegment)
+                .marketSegment(dto.getMarketSegment())
                 .build();
     }
 
@@ -87,7 +88,7 @@ public class PledgeSubjectBuildingConverter implements ConverterDto<PledgeSubjec
                 .conditionalNum(entity.getConditionalNum())
                 .readinessDegree(entity.getReadinessDegree())
                 .yearOfConstruction(entity.getYearOfConstruction())
-                .marketSegmentId(entity.getMarketSegment().getMarketSegmentId())
+                .marketSegment(entity.getMarketSegment())
                 .build();
     }
 }

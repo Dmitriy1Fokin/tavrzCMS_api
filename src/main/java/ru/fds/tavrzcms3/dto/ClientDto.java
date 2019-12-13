@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @SuperBuilder
-public class ClientDto{
+public class ClientDto implements Dto{
 
     private Long clientId;
 

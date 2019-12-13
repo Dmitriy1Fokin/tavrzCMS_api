@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectDto {
+public class PledgeSubjectDto implements Dto{
 
     private Long pledgeSubjectId;
 

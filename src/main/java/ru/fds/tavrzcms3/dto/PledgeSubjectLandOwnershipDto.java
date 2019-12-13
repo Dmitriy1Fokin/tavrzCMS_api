@@ -2,6 +2,7 @@ package ru.fds.tavrzcms3.dto;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import ru.fds.tavrzcms3.domain.LandCategory;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -14,7 +15,7 @@ import javax.validation.constraints.PositiveOrZero;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectLandOwnershipDto {
+public class PledgeSubjectLandOwnershipDto implements Dto{
 
     @Valid
     private PledgeSubjectDto pledgeSubjectDto;
@@ -39,5 +40,5 @@ public class PledgeSubjectLandOwnershipDto {
             message = "Неверное значение. Если несколько кад№, указывать через \";\"")
     private String cadastralNumOfBuilding;
 
-    private Integer landCategoryId;
+    private LandCategory landCategory;
 }

@@ -13,7 +13,7 @@ import javax.validation.constraints.PositiveOrZero;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectSecuritiesDto {
+public class PledgeSubjectSecuritiesDto implements Dto{
 
     @Valid
     private PledgeSubjectDto pledgeSubjectDto;

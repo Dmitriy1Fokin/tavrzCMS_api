@@ -2,6 +2,7 @@ package ru.fds.tavrzcms3.dto;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import ru.fds.tavrzcms3.domain.MarketSegment;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -14,7 +15,7 @@ import javax.validation.constraints.PositiveOrZero;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectRoomDto {
+public class PledgeSubjectRoomDto implements Dto{
 
     @Valid
     private PledgeSubjectDto pledgeSubjectDto;
@@ -32,7 +33,7 @@ public class PledgeSubjectRoomDto {
     @NotBlank(message = "Обязательно для заполнения")
     private String floorLocation;
 
-    private Integer marketSegmentRoom;
+    private MarketSegment marketSegmentRoom;
 
-    private Integer marketSegmentBuilding;
+    private MarketSegment marketSegmentBuilding;
 }

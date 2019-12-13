@@ -44,6 +44,10 @@ public class LoanAgreementService {
         return repositoryLoanAgreement.findAllByPledgeAgreements(pledgeAgreement);
     }
 
+    public List<LoanAgreement> getAllLoanAgreementByPledgeAgreements(List<PledgeAgreement> pledgeAgreementList){
+        return repositoryLoanAgreement.findAllByPledgeAgreementsIn(pledgeAgreementList);
+    }
+
     public int countOfCurrentLoanAgreementsByPledgeAgreement(PledgeAgreement pledgeAgreement){
         return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, StatusOfAgreement.OPEN);
     }

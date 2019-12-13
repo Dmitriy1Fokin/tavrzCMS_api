@@ -1,11 +1,13 @@
 package ru.fds.tavrzcms3.converver;
 
+import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.dto.PledgeSubjectRoomDto;
 import ru.fds.tavrzcms3.service.*;
 
 import java.util.List;
 
+@Component
 public class PledgeSubjectRoomConverter implements ConverterDto<PledgeSubjectRoom, PledgeSubjectRoomDto> {
     private final PledgeAgreementService pledgeAgreementService;
     private final CostHistoryService costHistoryService;
@@ -38,8 +40,6 @@ public class PledgeSubjectRoomConverter implements ConverterDto<PledgeSubjectRoo
         List<Monitoring> monitoringCollection = monitoringService.getMonitoringByIds(dto.getPledgeSubjectDto().getMonitoringIds());
         List<Encumbrance> encumbranceCollection = encumbranceService.getEncumbranceByIds(dto.getPledgeSubjectDto().getEncumbrancesIds());
         List<Insurance> insuranceCollection = insuranceService.getInsurancesByIds(dto.getPledgeSubjectDto().getInsurancesIds());
-        MarketSegment marketSegmentRoom = marketSegmentService.getMarketSegmentById(dto.getMarketSegmentRoom()).orElse(null);
-        MarketSegment marketSegmentBuilding = marketSegmentService.getMarketSegmentById(dto.getMarketSegmentBuilding()).orElse(null);
 
         return PledgeSubjectRoom.builder()
                 .pledgeSubjectId(dto.getPledgeSubjectDto().getPledgeSubjectId())
@@ -72,8 +72,8 @@ public class PledgeSubjectRoomConverter implements ConverterDto<PledgeSubjectRoo
                 .cadastralNum(dto.getCadastralNum())
                 .conditionalNum(dto.getConditionalNum())
                 .floorLocation(dto.getFloorLocation())
-                .marketSegmentRoom(marketSegmentRoom)
-                .marketSegmentBuilding(marketSegmentBuilding)
+                .marketSegmentRoom(dto.getMarketSegmentRoom())
+                .marketSegmentBuilding(dto.getMarketSegmentBuilding())
                 .build();
     }
 
@@ -86,8 +86,8 @@ public class PledgeSubjectRoomConverter implements ConverterDto<PledgeSubjectRoo
                 .cadastralNum(entity.getCadastralNum())
                 .conditionalNum(entity.getConditionalNum())
                 .floorLocation(entity.getFloorLocation())
-                .marketSegmentRoom(entity.getMarketSegmentRoom().getMarketSegmentId())
-                .marketSegmentBuilding(entity.getMarketSegmentBuilding().getMarketSegmentId())
+                .marketSegmentRoom(entity.getMarketSegmentRoom())
+                .marketSegmentBuilding(entity.getMarketSegmentBuilding())
                 .build();
     }
 }

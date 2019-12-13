@@ -1,11 +1,13 @@
 package ru.fds.tavrzcms3.converver;
 
+import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.dto.PledgeSubjectLandOwnershipDto;
 import ru.fds.tavrzcms3.service.*;
 
 import java.util.List;
 
+@Component
 public class PledgeSubjectLandOwnershipConverter implements ConverterDto<PledgeSubjectLandOwnership, PledgeSubjectLandOwnershipDto> {
 
     private final PledgeAgreementService pledgeAgreementService;
@@ -39,7 +41,6 @@ public class PledgeSubjectLandOwnershipConverter implements ConverterDto<PledgeS
         List<Monitoring> monitoringCollection = monitoringService.getMonitoringByIds(dto.getPledgeSubjectDto().getMonitoringIds());
         List<Encumbrance> encumbranceCollection = encumbranceService.getEncumbranceByIds(dto.getPledgeSubjectDto().getEncumbrancesIds());
         List<Insurance> insuranceCollection = insuranceService.getInsurancesByIds(dto.getPledgeSubjectDto().getInsurancesIds());
-        LandCategory landCategory = landCategoryService.getLandCategoryById(dto.getLandCategoryId()).orElse(null);
 
         return PledgeSubjectLandOwnership.builder()
                 .pledgeSubjectId(dto.getPledgeSubjectDto().getPledgeSubjectId())
@@ -74,7 +75,7 @@ public class PledgeSubjectLandOwnershipConverter implements ConverterDto<PledgeS
                 .permittedUse(dto.getPermittedUse())
                 .builtUp(dto.getBuiltUp())
                 .cadastralNumOfBuilding(dto.getCadastralNumOfBuilding())
-                .landCategory(landCategory)
+                .landCategory(dto.getLandCategory())
                 .build();
     }
 
@@ -89,7 +90,7 @@ public class PledgeSubjectLandOwnershipConverter implements ConverterDto<PledgeS
                 .permittedUse(entity.getPermittedUse())
                 .builtUp(entity.getBuiltUp())
                 .cadastralNumOfBuilding(entity.getCadastralNumOfBuilding())
-                .landCategoryId(entity.getLandCategory().getLandCategoryid())
+                .landCategory(entity.getLandCategory())
                 .build();
     }
 }

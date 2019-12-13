@@ -1,7 +1,7 @@
 package ru.fds.tavrzcms3.dto;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
+//import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Length;
 import ru.fds.tavrzcms3.dictionary.TypeOfAuto;
 
@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectAutoDto{
+public class PledgeSubjectAutoDto implements Dto {
 
     @Valid
     private PledgeSubjectDto pledgeSubjectDto;
@@ -34,7 +34,7 @@ public class PledgeSubjectAutoDto{
 
     @Min(value = 1900, message = "Неверное значение")
     @Max(value = 2100, message = "Неверное значение")
-    @Length(min = 4, max = 4, message = "Неверное значение")
+//    @Length(min = 4, max = 4, message = "Неверное значение")
     private Integer yearOfManufacture;
 
     private String inventoryNum;

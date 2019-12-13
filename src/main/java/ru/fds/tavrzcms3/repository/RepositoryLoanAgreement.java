@@ -15,6 +15,7 @@ import java.util.List;
 public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Long>, JpaSpecificationExecutor<LoanAgreement> {
     List<LoanAgreement> findAllByLoanAgreementIdIn(List<Long> ids);
     List<LoanAgreement> findAllByPledgeAgreements(PledgeAgreement pledgeAgreement);
+    List<LoanAgreement> findAllByPledgeAgreementsIn(List<PledgeAgreement> pledgeAgreement);
     List<LoanAgreement> findByPledgeAgreementsAndStatusLAEquals(PledgeAgreement pledgeAgreement, StatusOfAgreement statusLA);
     int countAllByPledgeAgreementsAndStatusLAEquals(PledgeAgreement pledgeAgreement, StatusOfAgreement statusLA);
     int countAllByClientAndStatusLAEquals(Client client, StatusOfAgreement statusLA);

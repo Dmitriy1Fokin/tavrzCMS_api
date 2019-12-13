@@ -1,11 +1,13 @@
 package ru.fds.tavrzcms3.converver;
 
+import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.dto.PledgeSubjectTboDto;
 import ru.fds.tavrzcms3.service.*;
 
 import java.util.List;
 
+@Component
 public class PledgeSubjectTboConverter implements ConverterDto<PledgeSubjectTBO, PledgeSubjectTboDto> {
 
     private final PledgeAgreementService pledgeAgreementService;

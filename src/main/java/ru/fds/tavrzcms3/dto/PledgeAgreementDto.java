@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeAgreementDto {
+public class PledgeAgreementDto implements Dto{
 
     private Long pledgeAgreementId;
 

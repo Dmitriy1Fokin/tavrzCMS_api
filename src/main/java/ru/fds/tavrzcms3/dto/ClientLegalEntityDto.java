@@ -12,7 +12,7 @@ import javax.validation.constraints.Pattern;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @SuperBuilder
-public class ClientLegalEntityDto extends ClientDto{
+public class ClientLegalEntityDto extends ClientDto implements Dto{
 
     @NotBlank(message = "Обязательно для заполнения")
     private String organizationalForm;

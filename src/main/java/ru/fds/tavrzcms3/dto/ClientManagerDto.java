@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ClientManagerDto {
+public class ClientManagerDto implements Dto{
 
     private Long clientManagerId;
 

@@ -16,7 +16,7 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectEquipmentDto{
+public class PledgeSubjectEquipmentDto implements Dto{
 
     @Valid
     private PledgeSubjectDto pledgeSubjectDto;

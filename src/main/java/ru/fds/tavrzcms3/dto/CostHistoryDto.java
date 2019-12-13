@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CostHistoryDto {
+public class CostHistoryDto implements Dto{
 
     private Long costHistoryId;
 

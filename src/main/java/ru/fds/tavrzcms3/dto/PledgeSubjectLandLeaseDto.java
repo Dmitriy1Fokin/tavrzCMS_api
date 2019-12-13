@@ -3,6 +3,7 @@ package ru.fds.tavrzcms3.dto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.fds.tavrzcms3.domain.LandCategory;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -16,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectLandLeaseDto {
+public class PledgeSubjectLandLeaseDto implements Dto{
 
     @Valid
     private PledgeSubjectDto pledgeSubjectDto;
@@ -49,5 +50,5 @@ public class PledgeSubjectLandLeaseDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateEndLease;
 
-    private Integer landCategoryId;
+    private LandCategory landCategory;
 }

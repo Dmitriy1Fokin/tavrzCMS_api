@@ -3,6 +3,7 @@ package ru.fds.tavrzcms3.dto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
+import ru.fds.tavrzcms3.domain.MarketSegment;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -12,7 +13,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectBuildingDto{
+public class PledgeSubjectBuildingDto implements Dto{
 
     @Valid
     private PledgeSubjectDto pledgeSubjectDto;
@@ -38,5 +39,5 @@ public class PledgeSubjectBuildingDto{
     @Length(min = 4, max = 4, message = "Неверное значение")
     private int yearOfConstruction;
 
-    private Integer marketSegmentId;
+    private MarketSegment marketSegment;
 }

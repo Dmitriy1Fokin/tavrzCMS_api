@@ -42,7 +42,7 @@ public class PledgeSubjectAuto extends PledgeSubject {
 
 	@Min(value = 1900, message = "Неверное значение")
 	@Max(value = 2100, message = "Неверное значение")
-	@Length(min = 4, max = 4, message = "Неверное значение")
+//	@Length(min = 4, max = 4, message = "Неверное значение")
 	@Column(name ="year_of_manufacture")
 	private Integer yearOfManufacture;
 	

@@ -7,7 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.fds.tavrzcms3.dictionary.*;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.domain.PledgeSubjectAuto;
 import ru.fds.tavrzcms3.dto.MainCharacteristic;
+import ru.fds.tavrzcms3.dto.PledgeSubjectAutoDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 
@@ -20,6 +22,8 @@ public class PledgeSubjectConverterDtoTest {
 
     @Autowired
     PledgeSubjectConverterDto pledgeSubjectConverterDto;
+    @Autowired
+    PledgeSubjectAutoConverter pledgeSubjectAutoConverter;
     @Autowired
     RepositoryPledgeSubject repositoryPledgeSubject;
 
@@ -83,6 +87,9 @@ public class PledgeSubjectConverterDtoTest {
         PledgeSubjectDto pledgeSubjectDtoSec = pledgeSubjectConverterDto.toDto(pledgeSubjectSec);
         PledgeSubjectDto pledgeSubjectDtoTBO = pledgeSubjectConverterDto.toDto(pledgeSubjectTBO);
         PledgeSubjectDto pledgeSubjectDtoVessel = pledgeSubjectConverterDto.toDto(pledgeSubjectVessel);
+
+        PledgeSubjectAutoDto pledgeSubjectDto = pledgeSubjectAutoConverter.toDto((PledgeSubjectAuto) pledgeSubjectAuto);
+        System.out.println(pledgeSubjectDto);
 
         System.out.println(pledgeSubjectDtoAuto);
         System.out.println(pledgeSubjectDtoEquip);

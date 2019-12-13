@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectVesselDto{
+public class PledgeSubjectVesselDto implements Dto{
 
     @Valid
     private PledgeSubjectDto pledgeSubjectDto;

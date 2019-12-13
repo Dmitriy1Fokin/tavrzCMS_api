@@ -86,7 +86,7 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.findById(pledgeAgreementId);
     }
 
-    public Collection<PledgeAgreement> getAllPledgeAgreementByPLedgeSubject(PledgeSubject pledgeSubject){
+    public List<PledgeAgreement> getAllPledgeAgreementByPLedgeSubject(PledgeSubject pledgeSubject){
         return repositoryPledgeAgreement.findAllByPledgeSubjects(pledgeSubject);
     }
 

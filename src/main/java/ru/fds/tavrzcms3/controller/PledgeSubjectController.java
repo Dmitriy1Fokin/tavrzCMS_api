@@ -7,16 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.fds.tavrzcms3.converver.PledgeSubjectAutoConverter;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 import ru.fds.tavrzcms3.domain.*;
-import ru.fds.tavrzcms3.service.LandCategoryService;
-import ru.fds.tavrzcms3.service.MarketSegmentService;
-import ru.fds.tavrzcms3.service.PledgeAgreementService;
-import ru.fds.tavrzcms3.service.PledgeSubjectService;
+import ru.fds.tavrzcms3.dto.*;
+import ru.fds.tavrzcms3.service.*;
+import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/pledge_subject")
@@ -26,6 +28,11 @@ public class PledgeSubjectController {
     private final LandCategoryService landCategoryService;
     private final MarketSegmentService marketSegmentService;
     private final PledgeAgreementService pledgeAgreementService;
+    private final LoanAgreementService loanAgreementService;
+
+    private final DtoFactory dtoFactory;
+    private final PledgeSubjectAutoConverter pledgeSubjectAutoConverter;
+    private final ValidatorEntity validatorEntity;
 
     private static final String PAGE_DETAIL = "pledge_subject/detail";
     private static final String PAGE_CARD_UPDATE = "pledge_subject/card_update";
@@ -54,19 +61,37 @@ public class PledgeSubjectController {
     public PledgeSubjectController(PledgeSubjectService pledgeSubjectService,
                                    LandCategoryService landCategoryService,
                                    MarketSegmentService marketSegmentService,
-                                   PledgeAgreementService pledgeAgreementService) {
+                                   PledgeAgreementService pledgeAgreementService,
+                                   LoanAgreementService loanAgreementService,
+                                   DtoFactory dtoFactory, PledgeSubjectAutoConverter pledgeSubjectAutoConverter, ValidatorEntity validatorEntity) {
         this.pledgeSubjectService = pledgeSubjectService;
         this.landCategoryService = landCategoryService;
         this.marketSegmentService = marketSegmentService;
         this.pledgeAgreementService = pledgeAgreementService;
+        this.loanAgreementService = loanAgreementService;
+        this.dtoFactory = dtoFactory;
+        this.pledgeSubjectAutoConverter = pledgeSubjectAutoConverter;
+        this.validatorEntity = validatorEntity;
     }
 
     @GetMapping("/detail")
-    public String pledgeSubjectDetailPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+    public String pledgeSubjectDetailPage(@RequestParam("pledgeSubjectId") Long pledgeSubjectId,
                                           Model model){
+
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId)
                 .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
-        model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubject);
+
+        Dto pledgeSubjectDto = dtoFactory.getPledgeSubjectDto(pledgeSubject);
+
+        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getAllPledgeAgreementByPLedgeSubject(pledgeSubject);
+        List<Dto> pledgeAgreementDtoList = dtoFactory.getPledgeAgreementsDto(pledgeAgreementList);
+
+        List<Dto> loanAgreementDtoList = dtoFactory
+                .getLoanAgreementsDto(loanAgreementService.getAllLoanAgreementByPledgeAgreements(pledgeAgreementList));
+
+        model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubjectDto);
+        model.addAttribute("pledgeAgreementDtoList", pledgeAgreementDtoList);
+        model.addAttribute("loanAgreementDtoList", loanAgreementDtoList);
 
         return PAGE_DETAIL;
     }

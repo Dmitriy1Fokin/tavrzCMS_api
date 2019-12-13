@@ -1,11 +1,13 @@
 package ru.fds.tavrzcms3.converver;
 
+import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.dto.PledgeSubjectLandLeaseDto;
 import ru.fds.tavrzcms3.service.*;
 
 import java.util.List;
 
+@Component
 public class PledgeSubjectLandLeaseConverter implements ConverterDto<PledgeSubjectLandLease, PledgeSubjectLandLeaseDto> {
 
     private final PledgeAgreementService pledgeAgreementService;
@@ -39,7 +41,6 @@ public class PledgeSubjectLandLeaseConverter implements ConverterDto<PledgeSubje
         List<Monitoring> monitoringCollection = monitoringService.getMonitoringByIds(dto.getPledgeSubjectDto().getMonitoringIds());
         List<Encumbrance> encumbranceCollection = encumbranceService.getEncumbranceByIds(dto.getPledgeSubjectDto().getEncumbrancesIds());
         List<Insurance> insuranceCollection = insuranceService.getInsurancesByIds(dto.getPledgeSubjectDto().getInsurancesIds());
-        LandCategory landCategory = landCategoryService.getLandCategoryById(dto.getLandCategoryId()).orElse(null);
 
         return PledgeSubjectLandLease.builder()
                 .pledgeSubjectId(dto.getPledgeSubjectDto().getPledgeSubjectId())
@@ -76,7 +77,7 @@ public class PledgeSubjectLandLeaseConverter implements ConverterDto<PledgeSubje
                 .cadastralNumOfBuilding(dto.getCadastralNumOfBuilding())
                 .dateBeginLease(dto.getDateBeginLease())
                 .dateEndLease(dto.getDateEndLease())
-                .landCategory(landCategory)
+                .landCategory(dto.getLandCategory())
                 .build();
     }
 
@@ -93,7 +94,7 @@ public class PledgeSubjectLandLeaseConverter implements ConverterDto<PledgeSubje
                 .cadastralNumOfBuilding(entity.getCadastralNumOfBuilding())
                 .dateBeginLease(entity.getDateBeginLease())
                 .dateEndLease(entity.getDateEndLease())
-                .landCategoryId(entity.getLandCategory().getLandCategoryid())
+                .landCategory(entity.getLandCategory())
                 .build();
     }
 }
