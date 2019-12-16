@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EncumbranceDto implements Dto{
+public class EncumbranceDto{
 
     private Long encumbranceId;
 

@@ -1,9 +1,8 @@
 package ru.fds.tavrzcms3.dto;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
-import ru.fds.tavrzcms3.domain.MarketSegment;
+import ru.fds.tavrzcms3.dictionary.MarketSegment;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -13,10 +12,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectBuildingDto implements Dto{
-
-    @Valid
-    private PledgeSubjectDto pledgeSubjectDto;
+public class PledgeSubjectBuildingDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
@@ -36,7 +32,6 @@ public class PledgeSubjectBuildingDto implements Dto{
     @NotNull(message = "Обязательно для заполнения")
     @Min(value = 1800, message = "Неверное значение")
     @Max(value = 2100, message = "Неверное значение")
-    @Length(min = 4, max = 4, message = "Неверное значение")
     private int yearOfConstruction;
 
     private MarketSegment marketSegment;

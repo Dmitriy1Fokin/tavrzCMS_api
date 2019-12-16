@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -21,7 +22,17 @@ import javax.validation.constraints.PositiveOrZero;
 @SuperBuilder
 @Entity
 @Table(name = "pledge_subject")
-@Inheritance(strategy = InheritanceType.JOINED)
+@SecondaryTables({
+        @SecondaryTable(name = "pledge_auto", pkJoinColumns = @PrimaryKeyJoinColumn(name = "pledge_subject_id")),
+        @SecondaryTable(name = "pledge_realty_building", pkJoinColumns = @PrimaryKeyJoinColumn(name = "pledge_subject_id")),
+        @SecondaryTable(name = "pledge_realty_land_lease", pkJoinColumns = @PrimaryKeyJoinColumn(name = "pledge_subject_id")),
+        @SecondaryTable(name = "pledge_realty_land_ownership", pkJoinColumns = @PrimaryKeyJoinColumn(name = "pledge_subject_id")),
+        @SecondaryTable(name = "pledge_realty_room", pkJoinColumns = @PrimaryKeyJoinColumn(name = "pledge_subject_id")),
+        @SecondaryTable(name = "pledge_equipment", pkJoinColumns = @PrimaryKeyJoinColumn(name = "pledge_subject_id")),
+        @SecondaryTable(name = "pledge_securities", pkJoinColumns = @PrimaryKeyJoinColumn(name = "pledge_subject_id")),
+        @SecondaryTable(name = "pledge_tbo", pkJoinColumns = @PrimaryKeyJoinColumn(name = "pledge_subject_id")),
+        @SecondaryTable(name = "pledge_vessel", pkJoinColumns = @PrimaryKeyJoinColumn(name = "pledge_subject_id"))
+})
 public class PledgeSubject {
 	
 	@Id
@@ -138,50 +149,41 @@ public class PledgeSubject {
     @OneToMany(mappedBy = "pledgeSubject")
     @JsonIgnore
     private List<Insurance> insurances;
-	
-	@OneToOne
-	@JoinColumn(name = "pledgeSubject_id")
-    @JsonIgnore
+
+    @Valid
+	@Embedded
 	private PledgeSubjectAuto pledgeSubjectAuto;
-	
-	@OneToOne
-	@JoinColumn(name = "pledgeSubject_id")
-    @JsonIgnore
+
+    @Valid
+	@Embedded
 	private PledgeSubjectEquipment pledgeSubjectEquipment;
 
-	@OneToOne
-	@JoinColumn(name = "pledgeSubject_id")
-	@JsonIgnore
+    @Valid
+    @Embedded
 	private PledgeSubjectBuilding pledgeSubjectBuilding;
 
-	@OneToOne
-	@JoinColumn(name = "pledgeSubject_id")
-	@JsonIgnore
+    @Valid
+    @Embedded
 	private PledgeSubjectLandLease pledgeSubjectLandLease;
 
-	@OneToOne
-	@JoinColumn(name = "pledgeSubject_id")
-	@JsonIgnore
+    @Valid
+	@Embedded
 	private PledgeSubjectLandOwnership pledgeSubjectLandOwnership;
 
-	@OneToOne
-	@JoinColumn(name = "pledgeSubject_id")
-	@JsonIgnore
+    @Valid
+    @Embedded
 	private PledgeSubjectRoom pledgeSubjectRoom;
-	
-	@OneToOne
-	@JoinColumn(name = "pledgeSubject_id")
-    @JsonIgnore
+
+    @Valid
+    @Embedded
 	private PledgeSubjectSecurities pledgeSubjectSecurities;
 	
-	@OneToOne
-	@JoinColumn(name = "pledgeSubject_id")
-    @JsonIgnore
+    @Valid
+    @Embedded
 	private PledgeSubjectTBO pledgeSubjectTBO;
 	
-	@OneToOne
-	@JoinColumn(name = "pledgeSubject_id")
-    @JsonIgnore
+    @Valid
+	@Embedded
 	private PledgeSubjectVessel pledgeSubjectVessel;
 
     @Override
@@ -189,7 +191,7 @@ public class PledgeSubject {
         return "PledgeSubject{" +
                 "pledgeSubjectId=" + pledgeSubjectId +
                 ", name='" + name + '\'' +
-                ", liquidity='" + liquidity + '\'' +
+                ", liquidity=" + liquidity +
                 ", zsDz=" + zsDz +
                 ", zsZz=" + zsZz +
                 ", rsDz=" + rsDz +
@@ -197,10 +199,10 @@ public class PledgeSubject {
                 ", ss=" + ss +
                 ", dateMonitoring=" + dateMonitoring +
                 ", dateConclusion=" + dateConclusion +
-                ", statusMonitoring='" + statusMonitoring + '\'' +
-                ", typeOfCollateral='" + typeOfCollateral + '\'' +
-                ", typeOfPledge='" + typeOfPledge + '\'' +
-                ", typeOfMonitoring='" + typeOfMonitoring + '\'' +
+                ", statusMonitoring=" + statusMonitoring +
+                ", typeOfCollateral=" + typeOfCollateral +
+                ", typeOfPledge=" + typeOfPledge +
+                ", typeOfMonitoring=" + typeOfMonitoring +
                 ", adressRegion='" + adressRegion + '\'' +
                 ", adressDistrict='" + adressDistrict + '\'' +
                 ", adressCity='" + adressCity + '\'' +
@@ -208,6 +210,15 @@ public class PledgeSubject {
                 ", adressBuilbing='" + adressBuilbing + '\'' +
                 ", adressPemises='" + adressPemises + '\'' +
                 ", insuranceObligation='" + insuranceObligation + '\'' +
+                ", pledgeSubjectAuto=" + pledgeSubjectAuto +
+                ", pledgeSubjectEquipment=" + pledgeSubjectEquipment +
+                ", pledgeSubjectBuilding=" + pledgeSubjectBuilding +
+                ", pledgeSubjectLandLease=" + pledgeSubjectLandLease +
+                ", pledgeSubjectLandOwnership=" + pledgeSubjectLandOwnership +
+                ", pledgeSubjectRoom=" + pledgeSubjectRoom +
+                ", pledgeSubjectSecurities=" + pledgeSubjectSecurities +
+                ", pledgeSubjectTBO=" + pledgeSubjectTBO +
+                ", pledgeSubjectVessel=" + pledgeSubjectVessel +
                 '}';
     }
 }

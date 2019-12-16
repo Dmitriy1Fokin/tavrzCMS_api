@@ -18,251 +18,61 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<div th:switch="${typeOfCollateral.name()}">
-    <div th:case="AUTO">
-        <form th:action="@{/pledge_subject/update_pledge_subject_auto}" th:method="post" th:object="${pledgeSubjectAuto}" action="card_update.html">
-            <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectAuto.getPledgeSubjectId()}">
-            <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectAuto.getZsDz()}">
-            <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectAuto.getZsZz()}">
-            <input type="hidden", th:field="*{rsDz}" th:value="${pledgeSubjectAuto.getRsDz()}">
-            <input type="hidden", th:field="*{rsZz}" th:value="${pledgeSubjectAuto.getRsZz()}">
-            <input type="hidden", th:field="*{ss}" th:value="${pledgeSubjectAuto.getSs()}">
-            <input type="hidden", th:field="*{dateMonitoring}" th:value="${pledgeSubjectAuto.getDateMonitoring()}">
-            <input type="hidden", th:field="*{dateConclusion}" th:value="${pledgeSubjectAuto.getDateConclusion()}">
-            <input type="hidden", th:field="*{statusMonitoring}" th:value="${pledgeSubjectAuto.getStatusMonitoring()}">
-            <input type="hidden", th:field="*{typeOfMonitoring}" th:value="${pledgeSubjectAuto.getTypeOfMonitoring()}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectAuto.getPledgeAgreements()}">
-            <input type="hidden", th:field="*{costHistories}" th:value="${pledgeSubjectAuto.getCostHistories()}">
-            <input type="hidden", th:field="*{monitorings}" th:value="${pledgeSubjectAuto.getMonitorings()}">
-            <input type="hidden", th:field="*{encumbrances}" th:value="${pledgeSubjectAuto.getEncumbrances()}">
-            <input type="hidden", th:field="*{insurances}" th:value="${pledgeSubjectAuto.getInsurances()}">
-            <input type="hidden", th:field="*{pledgeSubjectAuto}" th:value="${pledgeSubjectAuto.getPledgeSubjectAuto()}">
+<form th:action="@{/pledge_subject/update_pledge_subject}" th:method="post" th:object="${pledgeSubjectDto}" action="card_update.html">
+    <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectDto.getPledgeSubjectId()}">
+    <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectDto.getZsDz()}">
+    <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectDto.getZsZz()}">
+    <input type="hidden", th:field="*{rsDz}" th:value="${pledgeSubjectDto.getRsDz()}">
+    <input type="hidden", th:field="*{rsZz}" th:value="${pledgeSubjectDto.getRsZz()}">
+    <input type="hidden", th:field="*{ss}" th:value="${pledgeSubjectDto.getSs()}">
+    <input type="hidden", th:field="*{dateMonitoring}" th:value="${pledgeSubjectDto.getDateMonitoring()}">
+    <input type="hidden", th:field="*{dateConclusion}" th:value="${pledgeSubjectDto.getDateConclusion()}">
+    <input type="hidden", th:field="*{statusMonitoring}" th:value="${pledgeSubjectDto.getStatusMonitoring()}">
+    <input type="hidden", th:field="*{typeOfMonitoring}" th:value="${pledgeSubjectDto.getTypeOfMonitoring()}">
+    <input type="hidden", th:field="*{pledgeAgreementsIds}" th:value="${pledgeSubjectDto.getPledgeAgreementsIds()}">
+    <input type="hidden", th:field="*{costHistoriesIds}" th:value="${pledgeSubjectDto.getCostHistoriesIds()}">
+    <input type="hidden", th:field="*{monitoringIds}" th:value="${pledgeSubjectDto.getMonitoringIds()}">
+    <input type="hidden", th:field="*{encumbrancesIds}" th:value="${pledgeSubjectDto.getEncumbrancesIds()}">
+    <input type="hidden", th:field="*{insurancesIds}" th:value="${pledgeSubjectDto.getInsurancesIds()}">
+    <input type="hidden", th:field="*{typeOfCollateral}" th:value="${pledgeSubjectDto.getTypeOfCollateral()}">
 
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectAuto})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: autoProperty(${pledgeSubjectAuto})"></div>
-            <br>
-            <button type="submit">Обновить</button>
-        </form>
-    </div>
-    <div th:case="EQUIPMENT">
-        <form th:action="@{/pledge_subject/update_pledge_subject_equipment}" th:method="post" th:object="${pledgeSubjectEquipment}" action="card_update.html">
-            <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectEquipment.getPledgeSubjectId()}">
-            <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectEquipment.getZsDz()}">
-            <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectEquipment.getZsZz()}">
-            <input type="hidden", th:field="*{rsDz}" th:value="${pledgeSubjectEquipment.getRsDz()}">
-            <input type="hidden", th:field="*{rsZz}" th:value="${pledgeSubjectEquipment.getRsZz()}">
-            <input type="hidden", th:field="*{ss}" th:value="${pledgeSubjectEquipment.getSs()}">
-            <input type="hidden", th:field="*{dateMonitoring}" th:value="${pledgeSubjectEquipment.getDateMonitoring()}">
-            <input type="hidden", th:field="*{dateConclusion}" th:value="${pledgeSubjectEquipment.getDateConclusion()}">
-            <input type="hidden", th:field="*{statusMonitoring}" th:value="${pledgeSubjectEquipment.getStatusMonitoring()}">
-            <input type="hidden", th:field="*{typeOfMonitoring}" th:value="${pledgeSubjectEquipment.getTypeOfMonitoring()}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectEquipment.getPledgeAgreements()}">
-            <input type="hidden", th:field="*{costHistories}" th:value="${pledgeSubjectEquipment.getCostHistories()}">
-            <input type="hidden", th:field="*{monitorings}" th:value="${pledgeSubjectEquipment.getMonitorings()}">
-            <input type="hidden", th:field="*{encumbrances}" th:value="${pledgeSubjectEquipment.getEncumbrances()}">
-            <input type="hidden", th:field="*{insurances}" th:value="${pledgeSubjectEquipment.getInsurances()}">
-            <input type="hidden", th:field="*{pledgeSubjectEquipment}" th:value="${pledgeSubjectEquipment.getPledgeSubjectEquipment()}">
+    <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectDto})"></div>
+    <br>
 
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectEquipment})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: equipmentProperty(${pledgeSubjectEquipment})"></div>
-            <br>
-            <button type="submit">Обновить</button>
-        </form>
-    </div>
-    <div th:case="SECURITIES">
-        <form th:action="@{/pledge_subject/update_pledge_subject_securities}" th:method="post" th:object="${pledgeSubjectSecurities}" action="card_update.html">
-            <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectSecurities.getPledgeSubjectId()}">
-            <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectSecurities.getZsDz()}">
-            <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectSecurities.getZsZz()}">
-            <input type="hidden", th:field="*{rsDz}" th:value="${pledgeSubjectSecurities.getRsDz()}">
-            <input type="hidden", th:field="*{rsZz}" th:value="${pledgeSubjectSecurities.getRsZz()}">
-            <input type="hidden", th:field="*{ss}" th:value="${pledgeSubjectSecurities.getSs()}">
-            <input type="hidden", th:field="*{dateMonitoring}" th:value="${pledgeSubjectSecurities.getDateMonitoring()}">
-            <input type="hidden", th:field="*{dateConclusion}" th:value="${pledgeSubjectSecurities.getDateConclusion()}">
-            <input type="hidden", th:field="*{statusMonitoring}" th:value="${pledgeSubjectSecurities.getStatusMonitoring()}">
-            <input type="hidden", th:field="*{typeOfMonitoring}" th:value="${pledgeSubjectSecurities.getTypeOfMonitoring()}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectSecurities.getPledgeAgreements()}">
-            <input type="hidden", th:field="*{costHistories}" th:value="${pledgeSubjectSecurities.getCostHistories()}">
-            <input type="hidden", th:field="*{monitorings}" th:value="${pledgeSubjectSecurities.getMonitorings()}">
-            <input type="hidden", th:field="*{encumbrances}" th:value="${pledgeSubjectSecurities.getEncumbrances()}">
-            <input type="hidden", th:field="*{insurances}" th:value="${pledgeSubjectSecurities.getInsurances()}">
-            <input type="hidden", th:field="*{pledgeSubjectSecurities}" th:value="${pledgeSubjectSecurities.getPledgeSubjectSecurities()}">
-
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectSecurities})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: securitiesProperty(${pledgeSubjectSecurities})"></div>
-            <br>
-            <button type="submit">Обновить</button>
-        </form>
-    </div>
-    <div th:case="VESSEL">
-        <form th:action="@{/pledge_subject/update_pledge_subject_vessel}" th:method="post" th:object="${pledgeSubjectVessel}" action="card_update.html">
-            <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectVessel.getPledgeSubjectId()}">
-            <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectVessel.getZsDz()}">
-            <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectVessel.getZsZz()}">
-            <input type="hidden", th:field="*{rsDz}" th:value="${pledgeSubjectVessel.getRsDz()}">
-            <input type="hidden", th:field="*{rsZz}" th:value="${pledgeSubjectVessel.getRsZz()}">
-            <input type="hidden", th:field="*{ss}" th:value="${pledgeSubjectVessel.getSs()}">
-            <input type="hidden", th:field="*{dateMonitoring}" th:value="${pledgeSubjectVessel.getDateMonitoring()}">
-            <input type="hidden", th:field="*{dateConclusion}" th:value="${pledgeSubjectVessel.getDateConclusion()}">
-            <input type="hidden", th:field="*{statusMonitoring}" th:value="${pledgeSubjectVessel.getStatusMonitoring()}">
-            <input type="hidden", th:field="*{typeOfMonitoring}" th:value="${pledgeSubjectVessel.getTypeOfMonitoring()}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectVessel.getPledgeAgreements()}">
-            <input type="hidden", th:field="*{costHistories}" th:value="${pledgeSubjectVessel.getCostHistories()}">
-            <input type="hidden", th:field="*{monitorings}" th:value="${pledgeSubjectVessel.getMonitorings()}">
-            <input type="hidden", th:field="*{encumbrances}" th:value="${pledgeSubjectVessel.getEncumbrances()}">
-            <input type="hidden", th:field="*{insurances}" th:value="${pledgeSubjectVessel.getInsurances()}">
-            <input type="hidden", th:field="*{pledgeSubjectVessel}" th:value="${pledgeSubjectVessel.getPledgeSubjectVessel()}">
-
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectVessel})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: vesselProperty(${pledgeSubjectVessel})"></div>
-            <br>
-            <button type="submit">Обновить</button>
-        </form>
-    </div>
-    <div th:case="TBO">
-        <form th:action="@{/pledge_subject/update_pledge_subject_tbo}" th:method="post" th:object="${pledgeSubjectTBO}" action="card_update.html">
-            <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectTBO.getPledgeSubjectId()}">
-            <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectTBO.getZsDz()}">
-            <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectTBO.getZsZz()}">
-            <input type="hidden", th:field="*{rsDz}" th:value="${pledgeSubjectTBO.getRsDz()}">
-            <input type="hidden", th:field="*{rsZz}" th:value="${pledgeSubjectTBO.getRsZz()}">
-            <input type="hidden", th:field="*{ss}" th:value="${pledgeSubjectTBO.getSs()}">
-            <input type="hidden", th:field="*{dateMonitoring}" th:value="${pledgeSubjectTBO.getDateMonitoring()}">
-            <input type="hidden", th:field="*{dateConclusion}" th:value="${pledgeSubjectTBO.getDateConclusion()}">
-            <input type="hidden", th:field="*{statusMonitoring}" th:value="${pledgeSubjectTBO.getStatusMonitoring()}">
-            <input type="hidden", th:field="*{typeOfMonitoring}" th:value="${pledgeSubjectTBO.getTypeOfMonitoring()}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectTBO.getPledgeAgreements()}">
-            <input type="hidden", th:field="*{costHistories}" th:value="${pledgeSubjectTBO.getCostHistories()}">
-            <input type="hidden", th:field="*{monitorings}" th:value="${pledgeSubjectTBO.getMonitorings()}">
-            <input type="hidden", th:field="*{encumbrances}" th:value="${pledgeSubjectTBO.getEncumbrances()}">
-            <input type="hidden", th:field="*{insurances}" th:value="${pledgeSubjectTBO.getInsurances()}">
-            <input type="hidden", th:field="*{pledgeSubjectTBO}" th:value="${pledgeSubjectTBO.getPledgeSubjectTBO()}">
-
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectTBO})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: tboProperty(${pledgeSubjectTBO})"></div>
-            <br>
-            <button type="submit">Обновить</button>
-        </form>
-    </div>
-    <div th:case="LAND_OWNERSHIP">
-        <form th:action="@{/pledge_subject/update_pledge_subject_landOwn}" th:method="post" th:object="${pledgeSubjectRealty}" action="card_update.html">
-            <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectRealty.getPledgeSubjectId()}">
-            <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectRealty.getZsDz()}">
-            <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectRealty.getZsZz()}">
-            <input type="hidden", th:field="*{rsDz}" th:value="${pledgeSubjectRealty.getRsDz()}">
-            <input type="hidden", th:field="*{rsZz}" th:value="${pledgeSubjectRealty.getRsZz()}">
-            <input type="hidden", th:field="*{ss}" th:value="${pledgeSubjectRealty.getSs()}">
-            <input type="hidden", th:field="*{dateMonitoring}" th:value="${pledgeSubjectRealty.getDateMonitoring()}">
-            <input type="hidden", th:field="*{dateConclusion}" th:value="${pledgeSubjectRealty.getDateConclusion()}">
-            <input type="hidden", th:field="*{statusMonitoring}" th:value="${pledgeSubjectRealty.getStatusMonitoring()}">
-            <input type="hidden", th:field="*{typeOfMonitoring}" th:value="${pledgeSubjectRealty.getTypeOfMonitoring()}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectRealty.getPledgeAgreements()}">
-            <input type="hidden", th:field="*{costHistories}" th:value="${pledgeSubjectRealty.getCostHistories()}">
-            <input type="hidden", th:field="*{monitorings}" th:value="${pledgeSubjectRealty.getMonitorings()}">
-            <input type="hidden", th:field="*{encumbrances}" th:value="${pledgeSubjectRealty.getEncumbrances()}">
-            <input type="hidden", th:field="*{insurances}" th:value="${pledgeSubjectRealty.getInsurances()}">
-            <input type="hidden", th:field="*{pledgeSubjectRealty}" th:value="${pledgeSubjectRealty.getPledgeSubjectRealty()}">
-
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectRealty})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: realtyProperty(${pledgeSubjectRealty})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: landOwnshipProperty(${pledgeSubjectRealty}, ${landCategoryList})"></div>
-            <br>
-            <button type="submit">Обновить</button>
-        </form>
-    </div>
-    <div th:case="LAND_LEASE">
-        <form th:action="@{/pledge_subject/update_pledge_subject_landLease}" th:method="post" th:object="${pledgeSubjectRealty}" action="card_update.html">
-            <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectRealty.getPledgeSubjectId()}">
-            <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectRealty.getZsDz()}">
-            <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectRealty.getZsZz()}">
-            <input type="hidden", th:field="*{rsDz}" th:value="${pledgeSubjectRealty.getRsDz()}">
-            <input type="hidden", th:field="*{rsZz}" th:value="${pledgeSubjectRealty.getRsZz()}">
-            <input type="hidden", th:field="*{ss}" th:value="${pledgeSubjectRealty.getSs()}">
-            <input type="hidden", th:field="*{dateMonitoring}" th:value="${pledgeSubjectRealty.getDateMonitoring()}">
-            <input type="hidden", th:field="*{dateConclusion}" th:value="${pledgeSubjectRealty.getDateConclusion()}">
-            <input type="hidden", th:field="*{statusMonitoring}" th:value="${pledgeSubjectRealty.getStatusMonitoring()}">
-            <input type="hidden", th:field="*{typeOfMonitoring}" th:value="${pledgeSubjectRealty.getTypeOfMonitoring()}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectRealty.getPledgeAgreements()}">
-            <input type="hidden", th:field="*{costHistories}" th:value="${pledgeSubjectRealty.getCostHistories()}">
-            <input type="hidden", th:field="*{monitorings}" th:value="${pledgeSubjectRealty.getMonitorings()}">
-            <input type="hidden", th:field="*{encumbrances}" th:value="${pledgeSubjectRealty.getEncumbrances()}">
-            <input type="hidden", th:field="*{insurances}" th:value="${pledgeSubjectRealty.getInsurances()}">
-            <input type="hidden", th:field="*{pledgeSubjectRealty}" th:value="${pledgeSubjectRealty.getPledgeSubjectRealty()}">
-
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectRealty})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: realtyProperty(${pledgeSubjectRealty})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: landLeaseProperty(${pledgeSubjectRealty}, ${landCategoryList})"></div>
-            <br>
-            <button type="submit">Обновить</button>
-        </form>
-    </div>
-    <div th:case="BUILDING">
-        <form th:action="@{/pledge_subject/update_pledge_subject_building}" th:method="post" th:object="${pledgeSubjectRealty}" action="card_update.html">
-            <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectRealty.getPledgeSubjectId()}">
-            <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectRealty.getZsDz()}">
-            <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectRealty.getZsZz()}">
-            <input type="hidden", th:field="*{rsDz}" th:value="${pledgeSubjectRealty.getRsDz()}">
-            <input type="hidden", th:field="*{rsZz}" th:value="${pledgeSubjectRealty.getRsZz()}">
-            <input type="hidden", th:field="*{ss}" th:value="${pledgeSubjectRealty.getSs()}">
-            <input type="hidden", th:field="*{dateMonitoring}" th:value="${pledgeSubjectRealty.getDateMonitoring()}">
-            <input type="hidden", th:field="*{dateConclusion}" th:value="${pledgeSubjectRealty.getDateConclusion()}">
-            <input type="hidden", th:field="*{statusMonitoring}" th:value="${pledgeSubjectRealty.getStatusMonitoring()}">
-            <input type="hidden", th:field="*{typeOfMonitoring}" th:value="${pledgeSubjectRealty.getTypeOfMonitoring()}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectRealty.getPledgeAgreements()}">
-            <input type="hidden", th:field="*{costHistories}" th:value="${pledgeSubjectRealty.getCostHistories()}">
-            <input type="hidden", th:field="*{monitorings}" th:value="${pledgeSubjectRealty.getMonitorings()}">
-            <input type="hidden", th:field="*{encumbrances}" th:value="${pledgeSubjectRealty.getEncumbrances()}">
-            <input type="hidden", th:field="*{insurances}" th:value="${pledgeSubjectRealty.getInsurances()}">
-            <input type="hidden", th:field="*{pledgeSubjectRealty}" th:value="${pledgeSubjectRealty.getPledgeSubjectRealty()}">
-
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectRealty})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: realtyProperty(${pledgeSubjectRealty})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: buildingProperty(${pledgeSubjectRealty}, ${marketSegmentList})"></div>
-            <br>
-            <button type="submit">Обновить</button>
-        </form>
-    </div>
-    <div th:case="PREMISE">
-        <form th:action="@{/pledge_subject/update_pledge_subject_room}" th:method="post" th:object="${pledgeSubjectRealty}" action="card_update.html">
-            <input type="hidden", th:field="*{pledgeSubjectId}" th:value="${pledgeSubjectRealty.getPledgeSubjectId()}">
-            <input type="hidden", th:field="*{zsDz}" th:value="${pledgeSubjectRealty.getZsDz()}">
-            <input type="hidden", th:field="*{zsZz}" th:value="${pledgeSubjectRealty.getZsZz()}">
-            <input type="hidden", th:field="*{rsDz}" th:value="${pledgeSubjectRealty.getRsDz()}">
-            <input type="hidden", th:field="*{rsZz}" th:value="${pledgeSubjectRealty.getRsZz()}">
-            <input type="hidden", th:field="*{ss}" th:value="${pledgeSubjectRealty.getSs()}">
-            <input type="hidden", th:field="*{dateMonitoring}" th:value="${pledgeSubjectRealty.getDateMonitoring()}">
-            <input type="hidden", th:field="*{dateConclusion}" th:value="${pledgeSubjectRealty.getDateConclusion()}">
-            <input type="hidden", th:field="*{statusMonitoring}" th:value="${pledgeSubjectRealty.getStatusMonitoring()}">
-            <input type="hidden", th:field="*{typeOfMonitoring}" th:value="${pledgeSubjectRealty.getTypeOfMonitoring()}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectRealty.getPledgeAgreements()}">
-            <input type="hidden", th:field="*{costHistories}" th:value="${pledgeSubjectRealty.getCostHistories()}">
-            <input type="hidden", th:field="*{monitorings}" th:value="${pledgeSubjectRealty.getMonitorings()}">
-            <input type="hidden", th:field="*{encumbrances}" th:value="${pledgeSubjectRealty.getEncumbrances()}">
-            <input type="hidden", th:field="*{insurances}" th:value="${pledgeSubjectRealty.getInsurances()}">
-            <input type="hidden", th:field="*{pledgeSubjectRealty}" th:value="${pledgeSubjectRealty.getPledgeSubjectRealty()}">
-
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectRealty})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: realtyProperty(${pledgeSubjectRealty})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: roomProperty(${pledgeSubjectRealty}, ${marketSegmentList})"></div>
-            <br>
-            <button type="submit">Обновить</button>
-        </form>
+    <div th:switch="${pledgeSubjectDto.getTypeOfCollateral().name()}">
+        <div th:case="AUTO">
+            <div th:replace="fragments/pledge_subject_forms :: autoProperty(${pledgeSubjectDto.getPledgeSubjectAutoDto()})"></div>
+        </div>
+        <div th:case="EQUIPMENT">
+            <div th:replace="fragments/pledge_subject_forms :: equipmentProperty(${pledgeSubjectDto.getPledgeSubjectEquipmentDto()})"></div>
+        </div>
+        <div th:case="SECURITIES">
+            <div th:replace="fragments/pledge_subject_forms :: securitiesProperty(${pledgeSubjectDto.getPledgeSubjectSecuritiesDto()})"></div>
+        </div>
+        <div th:case="VESSEL">
+            <div th:replace="fragments/pledge_subject_forms :: vesselProperty(${pledgeSubjectDto.getPledgeSubjectVesselDto()})"></div>
+        </div>
+        <div th:case="TBO">
+            <div th:replace="fragments/pledge_subject_forms :: tboProperty(${pledgeSubjectDto.getPledgeSubjectTboDto()})"></div>
+        </div>
+        <div th:case="LAND_OWNERSHIP">
+            <div th:replace="fragments/pledge_subject_forms :: landOwnshipProperty(${pledgeSubjectDto.getPledgeSubjectLandOwnershipDto()})"></div>
+        </div>
+        <div th:case="LAND_LEASE">
+            <div th:replace="fragments/pledge_subject_forms :: landLeaseProperty(${pledgeSubjectDto.getPledgeSubjectLandLeaseDto()})"></div>
+        </div>
+        <div th:case="BUILDING">
+            <div th:replace="fragments/pledge_subject_forms :: buildingProperty(${pledgeSubjectDto.getPledgeSubjectBuildingDto()})"></div>
+        </div>
+        <div th:case="PREMISE">
+            <div th:replace="fragments/pledge_subject_forms :: roomProperty(${pledgeSubjectDto.getPledgeSubjectRoomDto()})"></div>
+        </div>
     </div>
 
-</div>
+
+    <br>
+    <button type="submit">Обновить</button>
+</form>
 
 </body>
 </html>

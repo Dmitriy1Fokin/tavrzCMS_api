@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MonitoringDto implements Dto{
+public class MonitoringDto{
 
     private Long monitoringId;
 

@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EmployeeDto implements Dto{
+public class EmployeeDto{
 
     private Long employeeId;
 

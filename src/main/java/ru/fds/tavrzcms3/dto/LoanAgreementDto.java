@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LoanAgreementDto implements Dto{
+public class LoanAgreementDto{
 
     private Long loanAgreementId;
 

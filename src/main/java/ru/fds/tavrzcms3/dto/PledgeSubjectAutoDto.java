@@ -13,10 +13,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectAutoDto implements Dto {
-
-    @Valid
-    private PledgeSubjectDto pledgeSubjectDto;
+public class PledgeSubjectAutoDto{
 
     @NotBlank(message = "Обязательно для заполнения")
     private String brand;
@@ -34,7 +31,6 @@ public class PledgeSubjectAutoDto implements Dto {
 
     @Min(value = 1900, message = "Неверное значение")
     @Max(value = 2100, message = "Неверное значение")
-//    @Length(min = 4, max = 4, message = "Неверное значение")
     private Integer yearOfManufacture;
 
     private String inventoryNum;

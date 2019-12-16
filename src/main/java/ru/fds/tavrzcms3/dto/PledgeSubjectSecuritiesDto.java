@@ -13,10 +13,7 @@ import javax.validation.constraints.PositiveOrZero;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectSecuritiesDto implements Dto{
-
-    @Valid
-    private PledgeSubjectDto pledgeSubjectDto;
+public class PledgeSubjectSecuritiesDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")

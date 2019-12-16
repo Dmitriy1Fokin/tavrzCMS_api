@@ -5,9 +5,14 @@ import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.dto.ClientDto;
-import ru.fds.tavrzcms3.service.*;
+import ru.fds.tavrzcms3.service.ClientManagerService;
+import ru.fds.tavrzcms3.service.ClientService;
+import ru.fds.tavrzcms3.service.EmployeeService;
+import ru.fds.tavrzcms3.service.LoanAgreementService;
+import ru.fds.tavrzcms3.service.PledgeAgreementService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,8 +39,17 @@ public class ClientConverterDto implements ConverterDto<Client,ClientDto> {
 
     @Override
     public Client toEntity(ClientDto dto) {
-        List<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementsByIds(dto.getLoanAgreementsIds());
-        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementsByIds(dto.getPledgeAgreementsIds());
+        List<LoanAgreement> loanAgreementList;
+        if(Objects.nonNull(dto.getLoanAgreementsIds()))
+            loanAgreementList = loanAgreementService.getLoanAgreementsByIds(dto.getLoanAgreementsIds());
+        else
+            loanAgreementList = Collections.emptyList();
+
+        List<PledgeAgreement> pledgeAgreementList;
+        if(Objects.nonNull(dto.getPledgeAgreementsIds()))
+            pledgeAgreementList = pledgeAgreementService.getPledgeAgreementsByIds(dto.getPledgeAgreementsIds());
+        else
+            pledgeAgreementList = Collections.emptyList();
 
         return Client.builder()
                 .clientId(dto.getClientId())

@@ -1,57 +1,31 @@
 package ru.fds.tavrzcms3.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
-import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 import ru.fds.tavrzcms3.dictionary.TypeOfSecurities;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
-@SuperBuilder
-@Entity
-@Table(name = "pledge_securities")
-public class PledgeSubjectSecurities extends PledgeSubject{
+@NoArgsConstructor
+@Builder
+@Embeddable
+public class PledgeSubjectSecurities{
 
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-	@Column(name ="nominal_value")
+	@Column(name ="nominal_value", table = "pledge_securities")
 	private double nominalValue;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-	@Column(name ="actual_value")
+	@Column(name ="actual_value", table = "pledge_securities")
 	private double actualValue;
 
 	@Convert(converter = TypeOfSecurities.Converter.class)
-	@Column(name ="type_of_securities")
+	@Column(name ="type_of_securities", table = "pledge_securities")
 	private TypeOfSecurities typeOfSecurities;
-
-	@Valid
-	@OneToOne(mappedBy = "pledgeSubjectSecurities")
-	@JsonIgnore
-	private PledgeSubject pledgeSubject;
-
-	public PledgeSubjectSecurities(){
-		super.setTypeOfCollateral(TypeOfCollateral.SECURITIES);
-	}
-
-	@Override
-	public String toString() {
-		return "PledgeSubjectSecurities{" +
-				"nominalValue=" + nominalValue +
-				", actualValue=" + actualValue +
-				", typeOfSecurities='" + typeOfSecurities + '\'' +
-				'}';
-	}
 }

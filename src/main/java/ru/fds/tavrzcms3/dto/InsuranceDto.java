@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class InsuranceDto implements Dto{
+public class InsuranceDto{
 
     private Long insuranceId;
 

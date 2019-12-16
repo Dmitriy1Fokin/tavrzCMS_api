@@ -14,7 +14,7 @@ import ru.fds.tavrzcms3.dto.LoanAgreementDto;
 import java.util.Arrays;
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

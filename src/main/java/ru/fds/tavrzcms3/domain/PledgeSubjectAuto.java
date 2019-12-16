@@ -1,40 +1,32 @@
 package ru.fds.tavrzcms3.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.validator.constraints.Length;
+import lombok.*;
 import ru.fds.tavrzcms3.dictionary.TypeOfAuto;
-import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
-@SuperBuilder
-@Entity
-@Table(name = "pledge_auto")
-public class PledgeSubjectAuto extends PledgeSubject {
+@NoArgsConstructor
+@Builder
+@Embeddable
+public class PledgeSubjectAuto{
 
 	@NotBlank(message = "Обязательно для заполнения")
-	@Column(name ="brand")
-	private String brand;
+	@Column(name ="brand_auto", table = "pledge_auto")
+	private String brandAuto;
 
 	@NotBlank(message = "Обязательно для заполнения")
-	@Column(name ="model")
-	private String model;
+	@Column(name ="model_auto", table = "pledge_auto")
+	private String modelAuto;
 
 	@Pattern(regexp = "^$|[0-9A-Z]{17}",
 			message = "Неверное значение")
-	@Column(name ="vin")
+	@Column(name ="vin", table = "pledge_auto")
 	private String vin;
 
-	@Column(name ="num_of_engine")
+	@Column(name ="num_of_engine", table = "pledge_auto")
 	private String numOfEngine;
 	
 	@Column(name ="num_of_pts")
@@ -42,41 +34,17 @@ public class PledgeSubjectAuto extends PledgeSubject {
 
 	@Min(value = 1900, message = "Неверное значение")
 	@Max(value = 2100, message = "Неверное значение")
-//	@Length(min = 4, max = 4, message = "Неверное значение")
-	@Column(name ="year_of_manufacture")
-	private Integer yearOfManufacture;
+	@Column(name ="year_of_manufacture_auto", table = "pledge_auto")
+	private Integer yearOfManufactureAuto;
 	
-	@Column(name ="inventory_number")
-	private String inventoryNum;
+	@Column(name ="inventory_number_auto")
+	private String inventoryNumAuto;
 
 	@Convert(converter = TypeOfAuto.Converter.class)
-	@Column(name ="type_of_auto")
+	@Column(name ="type_of_auto", table = "pledge_auto")
 	private TypeOfAuto typeOfAuto;
 
 	@Positive(message = "Значение должно быть больше нуля")
-	@Column(name ="horsepower")
+	@Column(name ="horsepower", table = "pledge_auto")
 	private Double horsepower;
-
-	@Valid
-	@OneToOne(mappedBy = "pledgeSubjectAuto")
-	@JsonIgnore
-	private PledgeSubject pledgeSubject;
-
-	public PledgeSubjectAuto(){
-		super.setTypeOfCollateral(TypeOfCollateral.AUTO);
-	}
-
-	@Override
-	public String toString() {
-		return "PledgeSubjectAuto{" +
-				"brand='" + brand + '\'' +
-				", model='" + model + '\'' +
-				", vin='" + vin + '\'' +
-				", numOfEngine='" + numOfEngine + '\'' +
-				", numOfPTS='" + numOfPTS + '\'' +
-				", yearOfManufacture=" + yearOfManufacture +
-				", inventoryNum='" + inventoryNum + '\'' +
-				", typeOfAuto='" + typeOfAuto + '\'' +
-				'}';
-	}
 }

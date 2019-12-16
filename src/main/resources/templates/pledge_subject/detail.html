@@ -24,348 +24,348 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<h1 th:text="'Предмет залога:' + ${pledgeSubject.getPledgeSubjectDto().getName()}">Предмет залога</h1>
+<h1 th:text="'Предмет залога:' + ${pledgeSubjectDto.getName()}">Предмет залога</h1>
 <div class="containerTable">
 
     <label>id предмета залога</label>
-    <span th:text="${pledgeSubject.getPledgeSubjectDto().getPledgeSubjectId()}">н/д</span>
+    <span th:text="${pledgeSubjectDto.getPledgeSubjectId()}">н/д</span>
     <br>
     <br>
     <label>Наименование:</label>
-    <span th:text="${pledgeSubject.getPledgeSubjectDto().getName()}">н/д</span>
+    <span th:text="${pledgeSubjectDto.getName()}">н/д</span>
     <br>
     <br>
-    <div th:switch="${pledgeSubject.getPledgeSubjectDto().getTypeOfCollateral().name()}">
+    <div th:switch="${pledgeSubjectDto.getTypeOfCollateral().name()}">
         <div th:case="AUTO">
             <label>Марка:</label>
-            <span th:text="${pledgeSubject.getBrand()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectAutoDto().getBrand()}">н/д</span>
             <br>
             <br>
             <label>Модель:</label>
-            <span th:text="${pledgeSubject.getModel()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectAutoDto().getModel()}">н/д</span>
             <br>
             <br>
             <label>л.с.:</label>
-            <span th:text="${pledgeSubject.getHorsepower()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectAutoDto().getHorsepower()}">н/д</span>
             <br>
             <br>
             <label>VIN:</label>
-            <span th:text="${pledgeSubject.getVin()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectAutoDto().getVin()}">н/д</span>
             <br>
             <br>
             <label>№ двигателя:</label>
-            <span th:text="${pledgeSubject.getNumOfEngine()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectAutoDto().getNumOfEngine()}">н/д</span>
             <br>
             <br>
             <label>№ ПТС:</label>
-            <span th:text="${pledgeSubject.getNumOfPTS()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectAutoDto().getNumOfPTS()}">н/д</span>
             <br>
             <br>
             <label>Год выпуска:</label>
-            <span th:text="${pledgeSubject.getYearOfManufacture()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectAutoDto().getYearOfManufacture()}">н/д</span>
             <br>
             <br>
             <label>Инв. №:</label>
-            <span th:text="${pledgeSubject.getInventoryNum()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectAutoDto().getInventoryNum()}">н/д</span>
             <br>
             <br>
             <label>Вид транспорта:</label>
-            <span th:text="${pledgeSubject.getTypeOfAuto().getTranslate()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectAutoDto().getTypeOfAuto().getTranslate()}">н/д</span>
             <br>
             <br>
         </div>
         <div th:case="EQUIPMENT">
             <label>Марка:</label>
-            <span th:text="${pledgeSubject.getBrand()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectEquipmentDto().getBrand()}">н/д</span>
             <br>
             <br>
             <label>Модель:</label>
-            <span th:text="${pledgeSubject.getModel()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectEquipmentDto().getModel()}">н/д</span>
             <br>
             <br>
             <label>Завод. №:</label>
-            <span th:text="${pledgeSubject.getSerialNum()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectEquipmentDto().getSerialNum()}">н/д</span>
             <br>
             <br>
             <label>Год выпуска:</label>
-            <span th:text="${pledgeSubject.getYearOfManufacture()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectEquipmentDto().getYearOfManufacture()}">н/д</span>
             <br>
             <br>
             <label>Инв. №:</label>
-            <span th:text="${pledgeSubject.getInventoryNum()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectEquipmentDto().getInventoryNum()}">н/д</span>
             <br>
             <br>
             <label>Вид оборудования:</label>
-            <span th:text="${pledgeSubject.getTypeOfEquipment().getTranslate()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectEquipmentDto().getTypeOfEquipment().getTranslate()}">н/д</span>
             <br>
             <br>
             <label>Производительность:</label>
-            <span th:text="${pledgeSubject.getProductivity()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectEquipmentDto().getProductivity()}">н/д</span>
             <br>
             <br>
             <label>Вид производительности:</label>
-            <span th:text="${pledgeSubject.getTypeOfProductivity()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectEquipmentDto().getTypeOfProductivity()}">н/д</span>
             <br>
             <br>
         </div>
 
         <div th:case="SECURITIES">
             <label>Номинальная стоимость:</label>
-            <span th:text="${pledgeSubject.getNominalValue()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectSecuritiesDto().getNominalValue()}">н/д</span>
             <br>
             <br>
             <label>Действительная стоимость:</label>
-            <span th:text="${pledgeSubject.getActualValue()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectSecuritiesDto().getActualValue()}">н/д</span>
             <br>
             <br>
             <label>Вид ценных бумаг:</label>
-            <span th:text="${pledgeSubject.getTypeOfSecurities().getTranslate()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectSecuritiesDto().getTypeOfSecurities().getTranslate()}">н/д</span>
             <br>
             <br>
         </div>
 
         <div th:case="VESSEL">
             <label>ИМО:</label>
-            <span th:text="${pledgeSubject.getImo()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectVesselDto().getImo()}">н/д</span>
             <br>
             <br>
             <label>MMSI:</label>
-            <span th:text="${pledgeSubject.getMmsi()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectVesselDto().getMmsi()}">н/д</span>
             <br>
             <br>
             <label>Флаг:</label>
-            <span th:text="${pledgeSubject.getFlag()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectVesselDto().getFlag()}">н/д</span>
             <br>
             <br>
             <label>Вид судна:</label>
-            <span th:text="${pledgeSubject.getVesselType().getTranslate()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectVesselDto().getVesselType().getTranslate()}">н/д</span>
             <br>
             <br>
             <label>Валовый тоннаж:</label>
-            <span th:text="${pledgeSubject.getGrossTonnage()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectVesselDto().getGrossTonnage()}">н/д</span>
             <br>
             <br>
             <label>Дедвейт:</label>
-            <span th:text="${pledgeSubject.getDeadweight()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectVesselDto().getDeadweight()}">н/д</span>
             <br>
             <br>
             <label>Год постройки:</label>
-            <span th:text="${pledgeSubject.getYearBuilt()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectVesselDto().getYearBuilt()}">н/д</span>
             <br>
             <br>
             <label>Статус судна:</label>
-            <span th:text="${pledgeSubject.getStatusVessel()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectVesselDto().getStatusVessel()}">н/д</span>
             <br>
             <br>
         </div>
 
         <div th:case="TBO">
             <label>Количество:</label>
-            <span th:text="${pledgeSubject.getCountOfTBO()}">н/д</span>
+            <span th:text="${#numbers.formatDecimal(pledgeSubjectDto.getPledgeSubjectTboDto().getCountOfTBO(), 0, 'WHITESPACE', 2, 'COMMA')}">н/д</span>
             <br>
             <br>
             <label>Баланс. стоимость:</label>
-            <span th:text="${pledgeSubject.getCarryingAmount()}">н/д</span>
+            <span th:text="${#numbers.formatDecimal(pledgeSubjectDto.getPledgeSubjectTboDto().getCarryingAmount(), 0, 'WHITESPACE', 2, 'COMMA')}">н/д</span>
             <br>
             <br>
             <label>Вид ТМЦ:</label>
-            <span th:text="${pledgeSubject.getTypeOfTBO().getTranslate()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectTboDto().getTypeOfTBO().getTranslate()}">н/д</span>
             <br>
             <br>
         </div>
 
         <div th:case="LAND_OWNERSHIP">
             <label>Площадь:</label>
-            <span th:text="${pledgeSubject.getArea()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandOwnershipDto().getArea()}">н/д</span>
             <br>
             <br>
             <label>Кад. №:</label>
-            <span th:text="${pledgeSubject.getCadastralNum()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandOwnershipDto().getCadastralNum()}">н/д</span>
             <br>
             <br>
             <label>Услов. №:</label>
-            <span th:text="${pledgeSubject.getConditionalNum()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandOwnershipDto().getConditionalNum()}">н/д</span>
             <br>
             <br>
 
             <label>Категория земель:</label>
-            <span th:text="${pledgeSubject.getLandCategory().getName()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandOwnershipDto().getLandCategory().getTranslate()}">н/д</span>
             <br>
             <br>
             <label>Разрешенное использование:</label>
-            <span th:text="${pledgeSubject.getPermittedUse()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandOwnershipDto().getPermittedUse()}">н/д</span>
             <br>
             <br>
             <label>Наличение ОКС:</label>
-            <span th:text="${pledgeSubject.getBuiltUp()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandOwnershipDto().getBuiltUp()}">н/д</span>
             <br>
             <br>
             <label>Кад. № ОКС:</label>
-            <span th:text="${pledgeSubject.getCadastralNumOfBuilding()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandOwnershipDto().getCadastralNumOfBuilding()}">н/д</span>
             <br>
             <br>
         </div>
 
         <div th:case="LAND_LEASE">
             <label>Площадь:</label>
-            <span th:text="${pledgeSubject.getArea()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandLeaseDto().getArea()}">н/д</span>
             <br>
             <br>
             <label>Кад. №:</label>
-            <span th:text="${pledgeSubject.getCadastralNum()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandLeaseDto().getCadastralNum()}">н/д</span>
             <br>
             <br>
             <label>Услов. №:</label>
-            <span th:text="${pledgeSubject.getConditionalNum()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandLeaseDto().getConditionalNum()}">н/д</span>
             <br>
             <br>
 
             <label>Категория земель:</label>
-            <span th:text="${pledgeSubject.getLandCategory().getName()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandLeaseDto().getLandCategory().getTranslate()}">н/д</span>
             <br>
             <br>
             <label>Разрешенное использование:</label>
-            <span th:text="${pledgeSubject.getPermittedUse()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandLeaseDto().getPermittedUse()}">н/д</span>
             <br>
             <br>
             <label>Наличение ОКС:</label>
-            <span th:text="${pledgeSubject.getBuiltUp()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandLeaseDto().getBuiltUp()}">н/д</span>
             <br>
             <br>
             <label>Кад. № ОКС:</label>
-            <span th:text="${pledgeSubject.getCadastralNumOfBuilding()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectLandLeaseDto().getCadastralNumOfBuilding()}">н/д</span>
             <br>
             <br>
             <label>Дата начала аренды:</label>
-            <span th:text="${#dates.format(pledgeSubject.getDateBeginLease(), 'dd.MM.yyyy')}">н/д</span>
+            <span th:text="${#dates.format(pledgeSubjectDto.getPledgeSubjectLandLeaseDto().getDateBeginLease(), 'dd.MM.yyyy')}">н/д</span>
             <br>
             <br>
             <label>Дата окончания аренды:</label>
-            <span th:text="${#dates.format(pledgeSubject.getDateEndLease(), 'dd.MM.yyyy')}">н/д</span>
+            <span th:text="${#dates.format(pledgeSubjectDto.getPledgeSubjectLandLeaseDto().getDateEndLease(), 'dd.MM.yyyy')}">н/д</span>
             <br>
             <br>
         </div>
 
         <div th:case="BUILDING">
             <label>Площадь:</label>
-            <span th:text="${pledgeSubject.getArea()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectBuildingDto().getArea()}">н/д</span>
             <br>
             <br>
             <label>Кад. №:</label>
-            <span th:text="${pledgeSubject.getCadastralNum()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectBuildingDto().getCadastralNum()}">н/д</span>
             <br>
             <br>
             <label>Услов. №:</label>
-            <span th:text="${pledgeSubject.getConditionalNum()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectBuildingDto().getConditionalNum()}">н/д</span>
             <br>
             <br>
 
             <label>Сегмент рынка:</label>
-            <span th:text="${pledgeSubject.getMarketSegment().getName()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectBuildingDto().getMarketSegment().getTranslate()}">н/д</span>
             <br>
             <br>
             <label>Степень готовноси:</label>
-            <span th:text="${pledgeSubject.getReadinessDegree()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectBuildingDto().getReadinessDegree()}">н/д</span>
             <br>
             <br>
             <label>Год постройки:</label>
-            <span th:text="${pledgeSubject.getYearOfConstruction()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectBuildingDto().getYearOfConstruction()}">н/д</span>
             <br>
             <br>
         </div>
 
         <div th:case="PREMISE">
             <label>Площадь:</label>
-            <span th:text="${pledgeSubject.getArea()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectRoomDto().getArea()}">н/д</span>
             <br>
             <br>
             <label>Кад. №:</label>
-            <span th:text="${pledgeSubject.getCadastralNum()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectRoomDto().getCadastralNum()}">н/д</span>
             <br>
             <br>
             <label>Услов. №:</label>
-            <span th:text="${pledgeSubject.getConditionalNum()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectRoomDto().getConditionalNum()}">н/д</span>
             <br>
             <br>
 
             <label>Сегмент рынка помещения:</label>
-            <span th:text="${pledgeSubject.getMarketSegmentRoom().getName()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectRoomDto().getMarketSegmentRoom().getTranslate()}">н/д</span>
             <br>
             <br>
             <label>Сегмент рынка здания где расположенно помещение:</label>
-            <span th:text="${pledgeSubject.getMarketSegmentBuilding().getName()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectRoomDto().getMarketSegmentBuilding().getTranslate()}">н/д</span>
             <br>
             <br>
             <label>Этаж расположения:</label>
-            <span th:text="${pledgeSubject.getFloorLocation()}">н/д</span>
+            <span th:text="${pledgeSubjectDto.getPledgeSubjectRoomDto().getFloorLocation()}">н/д</span>
             <br>
             <br>
         </div>
     </div>
 
     <label>Ликвидность:</label>
-    <span th:text="${pledgeSubject.getPledgeSubjectDto().getLiquidity().getTranslate()}">н/д</span>
+    <span th:text="${pledgeSubjectDto.getLiquidity().getTranslate()}">н/д</span>
     <br>
     <br>
     <label>Рыночноя стоимость по ДЗ:</label>
-    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectDto().getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
-       th:text="${#numbers.formatCurrency(pledgeSubject.getPledgeSubjectDto().getRsDz())}">н/д</a>
+    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubjectDto.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
+       th:text="${#numbers.formatCurrency(pledgeSubjectDto.getRsDz())}">н/д</a>
     <br>
     <br>
     <label>Рыночная стоимость по ЗЗ:</label>
-    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectDto().getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
-       th:text="${#numbers.formatCurrency(pledgeSubject.getPledgeSubjectDto().getRsZz())}">н/д</a>
+    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubjectDto.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
+       th:text="${#numbers.formatCurrency(pledgeSubjectDto.getRsZz())}">н/д</a>
     <br>
     <br>
     <label>Залоговая стоимость по ДЗ:</label>
-    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectDto().getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
-       th:text="${#numbers.formatCurrency(pledgeSubject.getPledgeSubjectDto().getZsDz())}">н/д</a>
+    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubjectDto.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
+       th:text="${#numbers.formatCurrency(pledgeSubjectDto.getZsDz())}">н/д</a>
     <br>
     <br>
     <label>Залоговая стоимость по ЗЗ:</label>
-    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectDto().getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
-       th:text="${#numbers.formatCurrency(pledgeSubject.getPledgeSubjectDto().getZsZz())}">н/д</a>
+    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubjectDto.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
+       th:text="${#numbers.formatCurrency(pledgeSubjectDto.getZsZz())}">н/д</a>
     <br>
     <br>
     <label>Справедливая стоимость:</label>
-    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectDto().getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
-       th:text="${#numbers.formatCurrency(pledgeSubject.getPledgeSubjectDto().getSs())}">н/д</a>
+    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubjectDto.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
+       th:text="${#numbers.formatCurrency(pledgeSubjectDto.getSs())}">н/д</a>
     <br>
     <br>
     <label>Дата ЗЗ:</label>
-    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectDto().getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
-       th:text="${#dates.format(pledgeSubject.getPledgeSubjectDto().getDateConclusion(), 'dd.MM.yyyy')}">н/д</a>
+    <a th:href="@{/cost_history/pledge_subject(pledgeSubjectId=${pledgeSubjectDto.getPledgeSubjectId()})}" href="../cost_history/pledge_subject.html"
+       th:text="${#dates.format(pledgeSubjectDto.getDateConclusion(), 'dd.MM.yyyy')}">н/д</a>
     <br>
     <br>
     <label>Дата мониторинга:</label>
-    <a th:href="@{/monitoring/pledge_subject(pledgeSubjectId=${pledgeSubject.getPledgeSubjectDto().getPledgeSubjectId()})}" href="../monitoring/pledge_subject.html"
-       th:text="${#dates.format(pledgeSubject.getPledgeSubjectDto().getDateMonitoring(), 'dd.MM.yyyy')}">н/д</a>
+    <a th:href="@{/monitoring/pledge_subject(pledgeSubjectId=${pledgeSubjectDto.getPledgeSubjectId()})}" href="../monitoring/pledge_subject.html"
+       th:text="${#dates.format(pledgeSubjectDto.getDateMonitoring(), 'dd.MM.yyyy')}">н/д</a>
     <br>
     <br>
     <label>Вид мониторинга:</label>
-    <span th:text="${pledgeSubject.getPledgeSubjectDto().getTypeOfMonitoring().getTranslate()}">н/д</span>
+    <span th:text="${pledgeSubjectDto.getTypeOfMonitoring().getTranslate()}">н/д</span>
     <br>
     <br>
     <label>Результат мониторинга:</label>
-    <span th:text="${pledgeSubject.getPledgeSubjectDto().getStatusMonitoring().getTranslate()}">н/д</span>
+    <span th:text="${pledgeSubjectDto.getStatusMonitoring().getTranslate()}">н/д</span>
     <br>
     <br>
     <label>Вид обеспечения:</label>
-    <span th:text="${pledgeSubject.getPledgeSubjectDto().getTypeOfCollateral().getTranslate()}">н/д</span>
+    <span th:text="${pledgeSubjectDto.getTypeOfCollateral().getTranslate()}">н/д</span>
     <br>
     <br>
     <label>Функция залога:</label>
-    <span th:text="${pledgeSubject.getPledgeSubjectDto().getTypeOfPledge().getTranslate()}">н/д</span>
+    <span th:text="${pledgeSubjectDto.getTypeOfPledge().getTranslate()}">н/д</span>
     <br>
     <br>
     <label>Адрес:</label>
-    <span th:text="${pledgeSubject.getPledgeSubjectDto().getFullAddress()}">н/д</span>
+    <span th:text="${pledgeSubjectDto.getFullAddress()}">н/д</span>
     <br>
     <br>
     <label>Обязательство страхования:</label>
-    <div th:switch="${pledgeSubject.getPledgeSubjectDto().getInsuranceObligation()}">
+    <div th:switch="${pledgeSubjectDto.getInsuranceObligation()}">
         <div th:case="да">
-                <a th:href="@{/insurance/insurances(pledgeSubjectId=${pledgeSubject.getPledgeSubjectDto().getPledgeSubjectId()})}" href="../insurance/insurances.html" th:text="да">да</a>
+                <a th:href="@{/insurance/insurances(pledgeSubjectId=${pledgeSubjectDto.getPledgeSubjectId()})}" href="../insurance/insurances.html" th:text="да">да</a>
         </div>
         <div th:case="нет">
             <span>нет</span>
@@ -374,10 +374,10 @@
     <br>
     <br>
     <label>Обременения:</label>
-    <a th:href="@{/encumbrance/encumbrances(pledgeSubjectId=${pledgeSubject.getPledgeSubjectDto().getPledgeSubjectId()})}" href="../encumbrance/encumbrances.html" th:text="подробнее">подробнее</a>
+    <a th:href="@{/encumbrance/encumbrances(pledgeSubjectId=${pledgeSubjectDto.getPledgeSubjectId()})}" href="../encumbrance/encumbrances.html" th:text="подробнее">подробнее</a>
     <br>
     <br>
-    <a th:href="@{/pledge_subject/card_update(pledgeSubjectId=${pledgeSubject.getPledgeSubjectDto().getPledgeSubjectId()})}"
+    <a th:href="@{/pledge_subject/card_update(pledgeSubjectId=${pledgeSubjectDto.getPledgeSubjectId()})}"
        href="card_update.html"
        th:text="'Изменить данные'">Изменить данные</a>
     <br>

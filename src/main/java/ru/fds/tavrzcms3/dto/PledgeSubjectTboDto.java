@@ -12,10 +12,7 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectTboDto implements Dto{
-
-    @Valid
-    private PledgeSubjectDto pledgeSubjectDto;
+public class PledgeSubjectTboDto{
 
     @Positive(message = "Значение должно быть больше нуля")
     private int countOfTBO;

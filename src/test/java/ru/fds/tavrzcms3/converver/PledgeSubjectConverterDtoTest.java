@@ -88,8 +88,8 @@ public class PledgeSubjectConverterDtoTest {
         PledgeSubjectDto pledgeSubjectDtoTBO = pledgeSubjectConverterDto.toDto(pledgeSubjectTBO);
         PledgeSubjectDto pledgeSubjectDtoVessel = pledgeSubjectConverterDto.toDto(pledgeSubjectVessel);
 
-        PledgeSubjectAutoDto pledgeSubjectDto = pledgeSubjectAutoConverter.toDto((PledgeSubjectAuto) pledgeSubjectAuto);
-        System.out.println(pledgeSubjectDto);
+//        PledgeSubjectAutoDto pledgeSubjectDto = pledgeSubjectAutoConverter.toDto((PledgeSubjectAuto) pledgeSubjectAuto);
+//        System.out.println(pledgeSubjectDto);
 
         System.out.println(pledgeSubjectDtoAuto);
         System.out.println(pledgeSubjectDtoEquip);

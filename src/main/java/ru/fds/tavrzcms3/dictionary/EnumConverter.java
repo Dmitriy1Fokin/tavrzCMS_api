@@ -13,7 +13,7 @@ public abstract class EnumConverter<T extends Enum<T> & BasicEnum<E>, E> impleme
     public E convertToDatabaseColumn(T attribute) {
 
         if(attribute == null){
-            throw new NullPointerException();
+            return null;
         }
         return attribute.getTranslate();
     }
@@ -21,7 +21,7 @@ public abstract class EnumConverter<T extends Enum<T> & BasicEnum<E>, E> impleme
     @Override
     public T convertToEntityAttribute(E dbData) {
         if(dbData == null){
-            throw new NullPointerException();
+            return null;
         }
 
         T[] enums = clazz.getEnumConstants();

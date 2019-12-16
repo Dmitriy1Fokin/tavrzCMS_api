@@ -15,216 +15,56 @@
 <body>
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<div th:switch="${typeOfCollateral.name()}">
-    <div th:case="AUTO">
-        <form th:action="@{/pledge_subject/insert_pledge_subject_auto}" th:method="post" th:object="${pledgeSubjectAuto}" action="card_new.html">
-            <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectAuto.getPledgeAgreements()}">
+<form th:action="@{/pledge_subject/insert_pledge_subject}" th:method="post" th:object="${pledgeSubjectDto}" action="card_update.html">
+    <input type="hidden", th:field="*{pledgeAgreementsIds}" th:value="${pledgeSubjectDto.getPledgeAgreementsIds()}">
+    <input type="hidden", th:field="*{typeOfCollateral}" th:value="${pledgeSubjectDto.getTypeOfCollateral()}">
 
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectAuto})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: autoProperty(${pledgeSubjectAuto})"></div>
-            <br>
-            <h3>Залоговое заключение</h3>
-            <div th:object="${costHistory}">
-            <div th:replace="fragments/pledge_subject_forms :: costHistoryProperty(${costHistory})"></div>
-            </div>
-            <br>
-            <h3>Мониторинг</h3>
-            <div th:object="${monitoring}">
-            <div th:replace="fragments/pledge_subject_forms :: monitoringProperty(${monitoring})"></div>
-            </div>
-            <br>
-            <button type="submit">Добавить новый предмет</button>
-        </form>
+    <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectDto})"></div>
+    <br>
+
+    <div th:switch="${pledgeSubjectDto.getTypeOfCollateral().name()}">
+        <div th:case="AUTO">
+            <div th:replace="fragments/pledge_subject_forms :: autoProperty(${pledgeSubjectDto.getPledgeSubjectAutoDto()})"></div>
+        </div>
+        <div th:case="EQUIPMENT">
+            <div th:replace="fragments/pledge_subject_forms :: equipmentProperty(${pledgeSubjectDto.getPledgeSubjectEquipmentDto()})"></div>
+        </div>
+        <div th:case="SECURITIES">
+            <div th:replace="fragments/pledge_subject_forms :: securitiesProperty(${pledgeSubjectDto.getPledgeSubjectSecuritiesDto()})"></div>
+        </div>
+        <div th:case="VESSEL">
+            <div th:replace="fragments/pledge_subject_forms :: vesselProperty(${pledgeSubjectDto.getPledgeSubjectVesselDto()})"></div>
+        </div>
+        <div th:case="TBO">
+            <div th:replace="fragments/pledge_subject_forms :: tboProperty(${pledgeSubjectDto.getPledgeSubjectTboDto()})"></div>
+        </div>
+        <div th:case="LAND_OWNERSHIP">
+            <div th:replace="fragments/pledge_subject_forms :: landOwnshipProperty(${pledgeSubjectDto.getPledgeSubjectLandOwnershipDto()})"></div>
+        </div>
+        <div th:case="LAND_LEASE">
+            <div th:replace="fragments/pledge_subject_forms :: landLeaseProperty(${pledgeSubjectDto.getPledgeSubjectLandLeaseDto()})"></div>
+        </div>
+        <div th:case="BUILDING">
+            <div th:replace="fragments/pledge_subject_forms :: buildingProperty(${pledgeSubjectDto.getPledgeSubjectBuildingDto()})"></div>
+        </div>
+        <div th:case="PREMISE">
+            <div th:replace="fragments/pledge_subject_forms :: roomProperty(${pledgeSubjectDto.getPledgeSubjectRoomDto()})"></div>
+        </div>
     </div>
-    <div th:case="EQUIPMENT">
-        <form th:action="@{/pledge_subject/insert_pledge_subject_equipment}" th:method="post" th:object="${pledgeSubjectEquipment}" action="card_new.html">
-            <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectEquipment.getPledgeAgreements()}">
 
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectEquipment})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: equipmentProperty(${pledgeSubjectEquipment})"></div>
-            <br>
-            <h3>Залоговое заключение</h3>
-            <div th:object="${costHistory}">
-                <div th:replace="fragments/pledge_subject_forms :: costHistoryProperty(${costHistory})"></div>
-            </div>
-            <br>
-            <h3>Мониторинг</h3>
-            <div th:object="${monitoring}">
-                <div th:replace="fragments/pledge_subject_forms :: monitoringProperty(${monitoring})"></div>
-            </div>
-            <br>
-            <button type="submit">Добавить новый предмет</button>
-        </form>
+    <br>
+    <h3>Залоговое заключение</h3>
+    <div th:object="${costHistoryDto}">
+        <div th:replace="fragments/pledge_subject_forms :: costHistoryProperty(${costHistoryDto})"></div>
     </div>
-    <div th:case="SECURITIES">
-        <form th:action="@{/pledge_subject/insert_pledge_subject_securities}" th:method="post" th:object="${pledgeSubjectSecurities}" action="card_new.html">
-            <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectSecurities.getPledgeAgreements()}">
-
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectSecurities})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: securitiesProperty(${pledgeSubjectSecurities})"></div>
-            <br>
-            <h3>Залоговое заключение</h3>
-            <div th:object="${costHistory}">
-                <div th:replace="fragments/pledge_subject_forms :: costHistoryProperty(${costHistory})"></div>
-            </div>
-            <br>
-            <h3>Мониторинг</h3>
-            <div th:object="${monitoring}">
-                <div th:replace="fragments/pledge_subject_forms :: monitoringProperty(${monitoring})"></div>
-            </div>
-            <br>
-            <button type="submit">Добавить новый предмет</button>
-        </form>
+    <br>
+    <h3>Мониторинг</h3>
+    <div th:object="${monitoringDto}">
+        <div th:replace="fragments/pledge_subject_forms :: monitoringProperty(${monitoringDto})"></div>
     </div>
-    <div th:case="VESSEL">
-        <form th:action="@{/pledge_subject/insert_pledge_subject_vessel}" th:method="post" th:object="${pledgeSubjectVessel}" action="card_new.html">
-            <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectVessel.getPledgeAgreements()}">
 
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectVessel})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: vesselProperty(${pledgeSubjectVessel})"></div>
-            <br>
-            <h3>Залоговое заключение</h3>
-            <div th:object="${costHistory}">
-                <div th:replace="fragments/pledge_subject_forms :: costHistoryProperty(${costHistory})"></div>
-            </div>
-            <br>
-            <h3>Мониторинг</h3>
-            <div th:object="${monitoring}">
-                <div th:replace="fragments/pledge_subject_forms :: monitoringProperty(${monitoring})"></div>
-            </div>
-            <br>
-            <button type="submit">Добавить новый предмет</button>
-        </form>
-    </div>
-    <div th:case="TBO">
-        <form th:action="@{/pledge_subject/insert_pledge_subject_tbo}" th:method="post" th:object="${pledgeSubjectTBO}" action="card_new.html">
-            <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectTBO.getPledgeAgreements()}">
-
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectTBO})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: tboProperty(${pledgeSubjectTBO})"></div>
-            <br>
-            <h3>Залоговое заключение</h3>
-            <div th:object="${costHistory}">
-                <div th:replace="fragments/pledge_subject_forms :: costHistoryProperty(${costHistory})"></div>
-            </div>
-            <br>
-            <h3>Мониторинг</h3>
-            <div th:object="${monitoring}">
-                <div th:replace="fragments/pledge_subject_forms :: monitoringProperty(${monitoring})"></div>
-            </div>
-            <br>
-            <button type="submit">Добавить новый предмет</button>
-        </form>
-    </div>
-    <div th:case="LAND_OWNERSHIP">
-        <form th:action="@{/pledge_subject/insert_pledge_subject_landOwn}" th:method="post" th:object="${pledgeSubjectLandOwnership}" action="card_new.html">
-            <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectLandOwnership.getPledgeAgreements()}">
-
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectLandOwnership})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: realtyProperty(${pledgeSubjectLandOwnership})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: landOwnshipProperty(${pledgeSubjectLandOwnership}, ${landCategoryList})"></div>
-            <br>
-            <h3>Залоговое заключение</h3>
-            <div th:object="${costHistory}">
-                <div th:replace="fragments/pledge_subject_forms :: costHistoryProperty(${costHistory})"></div>
-            </div>
-            <br>
-            <h3>Мониторинг</h3>
-            <div th:object="${monitoring}">
-                <div th:replace="fragments/pledge_subject_forms :: monitoringProperty(${monitoring})"></div>
-            </div>
-            <br>
-            <button type="submit">Добавить новый предмет</button>
-        </form>
-    </div>
-    <div th:case="LAND_LEASE">
-        <form th:action="@{/pledge_subject/insert_pledge_subject_landLease}" th:method="post" th:object="${pledgeSubjectLandLease}" action="card_new.html">
-            <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectLandLease.getPledgeAgreements()}">
-
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectLandLease})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: realtyProperty(${pledgeSubjectLandLease})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: landLeaseProperty(${pledgeSubjectLandLease}, ${landCategoryList})"></div>
-            <br>
-            <h3>Залоговое заключение</h3>
-            <div th:object="${costHistory}">
-                <div th:replace="fragments/pledge_subject_forms :: costHistoryProperty(${costHistory})"></div>
-            </div>
-            <br>
-            <h3>Мониторинг</h3>
-            <div th:object="${monitoring}">
-                <div th:replace="fragments/pledge_subject_forms :: monitoringProperty(${monitoring})"></div>
-            </div>
-            <br>
-            <button type="submit">Добавить новый предмет</button>
-        </form>
-    </div>
-    <div th:case="BUILDING">
-        <form th:action="@{/pledge_subject/insert_pledge_subject_building}" th:method="post" th:object="${pledgeSubjectBuilding}" action="card_new.html">
-            <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectBuilding.getPledgeAgreements()}">
-
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectBuilding})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: realtyProperty(${pledgeSubjectBuilding})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: buildingProperty(${pledgeSubjectBuilding}, ${marketSegmentList})"></div>
-            <br>
-            <h3>Залоговое заключение</h3>
-            <div th:object="${costHistory}">
-                <div th:replace="fragments/pledge_subject_forms :: costHistoryProperty(${costHistory})"></div>
-            </div>
-            <br>
-            <h3>Мониторинг</h3>
-            <div th:object="${monitoring}">
-                <div th:replace="fragments/pledge_subject_forms :: monitoringProperty(${monitoring})"></div>
-            </div>
-            <br>
-            <button type="submit">Добавить новый предмет</button>
-        </form>
-    </div>
-    <div th:case="PREMISE">
-        <form th:action="@{/pledge_subject/insert_pledge_subject_room}" th:method="post" th:object="${pledgeSubjectRoom}" action="card_new.html">
-            <input type="hidden", name="pledgeAgreementId" th:value="${pledgeAgreementId}">
-            <input type="hidden", th:field="*{pledgeAgreements}" th:value="${pledgeSubjectRoom.getPledgeAgreements()}">
-
-            <div th:replace="fragments/pledge_subject_forms :: generalProperty(${pledgeSubjectRoom})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: realtyProperty(${pledgeSubjectRoom})"></div>
-            <br>
-            <div th:replace="fragments/pledge_subject_forms :: roomProperty(${pledgeSubjectRoom}, ${marketSegmentList})"></div>
-            <br>
-            <h3>Залоговое заключение</h3>
-            <div th:object="${costHistory}">
-                <div th:replace="fragments/pledge_subject_forms :: costHistoryProperty(${costHistory})"></div>
-            </div>
-            <br>
-            <h3>Мониторинг</h3>
-            <div th:object="${monitoring}">
-                <div th:replace="fragments/pledge_subject_forms :: monitoringProperty(${monitoring})"></div>
-            </div>
-            <br>
-            <button type="submit">Добавить новый предмет</button>
-        </form>
-    </div>
-</div>
-
-
-
+    <br>
+    <button type="submit">Добавить</button>
+</form>
 </body>
 </html>

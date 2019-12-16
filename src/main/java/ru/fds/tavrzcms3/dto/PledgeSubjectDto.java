@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectDto implements Dto{
+public class PledgeSubjectDto{
 
     private Long pledgeSubjectId;
 
@@ -97,4 +98,31 @@ public class PledgeSubjectDto implements Dto{
     private MainCharacteristic mainCharacteristic;
 
     private PrimaryIdentifier primaryIdentifier;
+
+    @Valid
+    private PledgeSubjectAutoDto pledgeSubjectAutoDto;
+
+    @Valid
+    private PledgeSubjectEquipmentDto pledgeSubjectEquipmentDto;
+
+    @Valid
+    private PledgeSubjectBuildingDto pledgeSubjectBuildingDto;
+
+    @Valid
+    private PledgeSubjectLandLeaseDto pledgeSubjectLandLeaseDto;
+
+    @Valid
+    private PledgeSubjectLandOwnershipDto pledgeSubjectLandOwnershipDto;
+
+    @Valid
+    private PledgeSubjectRoomDto pledgeSubjectRoomDto;
+
+    @Valid
+    private PledgeSubjectSecuritiesDto pledgeSubjectSecuritiesDto;
+
+    @Valid
+    private PledgeSubjectTboDto pledgeSubjectTboDto;
+
+    @Valid
+    private PledgeSubjectVesselDto pledgeSubjectVesselDto;
 }

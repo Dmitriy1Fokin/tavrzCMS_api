@@ -1,85 +1,61 @@
 package ru.fds.tavrzcms3.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.validator.constraints.Length;
-import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
+import lombok.NoArgsConstructor;
 import ru.fds.tavrzcms3.dictionary.TypeOfVessel;
 
-import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Embeddable;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
-@SuperBuilder
-@Entity
-@Table(name = "pledge_vessel")
-public class PledgeSubjectVessel extends PledgeSubject {
+@NoArgsConstructor
+@Builder
+@Embeddable
+public class PledgeSubjectVessel{
 
-	@Length(min = 7, max = 7, message = "Неверное значение")
 	@NotNull(message = "Обязательно для заполнения")
-	@Column(name ="imo")
+	@Column(name ="imo", table = "pledge_vessel")
 	private Integer imo;
 
-	@Length(min = 9, max = 9, message = "Неверное значение")
-	@Column(name ="mmsi")
+	@Column(name ="mmsi", table = "pledge_vessel")
 	private Integer mmsi;
 
 	@NotBlank(message = "Обязательно для заполнения")
-	@Column(name ="flag")
+	@Column(name ="flag", table = "pledge_vessel")
 	private String flag;
 
 	@Convert(converter = TypeOfVessel.Converter.class)
-	@Column(name ="vessel_type")
+	@Column(name ="vessel_type", table = "pledge_vessel")
 	private TypeOfVessel vesselType;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@Positive(message = "Значение должно быть больше нуля")
-	@Column(name ="gross_tonnage")
+	@Column(name ="gross_tonnage", table = "pledge_vessel")
 	private int grossTonnage;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@Positive(message = "Значение должно быть больше нуля")
-	@Column(name ="deadweight")
+	@Column(name ="deadweight", table = "pledge_vessel")
 	private int deadweight;
 
 	@Min(value = 1900, message = "Неверное значение")
 	@Max(value = 2100, message = "Неверное значение")
-	@Length(min = 4, max = 4, message = "Неверное значение")
 	@NotNull(message = "Обязательно для заполнения")
-	@Column(name ="year_built")
+	@Column(name ="year_built", table = "pledge_vessel")
 	private int yearBuilt;
 
 	@NotBlank(message = "Обязательно для заполнения")
-	@Column(name ="status")
+	@Column(name ="status", table = "pledge_vessel")
 	private String statusVessel;
-
-	@Valid
-	@OneToOne(mappedBy = "pledgeSubjectVessel")
-	@JsonIgnore
-	private PledgeSubject pledgeSubject;
-
-	public PledgeSubjectVessel(){
-		super.setTypeOfCollateral(TypeOfCollateral.VESSEL);
-	}
-
-	@Override
-	public String toString() {
-		return "PledgeSubjectVessel{" +
-				"imo=" + imo +
-				", mmsi=" + mmsi +
-				", flag='" + flag + '\'' +
-				", vesselType='" + vesselType + '\'' +
-				", grossTonnage=" + grossTonnage +
-				", deadweight=" + deadweight +
-				", yearBuilt=" + yearBuilt +
-				", statusVessel='" + statusVessel + '\'' +
-				'}';
-	}
 }

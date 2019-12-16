@@ -1,13 +1,42 @@
 package ru.fds.tavrzcms3.converver;
 
 import org.springframework.stereotype.Component;
-import ru.fds.tavrzcms3.domain.*;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
+import ru.fds.tavrzcms3.domain.CostHistory;
+import ru.fds.tavrzcms3.domain.Encumbrance;
+import ru.fds.tavrzcms3.domain.Insurance;
+import ru.fds.tavrzcms3.domain.Monitoring;
+import ru.fds.tavrzcms3.domain.PledgeAgreement;
+import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.domain.PledgeSubjectAuto;
+import ru.fds.tavrzcms3.domain.PledgeSubjectBuilding;
+import ru.fds.tavrzcms3.domain.PledgeSubjectEquipment;
+import ru.fds.tavrzcms3.domain.PledgeSubjectLandLease;
+import ru.fds.tavrzcms3.domain.PledgeSubjectLandOwnership;
+import ru.fds.tavrzcms3.domain.PledgeSubjectRoom;
+import ru.fds.tavrzcms3.domain.PledgeSubjectSecurities;
+import ru.fds.tavrzcms3.domain.PledgeSubjectTBO;
+import ru.fds.tavrzcms3.domain.PledgeSubjectVessel;
 import ru.fds.tavrzcms3.dto.MainCharacteristic;
+import ru.fds.tavrzcms3.dto.PledgeSubjectAutoDto;
+import ru.fds.tavrzcms3.dto.PledgeSubjectBuildingDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
+import ru.fds.tavrzcms3.dto.PledgeSubjectEquipmentDto;
+import ru.fds.tavrzcms3.dto.PledgeSubjectLandLeaseDto;
+import ru.fds.tavrzcms3.dto.PledgeSubjectLandOwnershipDto;
+import ru.fds.tavrzcms3.dto.PledgeSubjectRoomDto;
+import ru.fds.tavrzcms3.dto.PledgeSubjectSecuritiesDto;
+import ru.fds.tavrzcms3.dto.PledgeSubjectTboDto;
+import ru.fds.tavrzcms3.dto.PledgeSubjectVesselDto;
 import ru.fds.tavrzcms3.dto.PrimaryIdentifier;
-import ru.fds.tavrzcms3.service.*;
+import ru.fds.tavrzcms3.service.CostHistoryService;
+import ru.fds.tavrzcms3.service.EncumbranceService;
+import ru.fds.tavrzcms3.service.InsuranceService;
+import ru.fds.tavrzcms3.service.MonitoringService;
+import ru.fds.tavrzcms3.service.PledgeAgreementService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,26 +48,106 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
     private final MonitoringService monitoringService;
     private final EncumbranceService encumbranceService;
     private final InsuranceService insuranceService;
+    private final PledgeSubjectAutoConverter pledgeSubjectAutoConverter;
+    private final PledgeSubjectEquipmentConverter pledgeSubjectEquipmentConverter;
+    private final PledgeSubjectBuildingConverter pledgeSubjectBuildingConverter;
+    private final PledgeSubjectLandLeaseConverter pledgeSubjectLandLeaseConverter;
+    private final PledgeSubjectLandOwnershipConverter pledgeSubjectLandOwnershipConverter;
+    private final PledgeSubjectRoomConverter pledgeSubjectRoomConverter;
+    private final PledgeSubjectSecuritiesConverter pledgeSubjectSecuritiesConverter;
+    private final PledgeSubjectTboConverter pledgeSubjectTboConverter;
+    private final PledgeSubjectVesselConverter pledgeSubjectVesselConverter;
 
     public PledgeSubjectConverterDto(PledgeAgreementService pledgeAgreementService,
                                      CostHistoryService costHistoryService,
                                      MonitoringService monitoringService,
                                      EncumbranceService encumbranceService,
-                                     InsuranceService insuranceService) {
+                                     InsuranceService insuranceService,
+                                     PledgeSubjectAutoConverter pledgeSubjectAutoConverter,
+                                     PledgeSubjectEquipmentConverter pledgeSubjectEquipmentConverter,
+                                     PledgeSubjectBuildingConverter pledgeSubjectBuildingConverter,
+                                     PledgeSubjectLandLeaseConverter pledgeSubjectLandLeaseConverter,
+                                     PledgeSubjectLandOwnershipConverter pledgeSubjectLandOwnershipConverter,
+                                     PledgeSubjectRoomConverter pledgeSubjectRoomConverter,
+                                     PledgeSubjectSecuritiesConverter pledgeSubjectSecuritiesConverter,
+                                     PledgeSubjectTboConverter pledgeSubjectTboConverter,
+                                     PledgeSubjectVesselConverter pledgeSubjectVesselConverter) {
         this.pledgeAgreementService = pledgeAgreementService;
         this.costHistoryService = costHistoryService;
         this.monitoringService = monitoringService;
         this.encumbranceService = encumbranceService;
         this.insuranceService = insuranceService;
+        this.pledgeSubjectAutoConverter = pledgeSubjectAutoConverter;
+        this.pledgeSubjectEquipmentConverter = pledgeSubjectEquipmentConverter;
+        this.pledgeSubjectBuildingConverter = pledgeSubjectBuildingConverter;
+        this.pledgeSubjectLandLeaseConverter = pledgeSubjectLandLeaseConverter;
+        this.pledgeSubjectLandOwnershipConverter = pledgeSubjectLandOwnershipConverter;
+        this.pledgeSubjectRoomConverter = pledgeSubjectRoomConverter;
+        this.pledgeSubjectSecuritiesConverter = pledgeSubjectSecuritiesConverter;
+        this.pledgeSubjectTboConverter = pledgeSubjectTboConverter;
+        this.pledgeSubjectVesselConverter = pledgeSubjectVesselConverter;
     }
 
     @Override
     public PledgeSubject toEntity(PledgeSubjectDto dto) {
-        List<PledgeAgreement> pledgeAgreementCollection = pledgeAgreementService.getPledgeAgreementsByIds(dto.getPledgeAgreementsIds());
-        List<CostHistory> historyCollection = costHistoryService.getCostHistorybyIds(dto.getCostHistoriesIds());
-        List<Monitoring> monitoringCollection = monitoringService.getMonitoringByIds(dto.getMonitoringIds());
-        List<Encumbrance> encumbranceCollection = encumbranceService.getEncumbranceByIds(dto.getEncumbrancesIds());
-        List<Insurance> insuranceCollection = insuranceService.getInsurancesByIds(dto.getInsurancesIds());
+        List<PledgeAgreement> pledgeAgreementList;
+        if(Objects.nonNull(dto.getPledgeAgreementsIds()))
+            pledgeAgreementList = pledgeAgreementService.getPledgeAgreementsByIds(dto.getPledgeAgreementsIds());
+        else
+            pledgeAgreementList = Collections.emptyList();
+
+        List<CostHistory> costHistoryList;
+        if(Objects.nonNull(dto.getCostHistoriesIds()))
+            costHistoryList = costHistoryService.getCostHistorybyIds(dto.getCostHistoriesIds());
+        else
+            costHistoryList = Collections.emptyList();
+
+        List<Monitoring> monitoringList;
+        if(Objects.nonNull(dto.getMonitoringIds()))
+            monitoringList = monitoringService.getMonitoringByIds(dto.getMonitoringIds());
+        else
+            monitoringList = Collections.emptyList();
+
+        List<Encumbrance> encumbranceList;
+        if(Objects.nonNull(dto.getEncumbrancesIds()))
+            encumbranceList = encumbranceService.getEncumbranceByIds(dto.getEncumbrancesIds());
+        else
+            encumbranceList = Collections.emptyList();
+
+        List<Insurance> insuranceList;
+        if(Objects.nonNull(dto.getInsurancesIds()))
+            insuranceList = insuranceService.getInsurancesByIds(dto.getInsurancesIds());
+        else
+            insuranceList = Collections.emptyList();
+
+        PledgeSubjectAuto pledgeSubjectAuto = null;
+        PledgeSubjectEquipment pledgeSubjectEquipment = null;
+        PledgeSubjectBuilding pledgeSubjectBuilding = null;
+        PledgeSubjectLandLease pledgeSubjectLandLease = null;
+        PledgeSubjectLandOwnership pledgeSubjectLandOwnership = null;
+        PledgeSubjectRoom pledgeSubjectRoom = null;
+        PledgeSubjectSecurities pledgeSubjectSecurities = null;
+        PledgeSubjectTBO pledgeSubjectTBO = null;
+        PledgeSubjectVessel pledgeSubjectVessel = null;
+
+        if(Objects.nonNull(dto.getPledgeSubjectAutoDto())) {
+            pledgeSubjectAuto = pledgeSubjectAutoConverter.toEntity(dto.getPledgeSubjectAutoDto());
+        }else if(Objects.nonNull(dto.getPledgeSubjectEquipmentDto())) {
+            pledgeSubjectEquipment = pledgeSubjectEquipmentConverter.toEntity(dto.getPledgeSubjectEquipmentDto());
+        }else if(Objects.nonNull(dto.getPledgeSubjectBuildingDto())) {
+            pledgeSubjectBuilding = pledgeSubjectBuildingConverter.toEntity(dto.getPledgeSubjectBuildingDto());
+        }else if(Objects.nonNull(dto.getPledgeSubjectLandLeaseDto())) {
+            pledgeSubjectLandLease = pledgeSubjectLandLeaseConverter.toEntity(dto.getPledgeSubjectLandLeaseDto());
+        }else if(Objects.nonNull(dto.getPledgeSubjectLandOwnershipDto())) {
+            pledgeSubjectLandOwnership = pledgeSubjectLandOwnershipConverter.toEntity(dto.getPledgeSubjectLandOwnershipDto());
+        }else if(Objects.nonNull(dto.getPledgeSubjectRoomDto())) {
+            pledgeSubjectRoom = pledgeSubjectRoomConverter.toEntity(dto.getPledgeSubjectRoomDto());
+        }else if(Objects.nonNull(dto.getPledgeSubjectSecuritiesDto())) {
+            pledgeSubjectSecurities = pledgeSubjectSecuritiesConverter.toEntity(dto.getPledgeSubjectSecuritiesDto());
+        }else if(Objects.nonNull(dto.getPledgeSubjectTboDto())) {
+            pledgeSubjectTBO = pledgeSubjectTboConverter.toEntity(dto.getPledgeSubjectTboDto());
+        }else if(Objects.nonNull(dto.getPledgeSubjectVesselDto()))
+            pledgeSubjectVessel = pledgeSubjectVesselConverter.toEntity(dto.getPledgeSubjectVesselDto());
 
         return PledgeSubject.builder()
                 .pledgeSubjectId(dto.getPledgeSubjectId())
@@ -62,11 +171,20 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
                 .adressBuilbing(dto.getAdressBuilbing())
                 .adressPemises(dto.getAdressPemises())
                 .insuranceObligation(dto.getInsuranceObligation())
-                .pledgeAgreements(pledgeAgreementCollection)
-                .costHistories(historyCollection)
-                .monitorings(monitoringCollection)
-                .encumbrances(encumbranceCollection)
-                .insurances(insuranceCollection)
+                .pledgeAgreements(pledgeAgreementList)
+                .costHistories(costHistoryList)
+                .monitorings(monitoringList)
+                .encumbrances(encumbranceList)
+                .insurances(insuranceList)
+                .pledgeSubjectAuto(pledgeSubjectAuto)
+                .pledgeSubjectEquipment(pledgeSubjectEquipment)
+                .pledgeSubjectBuilding(pledgeSubjectBuilding)
+                .pledgeSubjectLandLease(pledgeSubjectLandLease)
+                .pledgeSubjectLandOwnership(pledgeSubjectLandOwnership)
+                .pledgeSubjectRoom(pledgeSubjectRoom)
+                .pledgeSubjectSecurities(pledgeSubjectSecurities)
+                .pledgeSubjectTBO(pledgeSubjectTBO)
+                .pledgeSubjectVessel(pledgeSubjectVessel)
                 .build();
     }
 
@@ -91,6 +209,35 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
         List<Long> insurancesIds = new ArrayList<>();
         for(Insurance ins : insuranceService.getInsurancesByPledgeSubject(entity))
             insurancesIds.add(ins.getInsuranceId());
+
+        PledgeSubjectAutoDto pledgeSubjectAutoDto = null;
+        PledgeSubjectEquipmentDto pledgeSubjectEquipmentDto = null;
+        PledgeSubjectBuildingDto pledgeSubjectBuildingDto = null;
+        PledgeSubjectLandLeaseDto pledgeSubjectLandLeaseDto = null;
+        PledgeSubjectLandOwnershipDto pledgeSubjectLandOwnershipDto = null;
+        PledgeSubjectRoomDto pledgeSubjectRoomDto = null;
+        PledgeSubjectSecuritiesDto pledgeSubjectSecuritiesDto = null;
+        PledgeSubjectTboDto pledgeSubjectTboDto = null;
+        PledgeSubjectVesselDto pledgeSubjectVesselDto = null;
+
+        if(Objects.nonNull(entity.getPledgeSubjectAuto())) {
+            pledgeSubjectAutoDto = pledgeSubjectAutoConverter.toDto(entity.getPledgeSubjectAuto());
+        }else if(Objects.nonNull(entity.getPledgeSubjectEquipment())) {
+            pledgeSubjectEquipmentDto = pledgeSubjectEquipmentConverter.toDto(entity.getPledgeSubjectEquipment());
+        }else if(Objects.nonNull(entity.getPledgeSubjectBuilding())) {
+            pledgeSubjectBuildingDto = pledgeSubjectBuildingConverter.toDto(entity.getPledgeSubjectBuilding());
+        }else if(Objects.nonNull(entity.getPledgeSubjectLandLease())) {
+            pledgeSubjectLandLeaseDto = pledgeSubjectLandLeaseConverter.toDto(entity.getPledgeSubjectLandLease());
+        }else if(Objects.nonNull(entity.getPledgeSubjectLandOwnership())) {
+            pledgeSubjectLandOwnershipDto = pledgeSubjectLandOwnershipConverter.toDto(entity.getPledgeSubjectLandOwnership());
+        }else if(Objects.nonNull(entity.getPledgeSubjectRoom())) {
+            pledgeSubjectRoomDto = pledgeSubjectRoomConverter.toDto(entity.getPledgeSubjectRoom());
+        }else if(Objects.nonNull(entity.getPledgeSubjectSecurities())) {
+            pledgeSubjectSecuritiesDto = pledgeSubjectSecuritiesConverter.toDto(entity.getPledgeSubjectSecurities());
+        }else if(Objects.nonNull(entity.getPledgeSubjectTBO())) {
+            pledgeSubjectTboDto = pledgeSubjectTboConverter.toDto(entity.getPledgeSubjectTBO());
+        }else if(Objects.nonNull(entity.getPledgeSubjectVessel()))
+            pledgeSubjectVesselDto = pledgeSubjectVesselConverter.toDto(entity.getPledgeSubjectVessel());
 
         return PledgeSubjectDto.builder()
                 .pledgeSubjectId(entity.getPledgeSubjectId())
@@ -122,6 +269,15 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
                 .fullAddress(getFullAddress(entity))
                 .mainCharacteristic(getMainCharacteristic(entity))
                 .primaryIdentifier(getPrimaryIdentifier(entity))
+                .pledgeSubjectAutoDto(pledgeSubjectAutoDto)
+                .pledgeSubjectEquipmentDto(pledgeSubjectEquipmentDto)
+                .pledgeSubjectBuildingDto(pledgeSubjectBuildingDto)
+                .pledgeSubjectLandLeaseDto(pledgeSubjectLandLeaseDto)
+                .pledgeSubjectLandOwnershipDto(pledgeSubjectLandOwnershipDto)
+                .pledgeSubjectRoomDto(pledgeSubjectRoomDto)
+                .pledgeSubjectSecuritiesDto(pledgeSubjectSecuritiesDto)
+                .pledgeSubjectTboDto(pledgeSubjectTboDto)
+                .pledgeSubjectVesselDto(pledgeSubjectVesselDto)
                 .build();
     }
 
@@ -148,41 +304,41 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
         String typeOfMainCharacteristic = "-";
         String typeOfMainCharacteristicForRealty = "кв.м.";
 
-        if(entity instanceof PledgeSubjectAuto){
-            if(Objects.nonNull(((PledgeSubjectAuto) entity).getHorsepower()))
-                mainCharacteristic = String.valueOf(((PledgeSubjectAuto) entity).getHorsepower());
+        if(entity.getTypeOfCollateral() == TypeOfCollateral.AUTO){
+            if(Objects.nonNull(entity.getPledgeSubjectAuto().getHorsepower()))
+                mainCharacteristic = String.valueOf(entity.getPledgeSubjectAuto().getHorsepower());
             typeOfMainCharacteristic = "л.с.";
 
-        }else if(entity instanceof PledgeSubjectEquipment){
-            if(Objects.nonNull(((PledgeSubjectEquipment) entity).getProductivity()))
-                mainCharacteristic = String.valueOf(((PledgeSubjectEquipment) entity).getProductivity());
-            if(Objects.nonNull(((PledgeSubjectEquipment) entity).getTypeOfProductivity())
-                    && !((PledgeSubjectEquipment) entity).getTypeOfProductivity().isEmpty())
-                typeOfMainCharacteristic = ((PledgeSubjectEquipment) entity).getTypeOfProductivity();
+        }else if(entity.getTypeOfCollateral() ==  TypeOfCollateral.EQUIPMENT){
+            if(Objects.nonNull(entity.getPledgeSubjectEquipment().getProductivity()))
+                mainCharacteristic = String.valueOf(entity.getPledgeSubjectEquipment().getProductivity());
+            if(Objects.nonNull(entity.getPledgeSubjectEquipment().getTypeOfProductivity())
+                    && !entity.getPledgeSubjectEquipment().getTypeOfProductivity().isEmpty())
+                typeOfMainCharacteristic = entity.getPledgeSubjectEquipment().getTypeOfProductivity();
 
-        }else if(entity instanceof PledgeSubjectBuilding){
-            mainCharacteristic = String.valueOf(((PledgeSubjectBuilding) entity).getArea());
+        }else if(entity.getTypeOfCollateral() == TypeOfCollateral.BUILDING){
+            mainCharacteristic = String.valueOf(entity.getPledgeSubjectBuilding().getArea());
             typeOfMainCharacteristic = typeOfMainCharacteristicForRealty;
 
-        }else if(entity instanceof PledgeSubjectLandLease){
-            mainCharacteristic = String.valueOf(((PledgeSubjectLandLease) entity).getArea());
+        }else if(entity.getTypeOfCollateral() == TypeOfCollateral.LAND_LEASE){
+            mainCharacteristic = String.valueOf(entity.getPledgeSubjectLandLease().getArea());
             typeOfMainCharacteristic = typeOfMainCharacteristicForRealty;
 
-        }else if(entity instanceof PledgeSubjectLandOwnership){
-            mainCharacteristic = String.valueOf(((PledgeSubjectLandOwnership) entity).getArea());
+        }else if(entity.getTypeOfCollateral() == TypeOfCollateral.LAND_OWNERSHIP){
+            mainCharacteristic = String.valueOf(entity.getPledgeSubjectLandOwnership().getArea());
             typeOfMainCharacteristic = typeOfMainCharacteristicForRealty;
 
-        }else if(entity instanceof PledgeSubjectRoom){
-            mainCharacteristic = String.valueOf(((PledgeSubjectRoom) entity).getArea());
+        }else if(entity.getTypeOfCollateral() == TypeOfCollateral.PREMISE){
+            mainCharacteristic = String.valueOf(entity.getPledgeSubjectRoom().getArea());
             typeOfMainCharacteristic = typeOfMainCharacteristicForRealty;
 
-        }else if(entity instanceof PledgeSubjectTBO){
-            if(Objects.nonNull(((PledgeSubjectTBO) entity).getCountOfTBO()))
-                mainCharacteristic = String.valueOf(((PledgeSubjectTBO) entity).getCountOfTBO());
+        }else if(entity.getTypeOfCollateral() == TypeOfCollateral.TBO){
+            if(Objects.nonNull(entity.getPledgeSubjectTBO().getCountOfTBO()))
+                mainCharacteristic = String.valueOf(entity.getPledgeSubjectTBO().getCountOfTBO());
             typeOfMainCharacteristic = "кол-во";
 
-        }else if(entity instanceof PledgeSubjectVessel){
-            mainCharacteristic = String.valueOf(((PledgeSubjectVessel) entity).getDeadweight());
+        }else if(entity.getTypeOfCollateral() == TypeOfCollateral.VESSEL){
+            mainCharacteristic = String.valueOf(entity.getPledgeSubjectVessel().getDeadweight());
             typeOfMainCharacteristic = "дейдвейт";
         }
 
@@ -194,34 +350,34 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
         String typeOfPrimaryIdentifier = "-";
         String typeOfPrimaryIdentifierForRealty = "Кад№";
 
-        if(entity instanceof PledgeSubjectAuto){
-            primaryIdentifier = String.valueOf(((PledgeSubjectAuto) entity).getVin());
+        if(entity.getTypeOfCollateral() == TypeOfCollateral.AUTO){
+            primaryIdentifier = String.valueOf(entity.getPledgeSubjectAuto().getVin());
             typeOfPrimaryIdentifier = "VIN";
 
-        }else if(entity instanceof PledgeSubjectEquipment){
-            if(Objects.nonNull(((PledgeSubjectEquipment) entity).getSerialNum())
-                    && !((PledgeSubjectEquipment) entity).getSerialNum().isEmpty())
-                primaryIdentifier = String.valueOf(((PledgeSubjectEquipment) entity).getSerialNum());
+        }else if(entity.getTypeOfCollateral() ==  TypeOfCollateral.EQUIPMENT){
+            if(Objects.nonNull(entity.getPledgeSubjectEquipment().getSerialNum())
+                    && !entity.getPledgeSubjectEquipment().getSerialNum().isEmpty())
+                primaryIdentifier = String.valueOf(entity.getPledgeSubjectEquipment().getSerialNum());
             typeOfPrimaryIdentifier = "Завод№";
 
-        }else if(entity instanceof PledgeSubjectBuilding){
-            primaryIdentifier = String.valueOf(((PledgeSubjectBuilding) entity).getCadastralNum());
+        }else if(entity.getTypeOfCollateral() == TypeOfCollateral.BUILDING){
+            primaryIdentifier = String.valueOf(entity.getPledgeSubjectBuilding().getCadastralNum());
             typeOfPrimaryIdentifier = typeOfPrimaryIdentifierForRealty;
 
-        }else if(entity instanceof PledgeSubjectLandLease){
-            primaryIdentifier = String.valueOf(((PledgeSubjectLandLease) entity).getCadastralNum());
+        }else if(entity.getTypeOfCollateral() == TypeOfCollateral.LAND_LEASE){
+            primaryIdentifier = String.valueOf(entity.getPledgeSubjectLandLease().getCadastralNum());
             typeOfPrimaryIdentifier = typeOfPrimaryIdentifierForRealty;
 
-        }else if(entity instanceof PledgeSubjectLandOwnership){
-            primaryIdentifier = String.valueOf(((PledgeSubjectLandOwnership) entity).getCadastralNum());
+        }else if(entity.getTypeOfCollateral() == TypeOfCollateral.LAND_OWNERSHIP){
+            primaryIdentifier = String.valueOf(entity.getPledgeSubjectLandOwnership().getCadastralNum());
             typeOfPrimaryIdentifier = typeOfPrimaryIdentifierForRealty;
 
-        }else if(entity instanceof PledgeSubjectRoom){
-            primaryIdentifier = String.valueOf(((PledgeSubjectRoom) entity).getCadastralNum());
+        }else if(entity.getTypeOfCollateral() == TypeOfCollateral.PREMISE){
+            primaryIdentifier = String.valueOf(entity.getPledgeSubjectRoom().getCadastralNum());
             typeOfPrimaryIdentifier = typeOfPrimaryIdentifierForRealty;
 
-        }else if(entity instanceof PledgeSubjectVessel){
-            primaryIdentifier = String.valueOf(((PledgeSubjectVessel) entity).getImo());
+        }else if(entity.getTypeOfCollateral() == TypeOfCollateral.VESSEL){
+            primaryIdentifier = String.valueOf(entity.getPledgeSubjectVessel().getImo());
             typeOfPrimaryIdentifier = "IMO";
         }
 

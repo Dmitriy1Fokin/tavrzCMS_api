@@ -1,12 +1,9 @@
 package ru.fds.tavrzcms3.dto;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.validator.constraints.Length;
 import ru.fds.tavrzcms3.dictionary.TypeOfVessel;
 
 import javax.persistence.Column;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Data
@@ -14,16 +11,11 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PledgeSubjectVesselDto implements Dto{
+public class PledgeSubjectVesselDto{
 
-    @Valid
-    private PledgeSubjectDto pledgeSubjectDto;
-
-    @Length(min = 7, max = 7, message = "Неверное значение")
     @NotNull(message = "Обязательно для заполнения")
     private Integer imo;
 
-    @Length(min = 9, max = 9, message = "Неверное значение")
     private Integer mmsi;
 
     @NotBlank(message = "Обязательно для заполнения")
@@ -42,7 +34,6 @@ public class PledgeSubjectVesselDto implements Dto{
     @NotNull(message = "Обязательно для заполнения")
     @Min(value = 1900, message = "Неверное значение")
     @Max(value = 2100, message = "Неверное значение")
-    @Length(min = 4, max = 4, message = "Неверное значение")
     private int yearBuilt;
 
     @NotBlank(message = "Обязательно для заполнения")
