@@ -96,39 +96,7 @@ public class PagesController {
 
 
 
-    @PostMapping("searchPS")
-    public @ResponseBody List<PledgeSubject> searchPS(@RequestParam("cadastralNum") Optional<String> cadastralNum,
-                                                      @RequestParam("namePS") Optional<String> namePS){
 
-        if(cadastralNum.isPresent())
-            return pledgeSubjectService.getPledgeSubjectByCadastralNum(cadastralNum.get());
-        else if(namePS.isPresent())
-            return pledgeSubjectService.getPledgeSubjectByName(namePS.get());
-        else
-            throw new IllegalArgumentException(MSG_WRONG_LINK);
-    }
-
-    @PostMapping("insertPS")
-    public @ResponseBody int insertCurrentPledgeSubject(@RequestParam("pledgeSubjectsIdArray[]") long[] pledgeSubjectsIdArray,
-                                                        @RequestParam("pledgeAgreementId") long pledgeAgreementId){
-
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
-                .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
-
-        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId);
-        int countPSBeforeUpdate = pledgeSubjectList.size();
-        for(int i = 0; i < pledgeSubjectsIdArray.length; i++){
-            pledgeSubjectList.add(pledgeSubjectService.getPledgeSubjectById(pledgeSubjectsIdArray[i])
-                    .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK)));
-        }
-
-        int countPSAfterUpdate = pledgeSubjectList.size();
-
-        pledgeAgreement.setPledgeSubjects(pledgeSubjectList);
-        pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
-
-        return countPSAfterUpdate - countPSBeforeUpdate;
-    }
 
     @PostMapping("/upload")
     public String importEntityFromExcel(@RequestParam("file") Optional<MultipartFile> file,

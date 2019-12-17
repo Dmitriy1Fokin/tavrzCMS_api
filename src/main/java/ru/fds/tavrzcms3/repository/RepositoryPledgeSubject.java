@@ -24,4 +24,8 @@ public interface RepositoryPledgeSubject extends JpaRepository<PledgeSubject, Lo
     Page<PledgeSubject> findAll(Specification specification, Pageable pageable);
     List<PledgeSubject> findAllByNameContainingIgnoreCase(String name);
     Optional<PledgeSubject> findByCostHistories(CostHistory costHistory);
+    List<PledgeSubject> findByPledgeSubjectBuildingCadastralNumContainingIgnoreCase(String cadastralNum);
+    List<PledgeSubject> findByPledgeSubjectLandLeaseCadastralNumContainingIgnoreCase(String cadastralNum);
+    List<PledgeSubject> findByPledgeSubjectLandOwnershipCadastralNumContainingIgnoreCase(String cadastralNum);
+    List<PledgeSubject> findByPledgeSubjectRoomCadastralNumContainingIgnoreCase(String cadastralNum);
 }

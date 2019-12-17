@@ -14,6 +14,7 @@ import ru.fds.tavrzcms3.converver.PledgeSubjectConverterDto;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.EmployeeDto;
 import ru.fds.tavrzcms3.dto.LoanAgreementDto;
 import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
@@ -46,6 +47,7 @@ public class PledgeAgreementController {
     private final PledgeSubjectConverterDto pledgeSubjectConverterDto;
     private final EmployeeConverterDto employeeConverterDto;
     private final LoanAgreementConverterDto loanAgreementConverterDto;
+    private final DtoFactory dtoFactory;
 
     private final ValidatorEntity validatorEntity;
 
@@ -62,6 +64,7 @@ public class PledgeAgreementController {
                                      PledgeSubjectConverterDto pledgeSubjectConverterDto,
                                      EmployeeConverterDto employeeConverterDto,
                                      LoanAgreementConverterDto loanAgreementConverterDto,
+                                     DtoFactory dtoFactory,
                                      ValidatorEntity validatorEntity) {
         this.pledgeAgreementService = pledgeAgreementService;
         this.pledgeSubjectService = pledgeSubjectService;
@@ -71,6 +74,7 @@ public class PledgeAgreementController {
         this.pledgeSubjectConverterDto = pledgeSubjectConverterDto;
         this.employeeConverterDto = employeeConverterDto;
         this.loanAgreementConverterDto = loanAgreementConverterDto;
+        this.dtoFactory = dtoFactory;
         this.validatorEntity = validatorEntity;
     }
 
@@ -239,5 +243,40 @@ public class PledgeAgreementController {
         }
 
         return pledgeSubjectList.size();
+    }
+
+    @PostMapping("searchPS")
+    public @ResponseBody List<PledgeSubjectDto> searchPS(@RequestParam("cadastralNum") Optional<String> cadastralNum,
+                                                      @RequestParam("namePS") Optional<String> namePS){
+
+        List<PledgeSubjectDto> pledgeSubjectDtoList = Collections.emptyList();
+        if(cadastralNum.isPresent())
+            pledgeSubjectDtoList = dtoFactory.getPledgeSubjectsDto(pledgeSubjectService.getPledgeSubjectByCadastralNum(cadastralNum.get()));
+        else if(namePS.isPresent())
+            pledgeSubjectDtoList = dtoFactory.getPledgeSubjectsDto(pledgeSubjectService.getPledgeSubjectByName(namePS.get()));
+
+            return pledgeSubjectDtoList;
+    }
+
+    @PostMapping("insertPS")
+    public @ResponseBody int insertCurrentPledgeSubject(@RequestParam("pledgeSubjectsIdArray[]") long[] pledgeSubjectsIdArray,
+                                                        @RequestParam("pledgeAgreementId") long pledgeAgreementId){
+
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
+                .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
+
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId);
+        int countPSBeforeUpdate = pledgeSubjectList.size();
+        for(int i = 0; i < pledgeSubjectsIdArray.length; i++){
+            pledgeSubjectList.add(pledgeSubjectService.getPledgeSubjectById(pledgeSubjectsIdArray[i])
+                    .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK)));
+        }
+
+        int countPSAfterUpdate = pledgeSubjectList.size();
+
+        pledgeAgreement.setPledgeSubjects(pledgeSubjectList);
+        pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
+
+        return countPSAfterUpdate - countPSBeforeUpdate;
     }
 }
