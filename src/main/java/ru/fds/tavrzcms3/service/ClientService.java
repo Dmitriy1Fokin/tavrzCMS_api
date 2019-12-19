@@ -64,27 +64,6 @@ public class ClientService {
             return new ArrayList<>();
     }
 
-    public String getFullNameClient(Client client){
-        if(client instanceof ClientIndividual){
-            System.out.println("INDIVIDUAL");
-        }else if(client instanceof ClientLegalEntity){
-            System.out.println("LEGAL ENTITY");
-        }
-
-
-        if(client.getTypeOfClient() == TypeOfClient.INDIVIDUAL){
-            ClientIndividual clientIndividual = repositoryClientIndividual.findByClient(client);
-
-            return clientIndividual.getSurname() + " " + clientIndividual.getName() + " " + clientIndividual.getPatronymic();
-
-        }else if(client.getTypeOfClient() == TypeOfClient.LEGAL_ENTITY){
-            ClientLegalEntity clientLegalEntity = repositoryClientLegalEntity.findByClient(client);
-
-            return clientLegalEntity.getOrganizationalForm() + " " + clientLegalEntity.getName();
-        }else
-            return "";
-    }
-
     public String getFullNameClient(long clientId){
         Optional<Client> client = repositoryClient.findById(clientId);
 
@@ -119,49 +98,46 @@ public class ClientService {
         }
     }
 
-    public Page<Client> getClientFromSearch(Map<String, String> searchParam){
+    public List<Client> getClientFromSearch(Map<String, String> searchParam){
 
-        int currentPage = Integer.parseInt(searchParam.get("page"));
-        int pageSize = Integer.parseInt(searchParam.get("size"));
-        Pageable pageable = PageRequest.of(currentPage, pageSize);
+//        SpecificationBuilder builder = new SpecificationBuilderImpl();
+//
+//        if(searchParam.get("clientOption").equals(TypeOfClient.LEGAL_ENTITY.name())){
+//            if(!searchParam.get("clientName").isEmpty())
+//                builder.with("name", ":", searchParam.get("clientName"), false);
+//            if(!searchParam.get("inn").isEmpty())
+//                builder.with("inn", ":", searchParam.get("inn"), false);
+//
+//            Specification<ClientLegalEntity> specification = builder.build();
+//
+//            return repositoryClientLegalEntity.findAll(specification);
+//
+//
+//        }else{
+//            if(!searchParam.get("clientName").isEmpty()){
+//                String[] words = searchParam.get("clientName").split("\\s");
+//
+//                if(words.length == 1) {
+//                    builder.with("surname",":", words[0], false);
+//                }
+//                else if(words.length == 2){
+//                    builder.with("surname",":", words[0], false);
+//                    builder.with("name",":", words[1],false);
+//                }else if(words.length >= 3){
+//                    builder.with("surname",":", words[0], false);
+//                    builder.with("name",":", words[1],false);
+//                    builder.with("patronymic", ":", words[2],false);
+//                }
+//            }
+//            if(!searchParam.get("pasportNum").isEmpty())
+//                builder.with("pasportNum", ":", searchParam.get("pasportNum"),false);
+//
+//            Specification<ClientIndividual> specification = builder.build();
+//
+//            return repositoryClientIndividual.findAll(specification);
+//        }
 
-        SpecificationBuilder builder = new SpecificationBuilderImpl();
-
-        if(searchParam.get("clientOption").equals(TypeOfClient.LEGAL_ENTITY.name())){
-            if(!searchParam.get("clientName").isEmpty())
-                builder.with("name", ":", searchParam.get("clientName"), false);
-            if(!searchParam.get("inn").isEmpty())
-                builder.with("inn", ":", searchParam.get("inn"), false);
-
-            Specification<ClientLegalEntity> specification = builder.build();
-
-            return repositoryClientLegalEntity.findAll(specification, pageable);
-
-
-        }else{
-            if(!searchParam.get("clientName").isEmpty()){
-                String[] words = searchParam.get("clientName").split("\\s");
-
-                if(words.length == 1) {
-                    builder.with("surname",":", words[0], false);
-                }
-                else if(words.length == 2){
-                    builder.with("surname",":", words[0], false);
-                    builder.with("name",":", words[1],false);
-                }else if(words.length >= 3){
-                    builder.with("surname",":", words[0], false);
-                    builder.with("name",":", words[1],false);
-                    builder.with("patronymic", ":", words[2],false);
-                }
-            }
-            if(!searchParam.get("pasportNum").isEmpty())
-                builder.with("pasportNum", ":", searchParam.get("pasportNum"),false);
-
-            Specification<ClientIndividual> specification = builder.build();
-
-            return repositoryClientIndividual.findAll(specification, pageable);
-        }
-
+        return null;
     }
 
     @Transactional

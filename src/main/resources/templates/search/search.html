@@ -285,13 +285,14 @@
 <h3><u>Общие признаки</u>(поиск по всем видам имущества)</h3>
 
 <form th:action="@{/search/search_results}" th:method="get" action="search_results.html">
-    <input type="hidden", name="typeOfSearch" value="searchPS">
-    <input type="hidden", name="size" value='50'>
-    <input type="hidden", name="page" value='0'>
+    <input type="hidden" name="typeOfSearch" value="searchPS">
+    <input type="hidden" name="size" value='50'>
+    <input type="hidden" name="page" value='0'>
 
     <div class="row">
         <label>Наименование</label>
-        <input name="namePS" type="text"/>
+        <input name="name" type="text"/>
+        <input type="hidden" name="nameOption" value="EQUAL_IGNORE_CASE">
     </div>
     <br>
     <div class="row">
@@ -307,49 +308,49 @@
     <br>
     <div class="row">
         <label>РС по ДЗ</label>
-        <input type="number" min="0" step="0.01" name="rsDZ"/>
-        <select name="rsDZOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+        <input type="number" min="0" step="0.01" name="rsDz"/>
+        <select name="rsDzOption">
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
     <div class="row">
         <label>ЗС по ДЗ</label>
-        <input type="number" min="0" step="0.01" name="zsDZ"/>
-        <select name="zsDZOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+        <input type="number" min="0" step="0.01" name="zsDz"/>
+        <select name="zsDzOption">
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
     <div class="row">
         <label>РС по ЗЗ</label>
-        <input type="number" min="0" step="0.01" name="rsZZ"/>
-        <select name="rsZZOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+        <input type="number" min="0" step="0.01" name="rsZz"/>
+        <select name="rsZzOption">
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
     <div class="row">
         <label>ЗС по ЗЗ</label>
-        <input type="number" min="0" step="0.01" name="zsZZ"/>
-        <select name="zsZZOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+        <input type="number" min="0" step="0.01" name="zsZz"/>
+        <select name="zsZzOption">
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
@@ -357,11 +358,11 @@
         <label>СС</label>
         <input type="number" min="0" step="0.01" name="ss"/>
         <select name="ssOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
@@ -369,11 +370,11 @@
         <label>Дата мониторинга</label>
         <input name="dateMonitoring" type="date"/>
         <select name="dateMonitoringOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
@@ -381,17 +382,17 @@
         <label>Дата заключения</label>
         <input name="dateConclusion" type="date"/>
         <select name="dateConclusionOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
     <div class="row">
         <label>Результат мониторинга</label>
-        <select name="resultOfMonitoring">
+        <select name="statusMonitoring">
             <option selected value="">не выбрано</option>
             <option value="IN_STOCK">в наличии</option>
             <option value="PARTIAL_LOSS">частичная утрата</option>
@@ -413,21 +414,25 @@
     <div class="row">
         <label>Адрес(Регион)</label>
         <input name="adressRegion" type="text"/>
+        <input type="hidden" name="adressRegionOption" value="EQUAL_IGNORE_CASE">
     </div>
     <br>
     <div class="row">
         <label>Адрес(Район)</label>
         <input name="adressDistrict" type="text"/>
+        <input type="hidden" name="adressDistrictOption" value="EQUAL_IGNORE_CASE">
     </div>
     <br>
     <div class="row">
         <label>Адрес(Город)</label>
         <input name="adressCity" type="text"/>
+        <input type="hidden" name="adressCityOption" value="EQUAL_IGNORE_CASE">
     </div>
     <br>
     <div class="row">
         <label>Адрес(Улица)</label>
         <input name="adressStreet" type="text"/>
+        <input type="hidden" name="adressStreetOption" value="EQUAL_IGNORE_CASE">
     </div>
     <br>
     <div class="row">
@@ -437,6 +442,7 @@
             <option value="да">да</option>
             <option value="нет">нет</option>
         </select>
+        <input type="hidden" name="insuranceObligationOption" value="EQUAL_IGNORE_CASE">
     </div>
     <br>
     <h3><u>Поиск по конкретному виду обеспечения</u></h3>
@@ -508,43 +514,49 @@
             var codeInner = '<div class="row">\n' +
                 '<label>Марка</label>\n' +
                 '<input name="brandAuto" type="text"/>\n' +
+                '<input type="hidden" name="brandAutoOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '<label>Модель</label>\n' +
                 '<input name="modelAuto" type="text"/>\n' +
+                '<input type="hidden" name="modelAutoOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '<label>VIN</label>\n' +
                 '<input name="vin" type="text"/>\n' +
+                '<input type="hidden" name="vinOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '<label>№ двигателя</label>\n' +
                 '<input name="numOfEngine" type="text"/>\n' +
+                '<input type="hidden" name="numOfEngineOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '<label>№ПТС</label>\n' +
-                '<input name="numOfPts" type="text"/>\n' +
+                '<input name="numOfPTS" type="text"/>\n' +
+                '<input type="hidden" name="numOfPTSOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '<label>Год выпуска</label>\n' +
                 '<input type="number" min="0" name="yearOfManufactureAuto"/>\n' +
                 '<select name="yearOfManufactureAutoOption">\n' +
-                '<option selected value=":">равно</option>\n' +
-                '<option value=">">больше</option>\n' +
-                '<option value=">=">больше или ровно</option>\n' +
-                '<option value="<">меньше</option>\n' +
-                '<option value="<=">меньше или равно</option>\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '</select>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '<label>Инв.№</label>\n' +
                 '<input name="inventoryNumAuto" type="text">\n' +
+                '<input type="hidden" name="inventoryNumAutoOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
@@ -573,33 +585,37 @@
             var codeInner = '<div class="row">\n' +
                 '    <label>Марка</label>\n' +
                 '    <input name="brandEquip" type="text"/>\n' +
+                '<input type="hidden" name="brandEquipOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Модель</label>\n' +
                 '    <input name="modelEquip" type="text"/>\n' +
+                '<input type="hidden" name="modelEquipOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Завод №</label>\n' +
                 '    <input name="SerialNum" type="text"/>\n' +
+                '<input type="hidden" name="SerialNumOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Год выпуска</label>\n' +
                 '    <input type="number" min="0" name="yearOfManufactureEquip"/>\n' +
                 '    <select name="yearOfManufactureEquipOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Инв №</label>\n' +
                 '    <input name="inventoryNumEquip" type="text"/>\n' +
+                '<input type="hidden" name="inventoryNumEquipOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
@@ -639,11 +655,11 @@
                 '    <label>Баланс. стоимость</label>\n' +
                 '    <input type="number" min="0" step="0.01" name="carryingAmount"/>\n' +
                 '    <select name="carryingAmountOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
@@ -673,23 +689,23 @@
                 '    <label>Номинал. стоимость</label>\n' +
                 '    <input type="number" min="0" step="0.01" name="nominalValue"/>\n' +
                 '    <select name="nominalValueOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Действ. стоимость</label>\n' +
-                '    <input type="number" min="0" step="0.01" name="actuaValue"/>\n' +
-                '    <select name="actuaValueOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '    <input type="number" min="0" step="0.01" name="actualValue"/>\n' +
+                '    <select name="actualValueOption">\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
@@ -709,43 +725,46 @@
         }else if(choise == 'LAND_OWNERSHIP'){
             var codeInner = '<div class="row">\n' +
                 '    <label>Кад №</label>\n' +
-                '    <input name="CadastralNum" type="text"/>\n' +
+                '    <input name="cadastralNum" type="text"/>\n' +
+                '<input type="hidden" name="cadastralNumOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Площадь</label>\n' +
                 '    <input type="number" min="0" step="0.01" name="area"/>\n' +
                 '    <select name="areaOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Условный №</label>\n' +
-                '    <input name="ConditionalNum" type="text"/>\n' +
+                '    <input name="conditionalNum" type="text"/>\n' +
+                '<input type="hidden" name="conditionalNumOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Категория земель</label>\n' +
                 '    <select name="landCategory">\n' +
                 '        <option selected value="">не выбрано</option>\n' +
-                '        <option value="1">земли сельскохозяйственного назначения</option>\n' +
-                '        <option value="2">земли населенных пунктов</option>\n' +
-                '        <option value="3">земли промышленности, энергетики, транспорта, связи...</option>\n' +
-                '        <option value="4">земли особо охраняемых территорий и объектов</option>\n' +
-                '        <option value="5">земли лесного фонда</option>\n' +
-                '        <option value="6">земли водного фонда</option>\n' +
-                '        <option value="7">земли запаса</option>\n' +
+                '        <option value="AGRICULTURAL">земли сельскохозяйственного назначения</option>\n' +
+                '        <option value="LOCALITY">земли населенных пунктов</option>\n' +
+                '        <option value="INDUSTRIAL">земли промышленности, энергетики, транспорта, связи...</option>\n' +
+                '        <option value="SPECIALLY_PROTECTED">земли особо охраняемых территорий и объектов</option>\n' +
+                '        <option value="FOREST">земли лесного фонда</option>\n' +
+                '        <option value="WATER">земли водного фонда</option>\n' +
+                '        <option value="STOCK_LANDS">земли запаса</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Разрешенное использование</label>\n' +
                 '    <input name="permittedUse" type="text"/>\n' +
+                '<input type="hidden" name="permittedUseOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
@@ -755,11 +774,13 @@
                 '        <option value="да">да</option>\n' +
                 '        <option value="нет">нет</option>\n' +
                 '    </select>\n' +
+                '<input type="hidden" name="builtUpOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Кад № ОКС</label>\n' +
                 '    <input name="cadastralNumOfBuilding" type="text"/>\n' +
+                '<input type="hidden" name="cadastralNumOfBuildingOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>';
             elementPS.innerHTML = '';
@@ -767,43 +788,46 @@
         }else if(choise == 'LAND_LEASE'){
             var codeInner = '<div class="row">\n' +
                 '    <label>Кад №</label>\n' +
-                '    <input name="CadastralNum" type="text"/>\n' +
+                '    <input name="cadastralNum" type="text"/>\n' +
+                '<input type="hidden" name="cadastralNumOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Площадь</label>\n' +
                 '    <input type="number" min="0" step="0.01" name="area"/>\n' +
                 '    <select name="areaOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Условный №</label>\n' +
-                '    <input name="ConditionalNum" type="text"/>\n' +
+                '    <input name="conditionalNum" type="text"/>\n' +
+                '<input type="hidden" name="conditionalNumOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Категория земель</label>\n' +
                 '    <select name="landCategory">\n' +
                 '        <option selected value="">не выбрано</option>\n' +
-                '        <option value="1">земли сельскохозяйственного назначения</option>\n' +
-                '        <option value="2">земли населенных пунктов</option>\n' +
-                '        <option value="3">земли промышленности, энергетики, транспорта, связи...</option>\n' +
-                '        <option value="4">земли особо охраняемых территорий и объектов</option>\n' +
-                '        <option value="5">земли лесного фонда</option>\n' +
-                '        <option value="6">земли водного фонда</option>\n' +
-                '        <option value="7">земли запаса</option>\n' +
+                '        <option value="AGRICULTURAL">земли сельскохозяйственного назначения</option>\n' +
+                '        <option value="LOCALITY">земли населенных пунктов</option>\n' +
+                '        <option value="INDUSTRIAL">земли промышленности, энергетики, транспорта, связи...</option>\n' +
+                '        <option value="SPECIALLY_PROTECTED">земли особо охраняемых территорий и объектов</option>\n' +
+                '        <option value="FOREST">земли лесного фонда</option>\n' +
+                '        <option value="WATER">земли водного фонда</option>\n' +
+                '        <option value="STOCK_LANDS">земли запаса</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Разрешенное использование</label>\n' +
                 '    <input name="permittedUse" type="text"/>\n' +
+                '<input type="hidden" name="permittedUseOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
@@ -813,22 +837,24 @@
                 '        <option value="да">да</option>\n' +
                 '        <option value="нет">нет</option>\n' +
                 '    </select>\n' +
+                '<input type="hidden" name="builtUpOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Кад № ОКС</label>\n' +
                 '    <input name="cadastralNumOfBuilding" type="text"/>\n' +
+                '<input type="hidden" name="cadastralNumOfBuildingOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Дата начала аренды</label>\n' +
                 '    <input name="beginDateLease" type="date"/>\n' +
                 '    <select name="beginDateLeaseOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
@@ -836,11 +862,11 @@
                 '    <label>Дата окончания аренды</label>\n' +
                 '    <input name="endDateLease" type="date"/>\n' +
                 '    <select name="endDateLeaseOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>';
@@ -849,67 +875,69 @@
         }else if(choise == 'BUILDING'){
             var codeInner = '<div class="row">\n' +
                 '    <label>Кад №</label>\n' +
-                '    <input name="CadastralNum" type="text"/>\n' +
+                '    <input name="cadastralNum" type="text"/>\n' +
+                '<input type="hidden" name="cadastralNumOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Площадь</label>\n' +
                 '    <input type="number" min="0" step="0.01" name="area"/>\n' +
                 '    <select name="areaOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Условный №</label>\n' +
-                '    <input name="ConditionalNum" type="text"/>\n' +
+                '    <input name="conditionalNum" type="text"/>\n' +
+                '<input type="hidden" name="conditionalNumOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Сегмент рынка</label>\n' +
-                '    <select name="marketSegmentBuilding">\n' +
+                '    <select name="marketSegment">\n' +
                 '        <option selected value="">не выбрано</option>\n' +
-                '        <option value="Торговое">Торговое</option>\n' +
-                '        <option value="Офисное">Офисное</option>\n' +
-                '        <option value="Торгово-Офисное">Торгово-Офисное</option>\n' +
-                '        <option value="Производственное">Производственное</option>\n' +
-                '        <option value="Складское">Складское</option>\n' +
-                '        <option value="Производственно-складсткое">Производственно-складсткое</option>\n' +
-                '        <option value="Квартира">Квартира</option>\n' +
-                '        <option value="Жилой дом">Жилой дом</option>\n' +
-                '        <option value="Инженерное">Инженерное</option>\n' +
-                '        <option value="с/х">с/х</option>\n' +
-                '        <option value="Вспомогательное">Вспомогательное</option>\n' +
-                '        <option value="Гостиничное">Гостиничное</option>\n' +
-                '        <option value="Рекреационное">Рекреационное</option>\n' +
+                '        <option value="TRADING">Торговое</option>\n' +
+                '        <option value="OFFICE">Офисное</option>\n' +
+                '        <option value="TRADING_OFFICE">Торгово-Офисное</option>\n' +
+                '        <option value="INDUSTRIAL">Производственное</option>\n' +
+                '        <option value="WAREHOUSE">Складское</option>\n' +
+                '        <option value="INDUSTRIAL_WAREHOUSE">Производственно-складсткое</option>\n' +
+                '        <option value="FLAT">Квартира</option>\n' +
+                '        <option value="HOTEL">Жилой дом</option>\n' +
+                '        <option value="ENGINEERING">Инженерное</option>\n' +
+                '        <option value="AGRICULTURAL">с/х</option>\n' +
+                '        <option value="SUBSIDIARY">Вспомогательное</option>\n' +
+                '        <option value="HOTEL">Гостиничное</option>\n' +
+                '        <option value="RECREATIONAL">Рекреационное</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Степень готовности</label>\n' +
-                '    <input type="number" min="0" max="100" name="readinessВegree"/>\n' +
-                '    <select name="readinessВegreeOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '    <input type="number" min="0" max="100" name="readinessDegree"/>\n' +
+                '    <select name="readinessDegreeOption">\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Год постройки</label>\n' +
-                '    <input type="number" min="0" name="yearOfConstructionBuilding"/>\n' +
-                '    <select name="yearOfConstructionBuildingOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '    <input type="number" min="0" name="yearOfConstruction"/>\n' +
+                '    <select name="yearOfConstructiongOption">\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>';
@@ -918,43 +946,45 @@
         }else if(choise == 'PREMISE'){
             var codeInner = '<div class="row">\n' +
                 '    <label>Кад №</label>\n' +
-                '    <input name="CadastralNum" type="text"/>\n' +
+                '    <input name="cadastralNum" type="text"/>\n' +
+                '<input type="hidden" name="cadastralNumOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Площадь</label>\n' +
                 '    <input type="number" min="0" step="0.01" name="area"/>\n' +
                 '    <select name="areaOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Условный №</label>\n' +
-                '    <input name="ConditionalNum" type="text"/>\n' +
+                '    <input name="conditionalNum" type="text"/>\n' +
+                '<input type="hidden" name="conditionalNumOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Сегмент рынка ппомещения</label>\n' +
                 '    <select name="marketSegmentRoom">\n' +
                 '        <option selected value="">не выбрано</option>\n' +
-                '        <option value="Торговое">Торговое</option>\n' +
-                '        <option value="Офисное">Офисное</option>\n' +
-                '        <option value="Торгово-Офисное">Торгово-Офисное</option>\n' +
-                '        <option value="Производственное">Производственное</option>\n' +
-                '        <option value="Складское">Складское</option>\n' +
-                '        <option value="Производственно-складсткое">Производственно-складсткое</option>\n' +
-                '        <option value="Квартира">Квартира</option>\n' +
-                '        <option value="Жилой дом">Жилой дом</option>\n' +
-                '        <option value="Инженерное">Инженерное</option>\n' +
-                '        <option value="с/х">с/х</option>\n' +
-                '        <option value="Вспомогательное">Вспомогательное</option>\n' +
-                '        <option value="Гостиничное">Гостиничное</option>\n' +
-                '        <option value="Рекреационное">Рекреационное</option>\n' +
+                '        <option value="TRADING">Торговое</option>\n' +
+                '        <option value="OFFICE">Офисное</option>\n' +
+                '        <option value="TRADING_OFFICE">Торгово-Офисное</option>\n' +
+                '        <option value="INDUSTRIAL">Производственное</option>\n' +
+                '        <option value="WAREHOUSE">Складское</option>\n' +
+                '        <option value="INDUSTRIAL_WAREHOUSE">Производственно-складсткое</option>\n' +
+                '        <option value="FLAT">Квартира</option>\n' +
+                '        <option value="HOTEL">Жилой дом</option>\n' +
+                '        <option value="ENGINEERING">Инженерное</option>\n' +
+                '        <option value="AGRICULTURAL">с/х</option>\n' +
+                '        <option value="SUBSIDIARY">Вспомогательное</option>\n' +
+                '        <option value="HOTEL">Гостиничное</option>\n' +
+                '        <option value="RECREATIONAL">Рекреационное</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
@@ -962,19 +992,19 @@
                 '    <label>Сегмент рынка здания где расположено помещение</label>\n' +
                 '    <select name="marketSegmentBuilding">\n' +
                 '        <option selected value="">не выбрано</option>\n' +
-                '        <option value="Торговое">Торговое</option>\n' +
-                '        <option value="Офисное">Офисное</option>\n' +
-                '        <option value="Торгово-Офисное">Торгово-Офисное</option>\n' +
-                '        <option value="Производственное">Производственное</option>\n' +
-                '        <option value="Складское">Складское</option>\n' +
-                '        <option value="Производственно-складсткое">Производственно-складсткое</option>\n' +
-                '        <option value="Квартира">Квартира</option>\n' +
-                '        <option value="Жилой дом">Жилой дом</option>\n' +
-                '        <option value="Инженерное">Инженерное</option>\n' +
-                '        <option value="с/х">с/х</option>\n' +
-                '        <option value="Вспомогательное">Вспомогательное</option>\n' +
-                '        <option value="Гостиничное">Гостиничное</option>\n' +
-                '        <option value="Рекреационное">Рекреационное</option>\n' +
+                '        <option value="TRADING">Торговое</option>\n' +
+                '        <option value="OFFICE">Офисное</option>\n' +
+                '        <option value="TRADING_OFFICE">Торгово-Офисное</option>\n' +
+                '        <option value="INDUSTRIAL">Производственное</option>\n' +
+                '        <option value="WAREHOUSE">Складское</option>\n' +
+                '        <option value="INDUSTRIAL_WAREHOUSE">Производственно-складсткое</option>\n' +
+                '        <option value="FLAT">Квартира</option>\n' +
+                '        <option value="HOTEL">Жилой дом</option>\n' +
+                '        <option value="ENGINEERING">Инженерное</option>\n' +
+                '        <option value="AGRICULTURAL">с/х</option>\n' +
+                '        <option value="SUBSIDIARY">Вспомогательное</option>\n' +
+                '        <option value="HOTEL">Гостиничное</option>\n' +
+                '        <option value="RECREATIONAL">Рекреационное</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
@@ -982,12 +1012,13 @@
                 '    <label>Этаж расположения</label>\n' +
                 '    <input name="floorLocation" type="text"/>\n' +
                 '    <select name="floorLocationOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
+                '<input type="hidden" name="floorLocationOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>';
             elementPS.innerHTML = '';
@@ -997,6 +1028,7 @@
             elementPS.innerHTML = '<div class="row">\n' +
                 '    <label>IMO</label>\n' +
                 '    <input type="number" min="0" name="imo"/>\n' +
+                '<input type="hidden" name="imoOption" value="EQUAL_IGNORE_CASE">\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
@@ -1037,11 +1069,11 @@
                 '    <label>Валовая вместимость</label>\n' +
                 '    <input type="number" min="0" name="grossTonnage"/>\n' +
                 '    <select name="grossTonnageOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
@@ -1049,23 +1081,23 @@
                 '    <label>Дедвейт</label>\n' +
                 '    <input type="number" min="0" name="deadweight"/>\n' +
                 '    <select name="deadweightOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '<div class="row">\n' +
                 '    <label>Год постройки</label>\n' +
-                '    <input type="number" min="0" name="yearBuiltVessel"/>\n' +
-                '    <select name="yearBuiltVesselOption">\n' +
-                '        <option selected value=":">равно</option>\n' +
-                '        <option value=">">больше</option>\n' +
-                '        <option value=">=">больше или ровно</option>\n' +
-                '        <option value="<">меньше</option>\n' +
-                '        <option value="<=">меньше или равно</option>\n' +
+                '    <input type="number" min="0" name="yearBuilt"/>\n' +
+                '    <select name="yearBuiltOption">\n' +
+                '<option selected value="EQUAL_IGNORE_CASE">равно</option>\n' +
+                '<option value="GREATER">больше</option>\n' +
+                '<option value="GREATER_EQUAL">больше или ровно</option>\n' +
+                '<option value="LESS">меньше</option>\n' +
+                '<option value="LESS_EQUAL">меньше или равно</option>\n' +
                 '    </select>\n' +
                 '</div>\n' +
                 '<br>';

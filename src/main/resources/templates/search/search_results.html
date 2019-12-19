@@ -45,7 +45,7 @@
 </div>
 
 <div th:if="${resultList.totalPages > 1}" >
-    <form th:action="@{/search_results}" th:method="get" action="search_results.html">
+    <form th:action="@{/search/search_results}" th:method="get" action="search_results.html">
         <th:block th:each="elem : ${reqParam}">
             <input type="hidden", th:name="${elem.key}" th:value="${elem.value}">
         </th:block>

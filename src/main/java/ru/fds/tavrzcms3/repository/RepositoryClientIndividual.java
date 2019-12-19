@@ -14,6 +14,6 @@ public interface RepositoryClientIndividual extends JpaRepository<ClientIndividu
     List<ClientIndividual> findBySurnameContainingIgnoreCase(String surname);
     List<ClientIndividual> findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(String surname, String name);
     List<ClientIndividual> findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCaseAndPatronymicContainingIgnoreCase(String surname, String name, String patromic);
-    Page<Client> findAll(Specification specification, Pageable pageable);
+    List<Client> findAll(Specification specification);
     ClientIndividual findByClient(Client client);
 }

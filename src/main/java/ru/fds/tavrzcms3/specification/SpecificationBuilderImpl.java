@@ -1,42 +1,56 @@
 package ru.fds.tavrzcms3.specification;
 
 import org.springframework.data.jpa.domain.Specification;
+import ru.fds.tavrzcms3.dictionary.Operations;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SpecificationBuilderImpl implements SpecificationBuilder {
 
-    private final List<SearchCriteria> params;
+    private final List<SearchCriteria> searchCriteriaList;
+    private final List<SearchCriteriaNestedAttribute> searchCriteriaNestedAttributeList;
     private SearchCriteria criteria;
 
     public SpecificationBuilderImpl(){
-        params = new ArrayList<>();
+        searchCriteriaList = new ArrayList<>();
+        searchCriteriaNestedAttributeList = new ArrayList<>();
     }
 
     @Override
-    public void with(String key, String operation, Object value, boolean predicate) {
-        params.add(new SearchCriteria(key, operation, value, predicate));
+    public void with(SearchCriteria searchCriteria) {
+        searchCriteriaList.add(searchCriteria);
+    }
+
+    @Override
+    public void withNestedAttribute(SearchCriteriaNestedAttribute searchCriteriaNestedAttribute) {
+        searchCriteriaNestedAttributeList.add(searchCriteriaNestedAttribute);
     }
 
     @Override
     public Specification build() {
-        if(params.size() == 0){
+        if(searchCriteriaList.size() == 0 && searchCriteriaNestedAttributeList.size() == 0){
             return null;
         }
 
-        List<Specification> specs = params.stream().map(SpecificationImpl::new).collect(Collectors.toList());
+//        List<Specification> specs = searchCriteriaList.stream().map(SpecificationImpl::new).collect(Collectors.toList());
+        List<Specification> specs = new ArrayList<>();
+        for (SearchCriteria sc : searchCriteriaList)
+            specs.add(new SpecificationImpl(sc));
+
+        List<Specification> specsNested = new ArrayList<>();
+        for (SearchCriteriaNestedAttribute sc : searchCriteriaNestedAttributeList)
+            specsNested.add(new SpecificationNestedAttribute(sc));
+
 
         Specification result = specs.get(0);
 
-        for(int i = 1; i < params.size(); i++){
-            result = params.get(i).isPredicate() ? Specification.where(result).or(specs.get(i)) : Specification.where(result).and(specs.get(i));
+        for(int i = 1; i < searchCriteriaList.size(); i++){
+            result = searchCriteriaList.get(i).isPredicate() ? Specification.where(result).or(specs.get(i)) : Specification.where(result).and(specs.get(i));
+        }
+
+        for (int i = 0; i < searchCriteriaNestedAttributeList.size(); i++){
+            result = searchCriteriaNestedAttributeList.get(i).isPredicate() ? Specification.where(result).or(specsNested.get(i)) : Specification.where(result).and(specsNested.get(i));
         }
 
         return result;

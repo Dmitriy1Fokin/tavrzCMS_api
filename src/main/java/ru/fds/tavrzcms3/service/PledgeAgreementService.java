@@ -290,96 +290,93 @@ public class PledgeAgreementService {
         return pledgeAgreementListWithConclusionOverdue;
     }
 
-    public Page<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam){
-        SpecificationBuilder builder = new SpecificationBuilderImpl();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
-
-        if(!searchParam.get("numPA").isEmpty())
-            builder.with("numPA", ":", searchParam.get("numPA"), false);
-        if(!searchParam.get("client").isEmpty()) {
-            if (searchParam.get("clientOption").equals("юл")) {
-                List<ClientLegalEntity> pledgors = repositoryClientLegalEntity.findByNameContainingIgnoreCase(searchParam.get("client"));
-                if(pledgors.isEmpty())
-                    builder.with("client", ":", null, false);
-                else if(pledgors.size() == 1)
-                    builder.with("client", ":", pledgors.get(0), false);
-                else if(pledgors.size() > 1)
-                    for(ClientLegalEntity cle : pledgors)
-                        builder.with("client", ":", cle, true);
-            }
-            else{
-                String[] words = searchParam.get("client").split("\\s");
-                List<ClientIndividual> pledgors = new ArrayList<>();
-
-                if(words.length == 1)
-                    pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCase(words[0]);
-                else if(words.length > 1)
-                    pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(words[0], words[1]);
-
-                if(pledgors.isEmpty())
-                    builder.with("client", ":", null, false);
-                else if(pledgors.size() == 1)
-                    builder.with("client", ":", pledgors.get(0), false);
-                else if(pledgors.size() > 1)
-                    for(ClientIndividual ci : pledgors)
-                        builder.with("client", ":", ci, true);
-            }
-        }
-        if(!searchParam.get("dateBeginPA").isEmpty()){
-            try {
-                Date date = simpleDateFormat.parse(searchParam.get("dateBeginPA"));
-                builder.with("dateBeginPA", searchParam.get("dateBeginPAOption"), date, false);
-            }catch (ParseException e){
-                System.out.println("Не верный фортат dateBeginPA");
-            }
-        }
-        if(!searchParam.get("dateEndPA").isEmpty()){
-            try {
-                Date date = simpleDateFormat.parse(searchParam.get("dateEndPA"));
-                builder.with("dateEndPA", searchParam.get("dateEndPAOption"), date, false);
-            }catch (ParseException e){
-                System.out.println("Не верный фортат dateEndPA");
-            }
-        }
-        if(!searchParam.get("pervPosl").isEmpty())
-            builder.with("pervPosl", ":", TypeOfPledgeAgreement.valueOf(searchParam.get("pervPosl")), false);
-
-
-
-        if(!searchParam.get("rsDZ").isEmpty())
-            builder.with("rsDz", searchParam.get("rsDZOption"), searchParam.get("rsDZ"), false);
-
-
-
-        if(!searchParam.get("rsZZ").isEmpty())
-            builder.with("rsZz", searchParam.get("rsZZOption"), searchParam.get("rsZZ"), false);
-
-
-
-        if(!searchParam.get("zsDZ").isEmpty())
-            builder.with("zsDz", searchParam.get("zsDZOption"), searchParam.get("zsDZ"), false);
-
-
-
-        if(!searchParam.get("zsZZ").isEmpty())
-            builder.with("zsZz", searchParam.get("zsZZOption"), searchParam.get("zsZZ"), false);
-
-
-
-        if(!searchParam.get("ss").isEmpty())
-            builder.with("ss", searchParam.get("ssOption"), searchParam.get("ss"), false);
-
-
-
-        builder.with("statusPA", ":", StatusOfAgreement.valueOf(searchParam.get("statusPA")), false);
-
-        Specification<PledgeAgreement> spec = builder.build();
-
-        int currentPage = Integer.parseInt(searchParam.get("page"));
-        int pageSize = Integer.parseInt(searchParam.get("size"));
-        Pageable pageable = PageRequest.of(currentPage, pageSize);
-
-        return repositoryPledgeAgreement.findAll(spec, pageable);
+    public List<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam){
+//        SpecificationBuilder builder = new SpecificationBuilderImpl();
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
+//
+//        if(!searchParam.get("numPA").isEmpty())
+//            builder.with("numPA", ":", searchParam.get("numPA"), false);
+//        if(!searchParam.get("client").isEmpty()) {
+//            if (searchParam.get("clientOption").equals("юл")) {
+//                List<ClientLegalEntity> pledgors = repositoryClientLegalEntity.findByNameContainingIgnoreCase(searchParam.get("client"));
+//                if(pledgors.isEmpty())
+//                    builder.with("client", ":", null, false);
+//                else if(pledgors.size() == 1)
+//                    builder.with("client", ":", pledgors.get(0), false);
+//                else if(pledgors.size() > 1)
+//                    for(ClientLegalEntity cle : pledgors)
+//                        builder.with("client", ":", cle, true);
+//            }
+//            else{
+//                String[] words = searchParam.get("client").split("\\s");
+//                List<ClientIndividual> pledgors = new ArrayList<>();
+//
+//                if(words.length == 1)
+//                    pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCase(words[0]);
+//                else if(words.length > 1)
+//                    pledgors = repositoryClientIndividual.findBySurnameContainingIgnoreCaseAndNameContainingIgnoreCase(words[0], words[1]);
+//
+//                if(pledgors.isEmpty())
+//                    builder.with("client", ":", null, false);
+//                else if(pledgors.size() == 1)
+//                    builder.with("client", ":", pledgors.get(0), false);
+//                else if(pledgors.size() > 1)
+//                    for(ClientIndividual ci : pledgors)
+//                        builder.with("client", ":", ci, true);
+//            }
+//        }
+//        if(!searchParam.get("dateBeginPA").isEmpty()){
+//            try {
+//                Date date = simpleDateFormat.parse(searchParam.get("dateBeginPA"));
+//                builder.with("dateBeginPA", searchParam.get("dateBeginPAOption"), date, false);
+//            }catch (ParseException e){
+//                System.out.println("Не верный фортат dateBeginPA");
+//            }
+//        }
+//        if(!searchParam.get("dateEndPA").isEmpty()){
+//            try {
+//                Date date = simpleDateFormat.parse(searchParam.get("dateEndPA"));
+//                builder.with("dateEndPA", searchParam.get("dateEndPAOption"), date, false);
+//            }catch (ParseException e){
+//                System.out.println("Не верный фортат dateEndPA");
+//            }
+//        }
+//        if(!searchParam.get("pervPosl").isEmpty())
+//            builder.with("pervPosl", ":", TypeOfPledgeAgreement.valueOf(searchParam.get("pervPosl")), false);
+//
+//
+//
+//        if(!searchParam.get("rsDZ").isEmpty())
+//            builder.with("rsDz", searchParam.get("rsDZOption"), searchParam.get("rsDZ"), false);
+//
+//
+//
+//        if(!searchParam.get("rsZZ").isEmpty())
+//            builder.with("rsZz", searchParam.get("rsZZOption"), searchParam.get("rsZZ"), false);
+//
+//
+//
+//        if(!searchParam.get("zsDZ").isEmpty())
+//            builder.with("zsDz", searchParam.get("zsDZOption"), searchParam.get("zsDZ"), false);
+//
+//
+//
+//        if(!searchParam.get("zsZZ").isEmpty())
+//            builder.with("zsZz", searchParam.get("zsZZOption"), searchParam.get("zsZZ"), false);
+//
+//
+//
+//        if(!searchParam.get("ss").isEmpty())
+//            builder.with("ss", searchParam.get("ssOption"), searchParam.get("ss"), false);
+//
+//
+//
+//        builder.with("statusPA", ":", StatusOfAgreement.valueOf(searchParam.get("statusPA")), false);
+//
+//        Specification<PledgeAgreement> spec = builder.build();
+//
+//        return repositoryPledgeAgreement.findAll(spec);
+        return null;
 
     }
 

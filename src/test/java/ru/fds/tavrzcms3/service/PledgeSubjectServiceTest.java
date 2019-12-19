@@ -4,25 +4,34 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.fds.tavrzcms3.dictionary.Liquidity;
 import ru.fds.tavrzcms3.dictionary.MarketSegment;
+import ru.fds.tavrzcms3.dictionary.Operations;
 import ru.fds.tavrzcms3.dictionary.StatusOfMonitoring;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledge;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.domain.PledgeSubjectAuto;
 import ru.fds.tavrzcms3.domain.PledgeSubjectRoom;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
+import ru.fds.tavrzcms3.specification.SearchCriteria;
+import ru.fds.tavrzcms3.specification.SpecificationBuilder;
+import ru.fds.tavrzcms3.specification.SpecificationBuilderImpl;
+import ru.fds.tavrzcms3.specification.SpecificationNestedAttribute;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
 import javax.validation.ConstraintViolation;
+import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -123,6 +132,57 @@ public class PledgeSubjectServiceTest {
 
 
 
+
+    }
+
+    @Test
+    public void searchPledgeSubject(){
+//        SpecificationBuilder builder = new SpecificationBuilderImpl();
+//        builder.with("name", ":", "дом", false);
+
+//        Specification<PledgeSubject> specification = builder.build();
+
+//        List<PledgeSubject> pledgeSubjectList = repositoryPledgeSubject.findAll(specification);
+//        System.out.println("111111. size:" + pledgeSubjectList.size() + ". " + pledgeSubjectList);
+
+
+//        PledgeSubject pledgeSubject = PledgeSubject.builder().name("дом").build();
+//        ExampleMatcher exampleMatcher = ExampleMatcher.matching().withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+//        List<PledgeSubject> pledgeSubjectList2 = repositoryPledgeSubject.findAll(Example.of(pledgeSubject, exampleMatcher));
+//        System.out.println("2222222. size:" + pledgeSubjectList2.size() + ". " );
+
+
+        Class pledgeSubjecrClass = PledgeSubject.class;
+        Field[] pledgeSubjectFields = pledgeSubjecrClass.getDeclaredFields();
+        for(Field field : pledgeSubjectFields){
+
+                if(field.getType() == Liquidity.class){
+                    System.out.println("Liquidity.class");
+                }else if(field.getType() == Date.class){
+                    System.out.println("Date.class");
+
+                }
+
+        }
+
+        for (Field field : pledgeSubjectFields) {
+            Object o = field.getType();
+            System.out.println("Object: " + ((Class) o).getName() + ". Class: " + o.getClass());
+            System.out.println("TYPE: " + field.getType() + " NAME: " + field.getName());
+        }
+
+
+
+//        SpecificationNestedAttribute specificationNestedAttribute = new SpecificationNestedAttribute(PledgeSubject.class, PledgeSubjectAuto.class);
+//        specificationNestedAttribute.getSpecification("12", 12, ":");
+
+//        SpecificationBuilder builder2 = new SpecificationBuilderImpl();
+//        builder2.with("pledgeSubjectBuilding.getCadastralNum()", ":", "78", false);
+//
+//        Specification<PledgeSubject> specification2 = builder2.build();
+//
+//        List<PledgeSubject> pledgeSubjectList2 = repositoryPledgeSubject.findAll(specification2);
+//        System.out.println("2222222" + pledgeSubjectList2);
 
     }
 

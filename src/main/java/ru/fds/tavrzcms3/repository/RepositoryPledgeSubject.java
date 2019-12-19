@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.repository;
 
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,10 +23,12 @@ public interface RepositoryPledgeSubject extends JpaRepository<PledgeSubject, Lo
     boolean existsByPledgeAgreementsAndDateConclusionBetween(PledgeAgreement pledgeAgreement, Date firstDate, Date secondDate);
     boolean existsByPledgeAgreementsAndDateConclusionBefore(PledgeAgreement pledgeAgreement, Date beforeDate);
     Page<PledgeSubject> findAll(Specification specification, Pageable pageable);
+    List<PledgeSubject> findAll(Specification specification);
+//    List<PledgeSubject> findAllByExa(Example<PledgeSubject> example);
     List<PledgeSubject> findAllByNameContainingIgnoreCase(String name);
     Optional<PledgeSubject> findByCostHistories(CostHistory costHistory);
-    List<PledgeSubject> findByPledgeSubjectBuildingCadastralNumContainingIgnoreCase(String cadastralNum);
-    List<PledgeSubject> findByPledgeSubjectLandLeaseCadastralNumContainingIgnoreCase(String cadastralNum);
-    List<PledgeSubject> findByPledgeSubjectLandOwnershipCadastralNumContainingIgnoreCase(String cadastralNum);
-    List<PledgeSubject> findByPledgeSubjectRoomCadastralNumContainingIgnoreCase(String cadastralNum);
+    List<PledgeSubject> findByPledgeSubjectBuilding_CadastralNumContainingIgnoreCase(String cadastralNum);
+    List<PledgeSubject> findByPledgeSubjectLandLease_CadastralNumContainingIgnoreCase(String cadastralNum);
+    List<PledgeSubject> findByPledgeSubjectLandOwnership_CadastralNumContainingIgnoreCase(String cadastralNum);
+    List<PledgeSubject> findByPledgeSubjectRoom_CadastralNumContainingIgnoreCase(String cadastralNum);
 }

@@ -1,6 +1,8 @@
 package ru.fds.tavrzcms3.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,11 +12,17 @@ import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.dto.ClientDto;
+import ru.fds.tavrzcms3.dto.DtoFactory;
+import ru.fds.tavrzcms3.dto.LoanAgreementDto;
+import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
+import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.service.ClientService;
 import ru.fds.tavrzcms3.service.LoanAgreementService;
 import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,6 +37,8 @@ public class SearchController {
     private final PledgeSubjectService pledgeSubjectService;
     private final ClientService clientService;
 
+    private final DtoFactory dtoFactory;
+
     private static final String ATTR_RESULT_LIST = "resultList";
     private static final String ATTR_PAGE_NUMBERS = "pageNumbers";
     private static final String ATTR_REQ_PARAM = "reqParam";
@@ -37,11 +47,12 @@ public class SearchController {
     public SearchController(LoanAgreementService loanAgreementService,
                             PledgeAgreementService pledgeAgreementService,
                             PledgeSubjectService pledgeSubjectService,
-                            ClientService clientService) {
+                            ClientService clientService, DtoFactory dtoFactory) {
         this.loanAgreementService = loanAgreementService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.pledgeSubjectService = pledgeSubjectService;
         this.clientService = clientService;
+        this.dtoFactory = dtoFactory;
     }
 
     @GetMapping("/search")
@@ -52,13 +63,35 @@ public class SearchController {
     @GetMapping("/search_results")
     public String searchResultsPage(@RequestParam Map<String, String> reqParam,
                                     Model model){
+
+        int currentPage = Integer.parseInt(reqParam.get("page"));
+        int pageSize = Integer.parseInt(reqParam.get("size"));
+        int startItem = currentPage * pageSize;
+
         switch (reqParam.get("typeOfSearch")){
 
             case "searchLA":
-                Page<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementFromSearch(reqParam);
-                model.addAttribute(ATTR_RESULT_LIST, loanAgreementList);
 
-                int totalPagesLA = loanAgreementList.getTotalPages();
+                List<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementFromSearch(reqParam);
+
+                List<LoanAgreement> loanAgreementListForPage;
+                if(loanAgreementList.size() < startItem){
+                    loanAgreementListForPage = Collections.emptyList();
+                }else {
+                    int toIndex = Math.min(startItem+pageSize, loanAgreementList.size());
+                    loanAgreementListForPage = loanAgreementList.subList(startItem, toIndex);
+                }
+
+                Page<LoanAgreementDto> loanAgreementDtoPage = new PageImpl<>(
+                        dtoFactory.getLoanAgreementsDto(loanAgreementListForPage),
+                        PageRequest.of(currentPage, pageSize),
+                        loanAgreementList.size());
+
+
+
+                model.addAttribute(ATTR_RESULT_LIST, loanAgreementDtoPage);
+
+                int totalPagesLA = loanAgreementDtoPage.getTotalPages();
                 if(totalPagesLA > 0){
                     List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPagesLA).boxed().collect(Collectors.toList());
                     model.addAttribute(ATTR_PAGE_NUMBERS, pageNumbers);
@@ -70,10 +103,25 @@ public class SearchController {
                 break;
 
             case "searchPA":
-                Page<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementFromSearch(reqParam);
-                model.addAttribute(ATTR_RESULT_LIST, pledgeAgreementList);
 
-                int totalPagesPA = pledgeAgreementList.getTotalPages();
+                List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementFromSearch(reqParam);
+
+                List<PledgeAgreement> pledgeAgreementListForPage;
+                if(pledgeAgreementList.size() < startItem){
+                    pledgeAgreementListForPage = Collections.emptyList();
+                }else {
+                    int toIndex = Math.min(startItem+pageSize, pledgeAgreementList.size());
+                    pledgeAgreementListForPage = pledgeAgreementList.subList(startItem, toIndex);
+                }
+
+                Page<PledgeAgreementDto> pledgeAgreementDtoPage = new PageImpl<>(
+                        dtoFactory.getPledgeAgreementsDto(pledgeAgreementListForPage),
+                        PageRequest.of(currentPage, pageSize),
+                        pledgeAgreementList.size());
+
+                model.addAttribute(ATTR_RESULT_LIST, pledgeAgreementDtoPage);
+
+                int totalPagesPA = pledgeAgreementDtoPage.getTotalPages();
                 if(totalPagesPA > 0){
                     List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPagesPA).boxed().collect(Collectors.toList());
                     model.addAttribute(ATTR_PAGE_NUMBERS, pageNumbers);
@@ -86,10 +134,24 @@ public class SearchController {
 
             case "searchPS":
 
-                Page<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsFromSearch(reqParam);
-                model.addAttribute(ATTR_RESULT_LIST, pledgeSubjectList);
+                List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsFromSearch(reqParam);
 
-                int totalPagesPS = pledgeSubjectList.getTotalPages();
+                List<PledgeSubject> pledgeSubjectListForPage;
+                if(pledgeSubjectList.size() < startItem){
+                    pledgeSubjectListForPage = Collections.emptyList();
+                }else {
+                    int toIndex = Math.min(startItem+pageSize, pledgeSubjectList.size());
+                    pledgeSubjectListForPage = pledgeSubjectList.subList(startItem, toIndex);
+                }
+
+                Page<PledgeSubjectDto> pledgeSubjectDtoPage = new PageImpl<>(
+                        dtoFactory.getPledgeSubjectsDto(pledgeSubjectListForPage),
+                        PageRequest.of(currentPage, pageSize),
+                        pledgeSubjectList.size());
+
+                model.addAttribute(ATTR_RESULT_LIST, pledgeSubjectDtoPage);
+
+                int totalPagesPS = pledgeSubjectDtoPage.getTotalPages();
                 if(totalPagesPS > 0){
                     List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPagesPS).boxed().collect(Collectors.toList());
                     model.addAttribute(ATTR_PAGE_NUMBERS, pageNumbers);
@@ -102,17 +164,30 @@ public class SearchController {
 
             case "searchClient":
 
-                Page<Client> clientPage = clientService.getClientFromSearch(reqParam);
-                model.addAttribute(ATTR_RESULT_LIST, clientPage);
-
-                int totalPagesClient = clientPage.getTotalPages();
-                if(totalPagesClient > 0){
-                    List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPagesClient).boxed().collect(Collectors.toList());
-                    model.addAttribute(ATTR_PAGE_NUMBERS, pageNumbers);
-                }
-
-                reqParam.remove("page");
-                model.addAttribute(ATTR_REQ_PARAM, reqParam);
+//                List<Client> clientList = clientService.getClientFromSearch(reqParam);
+//
+//                List<Client> clientLissForPage;
+//                if(clientList.size() < startItem){
+//                    clientLissForPage = Collections.emptyList();
+//                }else {
+//                    int toIndex = Math.min(startItem+pageSize, clientList.size());
+//                    clientLissForPage = clientList.subList(startItem, toIndex);
+//                }
+//
+//                Page<ClientDto> clientDtoPage = new PageImpl<>(
+//                        dtoFactory.getC
+//                )
+//
+//                model.addAttribute(ATTR_RESULT_LIST, clientPage);
+//
+//                int totalPagesClient = clientPage.getTotalPages();
+//                if(totalPagesClient > 0){
+//                    List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPagesClient).boxed().collect(Collectors.toList());
+//                    model.addAttribute(ATTR_PAGE_NUMBERS, pageNumbers);
+//                }
+//
+//                reqParam.remove("page");
+//                model.addAttribute(ATTR_REQ_PARAM, reqParam);
 
                 break;
 

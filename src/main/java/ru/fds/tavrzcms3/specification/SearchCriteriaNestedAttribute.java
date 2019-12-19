@@ -8,10 +8,10 @@ import ru.fds.tavrzcms3.dictionary.Operations;
 @AllArgsConstructor
 @Getter
 @Builder
-public class SearchCriteria {
+public class SearchCriteriaNestedAttribute {
+    private String nestedObjectName;
     private String key;
     private Operations operation;
     private Object value;
     private boolean predicate;
-
 }
