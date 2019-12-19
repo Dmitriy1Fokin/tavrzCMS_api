@@ -24,49 +24,49 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<h1 th:text="'Клиент: ' + ${client.getFullName()}">Клиент ЮЛ</h1>
-<div th:switch="${client.getTypeOfClient().name()}">
+<h1 th:text="'Клиент: ' + ${clientDto.getFullName()}">Клиент ЮЛ</h1>
+<div th:switch="${clientDto.getTypeOfClient().name()}">
     <div th:case="LEGAL_ENTITY">
         <label>ИНН:</label>
-        <span th:text="${client.getInn()}"></span>
+        <span th:text="${clientDto.getClientLegalEntityDto().getInn()}"></span>
     </div>
     <div th:case="INDIVIDUAL">
         <label>Паспорт:</label>
-        <span th:text="${client.getPasportNum()}"></span>
+        <span th:text="${clientDto.getClientIndividualDto().getPasportNum()}"></span>
     </div>
 </div>
 <br>
 
 <label>Ответственный сотрудник: </label>
-<span th:text="${employee.getFullName()}"></span>
+<span th:text="${employeeDto.getFullName()}"></span>
 <br>
 <br>
 <label>Клиентский менеджер: </label>
-<span th:text="${clientManager.getFullName()}"></span>
+<span th:text="${clientManagerDto.getFullName()}"></span>
 <br>
 <br>
 <label>Id клиента:</label>
-<span th:text="${client.getClientId()}"></span>
+<span th:text="${clientDto.getClientId()}"></span>
 <br>
 <br>
-<a th:href="@{/client/client_card_update(clientId=${client.getClientId()})}"
-   href="client/card_update.html"
+<a th:href="@{/client/card(clientId=${clientDto.getClientId()}, whatDo='updateClient')}"
+   href="client/card.html"
    th:text="'Изменить данные клиента'">Изменить данные клиента</a>
 <br>
 <br>
-<a th:href="@{/pledge_agreement/card(whatDo='newPA', clientId=${client.getClientId()})}"
+<a th:href="@{/pledge_agreement/card(whatDo='newPA', clientId=${clientDto.getClientId()})}"
    href="../pledge_agreement/card.html"
    th:text="'Добавить новый договор залога'">Добавить новый договор залога</a>
 <br>
 <br>
-<a th:href="@{/loan_agreement/card(whatDo='newLA', clientId=${client.getClientId()})}"
+<a th:href="@{/loan_agreement/card(whatDo='newLA', clientId=${clientDto.getClientId()})}"
    href="../loan_agreement/card.html"
    th:text="'Добавить новый кредитный договор'">Добавить новый кредитный договор</a>
 <br>
 <br>
 
 <div th:if="${pledgeAgreementCurrentList.size() &gt; 0}">
-    <a th:href="@{/monitoring/card(whereUpdateMonitoring='pledgor', pledgorId=${client.getClientId()})}"
+    <a th:href="@{/monitoring/card(whereUpdateMonitoring='pledgor', pledgorId=${clientDto.getClientId()})}"
        href="../monitoring/card.html"
        th:text="'Обновить мониторинг предметов залога по всем договорам залога залогодателя'">Обновить мониторинг предметов залога по всем договорам залога залогодателя</a>
     <br>

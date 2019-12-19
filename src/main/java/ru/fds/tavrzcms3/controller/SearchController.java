@@ -164,30 +164,31 @@ public class SearchController {
 
             case "searchClient":
 
-//                List<Client> clientList = clientService.getClientFromSearch(reqParam);
-//
-//                List<Client> clientLissForPage;
-//                if(clientList.size() < startItem){
-//                    clientLissForPage = Collections.emptyList();
-//                }else {
-//                    int toIndex = Math.min(startItem+pageSize, clientList.size());
-//                    clientLissForPage = clientList.subList(startItem, toIndex);
-//                }
-//
-//                Page<ClientDto> clientDtoPage = new PageImpl<>(
-//                        dtoFactory.getC
-//                )
-//
-//                model.addAttribute(ATTR_RESULT_LIST, clientPage);
-//
-//                int totalPagesClient = clientPage.getTotalPages();
-//                if(totalPagesClient > 0){
-//                    List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPagesClient).boxed().collect(Collectors.toList());
-//                    model.addAttribute(ATTR_PAGE_NUMBERS, pageNumbers);
-//                }
-//
-//                reqParam.remove("page");
-//                model.addAttribute(ATTR_REQ_PARAM, reqParam);
+                List<Client> clientList = clientService.getClientFromSearch(reqParam);
+
+                List<Client> clientLissForPage;
+                if(clientList.size() < startItem){
+                    clientLissForPage = Collections.emptyList();
+                }else {
+                    int toIndex = Math.min(startItem+pageSize, clientList.size());
+                    clientLissForPage = clientList.subList(startItem, toIndex);
+                }
+
+                Page<ClientDto> clientDtoPage = new PageImpl<>(
+                        dtoFactory.getClientsDto(clientLissForPage),
+                        PageRequest.of(currentPage, pageSize),
+                        clientList.size());
+
+                model.addAttribute(ATTR_RESULT_LIST, clientDtoPage);
+
+                int totalPagesClient = clientDtoPage.getTotalPages();
+                if(totalPagesClient > 0){
+                    List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPagesClient).boxed().collect(Collectors.toList());
+                    model.addAttribute(ATTR_PAGE_NUMBERS, pageNumbers);
+                }
+
+                reqParam.remove("page");
+                model.addAttribute(ATTR_REQ_PARAM, reqParam);
 
                 break;
 

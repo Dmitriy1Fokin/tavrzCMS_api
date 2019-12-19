@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.fds.tavrzcms3.converver.InsuranceConverterDto;
-import ru.fds.tavrzcms3.converver.PledgeSubjectConverterDto;
 import ru.fds.tavrzcms3.domain.Insurance;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.InsuranceDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.service.InsuranceService;
@@ -29,8 +28,7 @@ public class InsuranceController {
     private final PledgeSubjectService pledgeSubjectService;
     private final InsuranceService insuranceService;
 
-    private final PledgeSubjectConverterDto pledgeSubjectConverterDto;
-    private final InsuranceConverterDto insuranceConverterDto;
+    private final DtoFactory dtoFactory;
 
     private final ValidatorEntity validatorEntity;
 
@@ -38,12 +36,11 @@ public class InsuranceController {
 
     public InsuranceController(PledgeSubjectService pledgeSubjectService,
                                InsuranceService insuranceService,
-                               PledgeSubjectConverterDto pledgeSubjectConverterDto,
-                               InsuranceConverterDto insuranceConverterDto, ValidatorEntity validatorEntity) {
+                               DtoFactory dtoFactory,
+                               ValidatorEntity validatorEntity) {
         this.pledgeSubjectService = pledgeSubjectService;
         this.insuranceService = insuranceService;
-        this.pledgeSubjectConverterDto = pledgeSubjectConverterDto;
-        this.insuranceConverterDto = insuranceConverterDto;
+        this.dtoFactory = dtoFactory;
         this.validatorEntity = validatorEntity;
     }
 
@@ -54,10 +51,10 @@ public class InsuranceController {
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId)
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
-        PledgeSubjectDto pledgeSubjectDto = pledgeSubjectConverterDto.toDto(pledgeSubject);
+        PledgeSubjectDto pledgeSubjectDto = dtoFactory.getPledgeSubjectDto(pledgeSubject);
 
-        List<InsuranceDto> insuranceList = insuranceConverterDto
-                .toDto(insuranceService.getInsurancesByPledgeSubject(pledgeSubject));
+        List<InsuranceDto> insuranceList = dtoFactory
+                .getInsurancesDto(insuranceService.getInsurancesByPledgeSubject(pledgeSubject));
 
         model.addAttribute("pledgeSubject", pledgeSubjectDto);
         model.addAttribute("insuranceList", insuranceList);
@@ -86,7 +83,7 @@ public class InsuranceController {
         if(bindingResult.hasErrors())
             return "insurance/card";
 
-        Insurance insurance = insuranceConverterDto.toEntity(insuranceDto);
+        Insurance insurance = dtoFactory.getInsuranceEntity(insuranceDto);
         Set<ConstraintViolation<Insurance>> violations = validatorEntity.validateEntity(insurance);
         if(!violations.isEmpty())
             throw new IllegalArgumentException(validatorEntity.getErrorMessage());

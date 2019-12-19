@@ -7,12 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.fds.tavrzcms3.converver.EmployeeConverterDto;
-import ru.fds.tavrzcms3.converver.LoanAgreementConverterDto;
-import ru.fds.tavrzcms3.converver.PledgeAgreementConverterDto;
 import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
+import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.EmployeeDto;
 import ru.fds.tavrzcms3.dto.LoanAgreementDto;
 import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
@@ -38,9 +36,7 @@ public class LoanAgreementController {
     private final LoanAgreementService loanAgreementService;
     private final PledgeAgreementService pledgeAgreementService;
 
-    private final LoanAgreementConverterDto loanAgreementConverterDto;
-    private final EmployeeConverterDto employeeConverterDto;
-    private final PledgeAgreementConverterDto pledgeAgreementConverterDto;
+    private final DtoFactory dtoFactory;
 
     private final ValidatorEntity validatorEntity;
 
@@ -52,16 +48,12 @@ public class LoanAgreementController {
     public LoanAgreementController(EmployeeService employeeService,
                                    LoanAgreementService loanAgreementService,
                                    PledgeAgreementService pledgeAgreementService,
-                                   LoanAgreementConverterDto loanAgreementConverterDto,
-                                   EmployeeConverterDto employeeConverterDto,
-                                   PledgeAgreementConverterDto pledgeAgreementConverterDto,
+                                   DtoFactory dtoFactory,
                                    ValidatorEntity validatorEntity) {
         this.employeeService = employeeService;
         this.loanAgreementService = loanAgreementService;
         this.pledgeAgreementService = pledgeAgreementService;
-        this.loanAgreementConverterDto = loanAgreementConverterDto;
-        this.employeeConverterDto = employeeConverterDto;
-        this.pledgeAgreementConverterDto = pledgeAgreementConverterDto;
+        this.dtoFactory = dtoFactory;
         this.validatorEntity = validatorEntity;
     }
 
@@ -88,7 +80,7 @@ public class LoanAgreementController {
         }
 
         Page<LoanAgreementDto> loanAgreementDtoPage = new PageImpl<>(
-                loanAgreementConverterDto.toDto(loanAgreementListForPage),
+                dtoFactory.getLoanAgreementsDto(loanAgreementListForPage),
                 PageRequest.of(currentPage, pageSize),
                 loanAgreementList.size());
 
@@ -110,15 +102,15 @@ public class LoanAgreementController {
 
         LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId)
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
-        LoanAgreementDto loanAgreementDto = loanAgreementConverterDto.toDto(loanAgreement);
+        LoanAgreementDto loanAgreementDto = dtoFactory.getLoanAgreementDto(loanAgreement);
 
-        EmployeeDto employeeDto = employeeConverterDto.toDto(employeeService.getEmployeeByLoanAgreement(loanAgreementId));
+        EmployeeDto employeeDto = dtoFactory.getEmployeeDto(employeeService.getEmployeeByLoanAgreement(loanAgreementId));
 
-        List<PledgeAgreementDto> currentPledgeAgreementDtoList = pledgeAgreementConverterDto
-                .toDto(pledgeAgreementService.getCurrentPledgeAgreementsByLoanAgreement(loanAgreement));
+        List<PledgeAgreementDto> currentPledgeAgreementDtoList = dtoFactory
+                .getPledgeAgreementsDto(pledgeAgreementService.getCurrentPledgeAgreementsByLoanAgreement(loanAgreement));
 
-        List<PledgeAgreementDto> closedPledgeAgreementDtoList = pledgeAgreementConverterDto
-                .toDto(pledgeAgreementService.getClosedPledgeAgreementsByLoanAgreement(loanAgreement));
+        List<PledgeAgreementDto> closedPledgeAgreementDtoList = dtoFactory
+                .getPledgeAgreementsDto(pledgeAgreementService.getClosedPledgeAgreementsByLoanAgreement(loanAgreement));
 
         model.addAttribute(ATTR_LOAN_AGREEMENT, loanAgreementDto);
         model.addAttribute("employeeDto", employeeDto);
@@ -138,7 +130,7 @@ public class LoanAgreementController {
                     .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
                     .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
-            LoanAgreementDto loanAgreementDto = loanAgreementConverterDto.toDto(loanAgreement);
+            LoanAgreementDto loanAgreementDto = dtoFactory.getLoanAgreementDto(loanAgreement);
 
             model.addAttribute(ATTR_LOAN_AGREEMENT, loanAgreementDto);
             model.addAttribute(ATTR_WHAT_DO, whatDo);
@@ -172,7 +164,7 @@ public class LoanAgreementController {
         }
 
 
-        LoanAgreement loanAgreement = loanAgreementConverterDto.toEntity(loanAgreementDto);
+        LoanAgreement loanAgreement = dtoFactory.getLoanAgreementEntity(loanAgreementDto);
 
         Set<ConstraintViolation<LoanAgreement>> violations =  validatorEntity.validateEntity(loanAgreement);
         if(!violations.isEmpty())
@@ -186,8 +178,8 @@ public class LoanAgreementController {
     @PostMapping("searchPA")
     public @ResponseBody List<PledgeAgreementDto> searchPA(@RequestParam("numPA") String numPA){
 
-        return pledgeAgreementConverterDto
-                .toDto(pledgeAgreementService.getPledgeAgreementsByNumPA(numPA));
+        return dtoFactory
+                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementsByNumPA(numPA));
     }
 
     @PostMapping("insertPA")
@@ -205,7 +197,6 @@ public class LoanAgreementController {
         }
 
         int countPAAfterUpdate = pledgeAgreementList.size();
-        System.out.println(countPAAfterUpdate - countPABeforeUpdate);
 
         loanAgreement.setPledgeAgreements(pledgeAgreementList);
 

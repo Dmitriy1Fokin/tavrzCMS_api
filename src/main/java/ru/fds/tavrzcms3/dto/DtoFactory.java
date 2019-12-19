@@ -1,12 +1,22 @@
 package ru.fds.tavrzcms3.dto;
 
 import org.springframework.stereotype.Component;
+import ru.fds.tavrzcms3.converver.ClientConverterDto;
+import ru.fds.tavrzcms3.converver.ClientManagerConverterDto;
 import ru.fds.tavrzcms3.converver.CostHistoryConverterDto;
+import ru.fds.tavrzcms3.converver.EmployeeConverterDto;
+import ru.fds.tavrzcms3.converver.EncumbranceConverterDto;
+import ru.fds.tavrzcms3.converver.InsuranceConverterDto;
 import ru.fds.tavrzcms3.converver.LoanAgreementConverterDto;
 import ru.fds.tavrzcms3.converver.MonitoringConverterDto;
 import ru.fds.tavrzcms3.converver.PledgeAgreementConverterDto;
 import ru.fds.tavrzcms3.converver.PledgeSubjectConverterDto;
+import ru.fds.tavrzcms3.domain.Client;
+import ru.fds.tavrzcms3.domain.ClientManager;
 import ru.fds.tavrzcms3.domain.CostHistory;
+import ru.fds.tavrzcms3.domain.Employee;
+import ru.fds.tavrzcms3.domain.Encumbrance;
+import ru.fds.tavrzcms3.domain.Insurance;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.Monitoring;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
@@ -23,17 +33,32 @@ public class DtoFactory {
     private final PledgeAgreementConverterDto pledgeAgreementConverterDto;
     private final CostHistoryConverterDto costHistoryConverterDto;
     private final MonitoringConverterDto monitoringConverterDto;
+    private final ClientConverterDto clientConverterDto;
+    private final ClientManagerConverterDto clientManagerConverterDto;
+    private final EmployeeConverterDto employeeConverterDto;
+    private final EncumbranceConverterDto encumbranceConverterDto;
+    private final InsuranceConverterDto insuranceConverterDto;
 
     public DtoFactory(PledgeSubjectConverterDto pledgeSubjectConverterDto,
                       LoanAgreementConverterDto loanAgreementConverterDto,
                       PledgeAgreementConverterDto pledgeAgreementConverterDto,
                       CostHistoryConverterDto costHistoryConverterDto,
-                      MonitoringConverterDto monitoringConverterDto) {
+                      MonitoringConverterDto monitoringConverterDto,
+                      ClientConverterDto clientConverterDto,
+                      ClientManagerConverterDto clientManagerConverterDto,
+                      EmployeeConverterDto employeeConverterDto,
+                      EncumbranceConverterDto encumbranceConverterDto,
+                      InsuranceConverterDto insuranceConverterDto) {
         this.pledgeSubjectConverterDto = pledgeSubjectConverterDto;
         this.loanAgreementConverterDto = loanAgreementConverterDto;
         this.pledgeAgreementConverterDto = pledgeAgreementConverterDto;
         this.costHistoryConverterDto = costHistoryConverterDto;
         this.monitoringConverterDto = monitoringConverterDto;
+        this.clientConverterDto = clientConverterDto;
+        this.clientManagerConverterDto = clientManagerConverterDto;
+        this.employeeConverterDto = employeeConverterDto;
+        this.encumbranceConverterDto = encumbranceConverterDto;
+        this.insuranceConverterDto = insuranceConverterDto;
     }
 
     public PledgeSubjectDto getPledgeSubjectDto(PledgeSubject pledgeSubject){
@@ -75,6 +100,10 @@ public class DtoFactory {
         return dtoList;
     }
 
+    public LoanAgreement getLoanAgreementEntity(LoanAgreementDto loanAgreementDto){
+        return loanAgreementConverterDto.toEntity(loanAgreementDto);
+    }
+
     public PledgeAgreementDto getPledgeAgreementDto(PledgeAgreement pledgeAgreement){
         return pledgeAgreementConverterDto.toDto(pledgeAgreement);
     }
@@ -85,6 +114,10 @@ public class DtoFactory {
             dtoList.add(getPledgeAgreementDto(pledgeAgreement));
 
         return dtoList;
+    }
+
+    public PledgeAgreement getPledgeAgreementEntity(PledgeAgreementDto pledgeAgreementDto){
+        return pledgeAgreementConverterDto.toEntity(pledgeAgreementDto);
     }
 
     public CostHistoryDto getCostHistoryDto(CostHistory costHistory){
@@ -135,5 +168,56 @@ public class DtoFactory {
         return dtoList;
     }
 
+    public ClientDto getClientDto(Client client){
+        return clientConverterDto.toDto(client);
+    }
+
+    public List<ClientDto> getClientsDto(List<Client> clientList){
+        return clientConverterDto.toDto(clientList);
+    }
+
+    public Client getClientEntity(ClientDto clientDto){
+        return clientConverterDto.toEntity(clientDto);
+    }
+
+    public ClientManagerDto getClientManagerDto(ClientManager clientManager){
+        return clientManagerConverterDto.toDto(clientManager);
+    }
+
+    public List<ClientManagerDto> getClientManagersDto(List<ClientManager> clientManagerList){
+        return clientManagerConverterDto.toDto(clientManagerList);
+    }
+
+    public EmployeeDto getEmployeeDto(Employee employee){
+        return employeeConverterDto.toDto(employee);
+    }
+
+    public List<EmployeeDto> getEmployeesDto(List<Employee> employeeList){
+        return employeeConverterDto.toDto(employeeList);
+    }
+
+    public EncumbranceDto getEncumbranceDto(Encumbrance encumbrance){
+        return encumbranceConverterDto.toDto(encumbrance);
+    }
+
+    public List<EncumbranceDto> getEncumbrancesDto(List<Encumbrance> encumbranceList){
+        return encumbranceConverterDto.toDto(encumbranceList);
+    }
+
+    public Encumbrance getEncumbranceEntity(EncumbranceDto encumbranceDto){
+        return encumbranceConverterDto.toEntity(encumbranceDto);
+    }
+
+    public InsuranceDto getInsuranceDto(Insurance insurance){
+        return insuranceConverterDto.toDto(insurance);
+    }
+
+    public List<InsuranceDto> getInsurancesDto(List<Insurance> insuranceList){
+        return insuranceConverterDto.toDto(insuranceList);
+    }
+
+    public Insurance getInsuranceEntity(InsuranceDto insuranceDto){
+        return insuranceConverterDto.toEntity(insuranceDto);
+    }
 
 }

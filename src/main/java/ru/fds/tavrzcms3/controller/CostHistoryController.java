@@ -7,13 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.fds.tavrzcms3.converver.CostHistoryConverterDto;
-import ru.fds.tavrzcms3.converver.PledgeAgreementConverterDto;
-import ru.fds.tavrzcms3.converver.PledgeSubjectConverterDto;
 import ru.fds.tavrzcms3.domain.CostHistory;
 import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.CostHistoryDto;
+import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.service.CostHistoryService;
@@ -36,9 +34,7 @@ public class CostHistoryController {
     private final EmployeeService employeeService;
     private final PledgeAgreementService pledgeAgreementService;
 
-    private final PledgeAgreementConverterDto pledgeAgreementConverterDto;
-    private final PledgeSubjectConverterDto pledgeSubjectConverterDto;
-    private final CostHistoryConverterDto costHistoryConverterDto;
+    private final DtoFactory dtoFactory;
 
     private final ValidatorEntity validatorEntity;
 
@@ -48,17 +44,13 @@ public class CostHistoryController {
                                  CostHistoryService costHistoryService,
                                  EmployeeService employeeService,
                                  PledgeAgreementService pledgeAgreementService,
-                                 PledgeAgreementConverterDto pledgeAgreementConverterDto,
-                                 PledgeSubjectConverterDto pledgeSubjectConverterDto,
-                                 CostHistoryConverterDto costHistoryConverterDto,
+                                 DtoFactory dtoFactory,
                                  ValidatorEntity validatorEntity) {
         this.pledgeSubjectService = pledgeSubjectService;
         this.costHistoryService = costHistoryService;
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
-        this.pledgeAgreementConverterDto = pledgeAgreementConverterDto;
-        this.pledgeSubjectConverterDto = pledgeSubjectConverterDto;
-        this.costHistoryConverterDto = costHistoryConverterDto;
+        this.dtoFactory = dtoFactory;
         this.validatorEntity = validatorEntity;
     }
 
@@ -68,12 +60,12 @@ public class CostHistoryController {
 
         Employee employee = employeeService.getEmployeeById(employeeId).orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
 
-        List<PledgeAgreementDto> pledgeAgreementListWithConclusionNotDone = pledgeAgreementConverterDto
-                .toDto(pledgeAgreementService.getPledgeAgreementWithConclusionNotDone(employee));
-        List<PledgeAgreementDto> pledgeAgreementListWithConclusionIsDone =  pledgeAgreementConverterDto
-                .toDto(pledgeAgreementService.getPledgeAgreementWithConclusionIsDone(employee));
-        List<PledgeAgreementDto> pledgeAgreementListWithConclusionOverdue = pledgeAgreementConverterDto
-                .toDto(pledgeAgreementService.getPledgeAgreementWithConclusionOverDue(employee));
+        List<PledgeAgreementDto> pledgeAgreementListWithConclusionNotDone = dtoFactory
+                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithConclusionNotDone(employee));
+        List<PledgeAgreementDto> pledgeAgreementListWithConclusionIsDone =  dtoFactory
+                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithConclusionIsDone(employee));
+        List<PledgeAgreementDto> pledgeAgreementListWithConclusionOverdue = dtoFactory
+                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithConclusionOverDue(employee));
 
         model.addAttribute("pledgeAgreementListWithConclusionNotDone", pledgeAgreementListWithConclusionNotDone);
         model.addAttribute("pledgeAgreementListWithConclusionIsDone", pledgeAgreementListWithConclusionIsDone);
@@ -89,10 +81,10 @@ public class CostHistoryController {
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId)
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
-        PledgeSubjectDto pledgeSubjectDto = pledgeSubjectConverterDto.toDto(pledgeSubject);
+        PledgeSubjectDto pledgeSubjectDto = dtoFactory.getPledgeSubjectDto(pledgeSubject);
 
-        List<CostHistoryDto> costHistoryList = costHistoryConverterDto
-                .toDto(costHistoryService.getCostHistoryPledgeSubject(pledgeSubject));
+        List<CostHistoryDto> costHistoryList = dtoFactory
+                .getCostHistoriesDto(costHistoryService.getCostHistoryPledgeSubject(pledgeSubject));
 
         model.addAttribute("pledgeSubject", pledgeSubjectDto);
         model.addAttribute("costHistoryList", costHistoryList);
@@ -130,7 +122,7 @@ public class CostHistoryController {
         }
 
 
-        CostHistory costHistory = costHistoryConverterDto.toEntity(costHistoryDto);
+        CostHistory costHistory = dtoFactory.getCostHistoryEntity(costHistoryDto);
         Set<ConstraintViolation<CostHistory>> violations = validatorEntity.validateEntity(costHistory);
         if(!violations.isEmpty())
             throw new IllegalArgumentException(validatorEntity.getErrorMessage());

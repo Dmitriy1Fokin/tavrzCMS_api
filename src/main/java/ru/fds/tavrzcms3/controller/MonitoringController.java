@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.fds.tavrzcms3.converver.*;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.dto.ClientDto;
+import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.MonitoringDto;
 import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
@@ -32,10 +33,7 @@ public class MonitoringController {
     private final PledgeAgreementService pledgeAgreementService;
     private final ClientService clientService;
 
-    private final MonitoringConverterDto monitoringConverterDto;
-    private final PledgeAgreementConverterDto pledgeAgreementConverterDto;
-    private final PledgeSubjectConverterDto pledgeSubjectConverterDto;
-    private final ClientConverterDto clientConverterDto;
+    private final DtoFactory dtoFactory;
 
     private ValidatorEntity validatorEntity;
 
@@ -54,19 +52,14 @@ public class MonitoringController {
                                 EmployeeService employeeService,
                                 PledgeAgreementService pledgeAgreementService,
                                 ClientService clientService,
-                                MonitoringConverterDto monitoringConverterDto,
-                                PledgeAgreementConverterDto pledgeAgreementConverterDto,
-                                PledgeSubjectConverterDto pledgeSubjectConverterDto,
-                                ClientConverterDto clientConverterDto, ValidatorEntity validatorEntity) {
+                                DtoFactory dtoFactory,
+                                ValidatorEntity validatorEntity) {
         this.pledgeSubjectService = pledgeSubjectService;
         this.monitoringService = monitoringService;
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.clientService = clientService;
-        this.monitoringConverterDto = monitoringConverterDto;
-        this.pledgeAgreementConverterDto = pledgeAgreementConverterDto;
-        this.pledgeSubjectConverterDto = pledgeSubjectConverterDto;
-        this.clientConverterDto = clientConverterDto;
+        this.dtoFactory = dtoFactory;
         this.validatorEntity = validatorEntity;
     }
 
@@ -77,8 +70,8 @@ public class MonitoringController {
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId)
                 .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
 
-        PledgeSubjectDto pledgeSubjectDto = pledgeSubjectConverterDto.toDto(pledgeSubject);
-        List<MonitoringDto> monitoringDtoList = monitoringConverterDto.toDto(monitoringService.getMonitoringByPledgeSubject(pledgeSubject));
+        PledgeSubjectDto pledgeSubjectDto = dtoFactory.getPledgeSubjectDto(pledgeSubject);
+        List<MonitoringDto> monitoringDtoList = dtoFactory.getMonitoringsDto(monitoringService.getMonitoringByPledgeSubject(pledgeSubject));
 
         model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubjectDto);
         model.addAttribute(ATTR_MONITORING_LIST, monitoringDtoList);
@@ -92,12 +85,12 @@ public class MonitoringController {
 
         Employee employee = employeeService.getEmployeeById(employeeId)
                 .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
-        List<PledgeAgreementDto> pledgeAgreementListWithMonitoringNotDone = pledgeAgreementConverterDto
-                .toDto(pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(employee));
-        List<PledgeAgreementDto> pledgeAgreementListWithMonitoringIsDone = pledgeAgreementConverterDto
-                .toDto(pledgeAgreementService.getPledgeAgreementWithMonitoringIsDone(employee));
-        List<PledgeAgreementDto> pledgeAgreementListWithMonitoringOverdue = pledgeAgreementConverterDto
-                .toDto(pledgeAgreementService.getPledgeAgreementWithMonitoringOverDue(employee));
+        List<PledgeAgreementDto> pledgeAgreementListWithMonitoringNotDone = dtoFactory
+                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(employee));
+        List<PledgeAgreementDto> pledgeAgreementListWithMonitoringIsDone = dtoFactory
+                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringIsDone(employee));
+        List<PledgeAgreementDto> pledgeAgreementListWithMonitoringOverdue = dtoFactory
+                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringOverDue(employee));
         model.addAttribute("pledgeAgreementListWithMonitoringNotDone", pledgeAgreementListWithMonitoringNotDone);
         model.addAttribute("pledgeAgreementListWithMonitoringIsDone", pledgeAgreementListWithMonitoringIsDone);
         model.addAttribute("pledgeAgreementListWithMonitoringOverdue", pledgeAgreementListWithMonitoringOverdue);
@@ -118,7 +111,7 @@ public class MonitoringController {
                     .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
                     .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
-            PledgeAgreementDto pledgeAgreementDto = pledgeAgreementConverterDto.toDto(pledgeAgreement);
+            PledgeAgreementDto pledgeAgreementDto = dtoFactory.getPledgeAgreementDto(pledgeAgreement);
 
             model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreementDto);
             model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, whereUpdateMonitoring);
@@ -130,7 +123,7 @@ public class MonitoringController {
                     .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
                     .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
-            PledgeSubjectDto pledgeSubjectDto = pledgeSubjectConverterDto.toDto(pledgeSubject);
+            PledgeSubjectDto pledgeSubjectDto = dtoFactory.getPledgeSubjectDto(pledgeSubject);
 
             model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubjectDto);
             model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, whereUpdateMonitoring);
@@ -142,7 +135,7 @@ public class MonitoringController {
                     .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
                     .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
-            ClientDto clientDto = clientConverterDto.toDto(client);
+            ClientDto clientDto = dtoFactory.getClientDto(client);
 
             model.addAttribute(ATTR_CLIENT, clientDto);
             model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, whereUpdateMonitoring);
@@ -171,7 +164,7 @@ public class MonitoringController {
                         .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
                         .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
-                PledgeAgreementDto pledgeAgreementDto = pledgeAgreementConverterDto.toDto(pledgeAgreement);
+                PledgeAgreementDto pledgeAgreementDto = dtoFactory.getPledgeAgreementDto(pledgeAgreement);
 
                 model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreementDto);
                 model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, whereUpdateMonitoring);
@@ -182,7 +175,7 @@ public class MonitoringController {
                         .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
                         .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
-                PledgeSubjectDto pledgeSubjectDto = pledgeSubjectConverterDto.toDto(pledgeSubject);
+                PledgeSubjectDto pledgeSubjectDto = dtoFactory.getPledgeSubjectDto(pledgeSubject);
 
                 model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubjectDto);
                 model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, whereUpdateMonitoring);
@@ -193,7 +186,7 @@ public class MonitoringController {
                         .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
                         .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
-                ClientDto clientDto = clientConverterDto.toDto(client);
+                ClientDto clientDto = dtoFactory.getClientDto(client);
 
                 model.addAttribute(ATTR_CLIENT, clientDto);
                 model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, whereUpdateMonitoring);
@@ -205,7 +198,7 @@ public class MonitoringController {
         }
 
 
-        Monitoring monitoring = monitoringConverterDto.toEntity(monitoringDto);
+        Monitoring monitoring = dtoFactory.getMonitoringEntity(monitoringDto);
         Set<ConstraintViolation<Monitoring>> violations =  validatorEntity.validateEntity(monitoring);
         if(!violations.isEmpty())
             throw new IllegalArgumentException(validatorEntity.getErrorMessage());
@@ -217,7 +210,7 @@ public class MonitoringController {
                     .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
                     .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
-            PledgeAgreementDto pledgeAgreementDto = pledgeAgreementConverterDto.toDto(pledgeAgreement);
+            PledgeAgreementDto pledgeAgreementDto = dtoFactory.getPledgeAgreementDto(pledgeAgreement);
             List<Monitoring> monitoringList = monitoringService.insertMonitoringInPledgeAgreement(pledgeAgreement, monitoring);
 
 
@@ -242,7 +235,7 @@ public class MonitoringController {
                     .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
                     .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
-            ClientDto clientDto = clientConverterDto.toDto(client);
+            ClientDto clientDto = dtoFactory.getClientDto(client);
 
             List<Monitoring> monitoringList = monitoringService.insertMonitoringInPledgor(client, monitoring);
 

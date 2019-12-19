@@ -13,8 +13,6 @@
             <th>Наименование</th>
             <th>Тип клиента</th>
             <th>ИНН/Паспорт</th>
-            <th>Ответственный сотрудник</th>
-            <th>Клиентский менеджер</th>
         </tr>
         </thead>
         <tbody>
@@ -24,7 +22,7 @@
 
                 <td>
                     <a th:href="@{/client/detail(clientId=${client.getClientId()})}" href="../client/detail.html"
-                       th:text="${@clientService.getFullNameClient(client)}">Клиент</a>
+                       th:text="${client.getFullName()}">Клиент</a>
                 </td>
 
                 <td th:text="${client.getTypeOfClient().getTranslate()}"></td>
@@ -32,16 +30,13 @@
                 <td>
                     <div th:switch="${client.getTypeOfClient().name()}">
                         <div th:case="LEGAL_ENTITY">
-                            <span th:text="${client.getInn()}"></span>
+                            <span th:text="${client.getClientLegalEntityDto().getInn()}"></span>
                         </div>
                         <div th:case="INDIVIDUAL">
-                            <span th:text="${client.getPasportNum()}"></span>
+                            <span th:text="${client.getClientIndividualDto().getPasportNum()}"></span>
                         </div>
                     </div>
                 </td>
-                <td th:text="${client.getEmployee().getSurname()} + ' ' + ${client.getEmployee().name}">н/д</td>
-
-                <td th:text="${client.getClientManager().getSurname() + ' ' + client.getClientManager().getName()}">н/д</td>
             </tr>
         </div>
         </tbody>

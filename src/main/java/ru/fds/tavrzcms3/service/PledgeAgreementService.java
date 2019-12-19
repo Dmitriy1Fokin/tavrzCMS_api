@@ -24,8 +24,6 @@ public class PledgeAgreementService {
     private final RepositoryPledgeAgreement repositoryPledgeAgreement;
     private final RepositoryPledgeSubject repositoryPledgeSubject;
     private final RepositoryLoanAgreement repositoryLoanAgreement;
-    private final RepositoryClientLegalEntity repositoryClientLegalEntity;
-    private final RepositoryClientIndividual repositoryClientIndividual;
     private final EmployeeService employeeService;
     private final ClientService clientService;
     private final PledgeSubjectService pledgeSubjectService;
@@ -35,16 +33,12 @@ public class PledgeAgreementService {
     public PledgeAgreementService(RepositoryPledgeAgreement repositoryPledgeAgreement,
                                   RepositoryPledgeSubject repositoryPledgeSubject,
                                   RepositoryLoanAgreement repositoryLoanAgreement,
-                                  RepositoryClientLegalEntity repositoryClientLegalEntity,
-                                  RepositoryClientIndividual repositoryClientIndividual,
                                   EmployeeService employeeService,
                                   ClientService clientService,
                                   PledgeSubjectService pledgeSubjectService) {
         this.repositoryPledgeAgreement = repositoryPledgeAgreement;
         this.repositoryPledgeSubject = repositoryPledgeSubject;
         this.repositoryLoanAgreement = repositoryLoanAgreement;
-        this.repositoryClientLegalEntity = repositoryClientLegalEntity;
-        this.repositoryClientIndividual = repositoryClientIndividual;
         this.employeeService = employeeService;
         this.clientService = clientService;
         this.pledgeSubjectService = pledgeSubjectService;

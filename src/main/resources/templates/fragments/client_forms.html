@@ -31,20 +31,20 @@
 <div th:fragment="legalEntitylProperty(client)">
     <div class="row">
         <label>Правовая форма</label>
-        <input required th:field="*{organizationalForm}" type="text" th:value="${client.getOrganizationalForm()}"/>
-        <div th:if="${#fields.hasErrors('organizationalForm')}" th:errors="*{organizationalForm}">Name Error</div>
+        <input required th:field="*{clientLegalEntityDto.organizationalForm}" type="text" th:value="${client.getOrganizationalForm()}"/>
+        <div th:if="${#fields.hasErrors('clientLegalEntityDto.organizationalForm')}" th:errors="*{clientLegalEntityDto.organizationalForm}">Name Error</div>
     </div>
     <br>
     <div class="row">
         <label>Наименование</label>
-        <input required th:field="*{name}" type="text" th:value="${client.getName()}"/>
-        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+        <input required th:field="*{clientLegalEntityDto.name}" type="text" th:value="${client.getName()}"/>
+        <div th:if="${#fields.hasErrors('clientLegalEntityDto.name')}" th:errors="*{clientLegalEntityDto.name}">Name Error</div>
     </div>
     <br>
     <div class="row">
         <label>ИНН</label>
-        <input th:field="*{inn}" type="text" th:value="${client.getInn()}"/>
-        <div th:if="${#fields.hasErrors('inn')}" th:errors="*{inn}">Name Error</div>
+        <input th:field="*{clientLegalEntityDto.inn}" type="text" th:value="${client.getInn()}"/>
+        <div th:if="${#fields.hasErrors('clientLegalEntityDto.inn')}" th:errors="*{clientLegalEntityDto.inn}">Name Error</div>
     </div>
 </div>
 
@@ -52,26 +52,26 @@
 <div th:fragment="individualProperty(client)">
     <div class="row">
         <label>Фамилия</label>
-        <input required th:field="*{surname}" type="text" th:value="${client.getSurname()}"/>
-        <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Name Error</div>
+        <input required th:field="*{clientIndividualDto.surname}" type="text" th:value="${client.getSurname()}"/>
+        <div th:if="${#fields.hasErrors('clientIndividualDto.surname')}" th:errors="*{clientIndividualDto.surname}">Name Error</div>
     </div>
     <br>
     <div class="row">
         <label>Имя</label>
-        <input required th:field="*{name}" type="text" th:value="${client.getName()}"/>
-        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+        <input required th:field="*{clientIndividualDto.name}" type="text" th:value="${client.getName()}"/>
+        <div th:if="${#fields.hasErrors('clientIndividualDto.name')}" th:errors="*{clientIndividualDto.name}">Name Error</div>
     </div>
     <br>
     <div class="row">
         <label>Отчество</label>
-        <input th:field="*{patronymic}" type="text" th:value="${client.getPatronymic()}"/>
-        <div th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}">Name Error</div>
+        <input th:field="*{clientIndividualDto.patronymic}" type="text" th:value="${client.getPatronymic()}"/>
+        <div th:if="${#fields.hasErrors('clientIndividualDto.patronymic')}" th:errors="*{clientIndividualDto.patronymic}">Name Error</div>
     </div>
     <br>
     <div class="row">
         <label>№ паспорта</label>
-        <input th:field="*{pasportNum}" type="text" th:value="${client.getPasportNum()}"/>
-        <div th:if="${#fields.hasErrors('pasportNum')}" th:errors="*{pasportNum}">Name Error</div>
+        <input th:field="*{clientIndividualDto.pasportNum}" type="text" th:value="${client.getPasportNum()}"/>
+        <div th:if="${#fields.hasErrors('clientIndividualDto.pasportNum')}" th:errors="*{clientIndividualDto.pasportNum}">Name Error</div>
     </div>
 </div>
 

@@ -35,7 +35,7 @@
     <div class="row">
         <label>Заемщик</label>
         <input name="client" type="text"/>
-        <select name="clientOption">
+        <select name="typeOfClient">
             <option selected value="юл">ЮЛ</option>
             <option value="фл">ФЛ</option>
         </select>
@@ -151,7 +151,7 @@
     <div class="row">
         <label>Залогодатель</label>
         <input name="client" type="text"/>
-        <select name="clientOption">
+        <select name="typeOfClient">
             <option selected value="юл">ЮЛ</option>
             <option value="фл">ФЛ</option>
         </select>
@@ -270,7 +270,7 @@
     <div class="row">
         <label>Клиент</label>
         <input name="clientName" type="text"/>
-        <select id="whatSearchClient" onchange="choiseClient()" name="clientOption">
+        <select id="whatSearchClient" onchange="choiseClient()" name="typeOfClient">
             <option selected value="LEGAL_ENTITY">ЮЛ</option>
             <option value="INDIVIDUAL">ФЛ</option>
         </select>

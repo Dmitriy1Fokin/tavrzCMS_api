@@ -7,10 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.fds.tavrzcms3.converver.EmployeeConverterDto;
-import ru.fds.tavrzcms3.converver.LoanAgreementConverterDto;
-import ru.fds.tavrzcms3.converver.PledgeAgreementConverterDto;
-import ru.fds.tavrzcms3.converver.PledgeSubjectConverterDto;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
@@ -43,10 +39,6 @@ public class PledgeAgreementController {
     private final EmployeeService employeeService;
     private final LoanAgreementService loanAgreementService;
 
-    private final PledgeAgreementConverterDto pledgeAgreementConverterDto;
-    private final PledgeSubjectConverterDto pledgeSubjectConverterDto;
-    private final EmployeeConverterDto employeeConverterDto;
-    private final LoanAgreementConverterDto loanAgreementConverterDto;
     private final DtoFactory dtoFactory;
 
     private final ValidatorEntity validatorEntity;
@@ -60,20 +52,12 @@ public class PledgeAgreementController {
                                      PledgeSubjectService pledgeSubjectService,
                                      EmployeeService employeeService,
                                      LoanAgreementService loanAgreementService,
-                                     PledgeAgreementConverterDto pledgeAgreementConverterDto,
-                                     PledgeSubjectConverterDto pledgeSubjectConverterDto,
-                                     EmployeeConverterDto employeeConverterDto,
-                                     LoanAgreementConverterDto loanAgreementConverterDto,
                                      DtoFactory dtoFactory,
                                      ValidatorEntity validatorEntity) {
         this.pledgeAgreementService = pledgeAgreementService;
         this.pledgeSubjectService = pledgeSubjectService;
         this.employeeService = employeeService;
         this.loanAgreementService = loanAgreementService;
-        this.pledgeAgreementConverterDto = pledgeAgreementConverterDto;
-        this.pledgeSubjectConverterDto = pledgeSubjectConverterDto;
-        this.employeeConverterDto = employeeConverterDto;
-        this.loanAgreementConverterDto = loanAgreementConverterDto;
         this.dtoFactory = dtoFactory;
         this.validatorEntity = validatorEntity;
     }
@@ -105,7 +89,7 @@ public class PledgeAgreementController {
         }
 
         Page<PledgeAgreementDto> pledgeAgreementDtoPage = new PageImpl<>(
-                pledgeAgreementConverterDto.toDto(pledgeAgreementListForPage),
+                dtoFactory.getPledgeAgreementsDto(pledgeAgreementListForPage),
                 PageRequest.of(currentPage, pageSize),
                 pledgeAgreementList.size()
         );
@@ -130,10 +114,10 @@ public class PledgeAgreementController {
         PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
                 .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
 
-        PledgeAgreementDto pledgeAgreementDto = pledgeAgreementConverterDto.toDto(pledgeAgreement);
+        PledgeAgreementDto pledgeAgreementDto = dtoFactory.getPledgeAgreementDto(pledgeAgreement);
 
-        List<PledgeSubjectDto> pledgeSubjectDtoList = pledgeSubjectConverterDto
-                .toDto(pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId));
+        List<PledgeSubjectDto> pledgeSubjectDtoList = dtoFactory
+                .getPledgeSubjectsDto(pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId));
 
         model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreementDto);
         model.addAttribute("pledgeSubjectDtoList", pledgeSubjectDtoList);
@@ -148,16 +132,16 @@ public class PledgeAgreementController {
         PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
                 .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
 
-        PledgeAgreementDto pledgeAgreementDto = pledgeAgreementConverterDto.toDto(pledgeAgreement);
+        PledgeAgreementDto pledgeAgreementDto = dtoFactory.getPledgeAgreementDto(pledgeAgreement);
 
-        EmployeeDto employeeDto = employeeConverterDto
-                .toDto(employeeService.getEmployeeByPledgeAgreement(pledgeAgreementId));
+        EmployeeDto employeeDto = dtoFactory
+                .getEmployeeDto(employeeService.getEmployeeByPledgeAgreement(pledgeAgreementId));
 
-        List<LoanAgreementDto> currentLoanAgreementDtoList = loanAgreementConverterDto
-                .toDto(loanAgreementService.getCurrentLoanAgreementsByPledgeAgreement(pledgeAgreement));
+        List<LoanAgreementDto> currentLoanAgreementDtoList = dtoFactory
+                .getLoanAgreementsDto(loanAgreementService.getCurrentLoanAgreementsByPledgeAgreement(pledgeAgreement));
 
-        List<LoanAgreementDto> closedLoanAgreementDtoList = loanAgreementConverterDto
-                .toDto(loanAgreementService.getClosedLoanAgreementsByPledgeAgreement(pledgeAgreement));
+        List<LoanAgreementDto> closedLoanAgreementDtoList = dtoFactory
+                .getLoanAgreementsDto(loanAgreementService.getClosedLoanAgreementsByPledgeAgreement(pledgeAgreement));
 
 
         model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreementDto);
@@ -179,7 +163,7 @@ public class PledgeAgreementController {
                     .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK)))
                     .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
 
-            PledgeAgreementDto pledgeAgreementDto = pledgeAgreementConverterDto.toDto(pledgeAgreement);
+            PledgeAgreementDto pledgeAgreementDto = dtoFactory.getPledgeAgreementDto(pledgeAgreement);
 
             model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreementDto);
             model.addAttribute(ATTR_WHAT_DO, whatDo);
@@ -213,7 +197,7 @@ public class PledgeAgreementController {
             return PAGE_CARD;
         }
 
-        PledgeAgreement pledgeAgreement = pledgeAgreementConverterDto.toEntity(pledgeAgreementDto);
+        PledgeAgreement pledgeAgreement = dtoFactory.getPledgeAgreementEntity(pledgeAgreementDto);
 
         Set<ConstraintViolation<PledgeAgreement>> violations =  validatorEntity.validateEntity(pledgeAgreement);
         if(!violations.isEmpty())

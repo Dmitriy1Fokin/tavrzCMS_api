@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -9,10 +11,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@SuperBuilder
-public class ClientLegalEntityDto extends ClientDto{
+@AllArgsConstructor
+@Builder
+public class ClientLegalEntityDto{
 
     @NotBlank(message = "Обязательно для заполнения")
     private String organizationalForm;

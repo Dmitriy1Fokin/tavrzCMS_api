@@ -14,7 +14,6 @@ import ru.fds.tavrzcms3.converver.ClientLegalEntityConverterDto;
 import ru.fds.tavrzcms3.converver.ClientConverterDto;
 import ru.fds.tavrzcms3.converver.LoanAgreementConverterDto;
 import ru.fds.tavrzcms3.repository.RepositoryClient;
-import ru.fds.tavrzcms3.repository.RepositoryClientLegalEntity;
 import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
 
 @RunWith(SpringRunner.class)
@@ -23,8 +22,6 @@ public class Tavrzcms3ApplicationTests {
 
     @Autowired
     RepositoryClient repositoryClient;
-    @Autowired
-    RepositoryClientLegalEntity repositoryClientLegalEntity;
     @Autowired
     ClientLegalEntityConverterDto clientLegalEntityConverter;
     @Autowired

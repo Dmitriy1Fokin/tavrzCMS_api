@@ -153,30 +153,30 @@ public class FilesService {
 
                 ClientLegalEntity clientLegalEntity = new ClientLegalEntity();
 
-                if(isCellEmpty(row.getCell(numColumnClientManager)))
-                    throw new InvalidFormatException("Отсутствует id клиентского менеджера в строке " + (i+1));
-                else if(row.getCell(numColumnClientManager).getCellType()==CellType.NUMERIC) {
-                    clientLegalEntity.
-                            setClientManager(clientManagerService.
-                                    getClientManager((long) row.getCell(numColumnClientManager).getNumericCellValue()).
-                                    orElseThrow(() ->
-                                            new InvalidFormatException("Клиентский менеджер с таким id(" +
-                                                    row.getCell(numColumnClientManager).getNumericCellValue() +
-                                                    ") отсутствует")));
-                }
-                else
-                    throw new InvalidFormatException("Неверный формат/значение id клиентского менеджера в строке " + (i+1));
-
-                if(isCellEmpty(row.getCell(numColumnEmployee)))
-                    throw new InvalidFormatException("Отсутствует id ответственного сотрудника в строке " + (i+1));
-                else if(row.getCell(numColumnEmployee).getCellType()==CellType.NUMERIC)
-                    clientLegalEntity.setEmployee(employeeService.
-                            getEmployeeById((long) row.getCell(numColumnEmployee).getNumericCellValue()).
-                            orElseThrow(() ->
-                                    new InvalidFormatException("Ответственный сотрудник с таким id(" +
-                                            row.getCell(numColumnEmployee).getNumericCellValue() + ") отсутствует")));
-                else
-                    throw new InvalidFormatException("Неверный формат/значение id ответственного сотрудника в строке " + (i+1));
+//                if(isCellEmpty(row.getCell(numColumnClientManager)))
+//                    throw new InvalidFormatException("Отсутствует id клиентского менеджера в строке " + (i+1));
+//                else if(row.getCell(numColumnClientManager).getCellType()==CellType.NUMERIC) {
+//                    clientLegalEntity.
+//                            setClientManager(clientManagerService.
+//                                    getClientManager((long) row.getCell(numColumnClientManager).getNumericCellValue()).
+//                                    orElseThrow(() ->
+//                                            new InvalidFormatException("Клиентский менеджер с таким id(" +
+//                                                    row.getCell(numColumnClientManager).getNumericCellValue() +
+//                                                    ") отсутствует")));
+//                }
+//                else
+//                    throw new InvalidFormatException("Неверный формат/значение id клиентского менеджера в строке " + (i+1));
+//
+//                if(isCellEmpty(row.getCell(numColumnEmployee)))
+//                    throw new InvalidFormatException("Отсутствует id ответственного сотрудника в строке " + (i+1));
+//                else if(row.getCell(numColumnEmployee).getCellType()==CellType.NUMERIC)
+//                    clientLegalEntity.setEmployee(employeeService.
+//                            getEmployeeById((long) row.getCell(numColumnEmployee).getNumericCellValue()).
+//                            orElseThrow(() ->
+//                                    new InvalidFormatException("Ответственный сотрудник с таким id(" +
+//                                            row.getCell(numColumnEmployee).getNumericCellValue() + ") отсутствует")));
+//                else
+//                    throw new InvalidFormatException("Неверный формат/значение id ответственного сотрудника в строке " + (i+1));
 
                 if(isCellEmpty(row.getCell(numColumnOrganizationForm)))
                     throw new InvalidFormatException("Отсутствует значение правовой формы организации в строке " + (i+1));
@@ -236,30 +236,30 @@ public class FilesService {
 
                 ClientIndividual clientIndividual = new ClientIndividual();
 
-                if(isCellEmpty(row.getCell(numColumnClientManager)))
-                    throw new InvalidFormatException("Отсутствует id клиентского менеджера в строке " + (i+1));
-                else if(row.getCell(numColumnClientManager).getCellType()==CellType.NUMERIC) {
-                    clientIndividual.
-                            setClientManager(clientManagerService.
-                                    getClientManager((long) row.getCell(numColumnClientManager).getNumericCellValue()).
-                                    orElseThrow(() ->
-                                            new InvalidFormatException("Клиентский менеджер с таким id(" +
-                                                    row.getCell(numColumnClientManager).getNumericCellValue() +
-                                                    ") отсутствует")));
-                }
-                else
-                    throw new InvalidFormatException("Неверный формат/значение id клиентского менеджера в строке " + (i+1));
+//                if(isCellEmpty(row.getCell(numColumnClientManager)))
+//                    throw new InvalidFormatException("Отсутствует id клиентского менеджера в строке " + (i+1));
+//                else if(row.getCell(numColumnClientManager).getCellType()==CellType.NUMERIC) {
+//                    clientIndividual.
+//                            setClientManager(clientManagerService.
+//                                    getClientManager((long) row.getCell(numColumnClientManager).getNumericCellValue()).
+//                                    orElseThrow(() ->
+//                                            new InvalidFormatException("Клиентский менеджер с таким id(" +
+//                                                    row.getCell(numColumnClientManager).getNumericCellValue() +
+//                                                    ") отсутствует")));
+//                }
+//                else
+//                    throw new InvalidFormatException("Неверный формат/значение id клиентского менеджера в строке " + (i+1));
 
-                if(isCellEmpty(row.getCell(numColumnEmployee)))
-                    throw new InvalidFormatException("Отсутствует id ответственного сотрудника в строке " + (i+1));
-                else if(row.getCell(numColumnEmployee).getCellType()==CellType.NUMERIC)
-                    clientIndividual.setEmployee(employeeService.
-                            getEmployeeById((long) row.getCell(numColumnEmployee).getNumericCellValue()).
-                            orElseThrow(() ->
-                                    new InvalidFormatException("Ответственный сотрудник с таким id(" +
-                                            row.getCell(numColumnEmployee).getNumericCellValue() + ") отсутствует")));
-                else
-                    throw new InvalidFormatException("Неверный формат/значение id ответственного сотрудника в строке " + (i+1));
+//                if(isCellEmpty(row.getCell(numColumnEmployee)))
+//                    throw new InvalidFormatException("Отсутствует id ответственного сотрудника в строке " + (i+1));
+//                else if(row.getCell(numColumnEmployee).getCellType()==CellType.NUMERIC)
+//                    clientIndividual.setEmployee(employeeService.
+//                            getEmployeeById((long) row.getCell(numColumnEmployee).getNumericCellValue()).
+//                            orElseThrow(() ->
+//                                    new InvalidFormatException("Ответственный сотрудник с таким id(" +
+//                                            row.getCell(numColumnEmployee).getNumericCellValue() + ") отсутствует")));
+//                else
+//                    throw new InvalidFormatException("Неверный формат/значение id ответственного сотрудника в строке " + (i+1));
 
                 if(isCellEmpty(row.getCell(numColumnIndividualSurname)))
                     throw new InvalidFormatException("Отсутствует фамилия в строке " + (i+1));

@@ -7,14 +7,18 @@ import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @Entity
 @Table(name = "client_prime")
-@Inheritance(strategy = InheritanceType.JOINED)
+@SecondaryTables({
+		@SecondaryTable(name = "client_individual", pkJoinColumns = @PrimaryKeyJoinColumn(name = "client_id")),
+		@SecondaryTable(name = "client_legal_entity", pkJoinColumns = @PrimaryKeyJoinColumn(name = "client_id"))
+})
 public class Client {
 	
 	@Id
@@ -34,12 +38,12 @@ public class Client {
 	@JoinColumn(name = "employee_id")
 	private Employee employee;
 
-	@OneToOne
-	@JoinColumn(name = "client_id")
+	@Valid
+    @Embedded
 	private ClientIndividual clientIndividual;
-	
-	@OneToOne
-	@JoinColumn(name = "client_id")
+
+	@Valid
+    @Embedded
 	private ClientLegalEntity clientLegalEntity;
 
 	@Singular
@@ -50,11 +54,13 @@ public class Client {
 	@OneToMany(mappedBy = "client")
 	private List<PledgeAgreement> pledgeAgreements;
 
-	@Override
-	public String toString() {
-		return "Client{" +
-				"clientId=" + clientId +
-				", typeOfClient='" + typeOfClient + '\'' +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "Client{" +
+                "clientId=" + clientId +
+                ", typeOfClient=" + typeOfClient +
+                ", clientIndividual=" + clientIndividual +
+                ", clientLegalEntity=" + clientLegalEntity +
+                '}';
+    }
 }

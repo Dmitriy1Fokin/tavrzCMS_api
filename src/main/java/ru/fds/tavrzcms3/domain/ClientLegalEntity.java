@@ -3,6 +3,7 @@ package ru.fds.tavrzcms3.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 
@@ -13,40 +14,21 @@ import javax.validation.constraints.Pattern;
 
 @Data
 @AllArgsConstructor
-@SuperBuilder
-@Entity
-@Table(name = "client_legal_entity")
-public class ClientLegalEntity extends Client {
+@NoArgsConstructor
+@Builder
+@Embeddable
+public class ClientLegalEntity{
 
 	@NotBlank(message = "Обязательно для заполнения")
-	@Column(name ="organizational_form")
+	@Column(name ="organizational_form", table = "client_legal_entity")
 	private String organizationalForm;
 
 	@NotBlank(message = "Обязательно для заполнения")
-	@Column(name ="name")
+	@Column(name ="name", table = "client_legal_entity")
 	private String name;
 
 	@Pattern(regexp = "^$|[0-9]{10}",
 			message = "Неверное значение")
-	@Column(name = "inn")
+	@Column(name = "inn", table = "client_legal_entity")
 	private  String inn;
-
-	@Valid
-	@OneToOne(mappedBy = "clientLegalEntity")
-	private Client client;
-
-	public ClientLegalEntity(){
-		super.setTypeOfClient(TypeOfClient.LEGAL_ENTITY);
-	}
-
-	@Override
-	public String toString() {
-		return "ClientLegalEntity{" +
-				"organizationalForm='" + organizationalForm + '\'' +
-				", name='" + name + '\'' +
-				", inn='" + inn + '\'' +
-				", clientId=" + getClientId() +
-				", typeOfClient='" + getTypeOfClient() + '\'' +
-				'}';
-	}
 }

@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.fds.tavrzcms3.converver.EncumbranceConverterDto;
-import ru.fds.tavrzcms3.converver.PledgeSubjectConverterDto;
 import ru.fds.tavrzcms3.domain.Encumbrance;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.EncumbranceDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.service.EncumbranceService;
@@ -29,8 +28,7 @@ public class EncumbranceController {
     private final PledgeSubjectService pledgeSubjectService;
     private final EncumbranceService encumbranceService;
 
-    private final PledgeSubjectConverterDto pledgeSubjectConverterDto;
-    private final EncumbranceConverterDto encumbranceConverterDto;
+    private final DtoFactory dtoFactory;
 
     private final ValidatorEntity validatorEntity;
 
@@ -38,13 +36,11 @@ public class EncumbranceController {
 
     public EncumbranceController(PledgeSubjectService pledgeSubjectService,
                                  EncumbranceService encumbranceService,
-                                 PledgeSubjectConverterDto pledgeSubjectConverterDto,
-                                 EncumbranceConverterDto encumbranceConverterDto,
+                                 DtoFactory dtoFactory,
                                  ValidatorEntity validatorEntity) {
         this.pledgeSubjectService = pledgeSubjectService;
         this.encumbranceService = encumbranceService;
-        this.pledgeSubjectConverterDto = pledgeSubjectConverterDto;
-        this.encumbranceConverterDto = encumbranceConverterDto;
+        this.dtoFactory = dtoFactory;
         this.validatorEntity = validatorEntity;
     }
 
@@ -55,10 +51,10 @@ public class EncumbranceController {
         PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId)
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
 
-        PledgeSubjectDto pledgeSubjectDto = pledgeSubjectConverterDto.toDto(pledgeSubject);
+        PledgeSubjectDto pledgeSubjectDto = dtoFactory.getPledgeSubjectDto(pledgeSubject);
 
-        List<EncumbranceDto> encumbranceList = encumbranceConverterDto
-                .toDto(encumbranceService.getEncumbranceByPledgeSubject(pledgeSubject));
+        List<EncumbranceDto> encumbranceList = dtoFactory
+                .getEncumbrancesDto(encumbranceService.getEncumbranceByPledgeSubject(pledgeSubject));
 
         model.addAttribute("pledgeSubject", pledgeSubjectDto);
         model.addAttribute("encumbranceList", encumbranceList);
@@ -87,7 +83,7 @@ public class EncumbranceController {
         if(bindingResult.hasErrors())
             return "encumbrance/card";
 
-        Encumbrance encumbrance = encumbranceConverterDto.toEntity(encumbranceDto);
+        Encumbrance encumbrance = dtoFactory.getEncumbranceEntity(encumbranceDto);
         Set<ConstraintViolation<Encumbrance>> violations = validatorEntity.validateEntity(encumbrance);
         if(!violations.isEmpty())
             throw new IllegalArgumentException(validatorEntity.getErrorMessage());

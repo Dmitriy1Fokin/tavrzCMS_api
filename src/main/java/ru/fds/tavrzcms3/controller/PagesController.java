@@ -20,7 +20,6 @@ public class PagesController {
 
     private final EmployeeService employeeService;
     private final PledgeAgreementService pledgeAgreementService;
-    private final PledgeSubjectService pledgeSubjectService;
     private final ClientService clientService;
     private final LoanAgreementService loanAgreementService;
     private final FilesService filesService;
@@ -32,13 +31,11 @@ public class PagesController {
 
     public PagesController(EmployeeService employeeService,
                            PledgeAgreementService pledgeAgreementService,
-                           PledgeSubjectService pledgeSubjectService,
                            ClientService clientService,
                            LoanAgreementService loanAgreementService,
                            FilesService filesService) {
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
-        this.pledgeSubjectService = pledgeSubjectService;
         this.clientService = clientService;
         this.loanAgreementService = loanAgreementService;
         this.filesService = filesService;
@@ -92,12 +89,6 @@ public class PagesController {
         return PAGE_UPDATE;
     }
 
-
-
-
-
-
-
     @PostMapping("/upload")
     public String importEntityFromExcel(@RequestParam("file") Optional<MultipartFile> file,
                                         @RequestParam("whatUpload") Optional<String> whatUpload,
@@ -109,13 +100,13 @@ public class PagesController {
             if(whatUpload.isPresent()){
                 if(whatUpload.get().equals("clientLegalEntity")){
                     List<ClientLegalEntity> clientLegalEntityList = filesService.getClientLegalEntityFromExcel(uploadFile);
-                    clientLegalEntityList = clientService.updateInsertClientLegalEntityList(clientLegalEntityList);
+//                    clientLegalEntityList = clientService.updateInsertClientLegalEntityList(clientLegalEntityList);
 
                     model.addAttribute("clientLegalEntityList", clientLegalEntityList);
 
                 }else if(whatUpload.get().equals("clientIndividual")){
                     List<ClientIndividual> clientIndividualList = filesService.getClientIndividualFromExcel(uploadFile);
-                    clientIndividualList = clientService.updateInsertClientIndividualList(clientIndividualList);
+//                    clientIndividualList = clientService.updateInsertClientIndividualList(clientIndividualList);
 
                     model.addAttribute("clientIndividualList", clientIndividualList);
 
