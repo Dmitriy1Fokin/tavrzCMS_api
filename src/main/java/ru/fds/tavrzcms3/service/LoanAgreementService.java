@@ -1,6 +1,5 @@
 package ru.fds.tavrzcms3.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,12 +21,18 @@ import java.util.*;
 @Service
 public class LoanAgreementService {
 
-    @Autowired
-    RepositoryLoanAgreement repositoryLoanAgreement;
-    @Autowired
-    RepositoryClient repositoryClient;
-    @Autowired
-    ClientService clientService;
+    private final RepositoryLoanAgreement repositoryLoanAgreement;
+    private final RepositoryClient repositoryClient;
+    private final ClientService clientService;
+
+    public LoanAgreementService(RepositoryLoanAgreement repositoryLoanAgreement,
+                                RepositoryClient repositoryClient,
+                                ClientService clientService) {
+        this.repositoryLoanAgreement = repositoryLoanAgreement;
+        this.repositoryClient = repositoryClient;
+        this.clientService = clientService;
+    }
+
 
     public Optional<LoanAgreement> getLoanAgreementById(long loanAgreementId){
         return repositoryLoanAgreement.findById(loanAgreementId);

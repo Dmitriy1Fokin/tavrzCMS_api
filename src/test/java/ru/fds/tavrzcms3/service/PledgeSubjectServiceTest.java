@@ -29,6 +29,8 @@ import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
 import javax.validation.ConstraintViolation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -151,25 +153,57 @@ public class PledgeSubjectServiceTest {
 //        List<PledgeSubject> pledgeSubjectList2 = repositoryPledgeSubject.findAll(Example.of(pledgeSubject, exampleMatcher));
 //        System.out.println("2222222. size:" + pledgeSubjectList2.size() + ". " );
 
-
+        PledgeSubject pledgeSubject = PledgeSubject.builder().build();
         Class pledgeSubjecrClass = PledgeSubject.class;
         Field[] pledgeSubjectFields = pledgeSubjecrClass.getDeclaredFields();
         for(Field field : pledgeSubjectFields){
 
-                if(field.getType() == Liquidity.class){
-                    System.out.println("Liquidity.class");
-                }else if(field.getType() == Date.class){
-                    System.out.println("Date.class");
+//                if(field.getType() == Liquidity.class){
+//                    System.out.println("Liquidity.class");
+//                    Class aClass = field.getType().getSuperclass();
+//                    System.out.println(aClass.getName());
+//
+//                }else if(field.getType() == Date.class){
+//                    System.out.println("Date.class");
+//
+//                }
 
+//                if(field.getType().getSuperclass() == Enum.class){
+                if(field.getType() == Liquidity.class){
+                    System.out.println(field.getName());
+                    try {
+                        Method method = field.getType().getMethod("valueOf", String.class);
+//                        Method method = field.getType().getMethod("values");
+
+                            Liquidity liquidity = Liquidity.HIGH;
+                            System.out.println("liquidity1: " + liquidity);
+                            Class aClass = field.getType();
+                            Enum anEnum;
+//                            = Enum.valueOf(aClass,"HIGH");
+
+                        anEnum =(Enum) method.invoke(aClass, "AVERAGE");
+                            System.out.println("liquidity1: " + anEnum);
+                            System.out.println("liquidity Class : " + anEnum.getClass().getName());
+
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
                 }
 
         }
+//      Liquidity.AVERAGE
 
-        for (Field field : pledgeSubjectFields) {
-            Object o = field.getType();
-            System.out.println("Object: " + ((Class) o).getName() + ". Class: " + o.getClass());
-            System.out.println("TYPE: " + field.getType() + " NAME: " + field.getName());
-        }
+        Liquidity.values();
+
+//        for (Field field : pledgeSubjectFields) {
+//            Object o = field.getType();
+//            System.out.println("Object: " + ((Class) o).getName() + ". Class: " + o.getClass());
+//            System.out.println("TYPE: " + field.getType() + " NAME: " + field.getName());
+//        }
 
 
 

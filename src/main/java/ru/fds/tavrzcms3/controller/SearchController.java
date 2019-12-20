@@ -62,7 +62,7 @@ public class SearchController {
 
     @GetMapping("/search_results")
     public String searchResultsPage(@RequestParam Map<String, String> reqParam,
-                                    Model model){
+                                    Model model) throws ReflectiveOperationException{
 
         int currentPage = Integer.parseInt(reqParam.get("page"));
         int pageSize = Integer.parseInt(reqParam.get("size"));

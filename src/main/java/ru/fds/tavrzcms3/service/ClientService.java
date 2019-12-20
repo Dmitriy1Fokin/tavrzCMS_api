@@ -83,51 +83,59 @@ public class ClientService {
     }
 
     public List<Client> getClientFromSearch(Map<String, String> searchParam){
+        final String SEARCH_PARAM_TYPE_OF_CLIENT = "typeOfClient";
+        final String SEARCH_PARAM_CLIENT_NAME = "clientName";
+        final String SEARCH_PARAM_CLIENT_LEGAL_ENTITY = "clientLegalEntity";
+        final String SEARCH_PARAM_INN = "inn";
+        final String SEARCH_PARAM_CLIENT_INDIVIDUAL = "clientIndividual";
+        final String SEARCH_PARAM_PASSPORT = "pasportNum";
+        final String SEARCH_PARAM_SURNAME = "surname";
+        final String SEARCH_PARAM_NAME = "name";
 
         SpecificationBuilder builder = new SpecificationBuilderImpl();
 
-        if(Objects.nonNull(searchParam.get("typeOfClient")) && !searchParam.get("typeOfClient").isEmpty()){
+        if(Objects.nonNull(searchParam.get(SEARCH_PARAM_TYPE_OF_CLIENT)) && !searchParam.get(SEARCH_PARAM_TYPE_OF_CLIENT).isEmpty()){
 
             SearchCriteria searchCriteria = SearchCriteria.builder()
-                    .key("typeOfClient")
-                    .value(TypeOfClient.valueOf(searchParam.get("typeOfClient")))
+                    .key(SEARCH_PARAM_TYPE_OF_CLIENT)
+                    .value(TypeOfClient.valueOf(searchParam.get(SEARCH_PARAM_TYPE_OF_CLIENT)))
                     .operation(Operations.EQUAL_IGNORE_CASE)
                     .predicate(false)
                     .build();
             builder.with(searchCriteria);
 
 
-            if(searchParam.get("typeOfClient").equals(TypeOfClient.LEGAL_ENTITY.name())){
+            if(searchParam.get(SEARCH_PARAM_TYPE_OF_CLIENT).equals(TypeOfClient.LEGAL_ENTITY.name())){
 
-                if(Objects.nonNull(searchParam.get("clientName")) && !searchParam.get("clientName").isEmpty()){
+                if(Objects.nonNull(searchParam.get(SEARCH_PARAM_CLIENT_NAME)) && !searchParam.get(SEARCH_PARAM_CLIENT_NAME).isEmpty()){
                     SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                            .nestedObjectName("clientLegalEntity")
+                            .nestedObjectName(SEARCH_PARAM_CLIENT_LEGAL_ENTITY)
                             .key("name")
-                            .value(searchParam.get("clientName"))
+                            .value(searchParam.get(SEARCH_PARAM_CLIENT_NAME))
                             .operation(Operations.EQUAL_IGNORE_CASE)
                             .predicate(false)
                             .build();
                     builder.withNestedAttribute(searchCriteriaNestedAttribute);
                 }
 
-                if(Objects.nonNull(searchParam.get("inn")) && !searchParam.get("inn").isEmpty()){
+                if(Objects.nonNull(searchParam.get(SEARCH_PARAM_INN)) && !searchParam.get(SEARCH_PARAM_INN).isEmpty()){
                     SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                            .nestedObjectName("clientLegalEntity")
-                            .key("inn")
-                            .value(searchParam.get("inn"))
+                            .nestedObjectName(SEARCH_PARAM_CLIENT_LEGAL_ENTITY)
+                            .key(SEARCH_PARAM_INN)
+                            .value(searchParam.get(SEARCH_PARAM_INN))
                             .operation(Operations.EQUAL_IGNORE_CASE)
                             .predicate(false)
                             .build();
                     builder.withNestedAttribute(searchCriteriaNestedAttribute);
                 }
-            }else if(searchParam.get("typeOfClient").equals(TypeOfClient.INDIVIDUAL.name())){
+            }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_CLIENT).equals(TypeOfClient.INDIVIDUAL.name())){
 
-                if(Objects.nonNull(searchParam.get("clientName")) && !searchParam.get("clientName").isEmpty()){
-                    String[] words = searchParam.get("clientName").split("\\s");
+                if(Objects.nonNull(searchParam.get(SEARCH_PARAM_CLIENT_NAME)) && !searchParam.get(SEARCH_PARAM_CLIENT_NAME).isEmpty()){
+                    String[] words = searchParam.get(SEARCH_PARAM_CLIENT_NAME).split("\\s");
                     if(words.length == 1) {
                         SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                .nestedObjectName("clientIndividual")
-                                .key("surname")
+                                .nestedObjectName(SEARCH_PARAM_CLIENT_INDIVIDUAL)
+                                .key(SEARCH_PARAM_SURNAME)
                                 .value(words[0])
                                 .operation(Operations.EQUAL_IGNORE_CASE)
                                 .predicate(false)
@@ -136,8 +144,8 @@ public class ClientService {
 
                     }else if(words.length == 2){
                         SearchCriteriaNestedAttribute surname = SearchCriteriaNestedAttribute.builder()
-                                .nestedObjectName("clientIndividual")
-                                .key("surname")
+                                .nestedObjectName(SEARCH_PARAM_CLIENT_INDIVIDUAL)
+                                .key(SEARCH_PARAM_SURNAME)
                                 .value(words[0])
                                 .operation(Operations.EQUAL_IGNORE_CASE)
                                 .predicate(false)
@@ -145,8 +153,8 @@ public class ClientService {
                         builder.withNestedAttribute(surname);
 
                         SearchCriteriaNestedAttribute name = SearchCriteriaNestedAttribute.builder()
-                                .nestedObjectName("clientIndividual")
-                                .key("name")
+                                .nestedObjectName(SEARCH_PARAM_CLIENT_INDIVIDUAL)
+                                .key(SEARCH_PARAM_NAME)
                                 .value(words[1])
                                 .operation(Operations.EQUAL_IGNORE_CASE)
                                 .predicate(false)
@@ -155,8 +163,8 @@ public class ClientService {
 
                     }else if(words.length >= 3){
                         SearchCriteriaNestedAttribute surname = SearchCriteriaNestedAttribute.builder()
-                                .nestedObjectName("clientIndividual")
-                                .key("surname")
+                                .nestedObjectName(SEARCH_PARAM_CLIENT_INDIVIDUAL)
+                                .key(SEARCH_PARAM_SURNAME)
                                 .value(words[0])
                                 .operation(Operations.EQUAL_IGNORE_CASE)
                                 .predicate(false)
@@ -164,8 +172,8 @@ public class ClientService {
                         builder.withNestedAttribute(surname);
 
                         SearchCriteriaNestedAttribute name = SearchCriteriaNestedAttribute.builder()
-                                .nestedObjectName("clientIndividual")
-                                .key("name")
+                                .nestedObjectName(SEARCH_PARAM_CLIENT_INDIVIDUAL)
+                                .key(SEARCH_PARAM_NAME)
                                 .value(words[1])
                                 .operation(Operations.EQUAL_IGNORE_CASE)
                                 .predicate(false)
@@ -173,7 +181,7 @@ public class ClientService {
                         builder.withNestedAttribute(name);
 
                         SearchCriteriaNestedAttribute patronymic = SearchCriteriaNestedAttribute.builder()
-                                .nestedObjectName("clientIndividual")
+                                .nestedObjectName(SEARCH_PARAM_CLIENT_INDIVIDUAL)
                                 .key("patronymic")
                                 .value(words[2])
                                 .operation(Operations.EQUAL_IGNORE_CASE)
@@ -184,11 +192,11 @@ public class ClientService {
                     }
                 }
 
-                if(Objects.nonNull(searchParam.get("pasportNum")) && !searchParam.get("pasportNum").isEmpty()){
+                if(Objects.nonNull(searchParam.get(SEARCH_PARAM_PASSPORT)) && !searchParam.get(SEARCH_PARAM_PASSPORT).isEmpty()){
                     SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                            .nestedObjectName("clientIndividual")
-                            .key("pasportNum")
-                            .value(searchParam.get("pasportNum"))
+                            .nestedObjectName(SEARCH_PARAM_CLIENT_INDIVIDUAL)
+                            .key(SEARCH_PARAM_PASSPORT)
+                            .value(searchParam.get(SEARCH_PARAM_PASSPORT))
                             .operation(Operations.EQUAL_IGNORE_CASE)
                             .predicate(false)
                             .build();

@@ -4,15 +4,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.dictionary.LandCategory;
-import ru.fds.tavrzcms3.dictionary.Liquidity;
 import ru.fds.tavrzcms3.dictionary.MarketSegment;
 import ru.fds.tavrzcms3.dictionary.Operations;
-import ru.fds.tavrzcms3.dictionary.StatusOfMonitoring;
 import ru.fds.tavrzcms3.dictionary.TypeOfAuto;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 import ru.fds.tavrzcms3.dictionary.TypeOfEquip;
-import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
-import ru.fds.tavrzcms3.dictionary.TypeOfPledge;
 import ru.fds.tavrzcms3.dictionary.TypeOfSecurities;
 import ru.fds.tavrzcms3.dictionary.TypeOfTBO;
 import ru.fds.tavrzcms3.dictionary.TypeOfVessel;
@@ -39,6 +35,7 @@ import ru.fds.tavrzcms3.specification.SpecificationBuilder;
 import ru.fds.tavrzcms3.specification.SpecificationBuilderImpl;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -91,94 +88,57 @@ public class PledgeSubjectService {
         return repositoryPledgeSubject.findByPledgeAgreementsIn(pledgeAgreementList);
     }
 
-    public List<PledgeSubject> getPledgeSubjectsFromSearch(Map<String, String> searchParam){
+    public List<PledgeSubject> getPledgeSubjectsFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException{
+        final String SEARCH_PARAM_TYPE_OF_COLLATERAL = "typeOfCollateral";
+        final String SEARCH_PARAM_POSTFIX = "Option";
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
 
         SpecificationBuilder builder = new SpecificationBuilderImpl();
 
-        Class pledgeSubjectClass = PledgeSubject.class;
-        Field[] pledgeSubjectFields = pledgeSubjectClass.getDeclaredFields();
-        for(Field field : pledgeSubjectFields){
+        for(Field field : PledgeSubject.class.getDeclaredFields()){
             if(searchParam.containsKey(field.getName())){
-                if(field.getType() == Liquidity.class && !searchParam.get(field.getName()).isEmpty()){
+                if((field.getType() == String.class || field.getType() == double.class)
+                        && !searchParam.get(field.getName()).isEmpty()){
                     SearchCriteria searchCriteria = SearchCriteria.builder()
                             .key(field.getName())
-                            .value(Liquidity.valueOf(searchParam.get(field.getName())))
-                            .operation(Operations.EQUAL_IGNORE_CASE)
+                            .value(searchParam.get(field.getName()))
+                            .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                             .predicate(false)
                             .build();
                     builder.with(searchCriteria);
 
-                }else if(field.getType() == Date.class && !searchParam.get(field.getName()).isEmpty()){
+                }else if(field.getType().getSuperclass() == Enum.class && !searchParam.get(field.getName()).isEmpty()){
+                    Method method = field.getType().getMethod("valueOf", String.class);
+                    Class enumClass = field.getType();
+                    SearchCriteria searchCriteria = SearchCriteria.builder()
+                            .key(field.getName())
+                            .value(method.invoke(enumClass, searchParam.get(field.getName())))
+                            .operation(Operations.EQUAL_IGNORE_CASE)
+                            .predicate(false)
+                            .build();
+                    builder.with(searchCriteria);
+                } else if(field.getType() == Date.class && !searchParam.get(field.getName()).isEmpty()){
                     try {
                         Date date = simpleDateFormat.parse(searchParam.get(field.getName()));
                         SearchCriteria searchCriteria = SearchCriteria.builder()
                                 .key(field.getName())
                                 .value(date)
-                                .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                                .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                 .predicate(false)
                                 .build();
                         builder.with(searchCriteria);
                     } catch (ParseException e) {
                         return Collections.emptyList();
                     }
-
-                }else if(field.getType() == StatusOfMonitoring.class && !searchParam.get(field.getName()).isEmpty()){
-                    SearchCriteria searchCriteria = SearchCriteria.builder()
-                            .key(field.getName())
-                            .value(StatusOfMonitoring.valueOf(searchParam.get(field.getName())))
-                            .operation(Operations.EQUAL_IGNORE_CASE)
-                            .predicate(false)
-                            .build();
-                    builder.with(searchCriteria);
-
-                }else if(field.getType() == TypeOfCollateral.class && !searchParam.get(field.getName()).isEmpty()){
-                    SearchCriteria searchCriteria = SearchCriteria.builder()
-                            .key(field.getName())
-                            .value(TypeOfCollateral.valueOf(searchParam.get(field.getName())))
-                            .operation(Operations.EQUAL_IGNORE_CASE)
-                            .predicate(false)
-                            .build();
-                    builder.with(searchCriteria);
-
-                }else if(field.getType() == TypeOfPledge.class && !searchParam.get(field.getName()).isEmpty()){
-                    SearchCriteria searchCriteria = SearchCriteria.builder()
-                            .key(field.getName())
-                            .value(TypeOfPledge.valueOf(searchParam.get(field.getName())))
-                            .operation(Operations.EQUAL_IGNORE_CASE)
-                            .predicate(false)
-                            .build();
-                    builder.with(searchCriteria);
-
-                }else if(field.getType() == TypeOfMonitoring.class && !searchParam.get(field.getName()).isEmpty()){
-                    SearchCriteria searchCriteria = SearchCriteria.builder()
-                            .key(field.getName())
-                            .value(TypeOfMonitoring.valueOf(searchParam.get(field.getName())))
-                            .operation(Operations.EQUAL_IGNORE_CASE)
-                            .predicate(false)
-                            .build();
-                    builder.with(searchCriteria);
-
-                }else if((field.getType() == String.class || field.getType() == double.class)
-                        && !searchParam.get(field.getName()).isEmpty()){
-                    SearchCriteria searchCriteria = SearchCriteria.builder()
-                            .key(field.getName())
-                            .value(searchParam.get(field.getName()))
-                            .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
-                            .predicate(false)
-                            .build();
-                    builder.with(searchCriteria);
                 }
             }
         }
 
-        if(searchParam.containsKey("typeOfCollateral") && !searchParam.get("typeOfCollateral").isEmpty()){
+        if(searchParam.containsKey(SEARCH_PARAM_TYPE_OF_COLLATERAL) && !searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).isEmpty()){
 
-            if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.AUTO.name())){
-                Class psAutoClass = PledgeSubjectAuto.class;
-                Field[] psAutoFields = psAutoClass.getDeclaredFields();
-                for(Field field : psAutoFields){
+            if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.AUTO.name())){
+                for(Field field : PledgeSubjectAuto.class.getDeclaredFields()){
                     if(searchParam.containsKey(field.getName())){
                         if((field.getType() == String.class || field.getType() == Double.class || field.getType() == Integer.class)
                                 && !searchParam.get(field.getName()).isEmpty()){
@@ -186,7 +146,7 @@ public class PledgeSubjectService {
                                     .nestedObjectName("pledgeSubjectAuto")
                                     .key(field.getName())
                                     .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
                             builder.withNestedAttribute(searchCriteriaNestedAttribute);
@@ -203,10 +163,8 @@ public class PledgeSubjectService {
                     }
                 }
 
-            }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.EQUIPMENT.name())){
-                Class psEquipmentClass = PledgeSubjectEquipment.class;
-                Field[] psEquipmentFields = psEquipmentClass.getDeclaredFields();
-                for (Field field : psEquipmentFields){
+            }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.EQUIPMENT.name())){
+                for (Field field : PledgeSubjectEquipment.class.getDeclaredFields()){
                     if(searchParam.containsKey(field.getName())){
                         if((field.getType() == String.class || field.getType() == Double.class || field.getType() == Integer.class)
                                 && !searchParam.get(field.getName()).isEmpty()){
@@ -214,7 +172,7 @@ public class PledgeSubjectService {
                                     .nestedObjectName("pledgeSubjectEquipment")
                                     .key(field.getName())
                                     .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
                             builder.withNestedAttribute(searchCriteriaNestedAttribute);
@@ -231,7 +189,7 @@ public class PledgeSubjectService {
                     }
                 }
 
-            }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.BUILDING.name())){
+            }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.BUILDING.name())){
                 for (Field field : PledgeSubjectBuilding.class.getDeclaredFields()){
                     if(searchParam.containsKey(field.getName())){
                         if((field.getType() == String.class || field.getType() == double.class || field.getType() == int.class)
@@ -240,7 +198,7 @@ public class PledgeSubjectService {
                                     .nestedObjectName("pledgeSubjectBuilding")
                                     .key(field.getName())
                                     .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
                             builder.withNestedAttribute(searchCriteriaNestedAttribute);
@@ -257,7 +215,7 @@ public class PledgeSubjectService {
                     }
                 }
 
-            }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.LAND_LEASE.name())){
+            }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.LAND_LEASE.name())){
                 for(Field field : PledgeSubjectLandLease.class.getDeclaredFields()){
                     if(searchParam.containsKey(field.getName())){
                         if((field.getType() == String.class || field.getType() == double.class)
@@ -266,7 +224,7 @@ public class PledgeSubjectService {
                                     .nestedObjectName("pledgeSubjectLandLease")
                                     .key(field.getName())
                                     .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
                             builder.withNestedAttribute(searchCriteriaNestedAttribute);
@@ -286,7 +244,7 @@ public class PledgeSubjectService {
                                         .nestedObjectName("pledgeSubjectLandLease")
                                         .key(field.getName())
                                         .value(date)
-                                        .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                                        .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                         .predicate(false)
                                         .build();
                                 builder.withNestedAttribute(searchCriteriaNestedAttribute);
@@ -297,7 +255,7 @@ public class PledgeSubjectService {
                     }
                 }
 
-            }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.LAND_OWNERSHIP.name())){
+            }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.LAND_OWNERSHIP.name())){
                 for(Field field : PledgeSubjectLandOwnership.class.getDeclaredFields()){
                     if(searchParam.containsKey(field.getName())){
                         if((field.getType() == String.class || field.getType() == double.class)
@@ -306,7 +264,7 @@ public class PledgeSubjectService {
                                     .nestedObjectName("pledgeSubjectLandOwnership")
                                     .key(field.getName())
                                     .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
                             builder.withNestedAttribute(searchCriteriaNestedAttribute);
@@ -323,7 +281,7 @@ public class PledgeSubjectService {
                     }
                 }
 
-            }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.PREMISE.name())){
+            }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.PREMISE.name())){
                 for(Field field : PledgeSubjectRoom.class.getDeclaredFields()){
                     if(searchParam.containsKey(field.getName())){
                         if((field.getType() == String.class || field.getType() == double.class)
@@ -332,7 +290,7 @@ public class PledgeSubjectService {
                                     .nestedObjectName("pledgeSubjectRoom")
                                     .key(field.getName())
                                     .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
                             builder.withNestedAttribute(searchCriteriaNestedAttribute);
@@ -349,7 +307,7 @@ public class PledgeSubjectService {
                     }
                 }
 
-            }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.SECURITIES.name())){
+            }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.SECURITIES.name())){
                 for(Field field : PledgeSubjectSecurities.class.getDeclaredFields()){
                     if(searchParam.containsKey(field.getName())){
                         if(field.getType() == double.class && !searchParam.get(field.getName()).isEmpty()){
@@ -357,7 +315,7 @@ public class PledgeSubjectService {
                                     .nestedObjectName("pledgeSubjectSecurities")
                                     .key(field.getName())
                                     .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
                             builder.withNestedAttribute(searchCriteriaNestedAttribute);
@@ -374,7 +332,7 @@ public class PledgeSubjectService {
                     }
                 }
 
-            }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.TBO.name())){
+            }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.TBO.name())){
                 for(Field field : PledgeSubjectTBO.class.getDeclaredFields()){
                     if(searchParam.containsKey(field.getName())){
                         if((field.getType() == double.class || field.getType() == int.class)&& !searchParam.get(field.getName()).isEmpty()){
@@ -382,7 +340,7 @@ public class PledgeSubjectService {
                                     .nestedObjectName("pledgeSubjectTBO")
                                     .key(field.getName())
                                     .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
                             builder.withNestedAttribute(searchCriteriaNestedAttribute);
@@ -399,7 +357,7 @@ public class PledgeSubjectService {
                     }
                 }
 
-            }else if(searchParam.get("typeOfCollateral").equals(TypeOfCollateral.VESSEL.name())){
+            }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.VESSEL.name())){
                 for(Field field : PledgeSubjectVessel.class.getDeclaredFields()){
                     if(searchParam.containsKey(field.getName())){
                         if((field.getType() == Integer.class || field.getType() == int.class || field.getType() == String.class)
@@ -408,7 +366,7 @@ public class PledgeSubjectService {
                                     .nestedObjectName("pledgeSubjectVessel")
                                     .key(field.getName())
                                     .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
                             builder.withNestedAttribute(searchCriteriaNestedAttribute);
