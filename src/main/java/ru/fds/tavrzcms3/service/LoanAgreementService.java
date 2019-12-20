@@ -2,18 +2,19 @@ package ru.fds.tavrzcms3.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.fds.tavrzcms3.dictionary.Operations;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
-import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.repository.*;
+import ru.fds.tavrzcms3.specification.SearchCriteria;
 import ru.fds.tavrzcms3.specification.SpecificationBuilder;
 import ru.fds.tavrzcms3.specification.SpecificationBuilderImpl;
 
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -99,73 +100,90 @@ public class LoanAgreementService {
 
     public List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){
 
-//        SpecificationBuilder builder = new SpecificationBuilderImpl();
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
-//
-//        if(!searchParam.get("numLA").isEmpty())
-//            builder.with("numLA", ":", searchParam.get("numLA"), false);
-//        if(!searchParam.get("client").isEmpty()) {
-//            if (searchParam.get("clientOption").equals("юл")) {
-//                List<ClientLegalEntity> loaners = clientService.getClientLegalEntityByName(searchParam.get("client"));
-//
-//                if(loaners.isEmpty())
-//                    builder.with("client", ":", null, false);
-//                else if(loaners.size() == 1)
-//                    builder.with("client", ":", loaners.get(0), false);
-//                else if(loaners.size() > 1)
-//                    for(ClientLegalEntity cle : loaners)
-//                        builder.with("client", ":", cle, true);
-//            }
-//            else{
-//                String[] words = searchParam.get("client").split("\\s");
-//                List<ClientIndividual> loaners = clientService.getClientIndividualByFio(words);
-//
-//                if(loaners.isEmpty())
-//                    builder.with("client", ":", null, false);
-//                else if(loaners.size() == 1)
-//                    builder.with("client", ":", loaners.get(0), false);
-//                else if(loaners.size() > 1)
-//                    for(ClientIndividual ci : loaners)
-//                        builder.with("client", ":", ci, true);
-//            }
-//        }
-//        if(!searchParam.get("dateBeginLA").isEmpty()){
-//            try {
-//                Date date = simpleDateFormat.parse(searchParam.get("dateBeginLA"));
-//                builder.with("dateBeginLA", searchParam.get("dateBeginLAOption"), date, false);
-//            }catch (ParseException e){
-//                System.out.println("Не верный фортат dateBeginLA");
-//            }
-//        }
-//        if(!searchParam.get("dateEndLA").isEmpty()){
-//            try {
-//                Date date = simpleDateFormat.parse(searchParam.get("dateEndLA"));
-//                builder.with("dateEndLA", searchParam.get("dateEndLAOption"), date, false);
-//            }catch (ParseException e){
-//                System.out.println("Не верный фортат dateEndLA");
-//            }
-//        }
-//        if(!searchParam.get("pfo").isEmpty())
-//            builder.with("pfo", searchParam.get("pfoOption"), searchParam.get("pfo"), false);
-//        if(!searchParam.get("quality").isEmpty())
-//            builder.with("qualityCategory", searchParam.get("qualityOption"), searchParam.get("quality"), false);
-//        if(!searchParam.get("amaunt").isEmpty())
-//            builder.with("amountLA", searchParam.get("amauntOption"), searchParam.get("amaunt"), false);
-//        if(!searchParam.get("debt").isEmpty())
-//            builder.with("debtLA", searchParam.get("debtOption"), searchParam.get("debt"), false);
-//        if(!searchParam.get("interestRate").isEmpty())
-//            builder.with("interestRateLA", searchParam.get("interestRateOption"), searchParam.get("interestRate"), false);
-//        builder.with("statusLA", ":", StatusOfAgreement.valueOf(searchParam.get("statusLA")), false);
-//
-//        Specification<LoanAgreement> spec = builder.build();
-//
-//        int currentPage = Integer.parseInt(searchParam.get("page"));
-//        int pageSize = Integer.parseInt(searchParam.get("size"));
-//        Pageable pageable = PageRequest.of(currentPage, pageSize);
-//
-//        return repositoryLoanAgreement.findAll(spec, pageable);
+        SpecificationBuilder builder = new SpecificationBuilderImpl();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
 
-        return null;
+        for(Field field : LoanAgreement.class.getDeclaredFields()){
+            if(searchParam.containsKey(field.getName())){
+                if((field.getType() == String.class || field.getType() == double.class || field.getType() == byte.class)
+                        && !searchParam.get(field.getName()).isEmpty()){
+                    SearchCriteria searchCriteria = SearchCriteria.builder()
+                            .key(field.getName())
+                            .value(searchParam.get(field.getName()))
+                            .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                            .predicate(false)
+                            .build();
+                    builder.with(searchCriteria);
+
+                }else if(field.getType() == StatusOfAgreement.class && !searchParam.get(field.getName()).isEmpty()){
+                    SearchCriteria searchCriteria = SearchCriteria.builder()
+                            .key(field.getName())
+                            .value(StatusOfAgreement.valueOf(searchParam.get(field.getName())))
+                            .operation(Operations.EQUAL_IGNORE_CASE)
+                            .predicate(false)
+                            .build();
+                    builder.with(searchCriteria);
+                }else if(field.getType() == Client.class && !searchParam.get(field.getName()).isEmpty()){
+                    Map<String, String> searchParamClient = new HashMap<>();
+                    searchParamClient.put("typeOfClient", searchParam.get("typeOfClient"));
+                    searchParamClient.put("clientName", searchParam.get(field.getName()));
+                    List<Client> clientList = clientService.getClientFromSearch(searchParamClient);
+                    if(clientList.isEmpty()){
+                        SearchCriteria searchCriteria = SearchCriteria.builder()
+                                .key(field.getName())
+                                .value(null)
+                                .operation(Operations.EQUAL_IGNORE_CASE)
+                                .predicate(false)
+                                .build();
+                        builder.with(searchCriteria);
+                    }else if(clientList.size() == 1){
+                            SearchCriteria searchCriteria = SearchCriteria.builder()
+                                    .key(field.getName())
+                                    .value(clientList.get(0))
+                                    .operation(Operations.EQUAL_IGNORE_CASE)
+                                    .predicate(false)
+                                    .build();
+                            builder.with(searchCriteria);
+
+                    }else {
+                        SearchCriteria searchCriteriaFirst = SearchCriteria.builder()
+                                .key(field.getName())
+                                .value(clientList.get(0))
+                                .operation(Operations.EQUAL_IGNORE_CASE)
+                                .predicate(false)
+                                .build();
+                        builder.with(searchCriteriaFirst);
+
+                        for(int i = 1; i < clientList.size(); i++){
+                            SearchCriteria searchCriteria = SearchCriteria.builder()
+                                    .key(field.getName())
+                                    .value(clientList.get(i))
+                                    .operation(Operations.EQUAL_IGNORE_CASE)
+                                    .predicate(true)
+                                    .build();
+                            builder.with(searchCriteria);
+                        }
+                    }
+                }else if(field.getType() == Date.class && !searchParam.get(field.getName()).isEmpty()){
+                    try {
+                        Date date = simpleDateFormat.parse(searchParam.get(field.getName()));
+                        SearchCriteria searchCriteria = SearchCriteria.builder()
+                                .key(field.getName())
+                                .value(date)
+                                .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                                .predicate(false)
+                                .build();
+                        builder.with(searchCriteria);
+                    } catch (ParseException e) {
+                        return Collections.emptyList();
+                    }
+                }
+            }
+        }
+
+        Specification<LoanAgreement> spec = builder.build();
+
+        return repositoryLoanAgreement.findAll(spec);
     }
 
     @Transactional

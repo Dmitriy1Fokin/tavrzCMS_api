@@ -30,14 +30,15 @@
     <div class="row">
         <label>№ КД</label>
         <input name="numLA" type="text"/>
+        <input type="hidden", name="numLAOption" value="EQUAL_IGNORE_CASE">
     </div>
     <br>
     <div class="row">
         <label>Заемщик</label>
         <input name="client" type="text"/>
         <select name="typeOfClient">
-            <option selected value="юл">ЮЛ</option>
-            <option value="фл">ФЛ</option>
+            <option selected value="LEGAL_ENTITY">ЮЛ</option>
+            <option value="INDIVIDUAL">ФЛ</option>
         </select>
     </div>
     <br>
@@ -45,11 +46,11 @@
             <label>дата начала КД</label>
             <input name="dateBeginLA" type="date"/>
             <select name="dateBeginLAOption">
-                <option selected value=":">равно</option>
-                <option value=">">больше</option>
-                <option value=">=">больше или ровно</option>
-                <option value="<">меньше</option>
-                <option value="<=">меньше или равно</option>
+                <option selected value="EQUAL_IGNORE_CASE">равно</option>
+                <option value="GREATER">больше</option>
+                <option value="GREATER_EQUAL">больше или ровно</option>
+                <option value="LESS">меньше</option>
+                <option value="LESS_EQUAL">меньше или равно</option>
             </select>
     </div>
     <br>
@@ -57,11 +58,11 @@
         <label>Дата окончания КД</label>
         <input name="dateEndLA" type="date"/>
         <select name="dateEndLAOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
@@ -69,59 +70,59 @@
         <label>ПФО</label>
         <input type="number" min="1" max="5" name="pfo" />
         <select name="pfoOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
     <div class="row">
         <label>Кат.кач</label>
-        <input type="number" min="1" max="5" name="quality" />
-        <select name="qualityOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+        <input type="number" min="1" max="5" name="qualityCategory" />
+        <select name="qualityCategoryOption">
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
     <div class="row">
         <label>Сумма договора</label>
-        <input type="number" min="0" step="0.01" name="amaunt" />
-        <select name="amauntOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+        <input type="number" min="0" step="0.01" name="amountLA" />
+        <select name="amountLAOption">
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
     <div class="row">
         <label>Ссудная задолженность</label>
-        <input type="number" min="0" step="0.01" name="debt"/>
-        <select name="debtOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+        <input type="number" min="0" step="0.01" name="debtLA"/>
+        <select name="debtLAOption">
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
     <div class="row">
         <label>%</label>
-        <input type="number" min="0" max="1" step="0.0001" name="interestRate"/>
-        <select name="interestRateOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+        <input type="number" min="0" max="1" step="0.0001" name="interestRateLA"/>
+        <select name="interestRateLAOption">
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>

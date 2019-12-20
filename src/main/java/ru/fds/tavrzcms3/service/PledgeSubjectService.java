@@ -97,8 +97,8 @@ public class PledgeSubjectService {
 
         SpecificationBuilder builder = new SpecificationBuilderImpl();
 
-        Class pledgeSubjecrClass = PledgeSubject.class;
-        Field[] pledgeSubjectFields = pledgeSubjecrClass.getDeclaredFields();
+        Class pledgeSubjectClass = PledgeSubject.class;
+        Field[] pledgeSubjectFields = pledgeSubjectClass.getDeclaredFields();
         for(Field field : pledgeSubjectFields){
             if(searchParam.containsKey(field.getName())){
                 if(field.getType() == Liquidity.class && !searchParam.get(field.getName()).isEmpty()){
