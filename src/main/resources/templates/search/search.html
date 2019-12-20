@@ -153,8 +153,8 @@
         <label>Залогодатель</label>
         <input name="client" type="text"/>
         <select name="typeOfClient">
-            <option selected value="юл">ЮЛ</option>
-            <option value="фл">ФЛ</option>
+            <option selected value="LEGAL_ENTITY">ЮЛ</option>
+            <option value="INDIVIDUAL">ФЛ</option>
         </select>
     </div>
     <br>
@@ -162,11 +162,11 @@
         <label>дата начала ДЗ</label>
         <input name="dateBeginPA" type="date"/>
         <select name="dateBeginPAOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
@@ -174,11 +174,11 @@
         <label>Дата окончания ДЗ</label>
         <input name="dateEndPA" type="date"/>
         <select name="dateEndPAOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
@@ -193,49 +193,49 @@
     <br>
     <div class="row">
         <label>Рыночная стоимость по ДЗ</label>
-        <input type="number" min="0" step="0.01" name="rsDZ"/>
-        <select name="rsDZOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+        <input type="number" min="0" step="0.01" name="zsDz"/>
+        <select name="zsDzOption">
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
     <div class="row">
         <label>Рыночная стоимость по ЗЗ</label>
-        <input type="number" min="0" step="0.01" name="rsZZ"/>
-        <select name="rsZZOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+        <input type="number" min="0" step="0.01" name="rsZz"/>
+        <select name="rsZzOption">
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
     <div class="row">
         <label>Залоговая стоимость по ДЗ</label>
-        <input type="number" min="0" step="0.01" name="zsDZ"/>
-        <select name="zsDZOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+        <input type="number" min="0" step="0.01" name="zsDz"/>
+        <select name="zsDzOption">
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
     <div class="row">
         <label>Залоговая стоимость по ЗЗ</label>
-        <input type="number" min="0" step="0.01" name="zsZZ"/>
-        <select name="zsZZOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+        <input type="number" min="0" step="0.01" name="zsZz"/>
+        <select name="zsZzOption">
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
@@ -243,11 +243,11 @@
         <label>Справедливая стоимость</label>
         <input type="number" min="0" step="0.01" name="ss"/>
         <select name="ssOption">
-            <option selected value=":">равно</option>
-            <option value=">">больше</option>
-            <option value=">=">больше или ровно</option>
-            <option value="<">меньше</option>
-            <option value="<=">меньше или равно</option>
+            <option selected value="EQUAL_IGNORE_CASE">равно</option>
+            <option value="GREATER">больше</option>
+            <option value="GREATER_EQUAL">больше или ровно</option>
+            <option value="LESS">меньше</option>
+            <option value="LESS_EQUAL">меньше или равно</option>
         </select>
     </div>
     <br>
@@ -261,6 +261,9 @@
     <br>
     <button type="submit">Найти</button>
 </form>
+
+
+
 
 <h2>Поиск клиента</h2>
 <form th:action="@{/search/search_results}" th:method="get" action="search_results.html">

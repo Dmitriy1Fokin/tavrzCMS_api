@@ -1,9 +1,6 @@
 package ru.fds.tavrzcms3.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -32,7 +29,6 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     List<PledgeAgreement> findByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, TypeOfPledgeAgreement pervPosl, StatusOfAgreement statusPA);
     List<PledgeAgreement> findByClientInAndStatusPAEquals(List<Client> clients, StatusOfAgreement statusPA, Sort sort);
     List<PledgeAgreement> findByClientInAndStatusPAEquals(List<Client> clients, StatusOfAgreement statusPA);
-    List<PledgeAgreement> findAll(Specification specification);
     List<PledgeAgreement> findAllByNumPAContainingIgnoreCase(String numPA);
 
     @Query(nativeQuery = true, value = "select distinct ps.date_conclusion " +
