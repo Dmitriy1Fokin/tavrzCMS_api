@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,8 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -42,16 +40,14 @@ public class Insurance {
 	private String numInsurance;
 
 	@NotNull(message = "Обязательно для заполнения")
-	@Column(name ="date_begin")
-	@Temporal(TemporalType.DATE)
+	@Column(name ="date_begin", columnDefinition = "DATE")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateBeginInsurance;
+	private LocalDate dateBeginInsurance;
 
 	@NotNull(message = "Обязательно для заполнения")
-	@Column(name ="date_end")
-	@Temporal(TemporalType.DATE)
+	@Column(name ="date_end", columnDefinition = "DATE")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateEndInsurance;
+	private LocalDate dateEndInsurance;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
@@ -59,10 +55,9 @@ public class Insurance {
 	private double sumInsured;
 
 	@NotNull(message = "Обязательно для заполнения")
-    @Column(name ="date_insurance_contract")
-    @Temporal(TemporalType.DATE)
+    @Column(name ="date_insurance_contract", columnDefinition = "DATE")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateInsuranceContract;
+    private LocalDate dateInsuranceContract;
 
     @Pattern(regexp = "да|нет", message = "Возможные варианты: да, нет")
 	@Column(name ="payment_of_insurance_premium")
@@ -87,7 +82,6 @@ public class Insurance {
                 ", sumInsured=" + sumInsured +
                 ", dateInsuranceContract=" + dateInsuranceContract +
                 ", paymentOfInsurancePremium='" + paymentOfInsurancePremium + '\'' +
-//                ", pledgeSubject=" + pledgeSubject +
                 '}';
     }
 }

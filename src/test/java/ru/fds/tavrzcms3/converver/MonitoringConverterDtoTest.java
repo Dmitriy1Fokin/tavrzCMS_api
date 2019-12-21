@@ -5,13 +5,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.fds.tavrzcms3.converver.dtoconverter.MonitoringConverterDto;
 import ru.fds.tavrzcms3.dictionary.StatusOfMonitoring;
 import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
 import ru.fds.tavrzcms3.domain.Monitoring;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.MonitoringDto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -26,7 +27,7 @@ public class MonitoringConverterDtoTest {
     public void toEntity() {
         MonitoringDto monitoringDto = MonitoringDto.builder()
                 .monitoringId(1L)
-                .dateMonitoring(new Date(123))
+                .dateMonitoring(LocalDate.now())
                 .statusMonitoring(StatusOfMonitoring.IN_STOCK)
                 .employee("QWE")
                 .typeOfMonitoring(TypeOfMonitoring.VISUAL)
@@ -51,7 +52,7 @@ public class MonitoringConverterDtoTest {
     public void toDto() {
         Monitoring monitoring = Monitoring.builder()
                 .monitoringId(1L)
-                .dateMonitoring(new Date(123))
+                .dateMonitoring(LocalDate.now())
                 .statusMonitoring(StatusOfMonitoring.IN_STOCK)
                 .employee("QWE")
                 .typeOfMonitoring(TypeOfMonitoring.VISUAL)

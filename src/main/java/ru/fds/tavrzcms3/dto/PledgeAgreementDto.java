@@ -10,6 +10,7 @@ import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -26,11 +27,11 @@ public class PledgeAgreementDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateBeginPA;
+    private LocalDate dateBeginPA;
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateEndPA;
+    private LocalDate dateEndPA;
 
     private TypeOfPledgeAgreement pervPosl;
 
@@ -58,9 +59,9 @@ public class PledgeAgreementDto{
 
     private List<String> typesOfCollateral;
 
-    private List<Date> datesOfConclusions;
+    private List<LocalDate> datesOfConclusions;
 
-    private List<Date> datesOfMonitoring;
+    private List<LocalDate> datesOfMonitoring;
 
     private List<String> resultsOfMonitoring;
 

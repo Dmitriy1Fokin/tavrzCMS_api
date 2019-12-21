@@ -5,11 +5,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.fds.tavrzcms3.converver.dtoconverter.InsuranceConverterDto;
 import ru.fds.tavrzcms3.domain.Insurance;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.InsuranceDto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -25,10 +26,10 @@ public class InsuranceConverterDtoTest {
         InsuranceDto insuranceDto = InsuranceDto.builder()
                 .insuranceId(1L)
                 .numInsurance("num1")
-                .dateBeginInsurance(new Date(1234))
-                .dateEndInsurance(new Date(456))
+                .dateBeginInsurance(LocalDate.now())
+                .dateEndInsurance(LocalDate.now())
                 .sumInsured(987654)
-                .dateInsuranceContract(new Date(789))
+                .dateInsuranceContract(LocalDate.now())
                 .paymentOfInsurancePremium("да")
                 .franchiseAmount(123.0)
                 .pledgeSubjectId(2L)
@@ -52,10 +53,10 @@ public class InsuranceConverterDtoTest {
         Insurance insurance = Insurance.builder()
                 .insuranceId(1L)
                 .numInsurance("num1")
-                .dateBeginInsurance(new Date(1234))
-                .dateEndInsurance(new Date(456))
+                .dateBeginInsurance(LocalDate.now())
+                .dateEndInsurance(LocalDate.now())
                 .sumInsured(987654)
-                .dateInsuranceContract(new Date(789))
+                .dateInsuranceContract(LocalDate.now())
                 .paymentOfInsurancePremium("да")
                 .franchiseAmount(123.0)
                 .pledgeSubject(new PledgeSubject().builder().pledgeSubjectId(3L).build())

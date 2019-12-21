@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 
 import javax.validation.constraints.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -24,11 +25,11 @@ public class LoanAgreementDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateBeginLA;
+    private LocalDate dateBeginLA;
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateEndLA;
+    private LocalDate dateEndLA;
 
     private StatusOfAgreement statusLA;
 

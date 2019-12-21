@@ -5,12 +5,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.fds.tavrzcms3.converver.dtoconverter.EncumbranceConverterDto;
 import ru.fds.tavrzcms3.dictionary.TypeOfEncumbrance;
 import ru.fds.tavrzcms3.domain.Encumbrance;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.EncumbranceDto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -28,8 +29,8 @@ public class EncumbranceConverterDtoTest {
                 .nameEncumbrance("QWE")
                 .typeOfEncumbrance(TypeOfEncumbrance.PLEDGE)
                 .inFavorOfWhom("ASD")
-                .dateBegin(new Date())
-                .dateEnd(new Date())
+                .dateBegin(LocalDate.now())
+                .dateEnd(LocalDate.now())
                 .numOfEncumbrance("ZXC")
                 .pledgeSubjectId(1L)
                 .build();
@@ -53,8 +54,8 @@ public class EncumbranceConverterDtoTest {
                 .nameEncumbrance("QWE")
                 .typeOfEncumbrance(TypeOfEncumbrance.PLEDGE)
                 .inFavorOfWhom("ASD")
-                .dateBegin(new Date())
-                .dateEnd(new Date())
+                .dateBegin(LocalDate.now())
+                .dateEnd(LocalDate.now())
                 .numOfEncumbrance("ZXC")
                 .pledgeSubject(new PledgeSubject().builder().pledgeSubjectId(2L).build())
                 .build();

@@ -4,7 +4,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.LandCategory;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -46,16 +46,14 @@ public class PledgeSubjectLandLease{
 	private String cadastralNumOfBuilding;
 
 	@NotNull(message = "Обязательно для заполнения")
-	@Column(name ="begin_date_lease", table = "pledge_realty_land_lease")
-	@Temporal(TemporalType.DATE)
+	@Column(name ="begin_date_lease", table = "pledge_realty_land_lease", columnDefinition = "DATE")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateBeginLease;
+	private LocalDate dateBeginLease;
 
 	@NotNull(message = "Обязательно для заполнения")
-	@Column(name ="end_date_lease", table = "pledge_realty_land_lease")
-	@Temporal(TemporalType.DATE)
+	@Column(name ="end_date_lease", table = "pledge_realty_land_lease", columnDefinition = "DATE")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateEndLease;
+	private LocalDate dateEndLease;
 
 	@Convert(converter = LandCategory.Converter.class)
     @Column(name ="land_category_land_lease", table = "pledge_realty_land_lease")

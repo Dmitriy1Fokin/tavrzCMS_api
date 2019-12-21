@@ -10,6 +10,7 @@ import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -22,7 +23,7 @@ public class MonitoringDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateMonitoring;
+    private LocalDate dateMonitoring;
 
     private StatusOfMonitoring statusMonitoring;
 

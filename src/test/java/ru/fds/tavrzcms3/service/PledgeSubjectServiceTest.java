@@ -31,6 +31,7 @@ import javax.validation.ConstraintViolation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -87,8 +88,8 @@ public class PledgeSubjectServiceTest {
                 .rsDz(150)
                 .rsZz(100)
                 .ss(70)
-                .dateMonitoring(new Date(123456789))
-                .dateConclusion(new Date(234567890))
+                .dateMonitoring(LocalDate.now())
+                .dateConclusion(LocalDate.now())
                 .statusMonitoring(StatusOfMonitoring.IN_STOCK)
                 .typeOfCollateral(TypeOfCollateral.PREMISE)
                 .typeOfPledge(TypeOfPledge.RETURN)

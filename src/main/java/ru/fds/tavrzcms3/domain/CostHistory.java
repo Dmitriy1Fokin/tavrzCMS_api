@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,8 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
@@ -36,10 +34,9 @@ public class CostHistory {
 	private Long costHistoryId;
 
 	@NotNull(message = "Обязательно для заполнения")
-	@Column(name ="date")
-	@Temporal(TemporalType.DATE)
+	@Column(name ="date", columnDefinition = "DATE")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateConclusion;
+	private LocalDate dateConclusion;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
@@ -72,10 +69,9 @@ public class CostHistory {
 	@Column(name ="num_appraisal_report")
 	private String appraisalReportNum;
 
-	@Column(name ="date_appraisal_report")
-	@Temporal(TemporalType.DATE)
+	@Column(name ="date_appraisal_report", columnDefinition = "DATE")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date appraisalReportDate;
+	private LocalDate appraisalReportDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pledge_subject_id")

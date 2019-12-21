@@ -79,11 +79,11 @@
                        th:text="${#numbers.formatCurrency(ps.getSs())}">н/д</a>
                 </td>
 
-                <td th:text="${#dates.format(ps.getDateConclusion(), 'dd.MM.yyyy')}"></td>
+                <td th:text="${#temporals.format(ps.getDateConclusion(), 'dd.MM.yyyy')}"></td>
 
                 <td>
                     <a th:href="@{/monitoring/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../monitoring/pledge_subject.html"
-                       th:text="${#dates.format(ps.getDateMonitoring(), 'dd.MM.yyyy')}">н/д</a>
+                       th:text="${#temporals.format(ps.getDateMonitoring(), 'dd.MM.yyyy')}">н/д</a>
                 </td>
 
                 <td th:text="${ps.getTypeOfMonitoring().getTranslate()}"></td>
@@ -187,11 +187,11 @@
                        th:text="${#numbers.formatCurrency(ps.getSs())}">н/д</a>
                 </td>
 
-                <td th:text="${#dates.format(ps.getDateConclusion(), 'dd.MM.yyyy')}"></td>
+                <td th:text="${#temporals.format(ps.getDateConclusion(), 'dd.MM.yyyy')}"></td>
 
                 <td>
                     <a th:href="@{/monitoring/pledge_subject(pledgeSubjectId=${ps.getPledgeSubjectId()})}" href="../monitoring/pledge_subject.html"
-                       th:text="${#dates.format(ps.getDateMonitoring(), 'dd.MM.yyyy')}">н/д</a>
+                       th:text="${#temporals.format(ps.getDateMonitoring(), 'dd.MM.yyyy')}">н/д</a>
                 </td>
 
                 <td th:text="${ps.getTypeOfMonitoring().getTranslate()}"></td>

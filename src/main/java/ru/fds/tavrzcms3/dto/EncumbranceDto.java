@@ -9,7 +9,7 @@ import ru.fds.tavrzcms3.dictionary.TypeOfEncumbrance;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -29,11 +29,11 @@ public class EncumbranceDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateBegin;
+    private LocalDate dateBegin;
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateEnd;
+    private LocalDate dateEnd;
 
     @NotBlank(message = "Обязательно для заполнения")
     private String numOfEncumbrance;

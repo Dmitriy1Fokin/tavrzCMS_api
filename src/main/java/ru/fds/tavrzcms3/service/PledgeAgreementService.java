@@ -14,22 +14,27 @@ import ru.fds.tavrzcms3.specification.SpecificationBuilderImpl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.text.ParseException;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class PledgeAgreementService {
 
     private final RepositoryPledgeAgreement repositoryPledgeAgreement;
-    private final RepositoryPledgeSubject repositoryPledgeSubject;
     private final ClientService clientService;
 
     public PledgeAgreementService(RepositoryPledgeAgreement repositoryPledgeAgreement,
-                                  RepositoryPledgeSubject repositoryPledgeSubject,
                                   ClientService clientService) {
         this.repositoryPledgeAgreement = repositoryPledgeAgreement;
-        this.repositoryPledgeSubject = repositoryPledgeSubject;
         this.clientService = clientService;
     }
 
@@ -41,28 +46,34 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.findAllByNumPAContainingIgnoreCase(numPA);
     }
 
-    public List<Date> getDatesOfConclusion(PledgeAgreement pledgeAgreement){
-        return repositoryPledgeAgreement.getDatesOfConclusion(pledgeAgreement.getPledgeAgreementId());
+    public List<LocalDate> getDatesOfConclusion(PledgeAgreement pledgeAgreement){
+        List<Date> dateList = repositoryPledgeAgreement.getDatesOfConclusion(pledgeAgreement.getPledgeAgreementId());
+
+        if(Objects.isNull(dateList) || dateList.isEmpty())
+            return Collections.emptyList();
+
+        List<LocalDate> localDateList = new ArrayList<>();
+        for(Date date : dateList)
+            localDateList.add(date.toLocalDate());
+
+        return localDateList;
     }
 
-    public List<Date> getDatesOfConclusion(long pledgeAgreementId){
-        return repositoryPledgeAgreement.getDatesOfConclusion(pledgeAgreementId);
-    }
+    public List<LocalDate> getDatesOfMonitoring(PledgeAgreement pledgeAgreement){
+        List<Date> dateList = repositoryPledgeAgreement.getDatesOMonitorings(pledgeAgreement.getPledgeAgreementId());
 
-    public List<Date> getDatesOfMonitoring(PledgeAgreement pledgeAgreement){
-        return repositoryPledgeAgreement.getDatesOMonitorings(pledgeAgreement.getPledgeAgreementId());
-    }
+        if(Objects.isNull(dateList) || dateList.isEmpty())
+            return Collections.emptyList();
 
-    public List<Date> getDatesOfMonitoring(long pledgeAgreementId){
-        return repositoryPledgeAgreement.getDatesOMonitorings(pledgeAgreementId);
+        List<LocalDate> localDateList = new ArrayList<>();
+        for(Date date : dateList)
+            localDateList.add(date.toLocalDate());
+
+        return localDateList;
     }
 
     public List<String> getResultsOfMonitoring(PledgeAgreement pledgeAgreement){
         return repositoryPledgeAgreement.getResultsOfMonitoring(pledgeAgreement.getPledgeAgreementId());
-    }
-
-    public List<String> getResultsOfMonitoring(long pledgeAgreementId){
-        return repositoryPledgeAgreement.getResultsOfMonitoring(pledgeAgreementId);
     }
 
     public Optional<PledgeAgreement> getPledgeAgreementById(long pledgeAgreementId){
@@ -75,10 +86,6 @@ public class PledgeAgreementService {
 
     public List<String> getTypeOfCollateral(PledgeAgreement pledgeAgreement){
         return  repositoryPledgeAgreement.getTypeOfCollateral(pledgeAgreement.getPledgeAgreementId());
-    }
-
-    public List<String> getTypeOfCollateral(long pledgeAgreementId){
-        return  repositoryPledgeAgreement.getTypeOfCollateral(pledgeAgreementId);
     }
 
     public List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(long employeeId, TypeOfPledgeAgreement pervPosl){
@@ -102,181 +109,100 @@ public class PledgeAgreementService {
     }
 
     public int countOfMonitoringNotDone(Employee employee){
-        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsByEmployee(employee.getEmployeeId(), TypeOfPledgeAgreement.PERV);
-        Calendar dateNow = new GregorianCalendar();
-        Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), 1);
-        Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
-        Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
-        Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
-        int countOfMonitoring = 0;
-        for(PledgeAgreement pa : pledgeAgreementList)
-            if(repositoryPledgeSubject.existsByPledgeAgreementsAndDateMonitoringBetween(pa, firstDate,secondDate))
-                countOfMonitoring += 1;
+        LocalDate now = LocalDate.now();
+        LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonth(), 1);
+        LocalDate secondDate = firstDate.plusMonths(1);
 
-        return countOfMonitoring;
+        return repositoryPledgeAgreement.countOfMonitoringBetweenDates(employee.getEmployeeId(), firstDate, secondDate);
     }
 
     public int countOfMonitoringIsDone(Employee employee){
-        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsByEmployee(employee.getEmployeeId(), TypeOfPledgeAgreement.PERV);
-        Calendar dateNow = new GregorianCalendar();
-        Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), 1);
-        Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
-        Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
-        Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
-        int countOfMonitoring = 0;
-        for(PledgeAgreement pa : pledgeAgreementList)
-            if(repositoryPledgeSubject.existsByPledgeAgreementsAndDateMonitoringBetween(pa, firstDate,secondDate))
-                countOfMonitoring += 1;
+        LocalDate now = LocalDate.now();
+        LocalDate firstDate = LocalDate.of(now.getYear(), now.getMonth(), 1);
+        LocalDate secondDate = firstDate.plusMonths(1);
 
-        return countOfMonitoring;
+        return repositoryPledgeAgreement.countOfMonitoringBetweenDates(employee.getEmployeeId(), firstDate, secondDate);
     }
 
     public int countOfMonitoringOverdue(Employee employee){
-        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsByEmployee(employee.getEmployeeId(), TypeOfPledgeAgreement.PERV);
-        Calendar dateNow = new GregorianCalendar();
-        Calendar beforeDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH) - 1, dateNow.getMaximum(Calendar.DAY_OF_MONTH));
-        Date beforeDate = new Date(beforeDateCalendar.getTimeInMillis());
-        int countOfMonitoring = 0;
-        for(PledgeAgreement pa : pledgeAgreementList)
-            if(repositoryPledgeSubject.existsByPledgeAgreementsAndDateMonitoringBefore(pa, beforeDate))
-                countOfMonitoring += 1;
+        LocalDate now = LocalDate.now();
+        LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonth(), 1);
 
-        return countOfMonitoring;
+        return repositoryPledgeAgreement.countOfMonitoringLessDate(employee.getEmployeeId(), firstDate);
     }
 
     public List<PledgeAgreement> getPledgeAgreementWithMonitoringNotDone(Employee employee){
-        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsByEmployee(employee.getEmployeeId(), TypeOfPledgeAgreement.PERV);
-        Calendar dateNow = new GregorianCalendar();
-        Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), 1);
-        Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
-        Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
-        Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
-        List<PledgeAgreement> pledgeAgreementListWithMonitoringNotDone = new ArrayList<>();
-        for (PledgeAgreement pa : pledgeAgreementList)
-            if(repositoryPledgeSubject.existsByPledgeAgreementsAndDateMonitoringBetween(pa, firstDate,secondDate))
-                pledgeAgreementListWithMonitoringNotDone.add(pa);
+        LocalDate now = LocalDate.now();
+        LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonthValue(), 1);
+        LocalDate secondDate = firstDate.plusMonths(1);
 
-        return pledgeAgreementListWithMonitoringNotDone;
+        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringBetweenDates(employee.getEmployeeId(), firstDate, secondDate);
     }
 
     public List<PledgeAgreement> getPledgeAgreementWithMonitoringIsDone(Employee employee){
-        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsByEmployee(employee.getEmployeeId(), TypeOfPledgeAgreement.PERV);
-        Calendar dateNow = new GregorianCalendar();
-        Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), 1);
-        Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
-        Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
-        Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
-        List<PledgeAgreement> pledgeAgreementListWithMonitoringIsDone = new ArrayList<>();
-        for (PledgeAgreement pa : pledgeAgreementList)
-            if(repositoryPledgeSubject.existsByPledgeAgreementsAndDateMonitoringBetween(pa, firstDate,secondDate))
-                pledgeAgreementListWithMonitoringIsDone.add(pa);
+        LocalDate now = LocalDate.now();
+        LocalDate firstDate = LocalDate.of(now.getYear(), now.getMonthValue(), 1);
+        LocalDate secondDate = firstDate.plusMonths(1);
 
-        return pledgeAgreementListWithMonitoringIsDone;
+        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringBetweenDates(employee.getEmployeeId(), firstDate, secondDate);
     }
 
     public List<PledgeAgreement> getPledgeAgreementWithMonitoringOverDue(Employee employee){
-        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsByEmployee(employee.getEmployeeId(), TypeOfPledgeAgreement.PERV);
-        Calendar dateNow = new GregorianCalendar();
-        Calendar beforeDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH) - 1, dateNow.getMaximum(Calendar.DAY_OF_MONTH));
-        Date beforeDate = new Date(beforeDateCalendar.getTimeInMillis());
-        List<PledgeAgreement> pledgeAgreementListWithMonitoringOverdue = new ArrayList<>();
-        for (PledgeAgreement pa : pledgeAgreementList)
-            if(repositoryPledgeSubject.existsByPledgeAgreementsAndDateMonitoringBefore(pa, beforeDate))
-                pledgeAgreementListWithMonitoringOverdue.add(pa);
+        LocalDate now = LocalDate.now();
+        LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonth(), 1);
 
-        return pledgeAgreementListWithMonitoringOverdue;
+        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringLessDate(employee.getEmployeeId(), firstDate);
     }
 
     public int countOfConclusionNotDone(Employee employee){
-        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsByEmployee(employee.getEmployeeId(), TypeOfPledgeAgreement.PERV);
-        Calendar dateNow = new GregorianCalendar();
-        Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), 1);
-        Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
-        Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
-        Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
-        int countOfConclusion = 0;
-        for(PledgeAgreement pa : pledgeAgreementList)
-            if(repositoryPledgeSubject.existsByPledgeAgreementsAndDateConclusionBetween(pa, firstDate, secondDate))
-                countOfConclusion += 1;
+        LocalDate now = LocalDate.now();
+        LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonthValue(), 1);
+        LocalDate secondDate = firstDate.plusMonths(1);
 
-        return countOfConclusion;
+        return repositoryPledgeAgreement.countOfConclusionsBetweenDates(employee.getEmployeeId(), firstDate, secondDate);
     }
 
     public int countOfConclusionIsDone(Employee employee){
-        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsByEmployee(employee.getEmployeeId(), TypeOfPledgeAgreement.PERV);
-        Calendar dateNow = new GregorianCalendar();
-        Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), 1);
-        Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
-        Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
-        Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
-        int countOfConclusion = 0;
-        for(PledgeAgreement pa : pledgeAgreementList)
-            if(repositoryPledgeSubject.existsByPledgeAgreementsAndDateConclusionBetween(pa, firstDate, secondDate))
-                countOfConclusion += 1;
+        LocalDate now = LocalDate.now();
+        LocalDate firstDate = LocalDate.of(now.getYear(), now.getMonth(), 1);
+        LocalDate secondDate = firstDate.plusMonths(1);
 
-        return countOfConclusion;
+        return repositoryPledgeAgreement.countOfConclusionsBetweenDates(employee.getEmployeeId(), firstDate, secondDate);
     }
 
     public int countOfConclusionOverdue(Employee employee){
-        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsByEmployee(employee.getEmployeeId(), TypeOfPledgeAgreement.PERV);
-        Calendar dateNow = new GregorianCalendar();
-        Calendar beforeDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH) - 1, dateNow.getMaximum(Calendar.DAY_OF_MONTH));
-        Date beforeDate = new Date(beforeDateCalendar.getTimeInMillis());
-        int countOfConclusion = 0;
-        for(PledgeAgreement pa : pledgeAgreementList)
-            if(repositoryPledgeSubject.existsByPledgeAgreementsAndDateConclusionBefore(pa, beforeDate))
-                countOfConclusion += 1;
+        LocalDate now = LocalDate.now();
+        LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonth(), 1);
 
-        return countOfConclusion;
+        return repositoryPledgeAgreement.countOfConclusionsLessDate(employee.getEmployeeId(), firstDate);
     }
 
     public List<PledgeAgreement> getPledgeAgreementWithConclusionNotDone(Employee employee){
-        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsByEmployee(employee.getEmployeeId(), TypeOfPledgeAgreement.PERV);
-        Calendar dateNow = new GregorianCalendar();
-        Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), 1);
-        Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
-        Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
-        Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
-        List<PledgeAgreement> pledgeAgreementListWithConclusionNotDone = new ArrayList<>();
-        for (PledgeAgreement pa : pledgeAgreementList)
-            if(repositoryPledgeSubject.existsByPledgeAgreementsAndDateConclusionBetween(pa, firstDate, secondDate))
-                pledgeAgreementListWithConclusionNotDone.add(pa);
+        LocalDate now = LocalDate.now();
+        LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonthValue(), 1);
+        LocalDate secondDate = firstDate.plusMonths(1);
 
-        return pledgeAgreementListWithConclusionNotDone;
+        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsBetweenDates(employee.getEmployeeId(), firstDate, secondDate);
     }
 
     public List<PledgeAgreement> getPledgeAgreementWithConclusionIsDone(Employee employee){
-        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsByEmployee(employee.getEmployeeId(), TypeOfPledgeAgreement.PERV);
-        Calendar dateNow = new GregorianCalendar();
-        Calendar firstDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), 1);
-        Calendar secondDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR), dateNow.get(Calendar.MONTH), dateNow.getMaximum(Calendar.DAY_OF_MONTH));
-        Date firstDate = new Date(firstDateCalendar.getTimeInMillis());
-        Date secondDate = new Date(secondDateCalendar.getTimeInMillis());
-        List<PledgeAgreement> pledgeAgreementListWithConclusionIsDone = new ArrayList<>();
-        for (PledgeAgreement pa : pledgeAgreementList)
-            if(repositoryPledgeSubject.existsByPledgeAgreementsAndDateConclusionBetween(pa, firstDate, secondDate))
-                pledgeAgreementListWithConclusionIsDone.add(pa);
+        LocalDate now = LocalDate.now();
+        LocalDate firstDate = LocalDate.of(now.getYear(), now.getMonth(), 1);
+        LocalDate secondDate = firstDate.plusMonths(1);
 
-        return pledgeAgreementListWithConclusionIsDone;
+        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsBetweenDates(employee.getEmployeeId(), firstDate, secondDate);
     }
 
     public List<PledgeAgreement> getPledgeAgreementWithConclusionOverDue(Employee employee){
-        List<PledgeAgreement> pledgeAgreementList = getCurrentPledgeAgreementsByEmployee(employee.getEmployeeId(), TypeOfPledgeAgreement.PERV);
-        Calendar dateNow = new GregorianCalendar();
-        Calendar beforeDateCalendar = new GregorianCalendar(dateNow.get(Calendar.YEAR) - 1, dateNow.get(Calendar.MONTH) - 1, dateNow.getMaximum(Calendar.DAY_OF_MONTH));
-        Date beforeDate = new Date(beforeDateCalendar.getTimeInMillis());
-        List<PledgeAgreement> pledgeAgreementListWithConclusionOverdue = new ArrayList<>();
-        for (PledgeAgreement pa : pledgeAgreementList)
-            if(repositoryPledgeSubject.existsByPledgeAgreementsAndDateConclusionBefore(pa, beforeDate))
-                pledgeAgreementListWithConclusionOverdue.add(pa);
+        LocalDate now = LocalDate.now();
+        LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonth(), 1);
 
-        return pledgeAgreementListWithConclusionOverdue;
+        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsLessDate(employee.getEmployeeId(), firstDate);
     }
 
     public List<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException{
 
         SpecificationBuilder builder = new SpecificationBuilderImpl();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
 
         for(Field field : PledgeAgreement.class.getDeclaredFields()){
             if(searchParam.containsKey(field.getName())){
@@ -340,19 +266,18 @@ public class PledgeAgreementService {
                         }
                     }
 
-                }else if(field.getType() == Date.class && !searchParam.get(field.getName()).isEmpty()){
-                    try {
-                        Date date = simpleDateFormat.parse(searchParam.get(field.getName()));
+                }else if(field.getType() == LocalDate.class && !searchParam.get(field.getName()).isEmpty()){
+
+                        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
+                        LocalDate localDate = LocalDate.parse(searchParam.get(field.getName()), dateTimeFormatter);
+
                         SearchCriteria searchCriteria = SearchCriteria.builder()
                                 .key(field.getName())
-                                .value(date)
+                                .value(localDate)
                                 .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
                                 .predicate(false)
                                 .build();
                         builder.with(searchCriteria);
-                    } catch (ParseException e) {
-                        return Collections.emptyList();
-                    }
                 }
             }
         }
@@ -361,32 +286,16 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.findAll(specification);
     }
 
-    public int countOfCurrentPledgeAgreementsByPledgor(Client client){
-        return repositoryPledgeAgreement.countAllByClientAndStatusPAEquals(client, StatusOfAgreement.OPEN);
-    }
-
     public List<PledgeAgreement> getCurrentPledgeAgreementsByPledgor(Client client){
         return repositoryPledgeAgreement.findByClientAndStatusPA(client, StatusOfAgreement.OPEN);
-    }
-
-    public int countOfClosedPledgeAgreementsByPledgor(Client client){
-        return repositoryPledgeAgreement.countAllByClientAndStatusPAEquals(client, StatusOfAgreement.CLOSED);
     }
 
     public List<PledgeAgreement> getClosedPledgeAgreementsByPledgor(Client client){
         return repositoryPledgeAgreement.findByClientAndStatusPA(client, StatusOfAgreement.CLOSED);
     }
 
-    public int countOfCurrentPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){
-        return repositoryPledgeAgreement.countAllByLoanAgreementsAndStatusPAEquals(loanAgreement,StatusOfAgreement.OPEN);
-    }
-
     public List<PledgeAgreement> getCurrentPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){
         return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPAEquals(loanAgreement, StatusOfAgreement.OPEN);
-    }
-
-    public int countOfClosedPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){
-        return repositoryPledgeAgreement.countAllByLoanAgreementsAndStatusPAEquals(loanAgreement, StatusOfAgreement.CLOSED);
     }
 
     public List<PledgeAgreement> getClosedPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){

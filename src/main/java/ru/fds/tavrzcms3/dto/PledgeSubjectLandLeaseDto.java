@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -40,11 +41,11 @@ public class PledgeSubjectLandLeaseDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateBeginLease;
+    private LocalDate dateBeginLease;
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateEndLease;
+    private LocalDate dateEndLease;
 
     private LandCategory landCategory;
 }

@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -25,11 +26,11 @@ public class InsuranceDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateBeginInsurance;
+    private LocalDate dateBeginInsurance;
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateEndInsurance;
+    private LocalDate dateEndInsurance;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
@@ -37,7 +38,7 @@ public class InsuranceDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateInsuranceContract;
+    private LocalDate dateInsuranceContract;
 
     @Pattern(regexp = "да|нет", message = "Возможные варианты: да, нет")
     private String paymentOfInsurancePremium;

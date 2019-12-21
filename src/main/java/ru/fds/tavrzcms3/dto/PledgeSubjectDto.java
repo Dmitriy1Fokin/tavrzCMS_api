@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -47,11 +48,11 @@ public class PledgeSubjectDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateMonitoring;
+    private LocalDate dateMonitoring;
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateConclusion;
+    private LocalDate dateConclusion;
 
     private StatusOfMonitoring statusMonitoring;
 

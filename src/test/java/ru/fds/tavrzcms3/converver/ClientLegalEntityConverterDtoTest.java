@@ -5,11 +5,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.fds.tavrzcms3.dictionary.TypeOfClient;
+import ru.fds.tavrzcms3.converver.dtoconverter.ClientLegalEntityConverterDto;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.dto.ClientLegalEntityDto;
-
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 

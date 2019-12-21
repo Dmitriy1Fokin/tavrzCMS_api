@@ -1,4 +1,4 @@
-package ru.fds.tavrzcms3.converver;
+package ru.fds.tavrzcms3.converver.dtoconverter;
 
 import java.util.ArrayList;
 import java.util.Collection;

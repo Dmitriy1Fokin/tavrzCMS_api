@@ -1,4 +1,4 @@
-package ru.fds.tavrzcms3.converver;
+package ru.fds.tavrzcms3.converver.dtoconverter;
 
 import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.domain.PledgeSubjectSecurities;

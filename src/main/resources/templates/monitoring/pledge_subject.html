@@ -53,7 +53,7 @@
         <tbody>
         <div th:each="monitoring : ${monitoringList}">
             <tr>
-                <td th:text="${#dates.format(monitoring.getDateMonitoring(), 'dd.MM.yyyy')}">н/д</td>
+                <td th:text="${#temporals.format(monitoring.getDateMonitoring(), 'dd.MM.yyyy')}">н/д</td>
                 <td th:text="${monitoring.getEmployee()}">н/д</td>
                 <td th:text="${monitoring.getStatusMonitoring().getTranslate()}">н/д</td>
                 <td th:text="${monitoring.getTypeOfMonitoring().getTranslate()}">н/д</td>

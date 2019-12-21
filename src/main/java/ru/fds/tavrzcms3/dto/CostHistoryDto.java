@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +20,7 @@ public class CostHistoryDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateConclusion;
+    private LocalDate dateConclusion;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
@@ -48,7 +48,7 @@ public class CostHistoryDto{
     private String appraisalReportNum;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date appraisalReportDate;
+    private LocalDate appraisalReportDate;
 
     private Long pledgeSubjectId;
 }

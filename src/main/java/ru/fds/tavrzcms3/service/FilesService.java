@@ -20,6 +20,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -334,14 +335,20 @@ public class FilesService {
                 if(isCellEmpty(row.getCell(numColumnPledgeAgreementDateBegin)))
                     throw new InvalidFormatException("Отсутствует дата начала ДЗ в строке " + (i+1));
                 else if(DateUtil.isCellDateFormatted(row.getCell(numColumnPledgeAgreementDateBegin)))
-                    pledgeAgreement.setDateBeginPA(row.getCell(numColumnPledgeAgreementDateBegin).getDateCellValue());
+                    pledgeAgreement.setDateBeginPA(row.getCell(numColumnPledgeAgreementDateBegin).getDateCellValue()
+                            .toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate());
                 else
                     throw new InvalidFormatException("Неверный формат/значение даты начала ДЗ в строке " + (i+1));
 
                 if(isCellEmpty(row.getCell(numColumnPledgeAgreementDateEnd)))
                     throw new InvalidFormatException("Отсутствует дата окончания ДЗ в строке " + (i+1));
                 else if(DateUtil.isCellDateFormatted(row.getCell(numColumnPledgeAgreementDateEnd)))
-                    pledgeAgreement.setDateEndPA(row.getCell(numColumnPledgeAgreementDateEnd).getDateCellValue());
+                    pledgeAgreement.setDateEndPA(row.getCell(numColumnPledgeAgreementDateEnd).getDateCellValue()
+                            .toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate());
                 else
                     throw new InvalidFormatException("Неверный формат/значение даты окончания ДЗ в строке " + (i+1));
 

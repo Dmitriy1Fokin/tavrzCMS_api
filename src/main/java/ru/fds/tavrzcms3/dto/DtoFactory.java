@@ -1,16 +1,16 @@
 package ru.fds.tavrzcms3.dto;
 
 import org.springframework.stereotype.Component;
-import ru.fds.tavrzcms3.converver.ClientConverterDto;
-import ru.fds.tavrzcms3.converver.ClientManagerConverterDto;
-import ru.fds.tavrzcms3.converver.CostHistoryConverterDto;
-import ru.fds.tavrzcms3.converver.EmployeeConverterDto;
-import ru.fds.tavrzcms3.converver.EncumbranceConverterDto;
-import ru.fds.tavrzcms3.converver.InsuranceConverterDto;
-import ru.fds.tavrzcms3.converver.LoanAgreementConverterDto;
-import ru.fds.tavrzcms3.converver.MonitoringConverterDto;
-import ru.fds.tavrzcms3.converver.PledgeAgreementConverterDto;
-import ru.fds.tavrzcms3.converver.PledgeSubjectConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.ClientConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.ClientManagerConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.CostHistoryConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.EmployeeConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.EncumbranceConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.InsuranceConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.LoanAgreementConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.MonitoringConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.PledgeAgreementConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.PledgeSubjectConverterDto;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.ClientManager;
 import ru.fds.tavrzcms3.domain.CostHistory;

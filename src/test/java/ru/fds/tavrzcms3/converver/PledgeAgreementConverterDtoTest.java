@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.fds.tavrzcms3.converver.dtoconverter.PledgeAgreementConverterDto;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.Client;
@@ -13,8 +14,8 @@ import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
 
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -30,8 +31,8 @@ public class PledgeAgreementConverterDtoTest {
         PledgeAgreementDto pledgeAgreementDto = PledgeAgreementDto.builder()
                 .pledgeAgreementId(1L)
                 .numPA("000")
-                .dateBeginPA(new Date(123))
-                .dateEndPA(new Date(34))
+                .dateBeginPA(LocalDate.now())
+                .dateEndPA(LocalDate.now())
                 .pervPosl(TypeOfPledgeAgreement.PERV)
                 .statusPA(StatusOfAgreement.CLOSED)
                 .noticePA("QWE")
@@ -45,8 +46,8 @@ public class PledgeAgreementConverterDtoTest {
                 .pledgeSubjectsIds(Arrays.asList(2L, 4L))
                 .briefInfoAboutCollateral(Arrays.asList("qwe, asd", "wert"))
                 .typesOfCollateral(Arrays.asList("gfd", "bnht"))
-                .datesOfConclusions(Arrays.asList(new Date(1), new Date(2)))
-                .datesOfMonitoring(Arrays.asList(new Date(31), new Date(25)))
+                .datesOfConclusions(Arrays.asList(LocalDate.now(), LocalDate.now()))
+                .datesOfMonitoring(Arrays.asList(LocalDate.now(), LocalDate.now()))
                 .resultsOfMonitoring(Arrays.asList("yhgb", "wedfc"))
                 .build();
 
@@ -74,8 +75,8 @@ public class PledgeAgreementConverterDtoTest {
         PledgeAgreement pledgeAgreement = PledgeAgreement.builder()
                 .pledgeAgreementId(1L)
                 .numPA("000")
-                .dateBeginPA(new Date(123))
-                .dateEndPA(new Date(34))
+                .dateBeginPA(LocalDate.now())
+                .dateEndPA(LocalDate.now())
                 .pervPosl(TypeOfPledgeAgreement.PERV)
                 .statusPA(StatusOfAgreement.CLOSED)
                 .noticePA("QWE")

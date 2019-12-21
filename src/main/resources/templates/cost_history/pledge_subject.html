@@ -55,7 +55,7 @@
         <tbody>
             <div th:each="costHistory : ${costHistoryList}">
                 <tr>
-                    <td th:text="${#dates.format(costHistory.getDateConclusion(), 'dd.MM.yyyy')}">н/д</td>
+                    <td th:text="${#temporals.format(costHistory.getDateConclusion(), 'dd.MM.yyyy')}">н/д</td>
                     <td th:text="${#numbers.formatCurrency(costHistory.getRsDz())}">н/д</td>
                     <td th:text="${#numbers.formatCurrency(costHistory.getZsDz())}">н/д</td>
                     <td th:text="${#numbers.formatCurrency(costHistory.getRsZz())}">н/д</td>
@@ -63,7 +63,7 @@
                     <td th:text="${#numbers.formatCurrency(costHistory.getSs())}">н/д</td>
                     <td th:text="${costHistory.getAppraiser()}">н/д</td>
                     <td th:text="${costHistory.getAppraisalReportNum()}">н/д</td>
-                    <td th:text="${#dates.format(costHistory.getAppraisalReportDate(), 'dd.MM.yyyy')}">н/д</td>
+                    <td th:text="${#temporals.format(costHistory.getAppraisalReportDate(), 'dd.MM.yyyy')}">н/д</td>
                 </tr>
             </div>
         </tbody>

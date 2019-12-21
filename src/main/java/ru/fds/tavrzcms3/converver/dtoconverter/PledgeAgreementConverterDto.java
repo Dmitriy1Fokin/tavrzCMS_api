@@ -1,4 +1,4 @@
-package ru.fds.tavrzcms3.converver;
+package ru.fds.tavrzcms3.converver.dtoconverter;
 
 import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
@@ -10,9 +10,9 @@ import ru.fds.tavrzcms3.service.LoanAgreementService;
 import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -84,9 +84,9 @@ public class PledgeAgreementConverterDto implements ConverterDto<PledgeAgreement
 
         List<String> typesOfCollateral = pledgeAgreementService.getTypeOfCollateral(entity);
 
-        List<Date> datesOfConclusions = pledgeAgreementService.getDatesOfConclusion(entity);
+        List<LocalDate> datesOfConclusions = pledgeAgreementService.getDatesOfConclusion(entity);
 
-        List<Date> datesOfMonitoring = pledgeAgreementService.getDatesOfMonitoring(entity);
+        List<LocalDate> datesOfMonitoring = pledgeAgreementService.getDatesOfMonitoring(entity);
 
         List<String> resultsOfMonitoring = pledgeAgreementService.getResultsOfMonitoring(entity);
 

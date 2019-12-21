@@ -8,12 +8,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.StatusOfMonitoring;
 import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Data
 @NoArgsConstructor
@@ -29,10 +28,9 @@ public class Monitoring {
 	private Long monitoringId;
 
 	@NotNull(message = "Обязательно для заполнения")
-	@Column(name ="date")
-	@Temporal(TemporalType.DATE)
+	@Column(name ="date", columnDefinition = "DATE")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateMonitoring;
+	private LocalDate dateMonitoring;
 
 	@Convert(converter = StatusOfMonitoring.Converter.class)
 	@Column(name ="status")
@@ -52,7 +50,7 @@ public class Monitoring {
 	@Column(name = "collateral_value")
 	private Double collateralValue;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
 	@JoinColumn(name = "pledge_subject_id")
 	private PledgeSubject pledgeSubject;
 

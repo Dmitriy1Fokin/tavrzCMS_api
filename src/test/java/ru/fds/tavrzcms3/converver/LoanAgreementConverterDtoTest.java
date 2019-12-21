@@ -5,14 +5,15 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.fds.tavrzcms3.converver.dtoconverter.LoanAgreementConverterDto;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.dto.LoanAgreementDto;
 
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,8 +29,8 @@ public class LoanAgreementConverterDtoTest {
         LoanAgreementDto loanAgreementDto = LoanAgreementDto.builder()
                 .loanAgreementId(1L)
                 .numLA("000")
-                .dateBeginLA(new Date(123))
-                .dateEndLA(new Date(456))
+                .dateBeginLA(LocalDate.now())
+                .dateEndLA(LocalDate.now())
                 .statusLA(StatusOfAgreement.OPEN)
                 .amountLA(12345)
                 .debtLA(1234)
@@ -61,8 +62,8 @@ public class LoanAgreementConverterDtoTest {
         LoanAgreement loanAgreement = LoanAgreement.builder()
                 .loanAgreementId(1L)
                 .numLA("000")
-                .dateBeginLA(new Date(123))
-                .dateEndLA(new Date(456))
+                .dateBeginLA(LocalDate.now())
+                .dateEndLA(LocalDate.now())
                 .statusLA(StatusOfAgreement.OPEN)
                 .amountLA(12345)
                 .debtLA(1234)

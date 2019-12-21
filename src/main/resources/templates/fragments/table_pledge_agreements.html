@@ -36,9 +36,9 @@
                    th:text="${pa.getNumPA()}">н/д</a>
             </td>
 
-            <td th:text="${#dates.format(pa.getDateBeginPA(), 'dd.MM.yyyy')}"></td>
+            <td th:text="${#temporals.format(pa.getDateBeginPA(), 'dd.MM.yyyy')}"></td>
 
-            <td th:text="${#dates.format(pa.getDateEndPA(), 'dd.MM.yyyy')}"></td>
+            <td th:text="${#temporals.format(pa.getDateEndPA(), 'dd.MM.yyyy')}"></td>
 
             <td>
                 <a th:href="@{/client/detail(clientId=${pa.getClientId()})}" href="../client/detail.html"
@@ -92,13 +92,13 @@
 
             <td>
                 <div th:each="dateOfConclusion : ${pa.getDatesOfConclusions()}">
-                    <span th:text="${#dates.format(dateOfConclusion, 'dd.MM.yyyy')}">н/д</span>
+                    <span th:text="${#temporals.format(dateOfConclusion, 'dd.MM.yyyy')}">н/д</span>
                 </div>
             </td>
 
             <td>
                 <div th:each="dateOfMonitoring : ${pa.getDatesOfMonitoring()}">
-                    <span th:text="${#dates.format(dateOfMonitoring, 'dd.MM.yyyy')}">н/д</span>
+                    <span th:text="${#temporals.format(dateOfMonitoring, 'dd.MM.yyyy')}">н/д</span>
                 </div>
             </td>
 

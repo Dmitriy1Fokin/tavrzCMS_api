@@ -26,7 +26,7 @@
 
 <div th:replace="fragments/nav :: user_nav_bar"></div>
 
-<h1 th:text="'Договор залога: №' + ${pledgeAgreementDto.getNumPA()} + ' от ' + ${#dates.format(pledgeAgreementDto.getDateBeginPA(), 'dd.MM.yyyy')}">Договор залога</h1>
+<h1 th:text="'Договор залога: №' + ${pledgeAgreementDto.getNumPA()} + ' от ' + ${#temporals.format(pledgeAgreementDto.getDateBeginPA(), 'dd.MM.yyyy')}">Договор залога</h1>
     <label>Ответственный сотрудник: </label>
     <span th:text="${employeeDto.getFullName()}"></span>
     <br>
@@ -40,11 +40,11 @@
     <br>
     <br>
     <label>Дата начала ДЗ:</label>
-    <span th:text="${#dates.format(pledgeAgreementDto.getDateBeginPA(), 'dd.MM.yyyy')}">н/д</span>
+    <span th:text="${#temporals.format(pledgeAgreementDto.getDateBeginPA(), 'dd.MM.yyyy')}">н/д</span>
     <br>
     <br>
     <label>Дата окончания ДЗ:</label>
-    <span th:text="${#dates.format(pledgeAgreementDto.getDateEndPA(), 'dd.MM.yyyy')}">н/д</span>
+    <span th:text="${#temporals.format(pledgeAgreementDto.getDateEndPA(), 'dd.MM.yyyy')}">н/д</span>
     <br>
     <br>
     <label>Залогодатель:</label>

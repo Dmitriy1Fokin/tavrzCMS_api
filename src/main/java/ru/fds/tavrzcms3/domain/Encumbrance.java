@@ -10,8 +10,7 @@ import ru.fds.tavrzcms3.dictionary.TypeOfEncumbrance;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -39,16 +38,14 @@ public class Encumbrance {
     private String inFavorOfWhom;
 
     @NotNull(message = "Обязательно для заполнения")
-    @Column(name ="date_begin")
-    @Temporal(TemporalType.DATE)
+    @Column(name ="date_begin", columnDefinition = "DATE")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateBegin;
+    private LocalDate dateBegin;
 
     @NotNull(message = "Обязательно для заполнения")
-    @Column(name ="date_end")
-    @Temporal(TemporalType.DATE)
+    @Column(name ="date_end", columnDefinition = "DATE")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateEnd;
+    private LocalDate dateEnd;
 
     @NotBlank(message = "Обязательно для заполнения")
     @Column(name = "num_of_encumbrance")

@@ -5,17 +5,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.fds.tavrzcms3.converver.dtoconverter.PledgeSubjectAutoConverter;
+import ru.fds.tavrzcms3.converver.dtoconverter.PledgeSubjectConverterDto;
 import ru.fds.tavrzcms3.dictionary.*;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
-import ru.fds.tavrzcms3.domain.PledgeSubjectAuto;
 import ru.fds.tavrzcms3.dto.MainCharacteristic;
-import ru.fds.tavrzcms3.dto.PledgeSubjectAutoDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PledgeSubjectConverterDtoTest {
@@ -38,8 +37,8 @@ public class PledgeSubjectConverterDtoTest {
                 .zsDz(70)
                 .zsZz(40)
                 .ss(0)
-                .dateMonitoring(new Date(1))
-                .dateConclusion(new Date(123456))
+                .dateMonitoring(LocalDate.now())
+                .dateConclusion(LocalDate.now())
                 .statusMonitoring(StatusOfMonitoring.IN_STOCK)
                 .typeOfCollateral(TypeOfCollateral.VESSEL)
                 .typeOfPledge(TypeOfPledge.RETURN)

@@ -6,13 +6,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Data
 @NoArgsConstructor
@@ -32,16 +31,14 @@ public class PledgeAgreement {
 	private String numPA;
 
 	@NotNull(message = "Обязательно для заполнения")
-	@Column(name ="date_begin_dz")
-	@Temporal(TemporalType.DATE)
+	@Column(name ="date_begin_dz", columnDefinition = "DATE")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateBeginPA;
+	private LocalDate dateBeginPA;
 
 	@NotNull(message = "Обязательно для заполнения")
-	@Column(name ="date_end_dz")
-	@Temporal(TemporalType.DATE)
+	@Column(name ="date_end_dz", columnDefinition = "DATE")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateEndPA;
+	private LocalDate dateEndPA;
 
 	@Convert(converter = TypeOfPledgeAgreement.Converter.class)
 	@Column(name ="perv_posl")

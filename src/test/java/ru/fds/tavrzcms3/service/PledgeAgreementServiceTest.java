@@ -16,6 +16,7 @@ import ru.fds.tavrzcms3.repository.RepositoryEmployee;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -51,12 +52,12 @@ public class PledgeAgreementServiceTest {
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findById(126L).orElseThrow(()-> new NullPointerException("Нет такого ДЗ!"));
 
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-        List<Date> datesTest = new ArrayList<>();
+        List<LocalDate> datesTest = new ArrayList<>();
         for(PledgeSubject ps : pledgeSubjects)
             if(!datesTest.contains(ps.getDateConclusion()))
                 datesTest.add(ps.getDateConclusion());
 
-        List<Date> datesResult = pledgeAgreementService.getDatesOfConclusion(pledgeAgreement);
+        List<LocalDate> datesResult = pledgeAgreementService.getDatesOfConclusion(pledgeAgreement);
 
         assertEquals(datesTest.size(), datesResult.size());
         assertTrue(datesTest.containsAll(datesResult));
@@ -67,12 +68,12 @@ public class PledgeAgreementServiceTest {
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findById(213L).orElseThrow(()-> new NullPointerException("Нет такого ДЗ!"));
 
         List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-        List<Date> datesTest = new ArrayList<>();
+        List<LocalDate> datesTest = new ArrayList<>();
         for(PledgeSubject ps : pledgeSubjects)
             if(!datesTest.contains(ps.getDateMonitoring()))
                 datesTest.add(ps.getDateMonitoring());
 
-        List<Date> datesResult = pledgeAgreementService.getDatesOfMonitoring(pledgeAgreement);
+        List<LocalDate> datesResult = pledgeAgreementService.getDatesOfMonitoring(pledgeAgreement);
 
         assertEquals(datesTest.size(), datesResult.size());
         assertTrue(datesTest.containsAll(datesResult));

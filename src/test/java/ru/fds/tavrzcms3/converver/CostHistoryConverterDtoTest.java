@@ -5,11 +5,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.fds.tavrzcms3.converver.dtoconverter.CostHistoryConverterDto;
 import ru.fds.tavrzcms3.domain.CostHistory;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.CostHistoryDto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -24,7 +25,7 @@ public class CostHistoryConverterDtoTest {
     public void toEntity() {
         CostHistoryDto costHistoryDto = CostHistoryDto.builder()
                 .costHistoryId(1L)
-                .dateConclusion(new Date())
+                .dateConclusion(LocalDate.now())
                 .zsDz(1)
                 .zsZz(2)
                 .rsDz(3)
@@ -32,7 +33,7 @@ public class CostHistoryConverterDtoTest {
                 .ss(5)
                 .appraiser("appraiser name")
                 .appraisalReportNum("report num")
-                .appraisalReportDate(new Date())
+                .appraisalReportDate(LocalDate.now())
                 .pledgeSubjectId(1L)
                 .build();
 
@@ -55,7 +56,7 @@ public class CostHistoryConverterDtoTest {
     public void toDto() {
         CostHistory costHistory = CostHistory.builder()
                 .costHistoryId(1L)
-                .dateConclusion(new Date())
+                .dateConclusion(LocalDate.now())
                 .zsDz(1)
                 .zsZz(2)
                 .rsDz(3)
@@ -63,7 +64,7 @@ public class CostHistoryConverterDtoTest {
                 .ss(5)
                 .appraiser("appraiser name")
                 .appraisalReportNum("report num")
-                .appraisalReportDate(new Date())
+                .appraisalReportDate(LocalDate.now())
                 .pledgeSubject(new PledgeSubject().builder().pledgeSubjectId(1L).build())
                 .build();
 

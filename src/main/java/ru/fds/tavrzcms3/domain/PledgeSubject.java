@@ -2,11 +2,10 @@ package ru.fds.tavrzcms3.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.*;
@@ -74,16 +73,14 @@ public class PledgeSubject {
 	private double ss;
 
     @NotNull(message = "Обязательно для заполнения")
-	@Column(name ="date_monitoring")
-	@Temporal(TemporalType.DATE)
+	@Column(name ="date_monitoring", columnDefinition = "DATE")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateMonitoring;
+	private LocalDate dateMonitoring;
 
     @NotNull(message = "Обязательно для заполнения")
-	@Column(name ="date_conclusion")
-	@Temporal(TemporalType.DATE)
+	@Column(name ="date_conclusion", columnDefinition = "DATE")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateConclusion;
+	private LocalDate dateConclusion;
 
     @Convert(converter = StatusOfMonitoring.Converter.class)
 	@Column(name ="status_monitoring")

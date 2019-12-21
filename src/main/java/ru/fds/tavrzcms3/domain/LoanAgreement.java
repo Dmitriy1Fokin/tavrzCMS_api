@@ -4,7 +4,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.*;
@@ -28,16 +28,14 @@ public class LoanAgreement {
 	private String numLA;
 
 	@NotNull(message = "Обязательно для заполнения")
-	@Column(name ="date_begin_kd")
-	@Temporal(TemporalType.DATE)
+	@Column(name ="date_begin_kd", columnDefinition = "DATE")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateBeginLA;
+	private LocalDate dateBeginLA;
 
 	@NotNull(message = "Обязательно для заполнения")
-	@Column(name ="date_end_kd")
-	@Temporal(TemporalType.DATE)
+	@Column(name ="date_end_kd", columnDefinition = "DATE")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateEndLA;
+	private LocalDate dateEndLA;
 
 	@Convert(converter = StatusOfAgreement.Converter.class)
 	@Column(name ="status")
