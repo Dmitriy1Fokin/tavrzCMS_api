@@ -36,11 +36,10 @@ import ru.fds.tavrzcms3.specification.SpecificationBuilderImpl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -92,8 +91,6 @@ public class PledgeSubjectService {
         final String SEARCH_PARAM_TYPE_OF_COLLATERAL = "typeOfCollateral";
         final String SEARCH_PARAM_POSTFIX = "Option";
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
-
         SpecificationBuilder builder = new SpecificationBuilderImpl();
 
         for(Field field : PledgeSubject.class.getDeclaredFields()){
@@ -118,19 +115,18 @@ public class PledgeSubjectService {
                             .predicate(false)
                             .build();
                     builder.with(searchCriteria);
-                } else if(field.getType() == Date.class && !searchParam.get(field.getName()).isEmpty()){
-                    try {
-                        Date date = simpleDateFormat.parse(searchParam.get(field.getName()));
-                        SearchCriteria searchCriteria = SearchCriteria.builder()
-                                .key(field.getName())
-                                .value(date)
-                                .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
-                                .predicate(false)
-                                .build();
-                        builder.with(searchCriteria);
-                    } catch (ParseException e) {
-                        return Collections.emptyList();
-                    }
+                } else if(field.getType() == LocalDate.class && !searchParam.get(field.getName()).isEmpty()){
+
+                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
+                    LocalDate localDate = LocalDate.parse(searchParam.get(field.getName()), dateTimeFormatter);
+
+                    SearchCriteria searchCriteria = SearchCriteria.builder()
+                            .key(field.getName())
+                            .value(localDate)
+                            .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                            .predicate(false)
+                            .build();
+                    builder.with(searchCriteria);
                 }
             }
         }
@@ -237,20 +233,19 @@ public class PledgeSubjectService {
                                     .predicate(false)
                                     .build();
                             builder.withNestedAttribute(searchCriteriaNestedAttribute);
-                        }else if(field.getType() == Date.class && !searchParam.get(field.getName()).isEmpty()){
-                            try {
-                                Date date = simpleDateFormat.parse(searchParam.get(field.getName()));
-                                SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                        .nestedObjectName("pledgeSubjectLandLease")
-                                        .key(field.getName())
-                                        .value(date)
-                                        .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
-                                        .predicate(false)
-                                        .build();
-                                builder.withNestedAttribute(searchCriteriaNestedAttribute);
-                            } catch (ParseException e) {
-                                return Collections.emptyList();
-                            }
+                        }else if(field.getType() == LocalDate.class && !searchParam.get(field.getName()).isEmpty()){
+
+                            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
+                            LocalDate localDate = LocalDate.parse(searchParam.get(field.getName()), dateTimeFormatter);
+
+                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
+                                    .nestedObjectName("pledgeSubjectLandLease")
+                                    .key(field.getName())
+                                    .value(localDate)
+                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
+                                    .predicate(false)
+                                    .build();
+                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
                         }
                     }
                 }

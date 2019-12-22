@@ -1,7 +1,6 @@
 package ru.fds.tavrzcms3.specification;
 
 import org.springframework.data.jpa.domain.Specification;
-import ru.fds.tavrzcms3.dictionary.Operations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,6 @@ public class SpecificationBuilderImpl implements SpecificationBuilder {
 
     private final List<SearchCriteria> searchCriteriaList;
     private final List<SearchCriteriaNestedAttribute> searchCriteriaNestedAttributeList;
-    private SearchCriteria criteria;
 
     public SpecificationBuilderImpl(){
         searchCriteriaList = new ArrayList<>();
@@ -29,11 +27,10 @@ public class SpecificationBuilderImpl implements SpecificationBuilder {
 
     @Override
     public Specification build() {
-        if(searchCriteriaList.size() == 0 && searchCriteriaNestedAttributeList.size() == 0){
+        if(searchCriteriaList.isEmpty() && searchCriteriaNestedAttributeList.isEmpty()){
             return null;
         }
 
-//        List<Specification> specs = searchCriteriaList.stream().map(SpecificationImpl::new).collect(Collectors.toList());
         List<Specification> specs = new ArrayList<>();
         for (SearchCriteria sc : searchCriteriaList)
             specs.add(new SpecificationImpl(sc));

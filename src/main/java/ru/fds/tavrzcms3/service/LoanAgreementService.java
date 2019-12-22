@@ -14,8 +14,8 @@ import ru.fds.tavrzcms3.specification.SpecificationBuilder;
 import ru.fds.tavrzcms3.specification.SpecificationBuilderImpl;
 
 import java.lang.reflect.Field;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -106,7 +106,6 @@ public class LoanAgreementService {
     public List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){
 
         SpecificationBuilder builder = new SpecificationBuilderImpl();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
 
         for(Field field : LoanAgreement.class.getDeclaredFields()){
             if(searchParam.containsKey(field.getName())){
@@ -169,19 +168,18 @@ public class LoanAgreementService {
                             builder.with(searchCriteria);
                         }
                     }
-                }else if(field.getType() == Date.class && !searchParam.get(field.getName()).isEmpty()){
-                    try {
-                        Date date = simpleDateFormat.parse(searchParam.get(field.getName()));
-                        SearchCriteria searchCriteria = SearchCriteria.builder()
-                                .key(field.getName())
-                                .value(date)
-                                .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
-                                .predicate(false)
-                                .build();
-                        builder.with(searchCriteria);
-                    } catch (ParseException e) {
-                        return Collections.emptyList();
-                    }
+                }else if(field.getType() == LocalDate.class && !searchParam.get(field.getName()).isEmpty()){
+
+                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
+                    LocalDate localDate = LocalDate.parse(searchParam.get(field.getName()), dateTimeFormatter);
+
+                    SearchCriteria searchCriteria = SearchCriteria.builder()
+                            .key(field.getName())
+                            .value(localDate)
+                            .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
+                            .predicate(false)
+                            .build();
+                    builder.with(searchCriteria);
                 }
             }
         }

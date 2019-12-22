@@ -9,11 +9,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class SpecificationNestedAttribute<T, N> implements Specification{
 
-    private Join<T, N> join;
     private final SearchCriteriaNestedAttribute criteria;
 
     public SpecificationNestedAttribute(SearchCriteriaNestedAttribute criteria){
@@ -22,14 +21,14 @@ public class SpecificationNestedAttribute<T, N> implements Specification{
 
     @Override
     public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
-        join = root.join(criteria.getNestedObjectName());
+        Join<T, N> join = root.join(criteria.getNestedObjectName());
         if(criteria.getOperation() == Operations.GREATER){
             if(criteria.getValue().getClass() == String.class) {
 
                 return criteriaBuilder.greaterThan(join.<String>get(criteria.getKey()), criteria.getValue().toString());
             }
-            else if(criteria.getValue().getClass() == Date.class){
-                return criteriaBuilder.greaterThan(join.<Date> get(criteria.getKey()), (Date) criteria.getValue());
+            else if(criteria.getValue().getClass() == LocalDate.class){
+                return criteriaBuilder.greaterThan(join.<LocalDate> get(criteria.getKey()), (LocalDate) criteria.getValue());
             }
             else {
                 return null;
@@ -39,8 +38,8 @@ public class SpecificationNestedAttribute<T, N> implements Specification{
             if(criteria.getValue().getClass() == String.class) {
                 return criteriaBuilder.greaterThanOrEqualTo(join.<String>get(criteria.getKey()), criteria.getValue().toString());
             }
-            else if(criteria.getValue().getClass() == Date.class){
-                return criteriaBuilder.greaterThanOrEqualTo(join.<Date> get(criteria.getKey()), (Date) criteria.getValue());
+            else if(criteria.getValue().getClass() == LocalDate.class){
+                return criteriaBuilder.greaterThanOrEqualTo(join.<LocalDate> get(criteria.getKey()), (LocalDate) criteria.getValue());
             }
             else {
                 return null;
@@ -50,8 +49,8 @@ public class SpecificationNestedAttribute<T, N> implements Specification{
             if(criteria.getValue().getClass() == String.class) {
                 return criteriaBuilder.lessThan(join.<String>get(criteria.getKey()), criteria.getValue().toString());
             }
-            else if(criteria.getValue().getClass() == Date.class){
-                return criteriaBuilder.lessThan(join.<Date> get(criteria.getKey()), (Date) criteria.getValue());
+            else if(criteria.getValue().getClass() == LocalDate.class){
+                return criteriaBuilder.lessThan(join.<LocalDate> get(criteria.getKey()), (LocalDate) criteria.getValue());
             }
             else {
                 return null;
@@ -61,8 +60,8 @@ public class SpecificationNestedAttribute<T, N> implements Specification{
             if(criteria.getValue().getClass() == String.class) {
                 return criteriaBuilder.lessThanOrEqualTo(join.<String>get(criteria.getKey()), criteria.getValue().toString());
             }
-            else if(criteria.getValue().getClass() == Date.class){
-                return criteriaBuilder.lessThanOrEqualTo(join.<Date> get(criteria.getKey()), (Date) criteria.getValue());
+            else if(criteria.getValue().getClass() == LocalDate.class){
+                return criteriaBuilder.lessThanOrEqualTo(join.<LocalDate> get(criteria.getKey()), (LocalDate) criteria.getValue());
             }
             else {
                 return null;
