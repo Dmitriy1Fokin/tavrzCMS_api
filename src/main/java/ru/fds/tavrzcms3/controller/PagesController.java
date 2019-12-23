@@ -1,7 +1,9 @@
 package ru.fds.tavrzcms3.controller;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,38 +52,47 @@ public class PagesController {
 
     @GetMapping("/")
     public String homePage(@AuthenticationPrincipal User user, Model model) {
-        Employee employee = employeeService.getEmployeeByUser(user);
-        model.addAttribute("employee", employee);
+        GrantedAuthority authorityUser = new SimpleGrantedAuthority("ROLE_USER");
+        GrantedAuthority authorityChief = new SimpleGrantedAuthority("ROLE_USER_CHIEF");
 
-        int countOfPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee);
-        model.addAttribute("countOfAllPledgeAgreement", countOfPA);
+        Collection<GrantedAuthority> grantedAuthorities = user.getAuthorities();
+        if(grantedAuthorities.contains(authorityUser) || grantedAuthorities.contains(authorityChief)){
+            Employee employee = employeeService.getEmployeeByUser(user);
+            model.addAttribute("employee", employee);
 
-        int countOfPervPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee, TypeOfPledgeAgreement.PERV);
-        model.addAttribute("countOfPervPledgeAgreements", countOfPervPA);
+            int countOfPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee);
+            model.addAttribute("countOfAllPledgeAgreement", countOfPA);
 
-        int countOfPoslPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee, TypeOfPledgeAgreement.POSL);
-        model.addAttribute("countOfPoslPledgeAgreements", countOfPoslPA);
+            int countOfPervPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee, TypeOfPledgeAgreement.PERV);
+            model.addAttribute("countOfPervPledgeAgreements", countOfPervPA);
 
-        int countOfLoanAgreements = loanAgreementService.countOfCurrentLoanAgreementsByEmployee(employee);
-        model.addAttribute("countOfLoanAgreements", countOfLoanAgreements);
+            int countOfPoslPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee, TypeOfPledgeAgreement.POSL);
+            model.addAttribute("countOfPoslPledgeAgreements", countOfPoslPA);
 
-        int countOfMonitoringNotDone = pledgeAgreementService.countOfMonitoringNotDone(employee);
-        model.addAttribute("countOfMonitoringNotDone", countOfMonitoringNotDone);
+            int countOfLoanAgreements = loanAgreementService.countOfCurrentLoanAgreementsByEmployee(employee);
+            model.addAttribute("countOfLoanAgreements", countOfLoanAgreements);
 
-        int countOfMonitoringIsDone = pledgeAgreementService.countOfMonitoringIsDone(employee);
-        model.addAttribute("countOfMonitoringIsDone", countOfMonitoringIsDone);
+            int countOfMonitoringNotDone = pledgeAgreementService.countOfMonitoringNotDone(employee);
+            model.addAttribute("countOfMonitoringNotDone", countOfMonitoringNotDone);
 
-        int countOfMonitoringOverdue = pledgeAgreementService.countOfMonitoringOverdue(employee);
-        model.addAttribute("countOfMonitoringOverdue", countOfMonitoringOverdue);
+            int countOfMonitoringIsDone = pledgeAgreementService.countOfMonitoringIsDone(employee);
+            model.addAttribute("countOfMonitoringIsDone", countOfMonitoringIsDone);
 
-        int countOfConclusionNotDone = pledgeAgreementService.countOfConclusionNotDone(employee);
-        model.addAttribute("countOfConclusionNotDone", countOfConclusionNotDone);
+            int countOfMonitoringOverdue = pledgeAgreementService.countOfMonitoringOverdue(employee);
+            model.addAttribute("countOfMonitoringOverdue", countOfMonitoringOverdue);
 
-        int countOfConclusionIsDone = pledgeAgreementService.countOfConclusionIsDone(employee);
-        model.addAttribute("countOfConclusionIsDone", countOfConclusionIsDone);
+            int countOfConclusionNotDone = pledgeAgreementService.countOfConclusionNotDone(employee);
+            model.addAttribute("countOfConclusionNotDone", countOfConclusionNotDone);
 
-        int countOfConclusionOverdue = pledgeAgreementService.countOfConclusionOverdue(employee);
-        model.addAttribute("countOfConclusionOverdue", countOfConclusionOverdue);
+            int countOfConclusionIsDone = pledgeAgreementService.countOfConclusionIsDone(employee);
+            model.addAttribute("countOfConclusionIsDone", countOfConclusionIsDone);
+
+            int countOfConclusionOverdue = pledgeAgreementService.countOfConclusionOverdue(employee);
+            model.addAttribute("countOfConclusionOverdue", countOfConclusionOverdue);
+        }
+
+
+
 
         return "home";
     }

@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.fds.tavrzcms3.service.AppUserDetailsService;
 
@@ -19,36 +20,42 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+        final String ROLE_ADMIN = "ADMIN";
+        final String ROLE_USER = "USER";
+        final String ROLE_USER_CHIEF = "USER_CHIEF";
+        final String ROLE_GUEST = "GUEST";
+
+
         http.csrf().disable()
                 //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 //.and()
-//                .authorizeRequests().antMatchers("/home", "/", "/pledge_agreements").hasRole("USER")
-//                .and()
-                .authorizeRequests().antMatchers("/").hasRole("USER")
+                .authorizeRequests()
+                .antMatchers("/client/**",
+                        "/cost_history/**",
+                        "/encumbrance/**",
+                        "/insurance/**",
+                        "/loan_agreement/**",
+                        "/monitoring/**",
+                        "/pledge_agreement/**",
+                        "/pledge_subject/**",
+                        "/search/**").hasAnyRole(ROLE_USER, ROLE_USER_CHIEF, ROLE_GUEST, ROLE_ADMIN)
+                .antMatchers("/insert",
+                        "/update").hasAnyRole(ROLE_USER, ROLE_USER_CHIEF,ROLE_ADMIN)
+                .antMatchers("/admin").hasRole(ROLE_ADMIN)
+                .antMatchers("/login").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .authorizeRequests().antMatchers("/edit").hasAnyRole("USER", "ADMIN", "GUEST")
-                .and()
-                .formLogin().loginPage("/login").permitAll()
+                .formLogin().loginPage("/login").defaultSuccessUrl("/")
                 .and()
                 .logout().logoutUrl("/logout");
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence charSequence) {
-                return charSequence.toString();
-            }
-
-            @Override
-            public boolean matches(CharSequence charSequence, String s) {
-                return charSequence.toString().equals(s);
-            }
-        };
+        return new BCryptPasswordEncoder();
     }
 
-    @Autowired
+    @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(appUserDetailsService).passwordEncoder(passwordEncoder());
     }

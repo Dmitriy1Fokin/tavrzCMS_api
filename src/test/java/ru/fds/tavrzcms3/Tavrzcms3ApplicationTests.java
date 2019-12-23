@@ -4,16 +4,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.fds.tavrzcms3.dictionary.TypeOfAuto;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 import ru.fds.tavrzcms3.dictionary.TypeOfSecurities;
+import ru.fds.tavrzcms3.domain.AppRole;
+import ru.fds.tavrzcms3.domain.AppUser;
 import ru.fds.tavrzcms3.domain.Client;
+import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.dto.ClientDto;
 import ru.fds.tavrzcms3.converver.dtoconverter.impl.ClientLegalEntityConverterDto;
 import ru.fds.tavrzcms3.converver.dtoconverter.impl.ClientConverterDto;
 import ru.fds.tavrzcms3.converver.dtoconverter.impl.LoanAgreementConverterDto;
+import ru.fds.tavrzcms3.repository.RepositoryAppRole;
+import ru.fds.tavrzcms3.repository.RepositoryAppUser;
 import ru.fds.tavrzcms3.repository.RepositoryClient;
+import ru.fds.tavrzcms3.repository.RepositoryEmployee;
 import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
 
 @RunWith(SpringRunner.class)
@@ -30,6 +37,14 @@ public class Tavrzcms3ApplicationTests {
     RepositoryLoanAgreement repositoryLoanAgreement;
     @Autowired
     LoanAgreementConverterDto loanAgreementConverter;
+    @Autowired
+    RepositoryEmployee repositoryEmployee;
+    @Autowired
+    RepositoryAppRole repositoryAppRole;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
+    RepositoryAppUser repositoryAppUser;
 
 
     @Test
@@ -68,6 +83,21 @@ public class Tavrzcms3ApplicationTests {
 
         Client client1 = clientConverter.toEntity(clientDto);
         System.out.println(client1);
+
+    }
+
+    @Test
+    public void testBCryptPasswordEncoder(){
+//        Employee employee = repositoryEmployee.findById(10L).get();
+//        AppRole appRoleUser = repositoryAppRole.findById(1L).get();
+//        AppUser appUser = AppUser.builder()
+//                .name("admin")
+//                .password(passwordEncoder.encode("admin"))
+//                .appRole(appRoleUser)
+//                .build();
+//        System.out.println(appUser);
+//        appUser = repositoryAppUser.save(appUser);
+//        System.out.println(appUser);
 
     }
 
