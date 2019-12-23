@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.fds.tavrzcms3.converver.dtoconverter.EncumbranceConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.EncumbranceConverterDto;
 import ru.fds.tavrzcms3.dictionary.TypeOfEncumbrance;
 import ru.fds.tavrzcms3.domain.Encumbrance;
 import ru.fds.tavrzcms3.domain.PledgeSubject;

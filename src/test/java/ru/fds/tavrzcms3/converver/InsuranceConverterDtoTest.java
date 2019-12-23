@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.fds.tavrzcms3.converver.dtoconverter.InsuranceConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.InsuranceConverterDto;
 import ru.fds.tavrzcms3.domain.Insurance;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.InsuranceDto;

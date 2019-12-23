@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
+import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
+import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
 import ru.fds.tavrzcms3.service.*;
 import ru.fds.tavrzcms3.domain.*;
 

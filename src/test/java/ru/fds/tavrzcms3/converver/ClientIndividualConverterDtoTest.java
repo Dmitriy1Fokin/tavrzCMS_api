@@ -5,8 +5,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.fds.tavrzcms3.converver.dtoconverter.ClientIndividualConverterDto;
-import ru.fds.tavrzcms3.domain.*;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.ClientIndividualConverterDto;
+import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
 import ru.fds.tavrzcms3.dto.ClientIndividualDto;
 
 import static org.junit.Assert.*;

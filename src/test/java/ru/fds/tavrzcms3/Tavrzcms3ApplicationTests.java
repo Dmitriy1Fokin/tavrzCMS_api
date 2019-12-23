@@ -10,9 +10,9 @@ import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 import ru.fds.tavrzcms3.dictionary.TypeOfSecurities;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.dto.ClientDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.ClientLegalEntityConverterDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.ClientConverterDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.LoanAgreementConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.ClientLegalEntityConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.ClientConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.LoanAgreementConverterDto;
 import ru.fds.tavrzcms3.repository.RepositoryClient;
 import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
 

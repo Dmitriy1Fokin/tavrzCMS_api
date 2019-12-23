@@ -4,6 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.*;
+import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectAuto;
+import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectBuilding;
+import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectEquipment;
+import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectLandLease;
+import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectLandOwnership;
+import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectRoom;
+import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectSecurities;
+import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectTBO;
+import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectVessel;
 
 import java.time.LocalDate;
 import java.util.List;

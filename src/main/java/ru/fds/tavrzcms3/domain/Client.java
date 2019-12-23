@@ -1,8 +1,9 @@
 package ru.fds.tavrzcms3.domain;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import ru.fds.tavrzcms3.dictionary.TypeOfClient;
+import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
+import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
 
 import java.util.List;
 

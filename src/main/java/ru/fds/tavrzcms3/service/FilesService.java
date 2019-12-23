@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
-import ru.fds.tavrzcms3.domain.ClientIndividual;
-import ru.fds.tavrzcms3.domain.ClientLegalEntity;
+import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
+import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 

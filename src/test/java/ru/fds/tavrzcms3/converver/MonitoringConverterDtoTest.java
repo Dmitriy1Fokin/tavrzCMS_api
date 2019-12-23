@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.fds.tavrzcms3.converver.dtoconverter.MonitoringConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.MonitoringConverterDto;
 import ru.fds.tavrzcms3.dictionary.StatusOfMonitoring;
 import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
 import ru.fds.tavrzcms3.domain.Monitoring;

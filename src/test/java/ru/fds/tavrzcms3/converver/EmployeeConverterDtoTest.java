@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.fds.tavrzcms3.converver.dtoconverter.EmployeeConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.EmployeeConverterDto;
 import ru.fds.tavrzcms3.domain.AppUser;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.Employee;

@@ -11,7 +11,7 @@ import ru.fds.tavrzcms3.repository.*;
 import ru.fds.tavrzcms3.specification.SearchCriteria;
 import ru.fds.tavrzcms3.specification.SearchCriteriaNestedAttribute;
 import ru.fds.tavrzcms3.specification.SpecificationBuilder;
-import ru.fds.tavrzcms3.specification.SpecificationBuilderImpl;
+import ru.fds.tavrzcms3.specification.impl.SpecificationBuilderImpl;
 
 import java.util.*;
 

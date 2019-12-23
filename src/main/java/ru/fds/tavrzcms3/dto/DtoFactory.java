@@ -1,16 +1,16 @@
 package ru.fds.tavrzcms3.dto;
 
 import org.springframework.stereotype.Component;
-import ru.fds.tavrzcms3.converver.dtoconverter.ClientConverterDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.ClientManagerConverterDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.CostHistoryConverterDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.EmployeeConverterDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.EncumbranceConverterDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.InsuranceConverterDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.LoanAgreementConverterDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.MonitoringConverterDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.PledgeAgreementConverterDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.PledgeSubjectConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.ClientConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.ClientManagerConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.CostHistoryConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.EmployeeConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.EncumbranceConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.InsuranceConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.LoanAgreementConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.MonitoringConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.PledgeAgreementConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.PledgeSubjectConverterDto;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.ClientManager;
 import ru.fds.tavrzcms3.domain.CostHistory;
@@ -62,30 +62,20 @@ public class DtoFactory {
     }
 
     public PledgeSubjectDto getPledgeSubjectDto(PledgeSubject pledgeSubject){
-
         return pledgeSubjectConverterDto.toDto(pledgeSubject);
     }
 
 
     public List<PledgeSubjectDto> getPledgeSubjectsDto(List<PledgeSubject> pledgeSubjectList){
-        List<PledgeSubjectDto> dtoList = new ArrayList<>();
-        for(PledgeSubject pledgeSubject: pledgeSubjectList)
-            dtoList.add(getPledgeSubjectDto(pledgeSubject));
-
-        return dtoList;
+        return pledgeSubjectConverterDto.toDto(pledgeSubjectList);
     }
 
     public PledgeSubject getPledgeSubjectEntity(PledgeSubjectDto pledgeSubjectDto){
-
         return pledgeSubjectConverterDto.toEntity(pledgeSubjectDto);
     }
 
     public List<PledgeSubject> getPledgeSubjectsEntity(List<PledgeSubjectDto> pledgeSubjectDtoList){
-        List<PledgeSubject> pledgeSubjectList = new ArrayList<>();
-        for(PledgeSubjectDto psDto : pledgeSubjectDtoList)
-            pledgeSubjectList.add(getPledgeSubjectEntity(psDto));
-
-        return pledgeSubjectList;
+        return pledgeSubjectConverterDto.toEntity(pledgeSubjectDtoList);
     }
 
     public LoanAgreementDto getLoanAgreementDto(LoanAgreement loanAgreement){
@@ -93,11 +83,7 @@ public class DtoFactory {
     }
 
     public List<LoanAgreementDto> getLoanAgreementsDto(List<LoanAgreement> loanAgreementList){
-        List<LoanAgreementDto> dtoList = new ArrayList<>(    );
-        for(LoanAgreement loanAgreement: loanAgreementList)
-            dtoList.add(loanAgreementConverterDto.toDto(loanAgreement));
-
-        return dtoList;
+        return loanAgreementConverterDto.toDto(loanAgreementList);
     }
 
     public LoanAgreement getLoanAgreementEntity(LoanAgreementDto loanAgreementDto){
@@ -109,11 +95,7 @@ public class DtoFactory {
     }
 
     public List<PledgeAgreementDto> getPledgeAgreementsDto(List<PledgeAgreement> pledgeAgreementList){
-        List<PledgeAgreementDto> dtoList = new ArrayList<>();
-        for(PledgeAgreement pledgeAgreement: pledgeAgreementList)
-            dtoList.add(getPledgeAgreementDto(pledgeAgreement));
-
-        return dtoList;
+        return pledgeAgreementConverterDto.toDto(pledgeAgreementList);
     }
 
     public PledgeAgreement getPledgeAgreementEntity(PledgeAgreementDto pledgeAgreementDto){
@@ -125,11 +107,7 @@ public class DtoFactory {
     }
 
     public List<CostHistoryDto> getCostHistoriesDto(List<CostHistory> costHistoryList){
-        List<CostHistoryDto> dtoList = new ArrayList<>();
-        for (CostHistory ch : costHistoryList)
-            dtoList.add(getCostHistoryDto(ch));
-
-        return dtoList;
+        return costHistoryConverterDto.toDto(costHistoryList);
     }
 
     public CostHistory getCostHistoryEntity(CostHistoryDto costHistoryDto){
@@ -137,11 +115,7 @@ public class DtoFactory {
     }
 
     public List<CostHistory> getCostHistoriesEntity(List<CostHistoryDto> costHistoryDtoList){
-        List<CostHistory> dtoList = new ArrayList<>();
-        for (CostHistoryDto ch : costHistoryDtoList)
-            dtoList.add(getCostHistoryEntity(ch));
-
-        return dtoList;
+        return costHistoryConverterDto.toEntity(costHistoryDtoList);
     }
 
     public MonitoringDto getMonitoringDto(Monitoring monitoring){
@@ -149,11 +123,7 @@ public class DtoFactory {
     }
 
     public List<MonitoringDto> getMonitoringsDto(List<Monitoring> monitoringList){
-        List<MonitoringDto> dtoList = new ArrayList<>();
-        for (Monitoring mon : monitoringList)
-            dtoList.add(getMonitoringDto(mon));
-
-        return dtoList;
+        return monitoringConverterDto.toDto(monitoringList);
     }
 
     public Monitoring getMonitoringEntity(MonitoringDto monitoringDto){
@@ -161,11 +131,7 @@ public class DtoFactory {
     }
 
     public List<Monitoring> getMonitoringsEntity(List<MonitoringDto> monitoringDtoList){
-        List<Monitoring> dtoList = new ArrayList<>();
-        for (MonitoringDto mon : monitoringDtoList)
-            dtoList.add(getMonitoringEntity(mon));
-
-        return dtoList;
+       return monitoringConverterDto.toEntity(monitoringDtoList);
     }
 
     public ClientDto getClientDto(Client client){

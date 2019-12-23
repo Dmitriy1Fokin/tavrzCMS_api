@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.fds.tavrzcms3.converver.dtoconverter.LoanAgreementConverterDto;
+import ru.fds.tavrzcms3.converver.dtoconverter.impl.LoanAgreementConverterDto;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;

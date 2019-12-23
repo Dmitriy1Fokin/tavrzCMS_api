@@ -4,27 +4,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.fds.tavrzcms3.dictionary.Liquidity;
 import ru.fds.tavrzcms3.dictionary.MarketSegment;
-import ru.fds.tavrzcms3.dictionary.Operations;
 import ru.fds.tavrzcms3.dictionary.StatusOfMonitoring;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledge;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
-import ru.fds.tavrzcms3.domain.PledgeSubjectAuto;
-import ru.fds.tavrzcms3.domain.PledgeSubjectRoom;
+import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectRoom;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
-import ru.fds.tavrzcms3.specification.SearchCriteria;
-import ru.fds.tavrzcms3.specification.SpecificationBuilder;
-import ru.fds.tavrzcms3.specification.SpecificationBuilderImpl;
-import ru.fds.tavrzcms3.specification.SpecificationNestedAttribute;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
 import javax.validation.ConstraintViolation;
@@ -32,8 +23,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @RunWith(SpringRunner.class)
