@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
 import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
+import ru.fds.tavrzcms3.dto.DtoFactory;
+import ru.fds.tavrzcms3.dto.EmployeeDto;
 import ru.fds.tavrzcms3.service.*;
 import ru.fds.tavrzcms3.domain.*;
 
@@ -20,29 +22,30 @@ import java.util.*;
 
 
 @Controller
-public class PagesController {
+public class MainController {
 
     private final EmployeeService employeeService;
     private final PledgeAgreementService pledgeAgreementService;
-    private final ClientService clientService;
     private final LoanAgreementService loanAgreementService;
     private final FilesService filesService;
+
+    private final DtoFactory dtoFactory;
 
     private static final String PAGE_UPDATE = "update";
     private static final String MSG_WRONG_LINK = "Неверная ссылка";
     private static final String ATTR_MESSAGE_ERROR = "messageError";
 
 
-    public PagesController(EmployeeService employeeService,
-                           PledgeAgreementService pledgeAgreementService,
-                           ClientService clientService,
-                           LoanAgreementService loanAgreementService,
-                           FilesService filesService) {
+    public MainController(EmployeeService employeeService,
+                          PledgeAgreementService pledgeAgreementService,
+                          LoanAgreementService loanAgreementService,
+                          FilesService filesService,
+                          DtoFactory dtoFactory) {
         this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
-        this.clientService = clientService;
         this.loanAgreementService = loanAgreementService;
         this.filesService = filesService;
+        this.dtoFactory = dtoFactory;
     }
 
     @GetMapping("/login")
@@ -52,13 +55,16 @@ public class PagesController {
 
     @GetMapping("/")
     public String homePage(@AuthenticationPrincipal User user, Model model) {
-        GrantedAuthority authorityUser = new SimpleGrantedAuthority("ROLE_USER");
-        GrantedAuthority authorityChief = new SimpleGrantedAuthority("ROLE_USER_CHIEF");
+        final GrantedAuthority authorityUser = new SimpleGrantedAuthority("ROLE_USER");
+        final GrantedAuthority authorityChief = new SimpleGrantedAuthority("ROLE_USER_CHIEF");
+        final GrantedAuthority authorityGuest = new SimpleGrantedAuthority("ROLE_GUEST");
+        final GrantedAuthority authorityAdmin = new SimpleGrantedAuthority("ROLE_ADMIN");
 
         Collection<GrantedAuthority> grantedAuthorities = user.getAuthorities();
         if(grantedAuthorities.contains(authorityUser) || grantedAuthorities.contains(authorityChief)){
             Employee employee = employeeService.getEmployeeByUser(user);
-            model.addAttribute("employee", employee);
+            EmployeeDto employeeDto = dtoFactory.getEmployeeDto(employee);
+            model.addAttribute("employeeDto", employeeDto);
 
             int countOfPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employee);
             model.addAttribute("countOfAllPledgeAgreement", countOfPA);
@@ -89,10 +95,82 @@ public class PagesController {
 
             int countOfConclusionOverdue = pledgeAgreementService.countOfConclusionOverdue(employee);
             model.addAttribute("countOfConclusionOverdue", countOfConclusionOverdue);
+
+            if(grantedAuthorities.contains(authorityChief)){
+                Map<EmployeeDto, List<Integer>> employeeDtoMapExcludeChief = new HashMap<>();
+                List<Employee> employeeListExcludeChief = employeeService.getEmployeesExcludeEmployee(employee.getEmployeeId());
+                for(Employee emp : employeeListExcludeChief){
+                    List<Integer> integerList = new ArrayList<>();
+                    integerList.add(pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(emp));
+                    integerList.add(pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(emp, TypeOfPledgeAgreement.PERV));
+                    integerList.add(pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(emp, TypeOfPledgeAgreement.POSL));
+                    integerList.add(loanAgreementService.countOfCurrentLoanAgreementsByEmployee(emp));
+                    integerList.add(pledgeAgreementService.countOfMonitoringNotDone(emp));
+                    integerList.add(pledgeAgreementService.countOfMonitoringIsDone(emp));
+                    integerList.add(pledgeAgreementService.countOfMonitoringOverdue(emp));
+                    integerList.add(pledgeAgreementService.countOfConclusionNotDone(emp));
+                    integerList.add(pledgeAgreementService.countOfConclusionIsDone(emp));
+                    integerList.add(pledgeAgreementService.countOfConclusionOverdue(emp));
+
+                    EmployeeDto emplDto = dtoFactory.getEmployeeDto(emp);
+                    employeeDtoMapExcludeChief.put(emplDto, integerList);
+                }
+
+                model.addAttribute("employeeDtoMapExcludeChief", employeeDtoMapExcludeChief);
+            }
+        }else if(grantedAuthorities.contains(authorityGuest) || grantedAuthorities.contains(authorityAdmin)){
+
+            model.addAttribute("countOfAllPledgeAgreement", pledgeAgreementService.countOfAllCurrentPledgeAgreements());
+            model.addAttribute("countOfPervPledgeAgreements", pledgeAgreementService.countOfAllCurrentPledgeAgreements(TypeOfPledgeAgreement.PERV));
+            model.addAttribute("countOfPoslPledgeAgreements", pledgeAgreementService.countOfAllCurrentPledgeAgreements(TypeOfPledgeAgreement.POSL));
+            model.addAttribute("countOfLoanAgreements", loanAgreementService.countOfAllCurrentLoanAgreements());
         }
 
 
+        return "home";
+    }
 
+    @GetMapping("/{id}")
+    public String homeEmployeePage(@PathVariable("id") Long employeeId, Model model) {
+
+        Optional<Employee> employeeOptional = employeeService.getEmployeeById(employeeId);
+
+        if(employeeOptional.isPresent()){
+            EmployeeDto employeeDto = dtoFactory.getEmployeeDto(employeeOptional.get());
+            model.addAttribute("employeeDto", employeeDto);
+
+            int countOfPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employeeOptional.get());
+            model.addAttribute("countOfAllPledgeAgreement", countOfPA);
+
+            int countOfPervPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employeeOptional.get(), TypeOfPledgeAgreement.PERV);
+            model.addAttribute("countOfPervPledgeAgreements", countOfPervPA);
+
+            int countOfPoslPA = pledgeAgreementService.countOfCurrentPledgeAgreementForEmployee(employeeOptional.get(), TypeOfPledgeAgreement.POSL);
+            model.addAttribute("countOfPoslPledgeAgreements", countOfPoslPA);
+
+            int countOfLoanAgreements = loanAgreementService.countOfCurrentLoanAgreementsByEmployee(employeeOptional.get());
+            model.addAttribute("countOfLoanAgreements", countOfLoanAgreements);
+
+            int countOfMonitoringNotDone = pledgeAgreementService.countOfMonitoringNotDone(employeeOptional.get());
+            model.addAttribute("countOfMonitoringNotDone", countOfMonitoringNotDone);
+
+            int countOfMonitoringIsDone = pledgeAgreementService.countOfMonitoringIsDone(employeeOptional.get());
+            model.addAttribute("countOfMonitoringIsDone", countOfMonitoringIsDone);
+
+            int countOfMonitoringOverdue = pledgeAgreementService.countOfMonitoringOverdue(employeeOptional.get());
+            model.addAttribute("countOfMonitoringOverdue", countOfMonitoringOverdue);
+
+            int countOfConclusionNotDone = pledgeAgreementService.countOfConclusionNotDone(employeeOptional.get());
+            model.addAttribute("countOfConclusionNotDone", countOfConclusionNotDone);
+
+            int countOfConclusionIsDone = pledgeAgreementService.countOfConclusionIsDone(employeeOptional.get());
+            model.addAttribute("countOfConclusionIsDone", countOfConclusionIsDone);
+
+            int countOfConclusionOverdue = pledgeAgreementService.countOfConclusionOverdue(employeeOptional.get());
+            model.addAttribute("countOfConclusionOverdue", countOfConclusionOverdue);
+
+        }else
+            throw new IllegalArgumentException(MSG_WRONG_LINK);
 
         return "home";
     }

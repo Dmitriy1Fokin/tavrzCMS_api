@@ -1,6 +1,5 @@
 package ru.fds.tavrzcms3.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -15,11 +14,14 @@ import java.util.Optional;
 @Service
 public class EmployeeService {
 
-    @Autowired
-    RepositoryEmployee repositoryEmployee;
+    private final RepositoryEmployee repositoryEmployee;
+    private final RepositoryAppUser repositoryAppUser;
 
-    @Autowired
-    RepositoryAppUser repositoryAppUser;
+    public EmployeeService(RepositoryEmployee repositoryEmployee,
+                           RepositoryAppUser repositoryAppUser) {
+        this.repositoryEmployee = repositoryEmployee;
+        this.repositoryAppUser = repositoryAppUser;
+    }
 
     public Employee getEmployeeByUser(User user){
         AppUser appUser = repositoryAppUser.findByName(user.getUsername());
@@ -33,6 +35,10 @@ public class EmployeeService {
     public List<Employee> getAllEmployee(){
         Sort sortByDateSurname = new Sort(Sort.Direction.ASC, "surname");
         return repositoryEmployee.findAll(sortByDateSurname);
+    }
+
+    public List<Employee> getEmployeesExcludeEmployee(Long employeeId){
+        return repositoryEmployee.findAllByEmployeeIdNot(employeeId);
     }
 
     public Employee getEmployeeByLoanAgreement(long loanAgreementId){

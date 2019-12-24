@@ -1,8 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Кредитные договоры на сопровождении</title>
+    <div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+        <title>Кредитные договоры на сопровождении</title>
+    </div>
+    <div sec:authorize="hasAnyRole('GUEST', 'ADMIN')">
+        <<title>Кредитные договоры </title>
+    </div>
+
     <style type="text/css">
         body {
             padding: 50px;
@@ -22,12 +28,30 @@
 </head>
 <body>
 
-<div th:replace="fragments/nav :: user_nav_bar"></div>
+<div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+    <div th:replace="fragments/nav :: user_nav_bar"></div>
+</div>
+<div sec:authorize="hasRole('ADMIN')">
+    <div th:replace="fragments/nav :: admin_nav_bar"></div>
+</div>
+<div sec:authorize="hasRole('GUEST')">
+    <div th:replace="fragments/nav :: guest_nav_bar"></div>
+</div>
 
-<h1>Кредитные договоры на сопровождении:</h1>
+
+<div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+    <h1>Кредитные договоры на сопровождении:</h1>
+</div>
+<div sec:authorize="hasAnyRole('GUEST', 'ADMIN')">
+    <h1>Кредитные договоры:</h1>
+</div>
+
+
 <div class="containerTable">
     <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${loanAgreementList})"></div>
+</div>
 
+<div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
     <div th:if="${loanAgreementList.totalPages > 0}" >
         <span th:text="'Страница: '"></span>
         <div th:each="pageNumber : ${pageNumbers}" style="display: inline" >
@@ -36,7 +60,18 @@
                th:class="${pageNumber==loanAgreementList.number + 1} ? active"></a>
         </div>
     </div>
-
 </div>
+<div sec:authorize="hasAnyRole('GUEST', 'ADMIN')">
+    <div th:if="${loanAgreementList.totalPages > 0}" >
+        <span th:text="'Страница: '"></span>
+        <div th:each="pageNumber : ${pageNumbers}" style="display: inline" >
+            <a th:href="@{/loan_agreement/loan_agreements(size=${loanAgreementList.size}, page=${pageNumber}-1)}"
+               th:text="${pageNumber}"
+               th:class="${pageNumber==loanAgreementList.number + 1} ? active"></a>
+        </div>
+    </div>
+</div>
+
+
 </body>
 </html>

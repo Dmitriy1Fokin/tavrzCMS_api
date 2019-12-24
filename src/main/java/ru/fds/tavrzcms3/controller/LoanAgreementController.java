@@ -58,7 +58,7 @@ public class LoanAgreementController {
     }
 
     @GetMapping("/loan_agreements")
-    public String loanAgreementsPage(@RequestParam("employeeId") long employeeId,
+    public String loanAgreementsPage(@RequestParam("employeeId") Optional<Long> employeeId,
                                      @RequestParam("page") Optional<Integer> page,
                                      @RequestParam("size") Optional<Integer> size,
                                      Model model) {
@@ -67,25 +67,45 @@ public class LoanAgreementController {
         int pageSize = size.orElse(50);
         int startItem = currentPage * pageSize;
 
-        Employee employee = employeeService.getEmployeeById(employeeId)
-                .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
-        List<LoanAgreement> loanAgreementList = loanAgreementService.getCurrentLoanAgreementsByEmployee(employee);
+        Page<LoanAgreementDto> loanAgreementDtoPage;
+        if(employeeId.isPresent()){
+            Employee employee = employeeService.getEmployeeById(employeeId.get())
+                    .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
+            List<LoanAgreement> loanAgreementList = loanAgreementService.getCurrentLoanAgreementsByEmployee(employee);
 
-        List<LoanAgreement> loanAgreementListForPage;
-        if(loanAgreementList.size() < startItem){
-            loanAgreementListForPage = Collections.emptyList();
-        }else {
-            int toIndex = Math.min(startItem+pageSize, loanAgreementList.size());
-            loanAgreementListForPage = loanAgreementList.subList(startItem, toIndex);
+            List<LoanAgreement> loanAgreementListForPage;
+            if(loanAgreementList.size() < startItem){
+                loanAgreementListForPage = Collections.emptyList();
+            }else {
+                int toIndex = Math.min(startItem+pageSize, loanAgreementList.size());
+                loanAgreementListForPage = loanAgreementList.subList(startItem, toIndex);
+            }
+
+            loanAgreementDtoPage = new PageImpl<>(
+                    dtoFactory.getLoanAgreementsDto(loanAgreementListForPage),
+                    PageRequest.of(currentPage, pageSize),
+                    loanAgreementList.size());
+        }else{
+            List<LoanAgreement> loanAgreementList = loanAgreementService.getAllCurrentLoanAgreements();
+
+            List<LoanAgreement> loanAgreementListForPage;
+            if(loanAgreementList.size() < startItem){
+                loanAgreementListForPage = Collections.emptyList();
+            }else {
+                int toIndex = Math.min(startItem+pageSize, loanAgreementList.size());
+                loanAgreementListForPage = loanAgreementList.subList(startItem, toIndex);
+            }
+
+            loanAgreementDtoPage = new PageImpl<>(
+                    dtoFactory.getLoanAgreementsDto(loanAgreementListForPage),
+                    PageRequest.of(currentPage, pageSize),
+                    loanAgreementList.size());
         }
 
-        Page<LoanAgreementDto> loanAgreementDtoPage = new PageImpl<>(
-                dtoFactory.getLoanAgreementsDto(loanAgreementListForPage),
-                PageRequest.of(currentPage, pageSize),
-                loanAgreementList.size());
+
 
         model.addAttribute("loanAgreementList", loanAgreementDtoPage);
-        model.addAttribute("employeeId", employeeId);
+        model.addAttribute("employeeId", employeeId.orElse(null));
 
         int totalPages = loanAgreementDtoPage.getTotalPages();
         if(totalPages > 0){

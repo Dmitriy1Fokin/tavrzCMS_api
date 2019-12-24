@@ -63,7 +63,7 @@ public class PledgeAgreementController {
     }
 
     @GetMapping("/pledge_agreements")
-    public String pledgeAgreementPage(@RequestParam("employeeId") long employeeId,
+    public String pledgeAgreementPage(@RequestParam("employeeId") Optional<Long> employeeId,
                                       @RequestParam("pervPosl") Optional<String> pervPosl,
                                       @RequestParam("page") Optional<Integer> page,
                                       @RequestParam("size") Optional<Integer> size,
@@ -72,31 +72,55 @@ public class PledgeAgreementController {
         int pageSize = size.orElse(50);
         int startItem = currentPage * pageSize;
 
-        List<PledgeAgreement> pledgeAgreementList;
-        if(pervPosl.isPresent())
-            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(
-                    employeeId,
-                    TypeOfPledgeAgreement.valueOf(pervPosl.get()));
-        else
-            pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(employeeId);
+        Page<PledgeAgreementDto> pledgeAgreementDtoPage;
+        if(employeeId.isPresent()){
+            List<PledgeAgreement> pledgeAgreementList;
+            if(pervPosl.isPresent()){
+                pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(
+                        employeeId.get(),
+                        TypeOfPledgeAgreement.valueOf(pervPosl.get()));
+            }else{
+                pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByEmployee(employeeId.get());
+            }
 
-        List<PledgeAgreement> pledgeAgreementListForPage;
-        if(pledgeAgreementList.size() < startItem){
-            pledgeAgreementListForPage = Collections.emptyList();
+            List<PledgeAgreement> pledgeAgreementListForPage;
+            if(pledgeAgreementList.size() < startItem){
+                pledgeAgreementListForPage = Collections.emptyList();
+            }else {
+                int toIndex = Math.min(startItem+pageSize, pledgeAgreementList.size());
+                pledgeAgreementListForPage = pledgeAgreementList.subList(startItem, toIndex);
+            }
+
+            pledgeAgreementDtoPage = new PageImpl<>(
+                    dtoFactory.getPledgeAgreementsDto(pledgeAgreementListForPage),
+                    PageRequest.of(currentPage, pageSize),
+                    pledgeAgreementList.size());
         }else {
-            int toIndex = Math.min(startItem+pageSize, pledgeAgreementList.size());
-            pledgeAgreementListForPage = pledgeAgreementList.subList(startItem, toIndex);
+            List<PledgeAgreement> pledgeAgreementList;
+            if(pervPosl.isPresent()){
+                pledgeAgreementList = pledgeAgreementService.getAllCurrentPledgeAgreements(TypeOfPledgeAgreement.valueOf(pervPosl.get()));
+            }else{
+                pledgeAgreementList = pledgeAgreementService.getAllCurrentPledgeAgreements();
+            }
+
+            List<PledgeAgreement> pledgeAgreementListForPage;
+            if(pledgeAgreementList.size() < startItem){
+                pledgeAgreementListForPage = Collections.emptyList();
+            }else {
+                int toIndex = Math.min(startItem+pageSize, pledgeAgreementList.size());
+                pledgeAgreementListForPage = pledgeAgreementList.subList(startItem, toIndex);
+            }
+
+            pledgeAgreementDtoPage = new PageImpl<>(
+                    dtoFactory.getPledgeAgreementsDto(pledgeAgreementListForPage),
+                    PageRequest.of(currentPage, pageSize),
+                    pledgeAgreementList.size());
         }
 
-        Page<PledgeAgreementDto> pledgeAgreementDtoPage = new PageImpl<>(
-                dtoFactory.getPledgeAgreementsDto(pledgeAgreementListForPage),
-                PageRequest.of(currentPage, pageSize),
-                pledgeAgreementList.size()
-        );
 
         model.addAttribute("pledgeAgreementList", pledgeAgreementDtoPage);
         model.addAttribute("pervPosl", pervPosl.orElse(""));
-        model.addAttribute("employeeId", employeeId);
+        model.addAttribute("employeeId", employeeId.orElse(null));
 
         int totalPages = pledgeAgreementDtoPage.getTotalPages();
         if(totalPages > 0){

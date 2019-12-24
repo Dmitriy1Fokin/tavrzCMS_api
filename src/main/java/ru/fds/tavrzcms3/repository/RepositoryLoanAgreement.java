@@ -17,12 +17,13 @@ public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Lo
     List<LoanAgreement> findAllByPledgeAgreements(PledgeAgreement pledgeAgreement);
     List<LoanAgreement> findAllByPledgeAgreementsIn(List<PledgeAgreement> pledgeAgreement);
     List<LoanAgreement> findByPledgeAgreementsAndStatusLAEquals(PledgeAgreement pledgeAgreement, StatusOfAgreement statusLA);
-    int countAllByPledgeAgreementsAndStatusLAEquals(PledgeAgreement pledgeAgreement, StatusOfAgreement statusLA);
-    int countAllByClientAndStatusLAEquals(Client client, StatusOfAgreement statusLA);
     int countAllByClientInAndStatusLAEquals(List<Client> clients, StatusOfAgreement statusLA);
     List<LoanAgreement> findByClientAndStatusLAEquals(Client client, StatusOfAgreement statusLA);
     List<LoanAgreement> findAllByClient(Client client);
     Page<LoanAgreement> findByClientInAndStatusLAEquals(List<Client> clients, StatusOfAgreement statusLA, Pageable pageable);
     List<LoanAgreement> findByClientInAndStatusLAEquals(List<Client> clients, StatusOfAgreement statusLA);
+    int countAllByStatusLAEquals(StatusOfAgreement statusOfAgreement);
+    List<LoanAgreement> findAllByStatusLAEquals(StatusOfAgreement statusOfAgreement);
+
 
 }

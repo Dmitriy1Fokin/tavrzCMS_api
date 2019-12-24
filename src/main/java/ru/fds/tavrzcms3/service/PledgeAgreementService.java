@@ -37,8 +37,28 @@ public class PledgeAgreementService {
         this.clientService = clientService;
     }
 
+    public Optional<PledgeAgreement> getPledgeAgreementById(long pledgeAgreementId){
+        return repositoryPledgeAgreement.findById(pledgeAgreementId);
+    }
+
     public List<PledgeAgreement> getPledgeAgreementsByIds(List<Long> ids){
         return repositoryPledgeAgreement.findAllByPledgeAgreementIdIn(ids);
+    }
+
+    public List<PledgeAgreement> getAllCurrentPledgeAgreements(){
+        return repositoryPledgeAgreement.findAllByStatusPAEquals(StatusOfAgreement.OPEN);
+    }
+
+    public List<PledgeAgreement> getAllCurrentPledgeAgreements(TypeOfPledgeAgreement typeOfPledgeAgreement){
+        return repositoryPledgeAgreement.findAllByStatusPAEqualsAndPervPoslEquals(StatusOfAgreement.OPEN, typeOfPledgeAgreement);
+    }
+
+    public int countOfAllCurrentPledgeAgreements(){
+        return repositoryPledgeAgreement.countAllByStatusPAEquals(StatusOfAgreement.OPEN);
+    }
+
+    public int countOfAllCurrentPledgeAgreements(TypeOfPledgeAgreement typeOfPledgeAgreement){
+        return repositoryPledgeAgreement.countAllByStatusPAEqualsAndPervPoslEquals(StatusOfAgreement.OPEN, typeOfPledgeAgreement);
     }
 
     public List<PledgeAgreement> getPledgeAgreementsByNumPA(String numPA){
@@ -75,16 +95,12 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.getResultsOfMonitoring(pledgeAgreement.getPledgeAgreementId());
     }
 
-    public Optional<PledgeAgreement> getPledgeAgreementById(long pledgeAgreementId){
-        return repositoryPledgeAgreement.findById(pledgeAgreementId);
+    public List<String> getTypeOfCollateral(PledgeAgreement pledgeAgreement){
+        return  repositoryPledgeAgreement.getTypeOfCollateral(pledgeAgreement.getPledgeAgreementId());
     }
 
     public List<PledgeAgreement> getAllPledgeAgreementByPLedgeSubject(PledgeSubject pledgeSubject){
         return repositoryPledgeAgreement.findAllByPledgeSubjects(pledgeSubject);
-    }
-
-    public List<String> getTypeOfCollateral(PledgeAgreement pledgeAgreement){
-        return  repositoryPledgeAgreement.getTypeOfCollateral(pledgeAgreement.getPledgeAgreementId());
     }
 
     public List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(long employeeId, TypeOfPledgeAgreement pervPosl){

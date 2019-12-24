@@ -5,8 +5,12 @@ import org.springframework.data.jpa.repository.Query;
 import ru.fds.tavrzcms3.domain.AppUser;
 import ru.fds.tavrzcms3.domain.Employee;
 
+import java.util.List;
+
 public interface RepositoryEmployee extends JpaRepository<Employee, Long> {
     Employee findByAppUser(AppUser appUser);
+    List<Employee> findAllByEmployeeIdNot(Long employeeId);
+
     @Query(nativeQuery = true, value = "select distinct(emp.*)\n" +
                                         "from employee as emp \n" +
                                         "join client_prime as cp on cp.employee_id = emp.employee_id\n" +

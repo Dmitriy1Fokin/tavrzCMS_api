@@ -23,15 +23,15 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     List<PledgeAgreement> findAllByClient(Client client);
     int countAllByClientInAndStatusPAEquals(List<Client> clients, StatusOfAgreement statusPA);
     int countAllByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, TypeOfPledgeAgreement perv, StatusOfAgreement statusPA);
-    int countAllByClientAndStatusPAEquals(Client client, StatusOfAgreement statusPA);
     List<PledgeAgreement> findByClientAndStatusPA(Client client, StatusOfAgreement statusPA);
     List<PledgeAgreement> findByLoanAgreements(LoanAgreement loanAgreement);
-    int countAllByLoanAgreementsAndStatusPAEquals(LoanAgreement loanAgreement, StatusOfAgreement statusPA);
     List<PledgeAgreement> findByLoanAgreementsAndStatusPAEquals(LoanAgreement loanAgreement, StatusOfAgreement statusPA);
     List<PledgeAgreement> findByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, TypeOfPledgeAgreement pervPosl, StatusOfAgreement statusPA);
-    List<PledgeAgreement> findByClientInAndStatusPAEquals(List<Client> clients, StatusOfAgreement statusPA, Sort sort);
-    List<PledgeAgreement> findByClientInAndStatusPAEquals(List<Client> clients, StatusOfAgreement statusPA);
     List<PledgeAgreement> findAllByNumPAContainingIgnoreCase(String numPA);
+    List<PledgeAgreement> findAllByStatusPAEquals(StatusOfAgreement statusPA);
+    List<PledgeAgreement> findAllByStatusPAEqualsAndPervPoslEquals(StatusOfAgreement statusPA, TypeOfPledgeAgreement typeOfPledgeAgreement);
+    int countAllByStatusPAEquals(StatusOfAgreement statusPA);
+    int countAllByStatusPAEqualsAndPervPoslEquals(StatusOfAgreement statusPA, TypeOfPledgeAgreement typeOfPledgeAgreement);
 
     @Query(nativeQuery = true, value = "select distinct ps.date_conclusion " +
                                         "from pledge_subject as ps " +

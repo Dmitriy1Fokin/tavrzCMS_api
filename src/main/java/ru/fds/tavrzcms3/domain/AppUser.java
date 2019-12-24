@@ -40,7 +40,6 @@ public class AppUser {
         return "AppUser{" +
                 "userId=" + userId +
                 ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
                 '}';
     }
 }

@@ -1,12 +1,10 @@
 package ru.fds.tavrzcms3.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.fds.tavrzcms3.domain.AppRole;
 import ru.fds.tavrzcms3.domain.AppUser;
@@ -20,13 +18,17 @@ import java.util.Optional;
 @Service
 public class AppUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    RepositoryAppUser repositoryAppUser;
-    @Autowired
-    RepositoryAppRole repositoryAppRole;
+    private final RepositoryAppUser repositoryAppUser;
+    private final RepositoryAppRole repositoryAppRole;
+
+    public AppUserDetailsService(RepositoryAppUser repositoryAppUser,
+                                 RepositoryAppRole repositoryAppRole) {
+        this.repositoryAppUser = repositoryAppUser;
+        this.repositoryAppRole = repositoryAppRole;
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String name){
         AppUser appUser = repositoryAppUser.findByName(name);
         List<AppRole> appRoleList = repositoryAppRole.findAllByAppUsers(appUser);
 
@@ -38,9 +40,7 @@ public class AppUserDetailsService implements UserDetailsService {
             }
         }
 
-        UserDetails userDetails = (UserDetails) new User(appUser.getName(), appUser.getPassword(), authorityList);
-
-        return userDetails;
+        return new User(appUser.getName(), appUser.getPassword(), authorityList);
     }
 
     public Optional<AppUser> getAppUserByEmployeeId(Long employeeId){

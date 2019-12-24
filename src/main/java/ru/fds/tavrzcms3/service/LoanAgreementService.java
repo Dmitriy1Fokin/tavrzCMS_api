@@ -54,16 +54,8 @@ public class LoanAgreementService {
         return repositoryLoanAgreement.findAllByPledgeAgreementsIn(pledgeAgreementList);
     }
 
-    public int countOfCurrentLoanAgreementsByPledgeAgreement(PledgeAgreement pledgeAgreement){
-        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, StatusOfAgreement.OPEN);
-    }
-
     public List<LoanAgreement> getCurrentLoanAgreementsByPledgeAgreement(PledgeAgreement pledgeAgreement){
         return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, StatusOfAgreement.OPEN);
-    }
-
-    public int countOfClosedLoanAgreementsByPledgeAgreement(PledgeAgreement pledgeAgreement){
-        return repositoryLoanAgreement.countAllByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, StatusOfAgreement.CLOSED);
     }
 
     public List<LoanAgreement> getClosedLoanAgreementsByPledgeAgreement(PledgeAgreement pledgeAgreement){
@@ -75,9 +67,12 @@ public class LoanAgreementService {
         return repositoryLoanAgreement.countAllByClientInAndStatusLAEquals(loaners, StatusOfAgreement.OPEN);
     }
 
-    public Page<LoanAgreement> getCurrentLoanAgreementsByEmployee(Pageable pageable, Employee employee){
-        List<Client> clientList = repositoryClient.findByEmployee(employee);
-        return repositoryLoanAgreement.findByClientInAndStatusLAEquals(clientList, StatusOfAgreement.OPEN, pageable);
+    public int countOfAllCurrentLoanAgreements(){
+        return repositoryLoanAgreement.countAllByStatusLAEquals(StatusOfAgreement.OPEN);
+    }
+
+    public List<LoanAgreement> getAllCurrentLoanAgreements(){
+        return repositoryLoanAgreement.findAllByStatusLAEquals(StatusOfAgreement.OPEN);
     }
 
     public List<LoanAgreement> getCurrentLoanAgreementsByEmployee(Employee employee){
@@ -85,23 +80,13 @@ public class LoanAgreementService {
         return repositoryLoanAgreement.findByClientInAndStatusLAEquals(clientList, StatusOfAgreement.OPEN);
     }
 
-    public int countOfCurrentLoanAgreementsByLoaner(Client client){
-        return repositoryLoanAgreement.countAllByClientAndStatusLAEquals(client, StatusOfAgreement.OPEN);
-    }
-
     public List<LoanAgreement> getCurrentLoanAgreementsByLoaner(Client client){
         return repositoryLoanAgreement.findByClientAndStatusLAEquals(client, StatusOfAgreement.OPEN);
-    }
-
-    public int countOfClosedLoanAgreementsByLoaner(Client client){
-        return repositoryLoanAgreement.countAllByClientAndStatusLAEquals(client, StatusOfAgreement.CLOSED);
     }
 
     public List<LoanAgreement> getClosedLoanAgreementsByLoaner(Client client){
         return repositoryLoanAgreement.findByClientAndStatusLAEquals(client, StatusOfAgreement.CLOSED);
     }
-
-
 
     public List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){
 
