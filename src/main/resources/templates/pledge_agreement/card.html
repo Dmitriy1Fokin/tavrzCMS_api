@@ -37,9 +37,14 @@
         <form th:action="@{/pledge_agreement/update_insert}" th:method="post" th:object="${pledgeAgreementDto}" action="card.html">
             <input type="hidden", name="whatDo" th:value="${whatDo}">
             <input type="hidden", th:field="*{pledgeAgreementId}" th:value="${pledgeAgreementDto.getPledgeAgreementId()}">
-            <input type="hidden" , th:field="*{clientId}" th:value="${pledgeAgreementDto.getClientId()}">
+            <input type="hidden", th:field="*{clientId}" th:value="${pledgeAgreementDto.getClientId()}">
             <input type="hidden", th:field="*{loanAgreementsIds}" th:value="${pledgeAgreementDto.getLoanAgreementsIds()}">
             <input type="hidden", th:field="*{pledgeSubjectsIds}" th:value="${pledgeAgreementDto.getPledgeSubjectsIds()}">
+            <input type="hidden", th:field="*{zsDz}" th:value="${pledgeAgreementDto.getZsDz()}">
+            <input type="hidden", th:field="*{zsZz}" th:value="${pledgeAgreementDto.getZsZz()}">
+            <input type="hidden", th:field="*{rsDz}" th:value="${pledgeAgreementDto.getRsDz()}">
+            <input type="hidden", th:field="*{rsZz}" th:value="${pledgeAgreementDto.getRsZz()}">
+            <input type="hidden", th:field="*{ss}" th:value="${pledgeAgreementDto.getSs()}">
 
             <div class="row">
                 <label>№ ДЗ:</label>

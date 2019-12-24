@@ -13,6 +13,7 @@ import ru.fds.tavrzcms3.dto.MainCharacteristic;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @RunWith(SpringRunner.class)
@@ -32,11 +33,11 @@ public class PledgeSubjectConverterDtoTest {
                 .pledgeSubjectId(2L)
                 .name("имя")
                 .liquidity(Liquidity.AVERAGE)
-                .rsDz(100)
-                .rsZz(50)
-                .zsDz(70)
-                .zsZz(40)
-                .ss(0)
+                .rsDz(BigDecimal.valueOf(100))
+                .rsZz(BigDecimal.valueOf(50))
+                .zsDz(BigDecimal.valueOf(70))
+                .zsZz(BigDecimal.valueOf(40))
+                .ss(BigDecimal.valueOf(0))
                 .dateMonitoring(LocalDate.now())
                 .dateConclusion(LocalDate.now())
                 .statusMonitoring(StatusOfMonitoring.IN_STOCK)

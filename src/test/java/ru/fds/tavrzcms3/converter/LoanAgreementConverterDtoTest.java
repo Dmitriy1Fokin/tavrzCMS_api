@@ -12,6 +12,7 @@ import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.dto.LoanAgreementDto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 
@@ -32,8 +33,8 @@ public class LoanAgreementConverterDtoTest {
                 .dateBeginLA(LocalDate.now())
                 .dateEndLA(LocalDate.now())
                 .statusLA(StatusOfAgreement.OPEN)
-                .amountLA(12345)
-                .debtLA(1234)
+                .amountLA(BigDecimal.valueOf(12345))
+                .debtLA(BigDecimal.valueOf(1234))
                 .interestRateLA(0.12)
                 .pfo((byte) 2)
                 .qualityCategory((byte)4)
@@ -48,8 +49,8 @@ public class LoanAgreementConverterDtoTest {
         assertEquals(loanAgreement.getDateBeginLA(), loanAgreementDto.getDateBeginLA());
         assertEquals(loanAgreement.getDateEndLA(), loanAgreementDto.getDateEndLA());
         assertEquals(loanAgreement.getStatusLA(), loanAgreementDto.getStatusLA());
-        assertEquals(loanAgreement.getAmountLA(), loanAgreementDto.getAmountLA(), 0);
-        assertEquals(loanAgreement.getDebtLA(), loanAgreementDto.getDebtLA(), 0);
+        assertEquals(loanAgreement.getAmountLA(), loanAgreementDto.getAmountLA());
+        assertEquals(loanAgreement.getDebtLA(), loanAgreementDto.getDebtLA());
         assertEquals(loanAgreement.getInterestRateLA(), loanAgreementDto.getInterestRateLA(),0);
         assertEquals(loanAgreement.getPfo(), loanAgreementDto.getPfo());
         assertEquals(loanAgreement.getQualityCategory(), loanAgreementDto.getQualityCategory());
@@ -65,8 +66,8 @@ public class LoanAgreementConverterDtoTest {
                 .dateBeginLA(LocalDate.now())
                 .dateEndLA(LocalDate.now())
                 .statusLA(StatusOfAgreement.OPEN)
-                .amountLA(12345)
-                .debtLA(1234)
+                .amountLA(BigDecimal.valueOf(12345))
+                .debtLA(BigDecimal.valueOf(1234))
                 .interestRateLA(0.12)
                 .pfo((byte) 2)
                 .qualityCategory((byte)4)
@@ -81,8 +82,8 @@ public class LoanAgreementConverterDtoTest {
         assertEquals(loanAgreement.getDateBeginLA(), loanAgreementDto.getDateBeginLA());
         assertEquals(loanAgreement.getDateEndLA(), loanAgreementDto.getDateEndLA());
         assertEquals(loanAgreement.getStatusLA(), loanAgreementDto.getStatusLA());
-        assertEquals(loanAgreement.getAmountLA(), loanAgreementDto.getAmountLA(), 0);
-        assertEquals(loanAgreement.getDebtLA(), loanAgreementDto.getDebtLA(), 0);
+        assertEquals(loanAgreement.getAmountLA(), loanAgreementDto.getAmountLA());
+        assertEquals(loanAgreement.getDebtLA(), loanAgreementDto.getDebtLA());
         assertEquals(loanAgreement.getInterestRateLA(), loanAgreementDto.getInterestRateLA(),0);
         assertEquals(loanAgreement.getPfo(), loanAgreementDto.getPfo());
         assertEquals(loanAgreement.getQualityCategory(), loanAgreementDto.getQualityCategory());

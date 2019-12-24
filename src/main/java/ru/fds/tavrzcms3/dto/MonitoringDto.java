@@ -10,6 +10,7 @@ import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -34,7 +35,7 @@ public class MonitoringDto{
 
     private String notice;
 
-    private Double collateralValue;
+    private BigDecimal collateralValue;
 
     private Long pledgeSubjectId;
 

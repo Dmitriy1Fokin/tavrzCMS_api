@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -44,12 +45,12 @@ public class LoanAgreement {
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="loan_amount")
-	private double amountLA;
+	private BigDecimal amountLA;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="loan_debt")
-	private double debtLA;
+	private BigDecimal debtLA;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@Positive(message = "Значение должно быть больше нуля")

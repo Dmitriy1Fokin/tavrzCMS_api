@@ -36,6 +36,7 @@ import ru.fds.tavrzcms3.specification.impl.SpecificationBuilderImpl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -94,7 +95,7 @@ public class PledgeSubjectService {
 
         for(Field field : PledgeSubject.class.getDeclaredFields()){
             if(searchParam.containsKey(field.getName())){
-                if((field.getType() == String.class || field.getType() == double.class)
+                if((field.getType() == String.class || field.getType() == BigDecimal.class)
                         && !searchParam.get(field.getName()).isEmpty()){
                     SearchCriteria searchCriteria = SearchCriteria.builder()
                             .key(field.getName())

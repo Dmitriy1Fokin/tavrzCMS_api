@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.StatusOfMonitoring;
 import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.*;
@@ -48,7 +49,7 @@ public class Monitoring {
 	private String notice;
 
 	@Column(name = "collateral_value")
-	private Double collateralValue;
+	private BigDecimal collateralValue;
 
 	@ManyToOne()
 	@JoinColumn(name = "pledge_subject_id")

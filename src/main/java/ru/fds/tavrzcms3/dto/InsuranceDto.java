@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -34,7 +35,7 @@ public class InsuranceDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double sumInsured;
+    private BigDecimal sumInsured;
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -45,7 +46,7 @@ public class InsuranceDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private Double franchiseAmount;
+    private BigDecimal franchiseAmount;
 
     private Long pledgeSubjectId;
 }

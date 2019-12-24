@@ -10,6 +10,7 @@ import ru.fds.tavrzcms3.domain.CostHistory;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.CostHistoryDto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.Assert.*;
@@ -26,11 +27,11 @@ public class CostHistoryConverterDtoTest {
         CostHistoryDto costHistoryDto = CostHistoryDto.builder()
                 .costHistoryId(1L)
                 .dateConclusion(LocalDate.now())
-                .zsDz(1)
-                .zsZz(2)
-                .rsDz(3)
-                .rsZz(4)
-                .ss(5)
+                .zsDz(BigDecimal.valueOf(1))
+                .zsZz(BigDecimal.valueOf(2))
+                .rsDz(BigDecimal.valueOf(3))
+                .rsZz(BigDecimal.valueOf(4))
+                .ss(BigDecimal.valueOf(5))
                 .appraiser("appraiser name")
                 .appraisalReportNum("report num")
                 .appraisalReportDate(LocalDate.now())
@@ -41,11 +42,11 @@ public class CostHistoryConverterDtoTest {
 
         assertEquals(costHistoryDto.getCostHistoryId(), costHistory.getCostHistoryId());
         assertEquals(costHistoryDto.getDateConclusion(), costHistory.getDateConclusion());
-        assertEquals(costHistoryDto.getZsDz(), costHistory.getZsDz(), 0);
-        assertEquals(costHistoryDto.getZsZz(), costHistory.getZsZz(), 0);
-        assertEquals(costHistoryDto.getRsDz(), costHistory.getRsDz(), 0);
-        assertEquals(costHistoryDto.getRsZz(), costHistory.getRsZz(),0);
-        assertEquals(costHistoryDto.getSs(), costHistory.getSs(), 0);
+        assertEquals(costHistoryDto.getZsDz(), costHistory.getZsDz());
+        assertEquals(costHistoryDto.getZsZz(), costHistory.getZsZz());
+        assertEquals(costHistoryDto.getRsDz(), costHistory.getRsDz());
+        assertEquals(costHistoryDto.getRsZz(), costHistory.getRsZz());
+        assertEquals(costHistoryDto.getSs(), costHistory.getSs());
         assertEquals(costHistoryDto.getAppraiser(), costHistory.getAppraiser());
         assertEquals(costHistoryDto.getAppraisalReportNum(), costHistory.getAppraisalReportNum());
         assertEquals(costHistoryDto.getAppraisalReportDate(), costHistory.getAppraisalReportDate());
@@ -57,11 +58,11 @@ public class CostHistoryConverterDtoTest {
         CostHistory costHistory = CostHistory.builder()
                 .costHistoryId(1L)
                 .dateConclusion(LocalDate.now())
-                .zsDz(1)
-                .zsZz(2)
-                .rsDz(3)
-                .rsZz(4)
-                .ss(5)
+                .zsDz(BigDecimal.valueOf(1))
+                .zsZz(BigDecimal.valueOf(2))
+                .rsDz(BigDecimal.valueOf(3))
+                .rsZz(BigDecimal.valueOf(4))
+                .ss(BigDecimal.valueOf(5))
                 .appraiser("appraiser name")
                 .appraisalReportNum("report num")
                 .appraisalReportDate(LocalDate.now())
@@ -72,11 +73,11 @@ public class CostHistoryConverterDtoTest {
 
         assertEquals(costHistoryDto.getCostHistoryId(), costHistory.getCostHistoryId());
         assertEquals(costHistoryDto.getDateConclusion(), costHistory.getDateConclusion());
-        assertEquals(costHistoryDto.getZsDz(), costHistory.getZsDz(), 0);
-        assertEquals(costHistoryDto.getZsZz(), costHistory.getZsZz(), 0);
-        assertEquals(costHistoryDto.getRsDz(), costHistory.getRsDz(), 0);
-        assertEquals(costHistoryDto.getRsZz(), costHistory.getRsZz(),0);
-        assertEquals(costHistoryDto.getSs(), costHistory.getSs(), 0);
+        assertEquals(costHistoryDto.getZsDz(), costHistory.getZsDz());
+        assertEquals(costHistoryDto.getZsZz(), costHistory.getZsZz());
+        assertEquals(costHistoryDto.getRsDz(), costHistory.getRsDz());
+        assertEquals(costHistoryDto.getRsZz(), costHistory.getRsZz());
+        assertEquals(costHistoryDto.getSs(), costHistory.getSs());
         assertEquals(costHistoryDto.getAppraiser(), costHistory.getAppraiser());
         assertEquals(costHistoryDto.getAppraisalReportNum(), costHistory.getAppraisalReportNum());
         assertEquals(costHistoryDto.getAppraisalReportDate(), costHistory.getAppraisalReportDate());

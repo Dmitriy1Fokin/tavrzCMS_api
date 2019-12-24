@@ -22,6 +22,7 @@ import javax.validation.ConstraintViolation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -72,11 +73,11 @@ public class PledgeSubjectServiceTest {
         PledgeSubject pledgeSubject = PledgeSubject.builder()
                 .name("qwer")
                 .liquidity(Liquidity.HIGH)
-                .zsDz(100)
-                .zsZz(70)
-                .rsDz(150)
-                .rsZz(100)
-                .ss(70)
+                .zsDz(BigDecimal.valueOf(100))
+                .zsZz(BigDecimal.valueOf(70))
+                .rsDz(BigDecimal.valueOf(150))
+                .rsZz(BigDecimal.valueOf(100))
+                .ss(BigDecimal.valueOf(70))
                 .dateMonitoring(LocalDate.now())
                 .dateConclusion(LocalDate.now())
                 .statusMonitoring(StatusOfMonitoring.IN_STOCK)

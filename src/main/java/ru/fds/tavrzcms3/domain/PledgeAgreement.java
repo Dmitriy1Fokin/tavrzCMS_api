@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -52,19 +53,19 @@ public class PledgeAgreement {
 	private String noticePA;
 
 	@Column(name ="zs_dz")
-	private double zsDz;
+	private BigDecimal zsDz;
 
 	@Column(name ="zs_zz")
-	private double zsZz;
+	private BigDecimal zsZz;
 
 	@Column(name ="rs_dz")
-	private double rsDz;
+	private BigDecimal rsDz;
 
 	@Column(name ="rs_zz")
-	private double rsZz;
+	private BigDecimal rsZz;
 
 	@Column(name ="ss")
-	private double ss;
+	private BigDecimal ss;
 
 	@Singular
 	@JsonIgnore

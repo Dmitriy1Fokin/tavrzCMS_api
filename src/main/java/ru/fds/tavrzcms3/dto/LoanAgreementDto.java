@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 
 import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -35,11 +36,11 @@ public class LoanAgreementDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double amountLA;
+    private BigDecimal amountLA;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double debtLA;
+    private BigDecimal debtLA;
 
     @NotNull(message = "Обязательно для заполнения")
     @Positive(message = "Значение должно быть больше нуля")

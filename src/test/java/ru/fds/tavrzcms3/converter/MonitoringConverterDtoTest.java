@@ -12,6 +12,7 @@ import ru.fds.tavrzcms3.domain.Monitoring;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.MonitoringDto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.Assert.*;
@@ -32,7 +33,7 @@ public class MonitoringConverterDtoTest {
                 .employee("QWE")
                 .typeOfMonitoring(TypeOfMonitoring.VISUAL)
                 .notice("ASD")
-                .collateralValue(1234.0)
+                .collateralValue(BigDecimal.valueOf(1234.0))
                 .pledgeSubjectId(2L)
                 .build();
 
@@ -57,7 +58,7 @@ public class MonitoringConverterDtoTest {
                 .employee("QWE")
                 .typeOfMonitoring(TypeOfMonitoring.VISUAL)
                 .notice("ASD")
-                .collateralValue(1234.0)
+                .collateralValue(BigDecimal.valueOf(1234.0))
                 .pledgeSubject(new PledgeSubject().builder().pledgeSubjectId(2L).build())
                 .build();
 

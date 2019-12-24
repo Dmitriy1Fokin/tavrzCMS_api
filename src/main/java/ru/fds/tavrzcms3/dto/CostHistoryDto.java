@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -24,24 +25,23 @@ public class CostHistoryDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double zsDz;
+    private BigDecimal zsDz;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double zsZz;
+    private BigDecimal zsZz;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double rsDz;
+    private BigDecimal rsDz;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double rsZz;
+    private BigDecimal rsZz;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double ss;
-
+    private BigDecimal ss;
 
     private String appraiser;
 

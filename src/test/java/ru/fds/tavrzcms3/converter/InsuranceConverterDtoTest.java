@@ -10,6 +10,7 @@ import ru.fds.tavrzcms3.domain.Insurance;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.InsuranceDto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.Assert.*;
@@ -28,10 +29,10 @@ public class InsuranceConverterDtoTest {
                 .numInsurance("num1")
                 .dateBeginInsurance(LocalDate.now())
                 .dateEndInsurance(LocalDate.now())
-                .sumInsured(987654)
+                .sumInsured(BigDecimal.valueOf(987654))
                 .dateInsuranceContract(LocalDate.now())
                 .paymentOfInsurancePremium("да")
-                .franchiseAmount(123.0)
+                .franchiseAmount(BigDecimal.valueOf(123.0))
                 .pledgeSubjectId(2L)
                 .build();
 
@@ -41,7 +42,7 @@ public class InsuranceConverterDtoTest {
         assertEquals(insurance.getNumInsurance(), insuranceDto.getNumInsurance());
         assertEquals(insurance.getDateBeginInsurance(), insuranceDto.getDateBeginInsurance());
         assertEquals(insurance.getDateEndInsurance(), insuranceDto.getDateEndInsurance());
-        assertEquals(insurance.getSumInsured(), insuranceDto.getSumInsured(), 0);
+        assertEquals(insurance.getSumInsured(), insuranceDto.getSumInsured());
         assertEquals(insurance.getDateInsuranceContract(), insuranceDto.getDateInsuranceContract());
         assertEquals(insurance.getPaymentOfInsurancePremium(), insuranceDto.getPaymentOfInsurancePremium());
         assertEquals(insurance.getFranchiseAmount(), insuranceDto.getFranchiseAmount());
@@ -55,10 +56,10 @@ public class InsuranceConverterDtoTest {
                 .numInsurance("num1")
                 .dateBeginInsurance(LocalDate.now())
                 .dateEndInsurance(LocalDate.now())
-                .sumInsured(987654)
+                .sumInsured(BigDecimal.valueOf(987654))
                 .dateInsuranceContract(LocalDate.now())
                 .paymentOfInsurancePremium("да")
-                .franchiseAmount(123.0)
+                .franchiseAmount(BigDecimal.valueOf(123.0))
                 .pledgeSubject(new PledgeSubject().builder().pledgeSubjectId(3L).build())
                 .build();
 
@@ -68,7 +69,7 @@ public class InsuranceConverterDtoTest {
         assertEquals(insurance.getNumInsurance(), insuranceDto.getNumInsurance());
         assertEquals(insurance.getDateBeginInsurance(), insuranceDto.getDateBeginInsurance());
         assertEquals(insurance.getDateEndInsurance(), insuranceDto.getDateEndInsurance());
-        assertEquals(insurance.getSumInsured(), insuranceDto.getSumInsured(), 0);
+        assertEquals(insurance.getSumInsured(), insuranceDto.getSumInsured());
         assertEquals(insurance.getDateInsuranceContract(), insuranceDto.getDateInsuranceContract());
         assertEquals(insurance.getPaymentOfInsurancePremium(), insuranceDto.getPaymentOfInsurancePremium());
         assertEquals(insurance.getFranchiseAmount(), insuranceDto.getFranchiseAmount());

@@ -14,6 +14,7 @@ import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectSecurities;
 import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectTBO;
 import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectVessel;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -59,27 +60,27 @@ public class PledgeSubject {
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="zs_dz")
-	private double zsDz;
+	private BigDecimal zsDz;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="zs_zz")
-	private double zsZz;
+	private BigDecimal zsZz;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="rs_dz")
-	private double rsDz;
+	private BigDecimal rsDz;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="rs_zz")
-	private double rsZz;
+	private BigDecimal rsZz;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="ss")
-	private double ss;
+	private BigDecimal ss;
 
     @NotNull(message = "Обязательно для заполнения")
 	@Column(name ="date_monitoring", columnDefinition = "DATE")

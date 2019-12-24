@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -41,27 +42,27 @@ public class CostHistory {
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="zs_dz")
-	private double zsDz;
+	private BigDecimal zsDz;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="zs_zz")
-	private double zsZz;
+	private BigDecimal zsZz;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="rs_dz")
-	private double rsDz;
+	private BigDecimal rsDz;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="rs_zz")
-	private double rsZz;
+	private BigDecimal rsZz;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="ss")
-	private double ss;
+	private BigDecimal ss;
 
 	@Column(name ="appraiser")
 	private String appraiser;

@@ -10,6 +10,7 @@ import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -39,15 +40,15 @@ public class PledgeAgreementDto{
 
     private String noticePA;
 
-    private double zsDz;
+    private BigDecimal zsDz;
 
-    private double zsZz;
+    private BigDecimal zsZz;
 
-    private double rsDz;
+    private BigDecimal rsDz;
 
-    private double rsZz;
+    private BigDecimal rsZz;
 
-    private double ss;
+    private BigDecimal ss;
 
     private List<Long> loanAgreementsIds;
 

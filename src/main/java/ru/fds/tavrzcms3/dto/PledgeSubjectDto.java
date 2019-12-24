@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -28,23 +29,23 @@ public class PledgeSubjectDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double zsDz;
+    private BigDecimal zsDz;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double zsZz;
+    private BigDecimal zsZz;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double rsDz;
+    private BigDecimal rsDz;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double rsZz;
+    private BigDecimal rsZz;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double ss;
+    private BigDecimal ss;
 
     @NotNull(message = "Обязательно для заполнения")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -77,7 +78,6 @@ public class PledgeSubjectDto{
 
     @Pattern(regexp = "да|нет", message = "Возможные варианты: да, нет")
     private String insuranceObligation;
-
 
     @Singular
     private List<Long> pledgeAgreementsIds;

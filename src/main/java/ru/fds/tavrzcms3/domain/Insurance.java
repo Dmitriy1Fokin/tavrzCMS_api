@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -52,7 +53,7 @@ public class Insurance {
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="sum_insured")
-	private double sumInsured;
+	private BigDecimal sumInsured;
 
 	@NotNull(message = "Обязательно для заполнения")
     @Column(name ="date_insurance_contract", columnDefinition = "DATE")
@@ -66,7 +67,7 @@ public class Insurance {
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name = "franchise_amount")
-    private Double franchiseAmount;
+    private BigDecimal franchiseAmount;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pledgesubject_id")
