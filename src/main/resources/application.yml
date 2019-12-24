@@ -1,0 +1,52 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/tavrzdb
+    username: dmitriy
+    password: nelson35
+
+# Fix Postgres JPA Error:
+# Method org.postgresql.jdbc.PgConnection.createClob() is not yet implemented.
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+        show_sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+
+#path to upload excel files (files to import data in database)
+path:
+  excel:
+    import: D:\\workSpace\\data\\import\\
+
+
+#column names of the client legal entity & individual import table
+excel_table:
+  import:
+    client:
+      client_manager_id: 0
+      employee_id: 1
+      legal_entity:
+        organizational_form: 2
+        name: 3
+        inn: 4
+      individual:
+        surname: 2
+        name: 3
+        patronymic: 4
+        pasport_number: 5
+    pledge_agreement:
+      numPA: 0
+      date_begin_pa: 1
+      date_end_pa: 2
+      perv_posl: 3
+      pledgor_id: 4
+      status: 5
+      notice: 6
+      la_id: 7

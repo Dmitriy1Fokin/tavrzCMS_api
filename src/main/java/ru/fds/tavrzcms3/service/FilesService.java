@@ -58,7 +58,7 @@ public class FilesService {
     private int numColumnIndividualPatronymic;
     @Value("${excel_table.import.client.individual.pasport_number}")
     private int numColumnIndividualPasport;
-    @Value("${excel_table.import.pledgeAgreement.numPA}")
+    @Value("${excel_table.import.pledge_agreement.numPA}")
     private int numColumnPledgeAgreementNumPA;
     @Value("${excel_table.import.pledge_agreement.date_begin_pa}")
     private int numColumnPledgeAgreementDateBegin;
