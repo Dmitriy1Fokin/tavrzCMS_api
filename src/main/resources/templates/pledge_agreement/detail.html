@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <script th:src="@{/js/jquery-3.4.1.min.js}" src="/js/jquery-3.4.1.min.js"></script>
     <script th:src="@{/js/scripts.js}" src="/js/testScript.js"></script>
@@ -24,7 +25,15 @@
 </head>
 <body>
 
-<div th:replace="fragments/nav :: user_nav_bar"></div>
+<div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+    <div th:replace="fragments/nav :: user_nav_bar"></div>
+</div>
+<div sec:authorize="hasRole('ADMIN')">
+    <div th:replace="fragments/nav :: admin_nav_bar"></div>
+</div>
+<div sec:authorize="hasRole('GUEST')">
+    <div th:replace="fragments/nav :: guest_nav_bar"></div>
+</div>
 
 <h1 th:text="'Договор залога: №' + ${pledgeAgreementDto.getNumPA()} + ' от ' + ${#temporals.format(pledgeAgreementDto.getDateBeginPA(), 'dd.MM.yyyy')}">Договор залога</h1>
     <label>Ответственный сотрудник: </label>
@@ -103,11 +112,13 @@
     <span th:text="${pledgeAgreementDto.getNoticePA()}">н/д</span>
     <br>
     <br>
-    <a th:href="@{/pledge_agreement/card(whatDo='changePA', pledgeAgreementId=${pledgeAgreementDto.getPledgeAgreementId()})}"
-       href="card.html"
-       th:text="'Изменить данные'">Изменить данные</a>
-    <br>
-    <br>
+    <div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+        <a th:href="@{/pledge_agreement/card(whatDo='changePA', pledgeAgreementId=${pledgeAgreementDto.getPledgeAgreementId()})}"
+           href="card.html"
+           th:text="'Изменить данные'">Изменить данные</a>
+        <br>
+        <br>
+    </div>
     <div th:if="${currentLoanAgreementDtoList.size() &gt; 0}">
         <label>Действующие кредитные договоры:</label>
         <div class="containerTable">

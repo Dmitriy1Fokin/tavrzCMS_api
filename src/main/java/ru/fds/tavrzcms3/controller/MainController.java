@@ -130,8 +130,8 @@ public class MainController {
         return "home";
     }
 
-    @GetMapping("/{id}")
-    public String homeEmployeePage(@PathVariable("id") Long employeeId, Model model) {
+    @GetMapping("/employee")
+    public String homeEmployeePage(@RequestParam("id") Long employeeId, Model model) {
 
         Optional<Employee> employeeOptional = employeeService.getEmployeeById(employeeId);
 

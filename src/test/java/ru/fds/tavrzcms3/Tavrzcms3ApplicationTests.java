@@ -9,14 +9,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.fds.tavrzcms3.dictionary.TypeOfAuto;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 import ru.fds.tavrzcms3.dictionary.TypeOfSecurities;
-import ru.fds.tavrzcms3.domain.AppRole;
-import ru.fds.tavrzcms3.domain.AppUser;
 import ru.fds.tavrzcms3.domain.Client;
-import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.dto.ClientDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.impl.ClientLegalEntityConverterDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.impl.ClientConverterDto;
-import ru.fds.tavrzcms3.converver.dtoconverter.impl.LoanAgreementConverterDto;
+import ru.fds.tavrzcms3.converter.dtoconverter.impl.ClientLegalEntityConverterDto;
+import ru.fds.tavrzcms3.converter.dtoconverter.impl.ClientConverterDto;
+import ru.fds.tavrzcms3.converter.dtoconverter.impl.LoanAgreementConverterDto;
 import ru.fds.tavrzcms3.repository.RepositoryAppRole;
 import ru.fds.tavrzcms3.repository.RepositoryAppUser;
 import ru.fds.tavrzcms3.repository.RepositoryClient;
@@ -89,10 +86,10 @@ public class Tavrzcms3ApplicationTests {
     @Test
     public void testBCryptPasswordEncoder(){
 //        Employee employee = repositoryEmployee.findById(10L).get();
-//        AppRole appRoleUser = repositoryAppRole.findById(1L).get();
+//        AppRole appRoleUser = repositoryAppRole.findById(4L).get();
 //        AppUser appUser = AppUser.builder()
-//                .name("admin")
-//                .password(passwordEncoder.encode("admin"))
+//                .name("guest")
+//                .password(passwordEncoder.encode("guest"))
 //                .appRole(appRoleUser)
 //                .build();
 //        System.out.println(appUser);

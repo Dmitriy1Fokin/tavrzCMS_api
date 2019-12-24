@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.fds.tavrzcms3.converver.*;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.dto.ClientDto;
 import ru.fds.tavrzcms3.dto.DtoFactory;
@@ -63,7 +62,7 @@ public class MonitoringController {
         this.validatorEntity = validatorEntity;
     }
 
-    @GetMapping("pledge_subject")
+    @GetMapping("/pledge_subject")
     public String monitoringPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
                                  Model model){
 

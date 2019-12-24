@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Клиент</title>
@@ -22,7 +23,15 @@
 </head>
 <body>
 
-<div th:replace="fragments/nav :: user_nav_bar"></div>
+<div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+    <div th:replace="fragments/nav :: user_nav_bar"></div>
+</div>
+<div sec:authorize="hasRole('ADMIN')">
+    <div th:replace="fragments/nav :: admin_nav_bar"></div>
+</div>
+<div sec:authorize="hasRole('GUEST')">
+    <div th:replace="fragments/nav :: guest_nav_bar"></div>
+</div>
 
 <h1 th:text="'Клиент: ' + ${clientDto.getFullName()}">Клиент ЮЛ</h1>
 <div th:switch="${clientDto.getTypeOfClient().name()}">
@@ -49,28 +58,32 @@
 <span th:text="${clientDto.getClientId()}"></span>
 <br>
 <br>
-<a th:href="@{/client/card(clientId=${clientDto.getClientId()}, whatDo='updateClient')}"
-   href="client/card.html"
-   th:text="'Изменить данные клиента'">Изменить данные клиента</a>
-<br>
-<br>
-<a th:href="@{/pledge_agreement/card(whatDo='newPA', clientId=${clientDto.getClientId()})}"
-   href="../pledge_agreement/card.html"
-   th:text="'Добавить новый договор залога'">Добавить новый договор залога</a>
-<br>
-<br>
-<a th:href="@{/loan_agreement/card(whatDo='newLA', clientId=${clientDto.getClientId()})}"
-   href="../loan_agreement/card.html"
-   th:text="'Добавить новый кредитный договор'">Добавить новый кредитный договор</a>
-<br>
-<br>
+<div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+    <a th:href="@{/client/card(clientId=${clientDto.getClientId()}, whatDo='updateClient')}"
+       href="client/card.html"
+       th:text="'Изменить данные клиента'">Изменить данные клиента</a>
+    <br>
+    <br>
+    <a th:href="@{/pledge_agreement/card(whatDo='newPA', clientId=${clientDto.getClientId()})}"
+       href="../pledge_agreement/card.html"
+       th:text="'Добавить новый договор залога'">Добавить новый договор залога</a>
+    <br>
+    <br>
+    <a th:href="@{/loan_agreement/card(whatDo='newLA', clientId=${clientDto.getClientId()})}"
+       href="../loan_agreement/card.html"
+       th:text="'Добавить новый кредитный договор'">Добавить новый кредитный договор</a>
+    <br>
+    <br>
+</div>
 
 <div th:if="${pledgeAgreementCurrentList.size() &gt; 0}">
-    <a th:href="@{/monitoring/card(whereUpdateMonitoring='pledgor', pledgorId=${clientDto.getClientId()})}"
-       href="../monitoring/card.html"
-       th:text="'Обновить мониторинг предметов залога по всем договорам залога залогодателя'">Обновить мониторинг предметов залога по всем договорам залога залогодателя</a>
-    <br>
-    <br>
+    <div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+        <a th:href="@{/monitoring/card(whereUpdateMonitoring='pledgor', pledgorId=${clientDto.getClientId()})}"
+           href="../monitoring/card.html"
+           th:text="'Обновить мониторинг предметов залога по всем договорам залога залогодателя'">Обновить мониторинг предметов залога по всем договорам залога залогодателя</a>
+        <br>
+        <br>
+    </div>
 
     <h2>Действующее договоры залога</h2>
     <div class="containerTable">

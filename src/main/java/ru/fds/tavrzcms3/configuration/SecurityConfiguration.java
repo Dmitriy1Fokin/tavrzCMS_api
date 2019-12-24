@@ -23,24 +23,37 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         final String ROLE_ADMIN = "ADMIN";
         final String ROLE_USER = "USER";
         final String ROLE_USER_CHIEF = "USER_CHIEF";
-        final String ROLE_GUEST = "GUEST";
 
 
         http.csrf().disable()
-                //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                //.and()
                 .authorizeRequests()
-                .antMatchers("/client/**",
-                        "/cost_history/**",
-                        "/encumbrance/**",
-                        "/insurance/**",
-                        "/loan_agreement/**",
-                        "/monitoring/**",
-                        "/pledge_agreement/**",
-                        "/pledge_subject/**",
-                        "/search/**").hasAnyRole(ROLE_USER, ROLE_USER_CHIEF, ROLE_GUEST, ROLE_ADMIN)
-                .antMatchers("/insert",
-                        "/update").hasAnyRole(ROLE_USER, ROLE_USER_CHIEF,ROLE_ADMIN)
+                .antMatchers(
+                        "/client/card",
+                        "/client/update_insert",
+                        "/cost_history/card",
+                        "/cost_history/insert",
+                        "/encumbrance/card",
+                        "/encumbrance/insert",
+                        "/insurance/card",
+                        "/insurance/insert",
+                        "/loan_agreement/card",
+                        "/loan_agreement/update_insert",
+                        "/loan_agreement/searchPA",
+                        "/loan_agreement/insertPA",
+                        "/update",
+                        "/upload",
+                        "/monitoring/card",
+                        "/monitoring/insert",
+                        "/pledge_agreement/card",
+                        "/pledge_agreement/update_insert",
+                        "/pledge_agreement/withdrawFromDepositPledgeSubject",
+                        "/pledge_agreement/searchPS",
+                        "/pledge_agreement/insertPS",
+                        "/pledge_subject/card_update",
+                        "/pledge_subject/update_pledge_subject",
+                        "/pledge_subject/card_new",
+                        "/pledge_subject/insert_pledge_subject").hasAnyRole(ROLE_USER, ROLE_USER_CHIEF)
+                .antMatchers("/employee").hasRole(ROLE_USER_CHIEF)
                 .antMatchers("/admin").hasRole(ROLE_ADMIN)
                 .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()

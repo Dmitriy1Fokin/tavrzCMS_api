@@ -98,7 +98,7 @@
             <div th:each="emp : ${employeeDtoMapExcludeChief}">
                 <tr>
                     <td>
-                        <a th:href="@{/{id}(id=${emp.getKey().getEmployeeId()})}" href="home.html"
+                        <a th:href="@{/employee(id=${emp.getKey().getEmployeeId()})}" href="home.html"
                            th:text="${emp.getKey().getFullName()}">№ КД</a>
                     </td>
                     <td th:text="${emp.getValue().get(0)}"></td>

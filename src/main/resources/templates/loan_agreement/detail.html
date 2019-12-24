@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <script th:src="@{/js/jquery-3.4.1.min.js}" src="/js/jquery-3.4.1.min.js"></script>
@@ -24,7 +25,15 @@
 </head>
 <body>
 
-<div th:replace="fragments/nav :: user_nav_bar"></div>
+<div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+    <div th:replace="fragments/nav :: user_nav_bar"></div>
+</div>
+<div sec:authorize="hasRole('ADMIN')">
+    <div th:replace="fragments/nav :: admin_nav_bar"></div>
+</div>
+<div sec:authorize="hasRole('GUEST')">
+    <div th:replace="fragments/nav :: guest_nav_bar"></div>
+</div>
 
 <h1 th:text="'Кредитный договор: №' + ${loanAgreementDto.getNumLA()} + ' от ' + ${#temporals.format(loanAgreementDto.getDateBeginLA(), 'dd.MM.yyyy')}">Кредитный договор</h1>
 <label>Ответственный сотрудник: </label>
@@ -77,42 +86,43 @@
 <span th:text="${loanAgreementDto.getStatusLA().getTranslate()}">н/д</span>
 <br>
 <br>
-<a th:href="@{/loan_agreement/card(whatDo='changeLA', loanAgreementId=${loanAgreementDto.getLoanAgreementId()})}"
-   href="card.html"
-   th:text="'Изменить данные'">Изменить данные</a>
-<br>
-<br>
-
-<a href="javascript:setVisible('searchBar');">Добавить договор залога</a>
-<div id="searchBar" style="display:none">
+<div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+    <a th:href="@{/loan_agreement/card(whatDo='changeLA', loanAgreementId=${loanAgreementDto.getLoanAgreementId()})}"
+             href="card.html"
+             th:text="'Изменить данные'">Изменить данные</a>
     <br>
-    <form action="" id="inputSearchNumPA" role="form">
-        <div class="form-group">
-            <label>№ договора залога</label>
-            <input required id="numPA" type="text"/>
-            <button type="submit">Найти</button>
-        </div>
-    </form>
-    <div id="searchResultPA" style="display:none">
-        <br>
-        <table class="customTable">
-            <thead>
-            <tr>
-                <th>check</th>
-                <th>№ ДЗ</th>
-                <th>дата</th>
-            </tr>
-            </thead>
-            <tbody id="tBodyPA">
-            </tbody>
-        </table>
-        <br>
-        <input type="button" id="buttonInsert" value="добавить" onclick="insertPA()" disabled="disabled">
-    </div>
-</div>
+    <br>
 
-<br>
-<br>
+    <a href="javascript:setVisible('searchBar');">Добавить договор залога</a>
+    <div id="searchBar" style="display:none">
+        <br>
+        <form action="" id="inputSearchNumPA" role="form">
+            <div class="form-group">
+                <label>№ договора залога</label>
+                <input required id="numPA" type="text"/>
+                <button type="submit">Найти</button>
+            </div>
+        </form>
+        <div id="searchResultPA" style="display:none">
+            <br>
+            <table class="customTable">
+                <thead>
+                <tr>
+                    <th>check</th>
+                    <th>№ ДЗ</th>
+                    <th>дата</th>
+                </tr>
+                </thead>
+                <tbody id="tBodyPA">
+                </tbody>
+            </table>
+            <br>
+            <input type="button" id="buttonInsert" value="добавить" onclick="insertPA()" disabled="disabled">
+        </div>
+    </div>
+    <br>
+    <br>
+</div>
 <div th:unless="${currentPledgeAgreementDtoList.isEmpty()}">
     <label>Действующее обеспечение:</label>
     <div class="containerTable">

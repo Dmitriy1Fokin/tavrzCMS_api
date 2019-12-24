@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title th:text="'История мониторингов предмета залога:' + ${pledgeSubject.getName()}">История мониторингов предмета залога</title>
@@ -22,7 +23,15 @@
 </head>
 <body>
 
-<div th:replace="fragments/nav :: user_nav_bar"></div>
+<div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+    <div th:replace="fragments/nav :: user_nav_bar"></div>
+</div>
+<div sec:authorize="hasRole('ADMIN')">
+    <div th:replace="fragments/nav :: admin_nav_bar"></div>
+</div>
+<div sec:authorize="hasRole('GUEST')">
+    <div th:replace="fragments/nav :: guest_nav_bar"></div>
+</div>
 
 <h1 th:text="'История мониторингов предмета залога:' + ${pledgeSubject.getName()}">История мониторингов предмета залога</h1>
 
@@ -32,11 +41,13 @@
 <br>
 <br>
 
-<a th:href="@{/monitoring/card(whereUpdateMonitoring='ps', pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
-   href="card.html"
-   th:text="'Добавить мониторинг'">Добавить мониторинг</a>
-<br>
-<br>
+<div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+    <a th:href="@{/monitoring/card(whereUpdateMonitoring='ps', pledgeSubjectId=${pledgeSubject.getPledgeSubjectId()})}"
+       href="card.html"
+       th:text="'Добавить мониторинг'">Добавить мониторинг</a>
+    <br>
+    <br>
+</div>
 
 <div class="containerTable">
     <table class="MonitoringTable">

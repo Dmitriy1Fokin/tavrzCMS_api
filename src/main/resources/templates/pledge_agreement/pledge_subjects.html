@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <script th:src="@{/js/jquery-3.4.1.min.js}" src="/js/jquery-3.4.1.min.js"></script>
     <script th:src="@{/js/scripts.js}" src="/js/testScript.js"></script>
@@ -24,7 +25,15 @@
 </head>
 <body>
 
-<div th:replace="fragments/nav :: user_nav_bar"></div>
+<div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+    <div th:replace="fragments/nav :: user_nav_bar"></div>
+</div>
+<div sec:authorize="hasRole('ADMIN')">
+    <div th:replace="fragments/nav :: admin_nav_bar"></div>
+</div>
+<div sec:authorize="hasRole('GUEST')">
+    <div th:replace="fragments/nav :: guest_nav_bar"></div>
+</div>
 
 <h1 th:text="'Предметы залога по договору залога №' + ${pledgeAgreementDto.getNumPA()}">Предметы залога</h1>
 <span th:text="${pledgeAgreementDto.getPledgeAgreementId()}" id="pledgeAgreementId" hidden></span>
@@ -32,71 +41,77 @@
    th:text="'Вернуться к договору залога №' + ${pledgeAgreementDto.getNumPA()}">Вернуться к договору залога</a>
 <br>
 <br>
-<a href="javascript:setVisible('searchBarNewPS');">Добавить новый предмет залога</a>
-<div id="searchBarNewPS" style="display:none">
-    <br>
-    <form th:action="@{/pledge_subject/card_new}" th:method="get" action="../pledge_subject/card_new.html">
-        <input type="hidden" name="pledgeAgreementId" th:value="${pledgeAgreementDto.getPledgeAgreementId()}">
-        <select required name="typeOfCollateral">
-            <option value="AUTO">Авто/спецтехника</option>
-            <option value="EQUIPMENT">Оборудование</option>
-            <option value="TBO">ТМЦ</option>
-            <option value="SECURITIES">Ценные бумаги</option>
-            <option value="LAND_OWNERSHIP">Недвижимость - ЗУ - собственность</option>
-            <option value="LAND_LEASE">Недвижимость - ЗУ - право аренды</option>
-            <option value="BUILDING">Недвижимость - здание/сооружение</option>
-            <option value="PREMISE">Недвижимость - помещение</option>
-            <option value="VESSEL">Судно</option>
-        </select>
-        <button type="submit">Добавить</button>
-    </form>
-</div>
-<br>
-<br>
 
-<a href="javascript:setVisible('searchBarCurrentPS');">Добавить существующий предмет залога</a>
-<div id="searchBarCurrentPS" style="display:none">
-    <br>
-    <form action="" id="inputSearchCadastralNum" role="form">
-        <div class="form-group">
-            <label>Недвижимое имущество(Кад №)</label>
-            <input required id="cadastralNum" type="text"/>
-            <button type="submit">Найти</button>
-        </div>
-    </form>
-    <br>
-    <form action="" id="inputSearchNamePS" role="form">
-        <div class="form-group">
-            <label>Движимое имущество(Наименование)</label>
-            <input required id="namePS" type="text"/>
-            <button type="submit">Найти</button>
-        </div>
-    </form>
-    <div id="searchResultPS" style="display:none">
+<div sec:authorize="hasAnyRole('USER', 'USER_CHIEF')">
+    <a href="javascript:setVisible('searchBarNewPS');">Добавить новый предмет залога</a>
+    <div id="searchBarNewPS" style="display:none">
         <br>
-        <table class="customTable">
-            <thead>
-            <tr>
-                <th>check</th>
-                <th>Наименование</th>
-                <th>ОХП</th>
-            </tr>
-            </thead>
-            <tbody id="tBodyPS">
-            </tbody>
-        </table>
-        <br>
-        <input type="button" id="buttonInsert" value="добавить" onclick="insertPS()" disabled="disabled">
+        <form th:action="@{/pledge_subject/card_new}" th:method="get" action="../pledge_subject/card_new.html">
+            <input type="hidden" name="pledgeAgreementId" th:value="${pledgeAgreementDto.getPledgeAgreementId()}">
+            <select required name="typeOfCollateral">
+                <option value="AUTO">Авто/спецтехника</option>
+                <option value="EQUIPMENT">Оборудование</option>
+                <option value="TBO">ТМЦ</option>
+                <option value="SECURITIES">Ценные бумаги</option>
+                <option value="LAND_OWNERSHIP">Недвижимость - ЗУ - собственность</option>
+                <option value="LAND_LEASE">Недвижимость - ЗУ - право аренды</option>
+                <option value="BUILDING">Недвижимость - здание/сооружение</option>
+                <option value="PREMISE">Недвижимость - помещение</option>
+                <option value="VESSEL">Судно</option>
+            </select>
+            <button type="submit">Добавить</button>
+        </form>
     </div>
-</div>
-<br>
-<br>
+    <br>
+    <br>
 
-<a th:href="@{../monitoring/card(whereUpdateMonitoring='pa', pledgeAgreementId=${pledgeAgreementDto.getPledgeAgreementId()})}"
-   href="../monitoring/card.html"
-   th:text="'Обновить мониторинг по всем предметам договора залога №' + ${pledgeAgreementDto.getNumPA()}">Обновить мониторинг по всем предметам договора залога</a>
-<br>
-<br>
+
+    <a href="javascript:setVisible('searchBarCurrentPS');">Добавить существующий предмет залога</a>
+    <div id="searchBarCurrentPS" style="display:none">
+        <br>
+        <form action="" id="inputSearchCadastralNum" role="form">
+            <div class="form-group">
+                <label>Недвижимое имущество(Кад №)</label>
+                <input required id="cadastralNum" type="text"/>
+                <button type="submit">Найти</button>
+            </div>
+        </form>
+        <br>
+        <form action="" id="inputSearchNamePS" role="form">
+            <div class="form-group">
+                <label>Движимое имущество(Наименование)</label>
+                <input required id="namePS" type="text"/>
+                <button type="submit">Найти</button>
+            </div>
+        </form>
+        <div id="searchResultPS" style="display:none">
+            <br>
+            <table class="customTable">
+                <thead>
+                <tr>
+                    <th>check</th>
+                    <th>Наименование</th>
+                    <th>ОХП</th>
+                </tr>
+                </thead>
+                <tbody id="tBodyPS">
+                </tbody>
+            </table>
+            <br>
+            <input type="button" id="buttonInsert" value="добавить" onclick="insertPS()" disabled="disabled">
+        </div>
+    </div>
+    <br>
+    <br>
+
+
+    <a th:href="@{../monitoring/card(whereUpdateMonitoring='pa', pledgeAgreementId=${pledgeAgreementDto.getPledgeAgreementId()})}"
+       href="../monitoring/card.html"
+       th:text="'Обновить мониторинг по всем предметам договора залога №' + ${pledgeAgreementDto.getNumPA()}">Обновить мониторинг по всем предметам договора залога</a>
+    <br>
+    <br>
+</div>
+
 <div class="containerTable">
     <div th:replace="fragments/table_pledge_subjects :: pledgeSubjectTableWithDelete(${pledgeSubjectDtoList}, ${pledgeAgreementDto.getPledgeAgreementId()})"></div>
 </div>

@@ -131,7 +131,7 @@ public class PledgeSubjectController {
         return pledgeSubjectDetailPage(pledgeSubject.getPledgeSubjectId(), model);
     }
 
-    @GetMapping("card_new")
+    @GetMapping("/card_new")
     public String pledgeSubjectCardNew(@RequestParam("typeOfCollateral") Optional<String> typeOfCollateral,
                                        @RequestParam("pledgeAgreementId") Optional<Long> pledgeAgreementId,
                                        Model model){
@@ -173,7 +173,7 @@ public class PledgeSubjectController {
         return PAGE_CARD_NEW;
     }
 
-    @PostMapping("insert_pledge_subject")
+    @PostMapping("/insert_pledge_subject")
     public String insertNewPledgeSubject(@Valid PledgeSubjectDto pledgeSubjectDto,
                                              BindingResult bindingResult,
                                              @Valid CostHistoryDto costHistoryDto,

@@ -146,7 +146,7 @@ public class ClientController {
             throw new IllegalArgumentException(MSG_WRONG_LINK);
     }
 
-    @PostMapping("update_insert")
+    @PostMapping("/update_insert")
     public String updateInsertClient(@Valid ClientDto clientDto,
                                      BindingResult bindingResult,
                                      @RequestParam("whatDo") String whatDo,
