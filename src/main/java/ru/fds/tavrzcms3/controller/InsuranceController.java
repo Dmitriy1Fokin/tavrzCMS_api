@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.fds.tavrzcms3.annotation.LogModificationDB;
 import ru.fds.tavrzcms3.domain.Insurance;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.DtoFactory;
@@ -75,8 +78,10 @@ public class InsuranceController {
         return "insurance/card";
     }
 
+    @LogModificationDB
     @PostMapping("/insert")
-    public String insuranceInsert(@Valid InsuranceDto insuranceDto,
+    public String insuranceInsert(@AuthenticationPrincipal User user,
+                                  @Valid InsuranceDto insuranceDto,
                                   BindingResult bindingResult,
                                   Model model){
 

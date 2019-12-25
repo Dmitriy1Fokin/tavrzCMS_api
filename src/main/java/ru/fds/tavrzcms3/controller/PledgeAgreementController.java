@@ -3,10 +3,13 @@ package ru.fds.tavrzcms3.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.fds.tavrzcms3.annotation.LogModificationDB;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
@@ -210,8 +213,10 @@ public class PledgeAgreementController {
 
     }
 
+    @LogModificationDB
     @PostMapping("/update_insert")
-    public String updateInsertPledgeAgreement(@Valid PledgeAgreementDto pledgeAgreementDto,
+    public String updateInsertPledgeAgreement(@AuthenticationPrincipal User user,
+                                              @Valid PledgeAgreementDto pledgeAgreementDto,
                                               BindingResult bindingResult,
                                               @RequestParam("whatDo") String whatDo,
                                               Model model){
@@ -232,9 +237,11 @@ public class PledgeAgreementController {
         return pledgeAgreementDetailPage(pledgeAgreement.getPledgeAgreementId(), model);
     }
 
+    @LogModificationDB
     @PostMapping("withdrawFromDepositPledgeSubject")
     public @ResponseBody
-    int withdrawFromDepositPledgeSubject(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+    int withdrawFromDepositPledgeSubject(@AuthenticationPrincipal User user,
+                                         @RequestParam("pledgeSubjectId") long pledgeSubjectId,
                                          @RequestParam("pledgeAgreementId") long pledgeAgreementId,
                                          Model model){
 
@@ -253,9 +260,11 @@ public class PledgeAgreementController {
         return pledgeSubjectList.size();
     }
 
+    @LogModificationDB
     @PostMapping("searchPS")
-    public @ResponseBody List<PledgeSubjectDto> searchPS(@RequestParam("cadastralNum") Optional<String> cadastralNum,
-                                                      @RequestParam("namePS") Optional<String> namePS){
+    public @ResponseBody List<PledgeSubjectDto> searchPS(@AuthenticationPrincipal User user,
+                                                         @RequestParam("cadastralNum") Optional<String> cadastralNum,
+                                                         @RequestParam("namePS") Optional<String> namePS){
 
         List<PledgeSubjectDto> pledgeSubjectDtoList = Collections.emptyList();
         if(cadastralNum.isPresent())
@@ -266,8 +275,10 @@ public class PledgeAgreementController {
             return pledgeSubjectDtoList;
     }
 
+    @LogModificationDB
     @PostMapping("insertPS")
-    public @ResponseBody int insertCurrentPledgeSubject(@RequestParam("pledgeSubjectsIdArray[]") long[] pledgeSubjectsIdArray,
+    public @ResponseBody int insertCurrentPledgeSubject(@AuthenticationPrincipal User user,
+                                                        @RequestParam("pledgeSubjectsIdArray[]") long[] pledgeSubjectsIdArray,
                                                         @RequestParam("pledgeAgreementId") long pledgeAgreementId){
 
         PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)

@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.fds.tavrzcms3.annotation.LogModificationDB;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 import ru.fds.tavrzcms3.domain.CostHistory;
 import ru.fds.tavrzcms3.domain.Monitoring;
@@ -111,8 +114,10 @@ public class PledgeSubjectController {
     }
 
 
+    @LogModificationDB
     @PostMapping("/update_pledge_subject")
-    public String updatePledgeSubject(@Valid PledgeSubjectDto pledgeSubjectDto,
+    public String updatePledgeSubject(@AuthenticationPrincipal User user,
+                                      @Valid PledgeSubjectDto pledgeSubjectDto,
                                       BindingResult bindingResult,
                                       Model model){
 
@@ -173,14 +178,16 @@ public class PledgeSubjectController {
         return PAGE_CARD_NEW;
     }
 
+    @LogModificationDB
     @PostMapping("/insert_pledge_subject")
-    public String insertNewPledgeSubject(@Valid PledgeSubjectDto pledgeSubjectDto,
-                                             BindingResult bindingResult,
-                                             @Valid CostHistoryDto costHistoryDto,
-                                             BindingResult bindingResultCostHistory,
-                                             @Valid MonitoringDto monitoringDto,
-                                             BindingResult bindingResultMonitoring,
-                                             Model model){
+    public String insertNewPledgeSubject(@AuthenticationPrincipal User user,
+                                         @Valid PledgeSubjectDto pledgeSubjectDto,
+                                         BindingResult bindingResult,
+                                         @Valid CostHistoryDto costHistoryDto,
+                                         BindingResult bindingResultCostHistory,
+                                         @Valid MonitoringDto monitoringDto,
+                                         BindingResult bindingResultMonitoring,
+                                         Model model){
 
         if(bindingResult.hasErrors()){
             model.addAttribute(ATTR_COST_HISTORY, costHistoryDto);

@@ -1,9 +1,12 @@
 package ru.fds.tavrzcms3.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.fds.tavrzcms3.annotation.LogModificationDB;
 import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 import ru.fds.tavrzcms3.domain.*;
 import ru.fds.tavrzcms3.dto.*;
@@ -146,8 +149,10 @@ public class ClientController {
             throw new IllegalArgumentException(MSG_WRONG_LINK);
     }
 
+    @LogModificationDB
     @PostMapping("/update_insert")
-    public String updateInsertClient(@Valid ClientDto clientDto,
+    public String updateInsertClient(@AuthenticationPrincipal User user,
+                                     @Valid ClientDto clientDto,
                                      BindingResult bindingResult,
                                      @RequestParam("whatDo") String whatDo,
                                      Model model){

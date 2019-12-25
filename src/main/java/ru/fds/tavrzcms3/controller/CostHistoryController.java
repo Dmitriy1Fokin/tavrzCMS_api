@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.fds.tavrzcms3.annotation.LogModificationDB;
 import ru.fds.tavrzcms3.domain.CostHistory;
 import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
@@ -111,11 +114,14 @@ public class CostHistoryController {
         return "cost_history/card";
     }
 
+    @LogModificationDB
     @PostMapping("/insert")
-    public String insertCostHistory(@Valid CostHistoryDto costHistoryDto,
-                                      BindingResult bindingResult,
-                                      @RequestParam("pledgeSubjectName") String pledgeSubjectName,
-                                      Model model){
+    public String insertCostHistory(@AuthenticationPrincipal User user,
+                                    @Valid CostHistoryDto costHistoryDto,
+                                    BindingResult bindingResult,
+                                    @RequestParam("pledgeSubjectName") String pledgeSubjectName,
+                                    Model model){
+
         if(bindingResult.hasErrors()) {
             model.addAttribute("pledgeSubjectName", pledgeSubjectName);
             return "cost_history/card";

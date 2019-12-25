@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.fds.tavrzcms3.annotation.LogModificationDB;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
 import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
@@ -180,8 +181,10 @@ public class MainController {
         return PAGE_UPDATE;
     }
 
+    @LogModificationDB
     @PostMapping("/upload")
-    public String importEntityFromExcel(@RequestParam("file") Optional<MultipartFile> file,
+    public String importEntityFromExcel(@AuthenticationPrincipal User user,
+                                        @RequestParam("file") Optional<MultipartFile> file,
                                         @RequestParam("whatUpload") Optional<String> whatUpload,
                                         Model model){
 

@@ -3,10 +3,13 @@ package ru.fds.tavrzcms3.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.fds.tavrzcms3.annotation.LogModificationDB;
 import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
@@ -172,8 +175,10 @@ public class LoanAgreementController {
             throw new IllegalArgumentException(MSG_WRONG_LINK);
     }
 
+    @LogModificationDB
     @PostMapping("/update_insert")
-    public String updateInsertLoanAgreement(@Valid LoanAgreementDto loanAgreementDto,
+    public String updateInsertLoanAgreement(@AuthenticationPrincipal User user,
+                                            @Valid LoanAgreementDto loanAgreementDto,
                                             BindingResult bindingResult,
                                             @RequestParam("whatDo") String whatDo,
                                             Model model){
@@ -195,15 +200,19 @@ public class LoanAgreementController {
         return loanAgreementDetailPage(loanAgreement.getLoanAgreementId(), model);
     }
 
+    @LogModificationDB
     @PostMapping("searchPA")
-    public @ResponseBody List<PledgeAgreementDto> searchPA(@RequestParam("numPA") String numPA){
+    public @ResponseBody List<PledgeAgreementDto> searchPA(@AuthenticationPrincipal User user,
+                                                           @RequestParam("numPA") String numPA){
 
         return dtoFactory
                 .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementsByNumPA(numPA));
     }
 
+    @LogModificationDB
     @PostMapping("insertPA")
-    public @ResponseBody int insertPA(@RequestParam("pledgeAgreementIdArray[]") long[] pledgeAgreementIdArray,
+    public @ResponseBody int insertPA(@AuthenticationPrincipal User user,
+                                      @RequestParam("pledgeAgreementIdArray[]") long[] pledgeAgreementIdArray,
                                       @RequestParam("loanAgreementId") long loanAgreementId){
 
         LoanAgreement loanAgreement = loanAgreementService.getLoanAgreementById(loanAgreementId)

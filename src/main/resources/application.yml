@@ -4,16 +4,12 @@ spring:
     url: jdbc:postgresql://localhost:5432/tavrzdb
     username: dmitriy
     password: nelson35
-
-# Fix Postgres JPA Error:
-# Method org.postgresql.jdbc.PgConnection.createClob() is not yet implemented.
   jpa:
     properties:
       hibernate:
+        show_sql: false
         temp:
-          use_jdbc_metadata_defaults: false
-        show_sql: true
-
+          use_jdbc_metadata_defaults: false #Fix Postgres JPA Error: Method org.postgresql.jdbc.PgConnection.createClob() is not yet implemented.
   servlet:
     multipart:
       max-file-size: 10MB
@@ -26,7 +22,7 @@ path:
     import: D:\\workSpace\\data\\import\\
 
 
-#column names of the client legal entity & individual import table
+#column names of import file xls, xlsx
 excel_table:
   import:
     client:
@@ -50,3 +46,6 @@ excel_table:
       status: 5
       notice: 6
       la_id: 7
+
+logging:
+  file: D:/workSpace/data/log.log
