@@ -25,7 +25,9 @@ path:
 #column names of import file xls, xlsx
 excel_table:
   import:
-    client:
+    start_row: 1
+    delimiter: ;
+    client_new:
       client_manager_id: 0
       employee_id: 1
       legal_entity:
@@ -37,15 +39,326 @@ excel_table:
         name: 3
         patronymic: 4
         pasport_number: 5
-    pledge_agreement:
-      numPA: 0
-      date_begin_pa: 1
-      date_end_pa: 2
-      perv_posl: 3
-      pledgor_id: 4
+    client_update:
+      client_id: 0
+      client_manager_id: 1
+      employee_id: 2
+      legal_entity:
+        organizational_form: 3
+        name: 4
+        inn: 5
+      individual:
+        surname: 3
+        name: 4
+        patronymic: 5
+        pasport_number: 6
+    loan_agreement_new:
+      num_la: 0
+      date_begin: 1
+      date_end: 2
+      status: 3
+      amount: 4
+      debt: 5
+      interest_rate: 6
+      pfo: 7
+      quality: 8
+      client_id: 9
+    loan_agreement_update:
+      la_id: 0
+      client_id: 1
+      num_la: 2
+      date_begin: 3
+      date_end: 4
       status: 5
-      notice: 6
+      amount: 6
+      debt: 7
+      interest_rate: 8
+      pfo: 9
+      quality: 10
+    pledge_agreement_new:
+      num_pa: 0
+      date_begin: 2
+      date_end: 3
+      perv_posl: 4
+      status: 5
+      client_id: 6
       la_id: 7
+      notice: 8
+    pledge_agreement_update:
+      pa_id: 0
+      num_pa: 1
+      date_begin: 2
+      date_end: 3
+      perv_posl: 4
+      status: 5
+      client_id: 6
+      la_id: 7
+      notice: 8
+    pledge_subject_new:
+      name: 0
+      liquidity: 1
+      type_of_pledge: 2
+      address_region: 3
+      address_district: 4
+      address_city: 5
+      address_street: 6
+      address_building: 7
+      address_premises: 8
+      insurance_obligation: 9
+      pledge_agreements_Id: 10
+      date_conclusion: 11
+      zs_dz: 12
+      zs_zz: 13
+      rs_dz: 14
+      rs_zz: 15
+      ss: 16
+      appraiser: 17
+      num_appraisal_report: 18
+      date_appraisal_report: 19
+      date_monitoring: 20
+      status_monitoring: 21
+      employee: 22
+      type_monitoring: 23
+      collateral_value: 24
+      notice: 25
+      ps_auto:
+        brand: 26
+        model: 27
+        vin: 28
+        num_of_engine: 29
+        num_of_pts: 30
+        year_of_manufacture: 31
+        inventory_num: 32
+        type_of_auto: 33
+        horsepower: 34
+      ps_equipment:
+        brand: 26
+        model: 27
+        serial_number: 28
+        year_of_manufacture: 29
+        inventory_number: 30
+        type_of_equipment: 31
+        productivity: 32
+        type_of_productivity: 33
+      ps_building:
+        area: 26
+        cadastral_num: 27
+        conditional_num: 28
+        readiness_degree: 29
+        year_of_construction: 30
+        market_segment: 31
+      ps_land_lease:
+        area: 26
+        cadastral_num: 27
+        conditional_num: 28
+        permitted_use: 29
+        built_up: 30
+        cadastral_num_of_building: 31
+        begin_date: 32
+        end_date: 33
+        land_category: 34
+      ps_land_owner:
+        area: 26
+        cadastral_num: 27
+        conditional_num: 28
+        permitted_use: 29
+        built_up: 30
+        cadastral_num_of_building: 31
+        land_category: 32
+      ps_room:
+        area: 26
+        cadastral_num: 27
+        conditional_num: 28
+        floor_location: 29
+        market_segment_room: 30
+        market_segment_building: 31
+      ps_securities:
+        nominal_value: 26
+        actual_value: 27
+        type_of_securities: 28
+      ps_tbo:
+        count_of_tbo: 26
+        carrying_amount: 27
+        type_of_tbo: 28
+      ps_vessel:
+        imo: 26
+        mmsi: 27
+        flag: 28
+        vessel_type: 29
+        gross_tonnage: 30
+        deadweight: 31
+        year_built: 32
+        status: 33
+    pledge_subject_update:
+      pledge_subject_id: 0
+      name: 1
+      liquidity: 2
+      type_of_pledge: 3
+      address_region: 4
+      address_district: 5
+      address_city: 6
+      address_street: 7
+      address_building: 8
+      address_premises: 9
+      insurance_obligation: 10
+      ps_auto:
+        brand: 11
+        model: 12
+        vin: 13
+        num_of_engine: 14
+        num_of_pts: 15
+        year_of_manufacture: 16
+        inventory_num: 17
+        type_of_auto: 18
+        horsepower: 19
+      ps_equipment:
+        brand: 11
+        model: 12
+        serial_number: 13
+        year_of_manufacture: 14
+        inventory_number: 15
+        type_of_equipment: 16
+        productivity: 17
+        type_of_productivity: 18
+      ps_building:
+        area: 11
+        cadastral_num: 12
+        conditional_num: 13
+        readiness_degree: 14
+        year_of_construction: 15
+        market_segment: 16
+      ps_land_lease:
+        area: 11
+        cadastral_num: 12
+        conditional_num: 13
+        permitted_use: 14
+        built_up: 15
+        cadastral_num_of_building: 16
+        begin_date: 17
+        end_date: 18
+        land_category: 19
+      ps_land_owner:
+        area: 11
+        cadastral_num: 12
+        conditional_num: 13
+        permitted_use: 14
+        built_up: 15
+        cadastral_num_of_building: 16
+        land_category: 17
+      ps_room:
+        area: 11
+        cadastral_num: 12
+        conditional_num: 13
+        floor_location: 14
+        market_segment_room: 15
+        market_segment_building: 16
+      ps_securities:
+        nominal_value: 11
+        actual_value: 12
+        type_of_securities: 13
+      ps_tbo:
+        count_of_tbo: 11
+        carrying_amount: 12
+        type_of_tbo: 13
+      ps_vessel:
+        imo: 11
+        mmsi: 12
+        flag: 13
+        vessel_type: 14
+        gross_tonnage: 15
+        deadweight: 16
+        year_built: 17
+        status: 18
+    cost_history_new:
+      pledge_subject_id: 0
+      date: 1
+      zs_dz: 2
+      zs_zz: 3
+      rs_dz: 4
+      rs_zz: 5
+      ss: 6
+      appraiser: 7
+      num_appraisal_report: 8
+      date_appraisal_report: 9
+    cost_history_update:
+      cost_history_id: 0
+      pledge_subject_id: 1
+      date: 2
+      zs_dz: 3
+      zs_zz: 4
+      rs_dz: 5
+      rs_zz: 6
+      ss: 7
+      appraiser: 8
+      num_appraisal_report: 9
+      date_appraisal_report: 10
+    monitoring_new:
+      pledge_subject_id: 0
+      date: 1
+      status: 2
+      employee: 3
+      type: 4
+      collateral_value: 5
+      notice: 6
+    monitoring_update:
+      monitoring_id: 0
+      pledge_subject_id: 1
+      date: 2
+      status: 3
+      employee: 4
+      type: 5
+      collateral_value: 6
+      notice: 7
+    encumbrance_new:
+      pledge_subject_id: 0
+      name: 1
+      type_of_encumbrance: 2
+      in_favor_of_whom: 3
+      date_begin: 4
+      date_end: 5
+      num_of_encumbrance: 6
+    encumbrance_update:
+      encumbrance_id: 0
+      pledge_subject_id: 1
+      name: 2
+      type_of_encumbrance: 3
+      in_favor_of_whom: 4
+      date_begin: 5
+      date_end: 6
+      num_of_encumbrance: 7
+    insurance_new:
+      pledge_subject_id: 0
+      num_insurance: 1
+      date_begin: 2
+      date_end: 3
+      sum_insured: 4
+      date_insurance_contract: 5
+      payment_of_insurance_premium: 6
+      franchise_amount: 7
+    insurance_update:
+      insurance_id: 0
+      pledge_subject_id: 1
+      num_insurance: 2
+      date_begin: 3
+      date_end: 4
+      sum_insured: 5
+      date_insurance_contract: 6
+      payment_of_insurance_premium: 7
+      franchise_amount: 8
+    client_manager_new:
+      surname: 0
+      name: 1
+      patronymic: 2
+    client_manager_update:
+      client_manager_id: 0
+      surname: 1
+      name: 2
+      patronymic: 3
+
+
+
+
+
 
 logging:
   file: D:/workSpace/data/log.log

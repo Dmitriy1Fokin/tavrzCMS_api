@@ -68,7 +68,7 @@ public class ClientController {
         ClientDto clientDto = dtoFactory.getClientDto(client);
 
         ClientManagerDto clientManagerDto = dtoFactory.getClientManagerDto(clientManagerService
-                .getClientManager(clientDto.getClientManagerId())
+                .getClientManagerById(clientDto.getClientManagerId())
                 .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)));
 
         EmployeeDto employeeDto = dtoFactory.getEmployeeDto(employeeService

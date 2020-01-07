@@ -19,11 +19,14 @@ import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
 import javax.validation.ConstraintViolation;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @RunWith(SpringRunner.class)
@@ -211,5 +214,26 @@ public class PledgeSubjectServiceTest {
 
     }
 
+    @Test
+    public void getNewPledgeSubjectsFromFile(){
+        try {
+            List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getNewPledgeSubjectsFromFile(new File("src\\test\\java\\ru\\fds\\tavrzcms3\\testdata\\ps_new_building.xlsx"), TypeOfCollateral.BUILDING);
+            System.out.println(pledgeSubjectList);
+//            System.out.println(pledgeSubjectList.get(0).getCostHistories().get(0));
+//            System.out.println(pledgeSubjectList.get(0).getMonitorings().get(0));
 
+//            pledgeSubjectList = pledgeSubjectService.insertPledgeSubjects(pledgeSubjectList);
+//            System.out.println(pledgeSubjectList);
+//            System.out.println(pledgeSubjectList.get(0).getCostHistories().get(0));
+//            System.out.println(pledgeSubjectList.get(0).getMonitorings().get(0));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void getCurrentPledgeSubjectsFromFile() {
+    }
 }

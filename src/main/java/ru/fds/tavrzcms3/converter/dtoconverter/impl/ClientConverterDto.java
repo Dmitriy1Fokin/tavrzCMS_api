@@ -74,7 +74,7 @@ public class ClientConverterDto implements ConverterDto<Client,ClientDto> {
         return Client.builder()
                 .clientId(dto.getClientId())
                 .typeOfClient(dto.getTypeOfClient())
-                .clientManager(clientManagerService.getClientManager(dto.getClientManagerId()).orElse(null))
+                .clientManager(clientManagerService.getClientManagerById(dto.getClientManagerId()).orElse(null))
                 .employee(employeeService.getEmployeeById(dto.getEmployeeId()).orElse(null))
                 .loanAgreements(loanAgreementList)
                 .pledgeAgreements(pledgeAgreementList)

@@ -14,6 +14,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
 
@@ -24,12 +25,14 @@ import javax.validation.constraints.Positive;
 @Embeddable
 public class PledgeSubjectVessel{
 
+	@Pattern(regexp = "[0-9]{7}")
 	@NotNull(message = "Обязательно для заполнения")
 	@Column(name ="imo", table = "pledge_vessel")
-	private Integer imo;
+	private String imo;
 
+	@Pattern(regexp = "^$|[0-9]{9}")
 	@Column(name ="mmsi", table = "pledge_vessel")
-	private Integer mmsi;
+	private String mmsi;
 
 	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="flag", table = "pledge_vessel")

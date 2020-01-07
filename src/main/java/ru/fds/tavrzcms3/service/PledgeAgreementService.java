@@ -6,12 +6,19 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.dictionary.Operations;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
+import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
 import ru.fds.tavrzcms3.domain.*;
+import ru.fds.tavrzcms3.fileimport.FileImporter;
+import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.*;
 import ru.fds.tavrzcms3.specification.SearchCriteria;
 import ru.fds.tavrzcms3.specification.SpecificationBuilder;
 import ru.fds.tavrzcms3.specification.impl.SpecificationBuilderImpl;
+import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
+import javax.validation.ConstraintViolation;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -25,17 +32,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PledgeAgreementService {
 
     private final RepositoryPledgeAgreement repositoryPledgeAgreement;
+    private final RepositoryLoanAgreement repositoryLoanAgreement;
+    private final RepositoryPledgeSubject repositoryPledgeSubject;
     private final ClientService clientService;
 
+    private final ValidatorEntity validatorEntity;
+    private final ExcelColumnNum excelColumnNum;
+
     public PledgeAgreementService(RepositoryPledgeAgreement repositoryPledgeAgreement,
-                                  ClientService clientService) {
+                                  RepositoryLoanAgreement repositoryLoanAgreement,
+                                  RepositoryPledgeSubject repositoryPledgeSubject,
+                                  ClientService clientService,
+                                  ValidatorEntity validatorEntity,
+                                  ExcelColumnNum excelColumnNum) {
         this.repositoryPledgeAgreement = repositoryPledgeAgreement;
+        this.repositoryLoanAgreement = repositoryLoanAgreement;
+        this.repositoryPledgeSubject = repositoryPledgeSubject;
         this.clientService = clientService;
+        this.validatorEntity = validatorEntity;
+        this.excelColumnNum = excelColumnNum;
     }
 
     public Optional<PledgeAgreement> getPledgeAgreementById(long pledgeAgreementId){
@@ -326,13 +347,145 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.findAllByClient(client);
     }
 
+    public List<PledgeAgreement> getNewPledgeAgreementsFromFile(File file) throws IOException {
+        FileImporter fileImporter = FileImporterFactory.getInstance(file);
+        for(int i = 0; i < excelColumnNum.getStartRow(); i++){
+            fileImporter.nextLine();
+        }
+        int countRow = excelColumnNum.getStartRow();
+
+        List<PledgeAgreement> pledgeAgreementList = new ArrayList<>();
+
+        do {
+            countRow += 1;
+
+            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getPledgeAgreementNew().getClientId()))){
+                throw new IOException("Неверный id{"
+                        + fileImporter.getLong(excelColumnNum.getPledgeAgreementNew().getClientId()) + ") клиента.");
+            }
+
+            Optional<Client> client = clientService.getClientById(fileImporter
+                    .getLong(excelColumnNum.getPledgeAgreementNew().getClientId()));
+            if(!client.isPresent()){
+                throw new IOException("Клиента с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getPledgeAgreementNew().getClientId())
+                        + "). Строка: " + countRow);
+            }
+
+            if(fileImporter.getLongList(excelColumnNum.getPledgeAgreementNew().getLoanAgreementsIds(), excelColumnNum.getDelimiter()).isEmpty()){
+                throw new IOException("Неверный id{"
+                        + fileImporter.getLongList(excelColumnNum.getPledgeAgreementNew().getLoanAgreementsIds(), excelColumnNum.getDelimiter())
+                        + ") кредитного договора.");
+            }
+
+            List<LoanAgreement> loanAgreementList = repositoryLoanAgreement.findAllByLoanAgreementIdIn(fileImporter
+                    .getLongList(excelColumnNum.getPledgeAgreementNew().getLoanAgreementsIds(), excelColumnNum.getDelimiter()));
+            if(loanAgreementList.isEmpty()){
+                throw new IOException("Кредитного договора с таким id отсутствует ("
+                        + fileImporter.getLongList(excelColumnNum.getPledgeAgreementNew().getLoanAgreementsIds(), excelColumnNum.getDelimiter())
+                        + "). Строка: " + countRow);
+            }
+
+            PledgeAgreement pledgeAgreement = PledgeAgreement.builder()
+                    .numPA(fileImporter.getString(excelColumnNum.getPledgeAgreementNew().getNumPA()))
+                    .dateBeginPA(fileImporter.getLocalDate(excelColumnNum.getPledgeAgreementNew().getDateBegin()))
+                    .dateEndPA(fileImporter.getLocalDate(excelColumnNum.getPledgeAgreementNew().getDateEnd()))
+                    .pervPosl(TypeOfPledgeAgreement.valueOf(fileImporter.getString(excelColumnNum.getPledgeAgreementNew().getPervPosl())))
+                    .statusPA(StatusOfAgreement.valueOf(fileImporter.getString(excelColumnNum.getPledgeAgreementNew().getStatus())))
+                    .noticePA(fileImporter.getString(excelColumnNum.getPledgeAgreementNew().getNotice()))
+                    .loanAgreements(loanAgreementList)
+                    .client(client.get())
+                    .build();
+
+            Set<ConstraintViolation<PledgeAgreement>> violations = validatorEntity.validateEntity(pledgeAgreement);
+            if(!violations.isEmpty())
+                throw new IOException("В строке:" + countRow + ". " + validatorEntity.getErrorMessage());
+
+            pledgeAgreementList.add(pledgeAgreement);
+        }while (fileImporter.nextLine());
+
+        return pledgeAgreementList;
+    }
+
+    public List<PledgeAgreement> getCurrentPledgeAgreementsFromFile(File file) throws IOException {
+        FileImporter fileImporter = FileImporterFactory.getInstance(file);
+        for(int i = 0; i < excelColumnNum.getStartRow(); i++){
+            fileImporter.nextLine();
+        }
+        int countRow = excelColumnNum.getStartRow();
+
+        List<PledgeAgreement> pledgeAgreementList = new ArrayList<>();
+
+        do {
+            countRow += 1;
+
+            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getPledgeAgreementUpdate().getPledgeAgreementId()))){
+                throw new IOException("Неверный id{"
+                        + fileImporter.getLong(excelColumnNum.getPledgeAgreementUpdate().getPledgeAgreementId()) + ") договора залога.");
+            }
+
+            Optional<PledgeAgreement> pledgeAgreement = getPledgeAgreementById(fileImporter
+                    .getLong(excelColumnNum.getPledgeAgreementUpdate().getPledgeAgreementId()));
+            if(!pledgeAgreement.isPresent()){
+                throw new IOException("Договора залога с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getPledgeAgreementUpdate().getPledgeAgreementId())
+                        + "). Строка: " + countRow);
+            }
+
+            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getPledgeAgreementUpdate().getClientId()))){
+                throw new IOException("Неверный id{"
+                        + fileImporter.getLong(excelColumnNum.getPledgeAgreementUpdate().getClientId()) + ") клиента.");
+            }
+
+            Optional<Client> client = clientService.getClientById(fileImporter
+                    .getLong(excelColumnNum.getPledgeAgreementUpdate().getClientId()));
+            if(!client.isPresent()){
+                throw new IOException("Клиента с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getPledgeAgreementUpdate().getClientId())
+                        + "). Строка: " + countRow);
+            }
+
+            if(fileImporter.getLongList(excelColumnNum.getPledgeAgreementUpdate().getLoanAgreementsIds(), excelColumnNum.getDelimiter()).isEmpty()){
+                throw new IOException("Неверный id{"
+                        + fileImporter.getLongList(excelColumnNum.getPledgeAgreementUpdate().getLoanAgreementsIds(), excelColumnNum.getDelimiter())
+                        + ") кредитного договора.");
+            }
+
+            List<LoanAgreement> loanAgreementList = repositoryLoanAgreement.findAllByLoanAgreementIdIn(fileImporter
+                    .getLongList(excelColumnNum.getPledgeAgreementUpdate().getLoanAgreementsIds(), excelColumnNum.getDelimiter()));
+            if(loanAgreementList.isEmpty()){
+                throw new IOException("Кредитного договора с таким id отсутствует ("
+                        + fileImporter.getLongList(excelColumnNum.getPledgeAgreementUpdate().getLoanAgreementsIds(), excelColumnNum.getDelimiter())
+                        + "). Строка: " + countRow);
+            }
+
+            pledgeAgreement.get().setNumPA(fileImporter.getString(excelColumnNum.getPledgeAgreementUpdate().getNumPA()));
+            pledgeAgreement.get().setDateBeginPA(fileImporter.getLocalDate(excelColumnNum.getPledgeAgreementUpdate().getDateBegin()));
+            pledgeAgreement.get().setDateEndPA(fileImporter.getLocalDate(excelColumnNum.getPledgeAgreementUpdate().getDateEnd()));
+            pledgeAgreement.get().setPervPosl(TypeOfPledgeAgreement.valueOf(fileImporter.getString(excelColumnNum.getPledgeAgreementUpdate().getPervPosl())));
+            pledgeAgreement.get().setStatusPA(StatusOfAgreement.valueOf(fileImporter.getString(excelColumnNum.getPledgeAgreementUpdate().getStatus())));
+            pledgeAgreement.get().setNoticePA(fileImporter.getString(excelColumnNum.getPledgeAgreementUpdate().getNotice()));
+            pledgeAgreement.get().setClient(client.get());
+            pledgeAgreement.get().setLoanAgreements(loanAgreementList);
+
+            Set<ConstraintViolation<PledgeAgreement>> violations = validatorEntity.validateEntity(pledgeAgreement.get());
+            if(!violations.isEmpty())
+                throw new IOException("В строке:" + countRow + ". " + validatorEntity.getErrorMessage());
+
+            pledgeAgreementList.add(pledgeAgreement.get());
+
+        }while (fileImporter.nextLine());
+
+        return pledgeAgreementList;
+    }
+
     @Transactional
     public PledgeAgreement updateInsertPledgeAgreement(PledgeAgreement pledgeAgreement){
         return repositoryPledgeAgreement.save(pledgeAgreement);
     }
 
     @Transactional
-    public List<PledgeAgreement> updateInsertPledgeAgreementList(List<PledgeAgreement> pledgeAgreementList){
+    public List<PledgeAgreement> updateInsertPledgeAgreements(List<PledgeAgreement> pledgeAgreementList){
         return repositoryPledgeAgreement.saveAll(pledgeAgreementList);
     }
 }

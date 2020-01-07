@@ -13,10 +13,12 @@ import javax.validation.constraints.*;
 @Builder
 public class PledgeSubjectVesselDto{
 
+    @Pattern(regexp = "[0-9]{7}")
     @NotNull(message = "Обязательно для заполнения")
-    private Integer imo;
+    private String imo;
 
-    private Integer mmsi;
+    @Pattern(regexp = "^$|[0-9]{9}")
+    private String mmsi;
 
     @NotBlank(message = "Обязательно для заполнения")
     private String flag;

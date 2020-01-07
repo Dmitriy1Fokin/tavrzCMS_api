@@ -42,8 +42,8 @@
         <option value="">не выбрано</option>
         <option value="clientLegalEntity">Клиенты.ЮЛ</option>
         <option value="clientIndividual">Клиенты.ФЛ</option>
-        <option value="pledgeAgreement">Договоры залога</option>
         <option value="loanAgreement">Кредитные договоры</option>
+        <option value="pledgeAgreement">Договоры залога</option>
         <option value="psBuilding">Предметы залога.Здания/Сооружения</option>
         <option value="psRoom">Предметы залога.Помещения</option>
         <option value="psLandOwnership">Предметы залога.ЗУ.Собственность</option>
@@ -72,31 +72,31 @@
             <br>
             <span>Добавлены следующие клиенты (ЮЛ)</span>
             <br>
-            <div th:replace="fragments/table_client :: clietTable(${clientLegalEntityList})"></div>
+            <div th:replace="fragments/table_client :: clietTable(${clientDtoList})"></div>
         </div>
         <div th:case="clientIndividual">
             <br>
             <span>Добавлены следующие клиенты (ФЛ)</span>
             <br>
-            <div th:replace="fragments/table_client :: clietTable(${clientIndividualList})"></div>
+            <div th:replace="fragments/table_client :: clietTable(${clientDtoList})"></div>
         </div>
         <div th:case="pledgeAgreement">
             <br>
             <span>Добавлены следующие договоры залога</span>
             <br>
-            <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementList})"></div>
+            <div th:replace="fragments/table_pledge_agreements :: pledgeAgreementTable(${pledgeAgreementDtoList})"></div>
         </div>
         <div th:case="loanAgreement">
             <br>
             <span>Добавлены следующие кредитные договоры</span>
             <br>
-            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${resultList})"></div>
+            <div th:replace="fragments/table_loan_agreements :: loanAgreementTable(${loanAgreementDtoList})"></div>
         </div>
         <!--<div th:case="psBuilding">-->
             <!--<br>-->
             <!--<span>Добавлены следующие клиенты (ЮЛ)</span>-->
             <!--<br>-->
-            <!--<div th:replace="fragments/table_client :: clietTable(${clientLegalEntityList})"></div>-->
+            <!--<div th:replace="fragments/table_client :: clietTable(${loanAgreementDtoList})"></div>-->
         <!--</div>-->
         <!--<div th:case="clientLegalEntity">-->
             <!--<br>-->

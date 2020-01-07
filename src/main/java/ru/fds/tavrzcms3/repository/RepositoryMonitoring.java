@@ -10,5 +10,6 @@ import java.util.List;
 
 public interface RepositoryMonitoring extends JpaRepository<Monitoring, Long> {
     List<Monitoring> findByPledgeSubject(PledgeSubject pledgeSubject, Sort sort);
+    List<Monitoring> findByPledgeSubject(PledgeSubject pledgeSubject);
     List<Monitoring> findAllByMonitoringIdIn(Collection<Long> ids);
 }

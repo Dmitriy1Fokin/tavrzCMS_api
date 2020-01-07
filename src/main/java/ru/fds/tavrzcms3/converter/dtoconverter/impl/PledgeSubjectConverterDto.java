@@ -99,7 +99,7 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
 
         List<CostHistory> costHistoryList;
         if(Objects.nonNull(dto.getCostHistoriesIds()))
-            costHistoryList = costHistoryService.getCostHistorybyIds(dto.getCostHistoriesIds());
+            costHistoryList = costHistoryService.getCostHistoryByIds(dto.getCostHistoriesIds());
         else
             costHistoryList = Collections.emptyList();
 

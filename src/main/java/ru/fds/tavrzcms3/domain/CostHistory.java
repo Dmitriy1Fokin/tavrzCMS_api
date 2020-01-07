@@ -74,7 +74,7 @@ public class CostHistory {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate appraisalReportDate;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
 	@JoinColumn(name = "pledge_subject_id")
 	private PledgeSubject pledgeSubject;
 

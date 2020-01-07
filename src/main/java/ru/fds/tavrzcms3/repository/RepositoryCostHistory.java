@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface RepositoryCostHistory extends JpaRepository<CostHistory, Long> {
     List<CostHistory> findByPledgeSubject(PledgeSubject pledgeSubject, Sort sort);
+    List<CostHistory> findByPledgeSubject(PledgeSubject pledgeSubject);
     List<CostHistory> findAllByCostHistoryIdIn(Collection<Long> ids);
 
 }

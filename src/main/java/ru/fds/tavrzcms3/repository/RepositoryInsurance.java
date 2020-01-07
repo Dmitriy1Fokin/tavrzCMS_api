@@ -10,5 +10,6 @@ import java.util.List;
 
 public interface RepositoryInsurance extends JpaRepository<Insurance, Long> {
     List<Insurance> findAllByPledgeSubject (PledgeSubject pledgeSubject, Sort sort);
+    List<Insurance> findAllByPledgeSubject (PledgeSubject pledgeSubject);
     List<Insurance> findAllByInsuranceIdIn(Collection<Long> ids);
 }
