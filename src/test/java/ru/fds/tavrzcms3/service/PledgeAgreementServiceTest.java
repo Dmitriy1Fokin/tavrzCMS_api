@@ -15,7 +15,11 @@ import ru.fds.tavrzcms3.repository.RepositoryClient;
 import ru.fds.tavrzcms3.repository.RepositoryEmployee;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
+import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
+import javax.validation.ConstraintViolation;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -35,6 +39,8 @@ public class PledgeAgreementServiceTest {
     RepositoryEmployee repositoryEmployee;
     @Autowired
     RepositoryClient repositoryClient;
+    @Autowired
+    ValidatorEntity validatorEntity;
 
 
 
@@ -229,5 +235,61 @@ public class PledgeAgreementServiceTest {
 
     @Test
     public void updateInsertPledgeAgreementList() {
+    }
+
+    @Test
+    public void getNewPledgeAgreementsFromFile() {
+        try {
+            List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getNewPledgeAgreementsFromFile(new File("src\\test\\java\\ru\\fds\\tavrzcms3\\testdata\\pledge_agreement_new.xlsx"));
+            System.out.println("PLEDGE AGREEMENT FROM FILE:");
+            pledgeAgreementList.forEach(x->System.out.println(x));
+
+            List<PledgeAgreement> pledgeAgreementListValid = new ArrayList<>();
+            System.out.println("PLEDGE AGREEMENT VALIDATION ERRORS:");
+            pledgeAgreementList.forEach(x->{
+                Set<ConstraintViolation<PledgeAgreement>> violations = validatorEntity.validateEntity(x);
+                if(violations.isEmpty())
+                    pledgeAgreementListValid.add(x);
+                else
+                    System.out.println(validatorEntity.getErrorMessage());
+            });
+
+            System.out.println("PLEDGE AGREEMENT VALID:");
+            pledgeAgreementListValid.forEach(x-> System.out.println(x));
+
+            assertEquals(3, pledgeAgreementList.size());
+            assertEquals(1, pledgeAgreementListValid.size());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getCurrentPledgeAgreementsFromFile() {
+        try {
+            List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsFromFile(new File("src\\test\\java\\ru\\fds\\tavrzcms3\\testdata\\pledge_agreement_update.xlsx"));
+            System.out.println("PLEDGE AGREEMENT FROM FILE:");
+            pledgeAgreementList.forEach(x->System.out.println(x));
+
+            List<PledgeAgreement> pledgeAgreementListValid = new ArrayList<>();
+            System.out.println("PLEDGE AGREEMENT VALIDATION ERRORS:");
+            pledgeAgreementList.forEach(x->{
+                Set<ConstraintViolation<PledgeAgreement>> violations = validatorEntity.validateEntity(x);
+                if(violations.isEmpty())
+                    pledgeAgreementListValid.add(x);
+                else
+                    System.out.println(validatorEntity.getErrorMessage());
+            });
+
+            System.out.println("PLEDGE AGREEMENT VALID:");
+            pledgeAgreementListValid.forEach(x-> System.out.println(x));
+
+            assertEquals(3, pledgeAgreementList.size());
+            assertEquals(1, pledgeAgreementListValid.size());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

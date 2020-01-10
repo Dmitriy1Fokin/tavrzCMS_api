@@ -38,6 +38,7 @@ public class LoanAgreement {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dateEndLA;
 
+	@NotNull
 	@Convert(converter = StatusOfAgreement.Converter.class)
 	@Column(name ="status")
 	private StatusOfAgreement statusLA;

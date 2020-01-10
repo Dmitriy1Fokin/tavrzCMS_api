@@ -40,9 +40,7 @@ import ru.fds.tavrzcms3.specification.SearchCriteria;
 import ru.fds.tavrzcms3.specification.SearchCriteriaNestedAttribute;
 import ru.fds.tavrzcms3.specification.SpecificationBuilder;
 import ru.fds.tavrzcms3.specification.impl.SpecificationBuilderImpl;
-import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
-import javax.validation.ConstraintViolation;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -56,7 +54,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class PledgeSubjectService {
@@ -66,20 +63,17 @@ public class PledgeSubjectService {
     private final RepositoryCostHistory repositoryCostHistory;
     private final RepositoryMonitoring repositoryMonitoring;
 
-    private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
 
     public PledgeSubjectService(RepositoryPledgeSubject repositoryPledgeSubject,
                                 RepositoryPledgeAgreement repositoryPledgeAgreement,
                                 RepositoryCostHistory repositoryCostHistory,
                                 RepositoryMonitoring repositoryMonitoring,
-                                ValidatorEntity validatorEntity,
                                 ExcelColumnNum excelColumnNum) {
         this.repositoryPledgeSubject = repositoryPledgeSubject;
         this.repositoryPledgeAgreement = repositoryPledgeAgreement;
         this.repositoryCostHistory = repositoryCostHistory;
         this.repositoryMonitoring = repositoryMonitoring;
-        this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
     }
 
@@ -419,32 +413,65 @@ public class PledgeSubjectService {
         do {
             countRow += 1;
 
+            if(fileImporter.getLongList(excelColumnNum.getPledgeSubjectNew().getPledgeAgreementsIds(), excelColumnNum.getDelimiter()).isEmpty()){
+                throw new IOException("Неверный id{"
+                        + fileImporter.getLongList(excelColumnNum.getPledgeSubjectNew().getPledgeAgreementsIds(), excelColumnNum.getDelimiter())
+                        + ") договора залога. Строка: " + countRow);
+            }
+            List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement
+                    .findAllByPledgeAgreementIdIn(fileImporter
+                            .getLongList(excelColumnNum.getPledgeSubjectNew().getPledgeAgreementsIds(), excelColumnNum.getDelimiter()));
+            if(pledgeAgreementList.isEmpty()){
+                throw new IOException("Договор залога с таким id отсутствует ("
+                        + fileImporter.getLongList(excelColumnNum.getPledgeSubjectNew().getPledgeAgreementsIds(), excelColumnNum.getDelimiter())
+                        + "). Строка: " + countRow);
+            }
+
+            Liquidity liquidity;
+            try {
+                liquidity = Liquidity.valueOf(fileImporter.getString(excelColumnNum.getPledgeSubjectNew().getLiquidity()));
+            }catch (IllegalArgumentException ex){
+                liquidity = null;
+            }
+
+            StatusOfMonitoring statusOfMonitoring;
+            try {
+                statusOfMonitoring = StatusOfMonitoring.valueOf(fileImporter.getString(excelColumnNum.getPledgeSubjectNew().getStatusMonitoring()));
+            }catch (IllegalArgumentException ex){
+                statusOfMonitoring = null;
+            }
+
+            TypeOfPledge typeOfPledge;
+            try {
+                typeOfPledge = TypeOfPledge.valueOf(fileImporter.getString(excelColumnNum.getPledgeSubjectNew().getTypeOfPledge()));
+            }catch (IllegalArgumentException ex){
+                typeOfPledge = null;
+            }
+
+            TypeOfMonitoring typeOfMonitoring;
+            try {
+                typeOfMonitoring = TypeOfMonitoring.valueOf(fileImporter.getString(excelColumnNum.getPledgeSubjectNew().getTypeOfMonitoring()));
+            }catch (IllegalArgumentException ex){
+                typeOfMonitoring = null;
+            }
+
             PledgeSubject pledgeSubject = PledgeSubject.builder()
                     .name(fileImporter
                             .getString(excelColumnNum.getPledgeSubjectNew().getName()))
-                    .liquidity(Liquidity.valueOf(fileImporter
-                            .getString(excelColumnNum.getPledgeSubjectNew().getLiquidity())))
                     .zsDz(fileImporter
                             .getBigDecimal(excelColumnNum.getPledgeSubjectNew().getZsDz()))
                     .zsZz(fileImporter
-                            .getBigDecimal(excelColumnNum.getPledgeSubjectNew().getZsDz()))
+                            .getBigDecimal(excelColumnNum.getPledgeSubjectNew().getZsZz()))
                     .rsDz(fileImporter
                             .getBigDecimal(excelColumnNum.getPledgeSubjectNew().getRsDz()))
                     .rsZz(fileImporter
-                            .getBigDecimal(excelColumnNum.getPledgeSubjectNew().getZsDz()))
+                            .getBigDecimal(excelColumnNum.getPledgeSubjectNew().getRsZz()))
                     .ss(fileImporter
                             .getBigDecimal(excelColumnNum.getPledgeSubjectNew().getSs()))
                     .dateMonitoring(fileImporter
                             .getLocalDate(excelColumnNum.getPledgeSubjectNew().getDateMonitoring()))
                     .dateConclusion(fileImporter
                             .getLocalDate(excelColumnNum.getPledgeSubjectNew().getDateConclusion()))
-                    .statusMonitoring(StatusOfMonitoring.valueOf(fileImporter
-                            .getString(excelColumnNum.getPledgeSubjectNew().getStatusMonitoring())))
-                    .typeOfCollateral(typeOfCollateral)
-                    .typeOfPledge(TypeOfPledge.valueOf(fileImporter
-                            .getString(excelColumnNum.getPledgeSubjectNew().getTypeOfPledge())))
-                    .typeOfMonitoring(TypeOfMonitoring.valueOf(fileImporter
-                            .getString(excelColumnNum.getPledgeSubjectNew().getTypeOfMonitoring())))
                     .adressRegion(fileImporter
                             .getString(excelColumnNum.getPledgeSubjectNew().getAddressRegion()))
                     .adressDistrict(fileImporter
@@ -459,11 +486,23 @@ public class PledgeSubjectService {
                             .getString(excelColumnNum.getPledgeSubjectNew().getAddressPremises()))
                     .insuranceObligation(fileImporter
                             .getString(excelColumnNum.getPledgeSubjectNew().getInsuranceObligation()))
-                    .pledgeAgreements(repositoryPledgeAgreement.findAllByPledgeAgreementIdIn(fileImporter
-                            .getLongList(excelColumnNum.getPledgeSubjectNew().getPledgeAgreementsIds(), excelColumnNum.getDelimiter())))
+                    .liquidity(liquidity)
+                    .statusMonitoring(statusOfMonitoring)
+                    .typeOfCollateral(typeOfCollateral)
+                    .typeOfPledge(typeOfPledge)
+                    .typeOfMonitoring(typeOfMonitoring)
+                    .pledgeAgreements(pledgeAgreementList)
                     .build();
 
             if(typeOfCollateral == TypeOfCollateral.AUTO){
+
+                TypeOfAuto typeOfAuto;
+                try {
+                    typeOfAuto = TypeOfAuto.valueOf(fileImporter.getString(excelColumnNum.getPledgeSubjectNew().getAuto().getTypeOfAuto()));
+                }catch (IllegalArgumentException ex){
+                    typeOfAuto = null;
+                }
+
                 PledgeSubjectAuto pledgeSubjectAuto = PledgeSubjectAuto.builder()
                         .brandAuto(fileImporter
                                 .getString(excelColumnNum.getPledgeSubjectNew().getAuto().getBrand()))
@@ -479,8 +518,7 @@ public class PledgeSubjectService {
                                 .getInteger(excelColumnNum.getPledgeSubjectNew().getAuto().getYearOfManufacture()))
                         .inventoryNumAuto(fileImporter
                                 .getString(excelColumnNum.getPledgeSubjectNew().getAuto().getInventoryNum()))
-                        .typeOfAuto(TypeOfAuto.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectNew().getAuto().getTypeOfAuto())))
+                        .typeOfAuto(typeOfAuto)
                         .horsepower(fileImporter
                                 .getDouble(excelColumnNum.getPledgeSubjectNew().getAuto().getHorsepower()))
                         .build();
@@ -488,6 +526,15 @@ public class PledgeSubjectService {
                 pledgeSubject.setPledgeSubjectAuto(pledgeSubjectAuto);
 
             }else if(typeOfCollateral == TypeOfCollateral.EQUIPMENT){
+
+                TypeOfEquip typeOfEquip;
+                try {
+                    typeOfEquip = TypeOfEquip.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectNew().getEquipment().getTypeOfEquipment()));
+                }catch (IllegalArgumentException ex){
+                    typeOfEquip = null;
+                }
+
                 PledgeSubjectEquipment pledgeSubjectEquipment = PledgeSubjectEquipment.builder()
                         .brandEquip(fileImporter
                                 .getString(excelColumnNum.getPledgeSubjectNew().getEquipment().getBrand()))
@@ -499,8 +546,7 @@ public class PledgeSubjectService {
                                 .getInteger(excelColumnNum.getPledgeSubjectNew().getEquipment().getYearOfManufacture()))
                         .inventoryNumEquip(fileImporter
                                 .getString(excelColumnNum.getPledgeSubjectNew().getEquipment().getInventoryNum()))
-                        .typeOfEquipment(TypeOfEquip.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectNew().getEquipment().getTypeOfEquipment())))
+                        .typeOfEquipment(typeOfEquip)
                         .productivity(fileImporter
                                 .getDouble(excelColumnNum.getPledgeSubjectNew().getEquipment().getProductivity()))
                         .typeOfProductivity(fileImporter
@@ -510,6 +556,15 @@ public class PledgeSubjectService {
                 pledgeSubject.setPledgeSubjectEquipment(pledgeSubjectEquipment);
 
             }else if(typeOfCollateral == TypeOfCollateral.BUILDING){
+
+                MarketSegment marketSegment;
+                try {
+                    marketSegment = MarketSegment.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectNew().getBuilding().getMarketSegment()));
+                }catch (IllegalArgumentException ex){
+                    marketSegment = null;
+                }
+
                 PledgeSubjectBuilding pledgeSubjectBuilding = PledgeSubjectBuilding.builder()
                         .area(fileImporter
                                 .getDouble(excelColumnNum.getPledgeSubjectNew().getBuilding().getArea()))
@@ -521,13 +576,20 @@ public class PledgeSubjectService {
                                 .getInteger(excelColumnNum.getPledgeSubjectNew().getBuilding().getReadinessDegree()))
                         .yearOfConstruction(fileImporter
                                 .getInteger(excelColumnNum.getPledgeSubjectNew().getBuilding().getYearOfConstruction()))
-                        .marketSegment(MarketSegment.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectNew().getBuilding().getMarketSegment())))
+                        .marketSegment(marketSegment)
                         .build();
 
                 pledgeSubject.setPledgeSubjectBuilding(pledgeSubjectBuilding);
 
             }else if(typeOfCollateral == TypeOfCollateral.LAND_LEASE){
+
+                LandCategory landCategory;
+                try {
+                    landCategory = LandCategory.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectNew().getLandLease().getLandCategory()));
+                }catch (IllegalArgumentException ex){
+                    landCategory = null;
+                }
 
                 PledgeSubjectLandLease pledgeSubjectLandLease = PledgeSubjectLandLease.builder()
                         .area(fileImporter
@@ -546,13 +608,20 @@ public class PledgeSubjectService {
                                 .getLocalDate(excelColumnNum.getPledgeSubjectNew().getLandLease().getDateBegin()))
                         .dateEndLease(fileImporter
                                 .getLocalDate(excelColumnNum.getPledgeSubjectNew().getLandLease().getDateEnd()))
-                        .landCategory(LandCategory.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectNew().getLandLease().getLandCategory())))
+                        .landCategory(landCategory)
                         .build();
 
                 pledgeSubject.setPledgeSubjectLandLease(pledgeSubjectLandLease);
 
             }else if(typeOfCollateral == TypeOfCollateral.LAND_OWNERSHIP){
+
+                LandCategory landCategory;
+                try {
+                    landCategory = LandCategory.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectNew().getLandOwnership().getLandCategory()));
+                }catch (IllegalArgumentException ex){
+                    landCategory = null;
+                }
 
                 PledgeSubjectLandOwnership pledgeSubjectLandOwnership = PledgeSubjectLandOwnership.builder()
                         .area(fileImporter
@@ -567,13 +636,28 @@ public class PledgeSubjectService {
                                 .getString(excelColumnNum.getPledgeSubjectNew().getLandOwnership().getBuiltUp()))
                         .cadastralNumOfBuilding(fileImporter
                                 .getString(excelColumnNum.getPledgeSubjectNew().getLandOwnership().getCadastralNumOfBuilding()))
-                        .landCategory(LandCategory.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectNew().getLandOwnership().getLandCategory())))
+                        .landCategory(landCategory)
                         .build();
 
                 pledgeSubject.setPledgeSubjectLandOwnership(pledgeSubjectLandOwnership);
 
             }else if(typeOfCollateral == TypeOfCollateral.PREMISE){
+
+                MarketSegment marketSegmentRoom;
+                try {
+                    marketSegmentRoom = MarketSegment.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectNew().getPremise().getMarketSegmentRoom()));
+                }catch (IllegalArgumentException ex){
+                    marketSegmentRoom = null;
+                }
+
+                MarketSegment marketSegmentBuilding;
+                try {
+                    marketSegmentBuilding = MarketSegment.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectNew().getPremise().getMarketSegmentBuilding()));
+                }catch (IllegalArgumentException ex){
+                    marketSegmentBuilding = null;
+                }
 
                 PledgeSubjectRoom pledgeSubjectRoom = PledgeSubjectRoom.builder()
                         .area(fileImporter
@@ -584,51 +668,78 @@ public class PledgeSubjectService {
                                 .getString(excelColumnNum.getPledgeSubjectNew().getPremise().getConditionalNum()))
                         .floorLocation(fileImporter
                                 .getString(excelColumnNum.getPledgeSubjectNew().getPremise().getFloorLocation()))
-                        .marketSegmentRoom(MarketSegment.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectNew().getPremise().getMarketSegmentRoom())))
-                        .marketSegmentBuilding(MarketSegment.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectNew().getPremise().getMarketSegmentBuilding())))
+                        .marketSegmentRoom(marketSegmentRoom)
+                        .marketSegmentBuilding(marketSegmentBuilding)
                         .build();
 
                 pledgeSubject.setPledgeSubjectRoom(pledgeSubjectRoom);
 
             }else if(typeOfCollateral == TypeOfCollateral.SECURITIES){
 
+                TypeOfSecurities typeOfSecurities;
+                try {
+                    typeOfSecurities = TypeOfSecurities.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectNew().getSecurities().getTypeOfSecurities()));
+                }catch (IllegalArgumentException ex){
+                    typeOfSecurities = null;
+                }
+
                 PledgeSubjectSecurities pledgeSubjectSecurities = PledgeSubjectSecurities.builder()
                         .nominalValue(fileImporter
                                 .getDouble(excelColumnNum.getPledgeSubjectNew().getSecurities().getNominalValue()))
                         .actualValue(fileImporter
                                 .getDouble(excelColumnNum.getPledgeSubjectNew().getSecurities().getActualValue()))
-                        .typeOfSecurities(TypeOfSecurities.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectNew().getSecurities().getTypeOfSecurities())))
+                        .typeOfSecurities(typeOfSecurities)
                         .build();
 
                 pledgeSubject.setPledgeSubjectSecurities(pledgeSubjectSecurities);
 
             }else if(typeOfCollateral == TypeOfCollateral.TBO){
 
+                TypeOfTBO typeOfTBO;
+                try {
+                    typeOfTBO = TypeOfTBO.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectNew().getTbo().getTypeOfTbo()));
+                }catch (IllegalArgumentException ex){
+                    typeOfTBO = null;
+                }
+
                 PledgeSubjectTBO pledgeSubjectTBO = PledgeSubjectTBO.builder()
                         .countOfTBO(fileImporter
                                 .getInteger(excelColumnNum.getPledgeSubjectNew().getTbo().getCount()))
                         .carryingAmount(fileImporter
                                 .getDouble(excelColumnNum.getPledgeSubjectNew().getTbo().getCarryingAmount()))
-                        .typeOfTBO(TypeOfTBO.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectNew().getTbo().getTypeOfTbo())))
+                        .typeOfTBO(typeOfTBO)
                         .build();
 
                 pledgeSubject.setPledgeSubjectTBO(pledgeSubjectTBO);
 
             }else if(typeOfCollateral == TypeOfCollateral.VESSEL){
 
+                TypeOfVessel typeOfVessel;
+                try {
+                    typeOfVessel = TypeOfVessel.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectNew().getVessel().getVesselType()));
+                }catch (IllegalArgumentException ex){
+                    typeOfVessel = null;
+                }
+
+                String imo = "";
+                if(Objects.nonNull(fileImporter.getInteger(excelColumnNum.getPledgeSubjectNew().getVessel().getImo()))){
+                    imo = fileImporter.getInteger(excelColumnNum.getPledgeSubjectNew().getVessel().getImo()).toString();
+                }
+
+                String mmsi = "";
+                if(Objects.nonNull(fileImporter.getInteger(excelColumnNum.getPledgeSubjectNew().getVessel().getMmsi()))){
+                    mmsi = fileImporter.getInteger(excelColumnNum.getPledgeSubjectNew().getVessel().getMmsi()).toString();
+                }
+
                 PledgeSubjectVessel pledgeSubjectVessel = PledgeSubjectVessel.builder()
-                        .imo(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectNew().getVessel().getImo()))
-                        .mmsi(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectNew().getVessel().getMmsi()))
+                        .imo(imo)
+                        .mmsi(mmsi)
                         .flag(fileImporter
                                 .getString(excelColumnNum.getPledgeSubjectNew().getVessel().getFlag()))
-                        .vesselType(TypeOfVessel.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectNew().getVessel().getVesselType())))
+                        .vesselType(typeOfVessel)
                         .grossTonnage(fileImporter
                                 .getInteger(excelColumnNum.getPledgeSubjectNew().getVessel().getGrossTonnage()))
                         .deadweight(fileImporter
@@ -642,38 +753,26 @@ public class PledgeSubjectService {
                 pledgeSubject.setPledgeSubjectVessel(pledgeSubjectVessel);
             }
 
-            Set<ConstraintViolation<PledgeSubject>> violationsPledgeSubject = validatorEntity.validateEntity(pledgeSubject);
-            if(!violationsPledgeSubject.isEmpty())
-                throw new IOException("В строке:" + countRow + ". " + validatorEntity.getErrorMessage());
-
             CostHistory costHistory = CostHistory.builder()
                     .dateConclusion(fileImporter.getLocalDate(excelColumnNum.getPledgeSubjectNew().getDateConclusion()))
                     .zsDz(fileImporter.getBigDecimal(excelColumnNum.getPledgeSubjectNew().getZsDz()))
-                    .zsZz(fileImporter.getBigDecimal(excelColumnNum.getPledgeSubjectNew().getZsZZ()))
+                    .zsZz(fileImporter.getBigDecimal(excelColumnNum.getPledgeSubjectNew().getZsZz()))
                     .rsDz(fileImporter.getBigDecimal(excelColumnNum.getPledgeSubjectNew().getRsDz()))
-                    .rsZz(fileImporter.getBigDecimal(excelColumnNum.getPledgeSubjectNew().getRsZZ()))
+                    .rsZz(fileImporter.getBigDecimal(excelColumnNum.getPledgeSubjectNew().getRsZz()))
                     .ss(fileImporter.getBigDecimal(excelColumnNum.getPledgeSubjectNew().getSs()))
                     .appraiser(fileImporter.getString(excelColumnNum.getPledgeSubjectNew().getAppraiser()))
                     .appraisalReportNum(fileImporter.getString(excelColumnNum.getPledgeSubjectNew().getNumAppraisalReport()))
                     .appraisalReportDate(fileImporter.getLocalDate(excelColumnNum.getPledgeSubjectNew().getDateAppraisalReport()))
                     .build();
 
-            Set<ConstraintViolation<CostHistory>> violationsCostHistory = validatorEntity.validateEntity(costHistory);
-            if(!violationsCostHistory.isEmpty())
-                throw new IOException("В строке:" + countRow + ". " + validatorEntity.getErrorMessage());
-
             Monitoring monitoring = Monitoring.builder()
                     .dateMonitoring(fileImporter.getLocalDate(excelColumnNum.getPledgeSubjectNew().getDateMonitoring()))
-                    .statusMonitoring(StatusOfMonitoring.valueOf(fileImporter.getString(excelColumnNum.getPledgeSubjectNew().getStatusMonitoring())))
+                    .statusMonitoring(statusOfMonitoring)
                     .employee(fileImporter.getString(excelColumnNum.getPledgeSubjectNew().getEmployee()))
-                    .typeOfMonitoring(TypeOfMonitoring.valueOf(fileImporter.getString(excelColumnNum.getPledgeSubjectNew().getTypeOfMonitoring())))
+                    .typeOfMonitoring(typeOfMonitoring)
                     .notice(fileImporter.getString(excelColumnNum.getPledgeSubjectNew().getNotice()))
                     .collateralValue(fileImporter.getBigDecimal(excelColumnNum.getPledgeSubjectNew().getCollateralValue()))
                     .build();
-
-            Set<ConstraintViolation<Monitoring>> violationsMonitoring = validatorEntity.validateEntity(monitoring);
-            if(!violationsMonitoring.isEmpty())
-                throw new IOException("В строке:" + countRow + ". " + validatorEntity.getErrorMessage());
 
             pledgeSubject.setCostHistories(Collections.singletonList(costHistory));
             pledgeSubject.setMonitorings(Collections.singletonList(monitoring));
@@ -699,9 +798,8 @@ public class PledgeSubjectService {
 
             if(Objects.isNull(fileImporter.getLong(excelColumnNum.getPledgeSubjectUpdate().getPledgeSubjectId()))){
                 throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getPledgeSubjectUpdate().getPledgeSubjectId()) + ") предмета залога");
+                        + fileImporter.getLong(excelColumnNum.getPledgeSubjectUpdate().getPledgeSubjectId()) + ") предмета залога. Строка: " + countRow);
             }
-
             Optional<PledgeSubject> pledgeSubject = getPledgeSubjectById(fileImporter.getLong(excelColumnNum.getPledgeSubjectUpdate().getPledgeSubjectId()));
             if(!pledgeSubject.isPresent()){
                 throw new IOException("Предмет залога с таким id отсутствует ("
@@ -709,12 +807,24 @@ public class PledgeSubjectService {
                         + "). Строка: " + countRow);
             }
 
+            Liquidity liquidity;
+            try {
+                liquidity = Liquidity.valueOf(fileImporter.getString(excelColumnNum.getPledgeSubjectUpdate().getLiquidity()));
+            }catch (IllegalArgumentException ex){
+                liquidity = null;
+            }
+
+            TypeOfPledge typeOfPledge;
+            try {
+                typeOfPledge = TypeOfPledge.valueOf(fileImporter.getString(excelColumnNum.getPledgeSubjectUpdate().getTypeOfPledge()));
+            }catch (IllegalArgumentException ex){
+                typeOfPledge = null;
+            }
+
             pledgeSubject.get().setName(fileImporter
                     .getString(excelColumnNum.getPledgeSubjectUpdate().getName()));
-            pledgeSubject.get().setLiquidity(Liquidity.valueOf(fileImporter
-                    .getString(excelColumnNum.getPledgeSubjectUpdate().getLiquidity())));
-            pledgeSubject.get().setTypeOfPledge(TypeOfPledge.valueOf(fileImporter
-                    .getString(excelColumnNum.getPledgeSubjectUpdate().getTypeOfPledge())));
+            pledgeSubject.get().setLiquidity(liquidity);
+            pledgeSubject.get().setTypeOfPledge(typeOfPledge);
             pledgeSubject.get().setAdressRegion(fileImporter
                     .getString(excelColumnNum.getPledgeSubjectUpdate().getAddressRegion()));
             pledgeSubject.get().setAdressDistrict(fileImporter
@@ -729,188 +839,228 @@ public class PledgeSubjectService {
                     .getString(excelColumnNum.getPledgeSubjectUpdate().getAddressPremises()));
             pledgeSubject.get().setInsuranceObligation(fileImporter.getString(excelColumnNum.getPledgeSubjectUpdate().getInsuranceObligation()));
 
-            if(pledgeSubject.get().getTypeOfCollateral() == TypeOfCollateral.AUTO){
-                PledgeSubjectAuto pledgeSubjectAuto = PledgeSubjectAuto.builder()
-                        .brandAuto(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getBrand()))
-                        .modelAuto(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getModel()))
-                        .vin(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getVin()))
-                        .numOfEngine(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getNumOfEngine()))
-                        .numOfPTS(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getNumOfPts()))
-                        .yearOfManufactureAuto(fileImporter
-                                .getInteger(excelColumnNum.getPledgeSubjectUpdate().getAuto().getYearOfManufacture()))
-                        .inventoryNumAuto(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getInventoryNum()))
-                        .typeOfAuto(TypeOfAuto.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getTypeOfAuto())))
-                        .horsepower(fileImporter
-                                .getDouble(excelColumnNum.getPledgeSubjectUpdate().getAuto().getHorsepower()))
-                        .build();
+            if(Objects.nonNull(pledgeSubject.get().getPledgeSubjectAuto())){
 
-                pledgeSubject.get().setPledgeSubjectAuto(pledgeSubjectAuto);
+                TypeOfAuto typeOfAuto;
+                try {
+                    typeOfAuto = TypeOfAuto.valueOf(fileImporter.getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getTypeOfAuto()));
+                }catch (IllegalArgumentException ex){
+                    typeOfAuto = null;
+                }
 
-            }else if(pledgeSubject.get().getTypeOfCollateral() == TypeOfCollateral.EQUIPMENT){
-                PledgeSubjectEquipment pledgeSubjectEquipment = PledgeSubjectEquipment.builder()
-                        .brandEquip(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getBrand()))
-                        .modelEquip(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getModel()))
-                        .serialNum(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getSerialNumber()))
-                        .yearOfManufactureEquip(fileImporter
-                                .getInteger(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getYearOfManufacture()))
-                        .inventoryNumEquip(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getInventoryNum()))
-                        .typeOfEquipment(TypeOfEquip.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getTypeOfEquipment())))
-                        .productivity(fileImporter
-                                .getDouble(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getProductivity()))
-                        .typeOfProductivity(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getTypeOfProductivity()))
-                        .build();
+                pledgeSubject.get().getPledgeSubjectAuto().setBrandAuto(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getBrand()));
+                pledgeSubject.get().getPledgeSubjectAuto().setModelAuto(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getModel()));
+                pledgeSubject.get().getPledgeSubjectAuto().setVin(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getVin()));
+                pledgeSubject.get().getPledgeSubjectAuto().setNumOfEngine(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getNumOfEngine()));
+                pledgeSubject.get().getPledgeSubjectAuto().setNumOfPTS(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getNumOfPts()));
+                pledgeSubject.get().getPledgeSubjectAuto().setYearOfManufactureAuto(fileImporter
+                        .getInteger(excelColumnNum.getPledgeSubjectUpdate().getAuto().getYearOfManufacture()));
+                pledgeSubject.get().getPledgeSubjectAuto().setInventoryNumAuto(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getAuto().getInventoryNum()));
+                pledgeSubject.get().getPledgeSubjectAuto().setTypeOfAuto(typeOfAuto);
+                pledgeSubject.get().getPledgeSubjectAuto().setHorsepower(fileImporter
+                        .getDouble(excelColumnNum.getPledgeSubjectUpdate().getAuto().getHorsepower()));
 
-                pledgeSubject.get().setPledgeSubjectEquipment(pledgeSubjectEquipment);
+            }else if(Objects.nonNull(pledgeSubject.get().getPledgeSubjectEquipment())){
 
-            }else if(pledgeSubject.get().getTypeOfCollateral() == TypeOfCollateral.BUILDING){
-                PledgeSubjectBuilding pledgeSubjectBuilding = PledgeSubjectBuilding.builder()
-                        .area(fileImporter
-                                .getDouble(excelColumnNum.getPledgeSubjectUpdate().getBuilding().getArea()))
-                        .cadastralNum(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getBuilding().getCadastralNum()))
-                        .conditionalNum(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getBuilding().getConditionalNum()))
-                        .readinessDegree(fileImporter
-                                .getInteger(excelColumnNum.getPledgeSubjectUpdate().getBuilding().getReadinessDegree()))
-                        .yearOfConstruction(fileImporter
-                                .getInteger(excelColumnNum.getPledgeSubjectUpdate().getBuilding().getYearOfConstruction()))
-                        .marketSegment(MarketSegment.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getBuilding().getMarketSegment())))
-                        .build();
+                TypeOfEquip typeOfEquip;
+                try {
+                    typeOfEquip = TypeOfEquip.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getTypeOfEquipment()));
+                }catch (IllegalArgumentException ex){
+                    typeOfEquip = null;
+                }
 
-                pledgeSubject.get().setPledgeSubjectBuilding(pledgeSubjectBuilding);
+                pledgeSubject.get().getPledgeSubjectEquipment().setBrandEquip(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getBrand()));
+                pledgeSubject.get().getPledgeSubjectEquipment().setModelEquip(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getModel()));
+                pledgeSubject.get().getPledgeSubjectEquipment().setSerialNum(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getSerialNumber()));
+                pledgeSubject.get().getPledgeSubjectEquipment().setYearOfManufactureEquip(fileImporter
+                        .getInteger(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getYearOfManufacture()));
+                pledgeSubject.get().getPledgeSubjectEquipment().setInventoryNumEquip(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getInventoryNum()));
+                pledgeSubject.get().getPledgeSubjectEquipment().setTypeOfEquipment(typeOfEquip);
+                pledgeSubject.get().getPledgeSubjectEquipment().setProductivity(fileImporter
+                        .getDouble(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getProductivity()));
+                pledgeSubject.get().getPledgeSubjectEquipment().setTypeOfProductivity(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getEquipment().getTypeOfProductivity()));
 
-            }else if(pledgeSubject.get().getTypeOfCollateral() == TypeOfCollateral.LAND_LEASE){
+            }else if(Objects.nonNull(pledgeSubject.get().getPledgeSubjectBuilding())){
 
-                PledgeSubjectLandLease pledgeSubjectLandLease = PledgeSubjectLandLease.builder()
-                        .area(fileImporter
-                                .getDouble(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getArea()))
-                        .cadastralNum(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getCadastralNum()))
-                        .conditionalNum(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getConditionalNum()))
-                        .permittedUse(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getPermittedUse()))
-                        .builtUp(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getBuiltUp()))
-                        .cadastralNumOfBuilding(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getCadastralNumOfBuilding()))
-                        .dateBeginLease(fileImporter
-                                .getLocalDate(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getDateBegin()))
-                        .dateEndLease(fileImporter
-                                .getLocalDate(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getDateEnd()))
-                        .landCategory(LandCategory.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getLandCategory())))
-                        .build();
+                MarketSegment marketSegment;
+                try {
+                    marketSegment = MarketSegment.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectUpdate().getBuilding().getMarketSegment()));
+                }catch (IllegalArgumentException ex){
+                    marketSegment = null;
+                }
 
-                pledgeSubject.get().setPledgeSubjectLandLease(pledgeSubjectLandLease);
+                pledgeSubject.get().getPledgeSubjectBuilding().setArea(fileImporter
+                        .getDouble(excelColumnNum.getPledgeSubjectUpdate().getBuilding().getArea()));
+                pledgeSubject.get().getPledgeSubjectBuilding().setCadastralNum(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getBuilding().getCadastralNum()));
+                pledgeSubject.get().getPledgeSubjectBuilding().setConditionalNum(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getBuilding().getConditionalNum()));
+                pledgeSubject.get().getPledgeSubjectBuilding().setReadinessDegree(fileImporter
+                        .getInteger(excelColumnNum.getPledgeSubjectUpdate().getBuilding().getReadinessDegree()));
+                pledgeSubject.get().getPledgeSubjectBuilding().setYearOfConstruction(fileImporter
+                        .getInteger(excelColumnNum.getPledgeSubjectUpdate().getBuilding().getYearOfConstruction()));
+                pledgeSubject.get().getPledgeSubjectBuilding().setMarketSegment(marketSegment);
 
-            }else if(pledgeSubject.get().getTypeOfCollateral() == TypeOfCollateral.LAND_OWNERSHIP){
+            }else if(Objects.nonNull(pledgeSubject.get().getPledgeSubjectLandLease())){
 
-                PledgeSubjectLandOwnership pledgeSubjectLandOwnership = PledgeSubjectLandOwnership.builder()
-                        .area(fileImporter
-                                .getDouble(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getArea()))
-                        .cadastralNum(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getCadastralNum()))
-                        .conditionalNum(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getConditionalNum()))
-                        .permittedUse(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getPermittedUse()))
-                        .builtUp(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getBuiltUp()))
-                        .cadastralNumOfBuilding(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getCadastralNumOfBuilding()))
-                        .landCategory(LandCategory.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getLandCategory())))
-                        .build();
+                LandCategory landCategory;
+                try {
+                    landCategory = LandCategory.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getLandCategory()));
+                }catch (IllegalArgumentException ex){
+                    landCategory = null;
+                }
 
-                pledgeSubject.get().setPledgeSubjectLandOwnership(pledgeSubjectLandOwnership);
+                pledgeSubject.get().getPledgeSubjectLandLease().setArea(fileImporter
+                        .getDouble(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getArea()));
+                pledgeSubject.get().getPledgeSubjectLandLease().setCadastralNum(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getCadastralNum()));
+                pledgeSubject.get().getPledgeSubjectLandLease().setConditionalNum(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getConditionalNum()));
+                pledgeSubject.get().getPledgeSubjectLandLease().setPermittedUse(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getPermittedUse()));
+                pledgeSubject.get().getPledgeSubjectLandLease().setBuiltUp(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getBuiltUp()));
+                pledgeSubject.get().getPledgeSubjectLandLease().setCadastralNumOfBuilding(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getCadastralNumOfBuilding()));
+                pledgeSubject.get().getPledgeSubjectLandLease().setDateBeginLease(fileImporter
+                        .getLocalDate(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getDateBegin()));
+                pledgeSubject.get().getPledgeSubjectLandLease().setDateEndLease(fileImporter
+                        .getLocalDate(excelColumnNum.getPledgeSubjectUpdate().getLandLease().getDateEnd()));
+                pledgeSubject.get().getPledgeSubjectLandLease().setLandCategory(landCategory);
 
-            }else if(pledgeSubject.get().getTypeOfCollateral() == TypeOfCollateral.PREMISE){
+            }else if(Objects.nonNull(pledgeSubject.get().getPledgeSubjectLandOwnership())){
 
-                PledgeSubjectRoom pledgeSubjectRoom = PledgeSubjectRoom.builder()
-                        .area(fileImporter
-                                .getDouble(excelColumnNum.getPledgeSubjectUpdate().getPremise().getArea()))
-                        .cadastralNum(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getPremise().getCadastralNum()))
-                        .conditionalNum(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getPremise().getConditionalNum()))
-                        .floorLocation(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getPremise().getFloorLocation()))
-                        .marketSegmentRoom(MarketSegment.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getPremise().getMarketSegmentRoom())))
-                        .marketSegmentBuilding(MarketSegment.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getPremise().getMarketSegmentBuilding())))
-                        .build();
+                LandCategory landCategory;
+                try {
+                    landCategory = LandCategory.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getLandCategory()));
+                }catch (IllegalArgumentException ex){
+                    landCategory = null;
+                }
 
-                pledgeSubject.get().setPledgeSubjectRoom(pledgeSubjectRoom);
+                pledgeSubject.get().getPledgeSubjectLandOwnership().setArea(fileImporter
+                        .getDouble(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getArea()));
+                pledgeSubject.get().getPledgeSubjectLandOwnership().setCadastralNum(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getCadastralNum()));
+                pledgeSubject.get().getPledgeSubjectLandOwnership().setConditionalNum(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getConditionalNum()));
+                pledgeSubject.get().getPledgeSubjectLandOwnership().setPermittedUse(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getPermittedUse()));
+                pledgeSubject.get().getPledgeSubjectLandOwnership().setBuiltUp(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getBuiltUp()));
+                pledgeSubject.get().getPledgeSubjectLandOwnership().setCadastralNumOfBuilding(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getLandOwnership().getCadastralNumOfBuilding()));
+                pledgeSubject.get().getPledgeSubjectLandOwnership().setLandCategory(landCategory);
 
-            }else if(pledgeSubject.get().getTypeOfCollateral() == TypeOfCollateral.SECURITIES){
+            }else if(Objects.nonNull(pledgeSubject.get().getPledgeSubjectRoom())){
 
-                PledgeSubjectSecurities pledgeSubjectSecurities = PledgeSubjectSecurities.builder()
-                        .nominalValue(fileImporter
-                                .getDouble(excelColumnNum.getPledgeSubjectUpdate().getSecurities().getNominalValue()))
-                        .actualValue(fileImporter
-                                .getDouble(excelColumnNum.getPledgeSubjectUpdate().getSecurities().getActualValue()))
-                        .typeOfSecurities(TypeOfSecurities.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getSecurities().getTypeOfSecurities())))
-                        .build();
+                MarketSegment marketSegmentRoom;
+                try {
+                    marketSegmentRoom = MarketSegment.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectUpdate().getPremise().getMarketSegmentRoom()));
+                }catch (IllegalArgumentException ex){
+                    marketSegmentRoom = null;
+                }
 
-                pledgeSubject.get().setPledgeSubjectSecurities(pledgeSubjectSecurities);
+                MarketSegment marketSegmentBuilding;
+                try {
+                    marketSegmentBuilding = MarketSegment.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectUpdate().getPremise().getMarketSegmentBuilding()));
+                }catch (IllegalArgumentException ex){
+                    marketSegmentBuilding = null;
+                }
 
-            }else if(pledgeSubject.get().getTypeOfCollateral() == TypeOfCollateral.TBO){
+                pledgeSubject.get().getPledgeSubjectRoom().setArea(fileImporter
+                        .getDouble(excelColumnNum.getPledgeSubjectUpdate().getPremise().getArea()));
+                pledgeSubject.get().getPledgeSubjectRoom().setCadastralNum(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getPremise().getCadastralNum()));
+                pledgeSubject.get().getPledgeSubjectRoom().setConditionalNum(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getPremise().getConditionalNum()));
+                pledgeSubject.get().getPledgeSubjectRoom().setFloorLocation(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getPremise().getFloorLocation()));
+                pledgeSubject.get().getPledgeSubjectRoom().setMarketSegmentRoom(marketSegmentRoom);
+                pledgeSubject.get().getPledgeSubjectRoom().setMarketSegmentBuilding(marketSegmentBuilding);
 
-                PledgeSubjectTBO pledgeSubjectTBO = PledgeSubjectTBO.builder()
-                        .countOfTBO(fileImporter
-                                .getInteger(excelColumnNum.getPledgeSubjectUpdate().getTbo().getCount()))
-                        .carryingAmount(fileImporter
-                                .getDouble(excelColumnNum.getPledgeSubjectUpdate().getTbo().getCarryingAmount()))
-                        .typeOfTBO(TypeOfTBO.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getTbo().getTypeOfTbo())))
-                        .build();
+            }else if(Objects.nonNull(pledgeSubject.get().getPledgeSubjectSecurities())){
 
-                pledgeSubject.get().setPledgeSubjectTBO(pledgeSubjectTBO);
+                TypeOfSecurities typeOfSecurities;
+                try {
+                    typeOfSecurities = TypeOfSecurities.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectUpdate().getSecurities().getTypeOfSecurities()));
+                }catch (IllegalArgumentException ex){
+                    typeOfSecurities = null;
+                }
 
-            }else if(pledgeSubject.get().getTypeOfCollateral() == TypeOfCollateral.VESSEL){
+                pledgeSubject.get().getPledgeSubjectSecurities().setNominalValue(fileImporter
+                        .getDouble(excelColumnNum.getPledgeSubjectUpdate().getSecurities().getNominalValue()));
+                pledgeSubject.get().getPledgeSubjectSecurities().setActualValue(fileImporter
+                        .getDouble(excelColumnNum.getPledgeSubjectUpdate().getSecurities().getActualValue()));
+                pledgeSubject.get().getPledgeSubjectSecurities().setTypeOfSecurities(typeOfSecurities);
 
-                PledgeSubjectVessel pledgeSubjectVessel = PledgeSubjectVessel.builder()
-                        .imo(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getVessel().getImo()))
-                        .mmsi(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getVessel().getMmsi()))
-                        .flag(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getVessel().getFlag()))
-                        .vesselType(TypeOfVessel.valueOf(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getVessel().getVesselType())))
-                        .grossTonnage(fileImporter
-                                .getInteger(excelColumnNum.getPledgeSubjectUpdate().getVessel().getGrossTonnage()))
-                        .deadweight(fileImporter
-                                .getInteger(excelColumnNum.getPledgeSubjectUpdate().getVessel().getDeadweight()))
-                        .yearBuilt(fileImporter
-                                .getInteger(excelColumnNum.getPledgeSubjectUpdate().getVessel().getYearOfBuilt()))
-                        .statusVessel(fileImporter
-                                .getString(excelColumnNum.getPledgeSubjectUpdate().getVessel().getStatus()))
-                        .build();
+            }else if(Objects.nonNull(pledgeSubject.get().getPledgeSubjectTBO())){
 
-                pledgeSubject.get().setPledgeSubjectVessel(pledgeSubjectVessel);
+                TypeOfTBO typeOfTBO;
+                try {
+                    typeOfTBO = TypeOfTBO.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectUpdate().getTbo().getTypeOfTbo()));
+                }catch (IllegalArgumentException ex){
+                    typeOfTBO = null;
+                }
+
+                pledgeSubject.get().getPledgeSubjectTBO().setCountOfTBO(fileImporter
+                        .getInteger(excelColumnNum.getPledgeSubjectUpdate().getTbo().getCount()));
+                pledgeSubject.get().getPledgeSubjectTBO().setCarryingAmount(fileImporter
+                        .getDouble(excelColumnNum.getPledgeSubjectUpdate().getTbo().getCarryingAmount()));
+                pledgeSubject.get().getPledgeSubjectTBO().setTypeOfTBO(typeOfTBO);
+
+            }else if(Objects.nonNull(pledgeSubject.get().getPledgeSubjectVessel())){
+
+                TypeOfVessel typeOfVessel;
+                try {
+                    typeOfVessel = TypeOfVessel.valueOf(fileImporter
+                            .getString(excelColumnNum.getPledgeSubjectUpdate().getVessel().getVesselType()));
+                }catch (IllegalArgumentException ex){
+                    typeOfVessel = null;
+                }
+
+                String imo = "";
+                if(Objects.nonNull(fileImporter.getInteger(excelColumnNum.getPledgeSubjectUpdate().getVessel().getImo()))){
+                    imo = fileImporter.getInteger(excelColumnNum.getPledgeSubjectUpdate().getVessel().getImo()).toString();
+                }
+
+                String mmsi = "";
+                if(Objects.nonNull(fileImporter.getInteger(excelColumnNum.getPledgeSubjectUpdate().getVessel().getMmsi()))){
+                    mmsi = fileImporter.getInteger(excelColumnNum.getPledgeSubjectUpdate().getVessel().getMmsi()).toString();
+                }
+
+                pledgeSubject.get().getPledgeSubjectVessel().setImo(imo);
+                pledgeSubject.get().getPledgeSubjectVessel().setMmsi(mmsi);
+                pledgeSubject.get().getPledgeSubjectVessel().setFlag(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getVessel().getFlag()));
+                pledgeSubject.get().getPledgeSubjectVessel().setVesselType(typeOfVessel);
+                pledgeSubject.get().getPledgeSubjectVessel().setGrossTonnage(fileImporter
+                        .getInteger(excelColumnNum.getPledgeSubjectUpdate().getVessel().getGrossTonnage()));
+                pledgeSubject.get().getPledgeSubjectVessel().setDeadweight(fileImporter
+                        .getInteger(excelColumnNum.getPledgeSubjectUpdate().getVessel().getDeadweight()));
+                pledgeSubject.get().getPledgeSubjectVessel().setYearBuilt(fileImporter
+                        .getInteger(excelColumnNum.getPledgeSubjectUpdate().getVessel().getYearOfBuilt()));
+                pledgeSubject.get().getPledgeSubjectVessel().setStatusVessel(fileImporter
+                        .getString(excelColumnNum.getPledgeSubjectUpdate().getVessel().getStatus()));
             }
-
-            Set<ConstraintViolation<PledgeSubject>> violationsPledgeSubject = validatorEntity.validateEntity(pledgeSubject.get());
-            if(!violationsPledgeSubject.isEmpty())
-                throw new IOException("В строке:" + countRow + ". " + validatorEntity.getErrorMessage());
 
             pledgeSubjectList.add(pledgeSubject.get());
 

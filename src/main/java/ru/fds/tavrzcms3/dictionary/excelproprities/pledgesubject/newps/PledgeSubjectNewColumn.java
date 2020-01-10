@@ -65,11 +65,11 @@ public final class PledgeSubjectNewColumn {
     @Value("${excel_table.import.pledge_subject_new.zs_dz}")
     int zsDz;
     @Value("${excel_table.import.pledge_subject_new.zs_zz}")
-    int zsZZ;
+    int zsZz;
     @Value("${excel_table.import.pledge_subject_new.rs_dz}")
     int rsDz;
     @Value("${excel_table.import.pledge_subject_new.rs_zz}")
-    int rsZZ;
+    int rsZz;
     @Value("${excel_table.import.pledge_subject_new.ss}")
     int ss;
     @Value("${excel_table.import.pledge_subject_new.appraiser}")

@@ -32,6 +32,7 @@ public class PledgeSubjectEquipment{
 	@Column(name ="inventory_number_equip", table = "pledge_equipment")
 	private String inventoryNumEquip;
 
+	@NotNull
 	@Convert(converter = TypeOfEquip.Converter.class)
 	@Column(name ="type_of_equipment", table = "pledge_equipment")
 	private TypeOfEquip typeOfEquipment;

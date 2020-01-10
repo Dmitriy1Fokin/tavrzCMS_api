@@ -38,6 +38,7 @@ public class PledgeSubjectVessel{
 	@Column(name ="flag", table = "pledge_vessel")
 	private String flag;
 
+	@NotNull
 	@Convert(converter = TypeOfVessel.Converter.class)
 	@Column(name ="vessel_type", table = "pledge_vessel")
 	private TypeOfVessel vesselType;

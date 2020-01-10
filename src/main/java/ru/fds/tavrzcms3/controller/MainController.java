@@ -328,7 +328,7 @@ public class MainController {
                     model.addAttribute("encumbranceDtoList", encumbranceDtoList);
 
                 }else if(whatUpload.get().equals("costHistory")){
-                    List<CostHistory> costHistoryList = costHistoryService.getNewCostHistorysFromFile(uploadFile);
+                    List<CostHistory> costHistoryList = costHistoryService.getNewCostHistoriesFromFile(uploadFile);
                     costHistoryList = costHistoryService.insertCostHistories(costHistoryList);
                     List<CostHistoryDto> costHistoryDtoList = dtoFactory.getCostHistoriesDto(costHistoryList);
 

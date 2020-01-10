@@ -28,16 +28,13 @@ public class InsuranceService {
     private final RepositoryInsurance repositoryInsurance;
     private final RepositoryPledgeSubject repositoryPledgeSubject;
 
-    private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
 
     public InsuranceService(RepositoryInsurance repositoryInsurance,
                             RepositoryPledgeSubject repositoryPledgeSubject,
-                            ValidatorEntity validatorEntity,
                             ExcelColumnNum excelColumnNum) {
         this.repositoryInsurance = repositoryInsurance;
         this.repositoryPledgeSubject = repositoryPledgeSubject;
-        this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
     }
 
@@ -89,10 +86,6 @@ public class InsuranceService {
                 .franchiseAmount(fileImporter.getBigDecimal(excelColumnNum.getInsuranceNew().getFranchiseAmount()))
                 .pledgeSubject(pledgeSubject.get())
                 .build();
-
-            Set<ConstraintViolation<Insurance>> violations = validatorEntity.validateEntity(insurance);
-            if(!violations.isEmpty())
-                throw new IOException("В строке:" + countRow + ". " + validatorEntity.getErrorMessage());
 
             insuranceList.add(insurance);
 
@@ -147,10 +140,6 @@ public class InsuranceService {
             insurance.get().setPaymentOfInsurancePremium(fileImporter.getString(excelColumnNum.getInsuranceUpdate().getPaymentOfInsurancePremium()));
             insurance.get().setFranchiseAmount(fileImporter.getBigDecimal(excelColumnNum.getInsuranceUpdate().getFranchiseAmount()));
             insurance.get().setPledgeSubject(pledgeSubject.get());
-
-            Set<ConstraintViolation<Insurance>> violations = validatorEntity.validateEntity(insurance.get());
-            if(!violations.isEmpty())
-                throw new IOException("В строке:" + countRow + ". " + validatorEntity.getErrorMessage());
 
             insuranceList.add(insurance.get());
 

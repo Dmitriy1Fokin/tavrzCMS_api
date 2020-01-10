@@ -10,9 +10,7 @@ import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryCostHistory;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
-import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
-import javax.validation.ConstraintViolation;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +18,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class CostHistoryService {
@@ -28,16 +25,13 @@ public class CostHistoryService {
     private final RepositoryCostHistory repositoryCostHistory;
     private final RepositoryPledgeSubject repositoryPledgeSubject;
 
-    private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
 
     public CostHistoryService(RepositoryCostHistory repositoryCostHistory,
                               RepositoryPledgeSubject repositoryPledgeSubject,
-                              ValidatorEntity validatorEntity,
                               ExcelColumnNum excelColumnNum) {
         this.repositoryCostHistory = repositoryCostHistory;
         this.repositoryPledgeSubject = repositoryPledgeSubject;
-        this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
     }
 
@@ -54,7 +48,7 @@ public class CostHistoryService {
         return repositoryCostHistory.findAllByCostHistoryIdIn(ids);
     }
 
-    public List<CostHistory> getNewCostHistorysFromFile(File file) throws IOException{
+    public List<CostHistory> getNewCostHistoriesFromFile(File file) throws IOException{
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
             fileImporter.nextLine();
@@ -70,7 +64,6 @@ public class CostHistoryService {
                 throw new IOException("Неверный id{"
                         + fileImporter.getLong(excelColumnNum.getCostHistoryNew().getPledgeSubjectId()) + ") предмета залога.");
             }
-
             Optional<PledgeSubject> pledgeSubject = repositoryPledgeSubject
                     .findById(fileImporter.getLong(excelColumnNum.getCostHistoryNew().getPledgeSubjectId()));
             if(!pledgeSubject.isPresent()){
@@ -92,10 +85,6 @@ public class CostHistoryService {
                     .pledgeSubject(pledgeSubject.get())
                     .build();
 
-            Set<ConstraintViolation<CostHistory>> violations = validatorEntity.validateEntity(costHistory);
-            if(!violations.isEmpty())
-                throw new IOException("В строке:" + countRow + ". " + validatorEntity.getErrorMessage());
-
             costHistoryList.add(costHistory);
 
         }while (fileImporter.nextLine());
@@ -103,7 +92,7 @@ public class CostHistoryService {
         return costHistoryList;
     }
 
-    public List<CostHistory> getCurrentCostHistorysFromFile(File file) throws IOException{
+    public List<CostHistory> getCurrentCostHistoriesFromFile(File file) throws IOException{
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
             fileImporter.nextLine();
@@ -151,12 +140,6 @@ public class CostHistoryService {
             costHistory.get().setAppraisalReportNum(fileImporter.getString(excelColumnNum.getCostHistoryUpdate().getNumAppraisalReport()));
             costHistory.get().setAppraisalReportDate(fileImporter.getLocalDate(excelColumnNum.getCostHistoryUpdate().getDateAppraisalReport()));
             costHistory.get().setPledgeSubject(pledgeSubject.get());
-
-
-
-            Set<ConstraintViolation<CostHistory>> violations = validatorEntity.validateEntity(costHistory.get());
-            if(!violations.isEmpty())
-                throw new IOException("В строке:" + countRow + ". " + validatorEntity.getErrorMessage());
 
             costHistoryList.add(costHistory.get());
 

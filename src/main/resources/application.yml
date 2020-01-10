@@ -77,13 +77,13 @@ excel_table:
       quality: 10
     pledge_agreement_new:
       num_pa: 0
-      date_begin: 2
-      date_end: 3
-      perv_posl: 4
-      status: 5
-      client_id: 6
-      la_id: 7
-      notice: 8
+      date_begin: 1
+      date_end: 2
+      perv_posl: 3
+      status: 4
+      client_id: 5
+      la_id: 6
+      notice: 7
     pledge_agreement_update:
       pa_id: 0
       num_pa: 1

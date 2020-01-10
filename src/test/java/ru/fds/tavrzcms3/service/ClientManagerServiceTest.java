@@ -27,7 +27,7 @@ public class ClientManagerServiceTest {
     ValidatorEntity validatorEntity;
 
     @Test
-    public void getNewClientMAnagersFromFile() {
+    public void getNewClientManagersFromFile() {
         try {
             List<ClientManager> clientManagerList = clientManagerService.getNewClientManagersFromFile(new File("src\\test\\java\\ru\\fds\\tavrzcms3\\testdata\\client_manager_new.xlsx"));
             clientManagerList.stream().forEach(x -> System.out.println(x));
@@ -50,7 +50,32 @@ public class ClientManagerServiceTest {
         }
     }
 
+    @Test(expected = IOException.class)
+    public void getCurrentClientManagersFromFileIOException() throws IOException {
+            List<ClientManager> clientManagerList = clientManagerService.getCurrentClientManagersFromFile(new File("src\\test\\java\\ru\\fds\\tavrzcms3\\testdata\\client_manager_update_ioe.xlsx"));
+    }
+
     @Test
-    public void getCurrentClientMAnagersFromFile() {
+    public void getCurrentClientManagersFromFile() {
+        try {
+            List<ClientManager> clientManagerList = clientManagerService.getCurrentClientManagersFromFile(new File("src\\test\\java\\ru\\fds\\tavrzcms3\\testdata\\client_manager_update.xlsx"));
+            clientManagerList.stream().forEach(x -> System.out.println(x));
+
+            List<ClientManager> clientManagerListValid = new ArrayList<>();
+            clientManagerList.stream().forEach(x->{
+                Set<ConstraintViolation<ClientManager>> violations = validatorEntity.validateEntity(x);
+                if(violations.isEmpty())
+                    clientManagerListValid.add(x);
+                else
+                    System.out.println(validatorEntity.getErrorMessage());
+            });
+
+
+            assertEquals(7, clientManagerList.size());
+            assertEquals(2, clientManagerListValid.size());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

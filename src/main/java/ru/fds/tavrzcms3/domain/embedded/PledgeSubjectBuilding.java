@@ -38,6 +38,7 @@ public class PledgeSubjectBuilding{
 	@Column(name ="year_of_construction", table = "pledge_realty_building")
 	private int yearOfConstruction;
 
+	@NotNull
 	@Convert(converter = MarketSegment.Converter.class)
     @Column(name = "market_segment", table = "pledge_realty_building")
 	private MarketSegment marketSegment;

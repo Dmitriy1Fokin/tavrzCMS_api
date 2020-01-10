@@ -40,6 +40,7 @@ public class PledgeSubjectAuto{
 	@Column(name ="inventory_number_auto")
 	private String inventoryNumAuto;
 
+	@NotNull
 	@Convert(converter = TypeOfAuto.Converter.class)
 	@Column(name ="type_of_auto", table = "pledge_auto")
 	private TypeOfAuto typeOfAuto;

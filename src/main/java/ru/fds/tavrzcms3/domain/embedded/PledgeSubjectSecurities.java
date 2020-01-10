@@ -25,6 +25,7 @@ public class PledgeSubjectSecurities{
 	@Column(name ="actual_value", table = "pledge_securities")
 	private double actualValue;
 
+	@NotNull
 	@Convert(converter = TypeOfSecurities.Converter.class)
 	@Column(name ="type_of_securities", table = "pledge_securities")
 	private TypeOfSecurities typeOfSecurities;

@@ -78,7 +78,6 @@ public class ExcelImporter implements FileImporter{
                 return (int)row.getCell(positionInLine).getNumericCellValue();
             }
         }catch (Exception ex){
-            log.info(ex);
             return null;
         }
 
@@ -92,7 +91,6 @@ public class ExcelImporter implements FileImporter{
                 return (long)row.getCell(positionInLine).getNumericCellValue();
             }
         }catch (Exception ex){
-            log.info(ex);
             return null;
         }
         return null;
@@ -105,7 +103,6 @@ public class ExcelImporter implements FileImporter{
                 return row.getCell(positionInLine).getNumericCellValue();
             }
         }catch (Exception ex){
-            log.info(ex);
             return null;
         }
         return null;
@@ -118,7 +115,6 @@ public class ExcelImporter implements FileImporter{
                 return BigDecimal.valueOf(row.getCell(positionInLine).getNumericCellValue());
             }
         }catch (Exception ex){
-            log.info(ex);
             return null;
         }
         return null;
@@ -137,7 +133,6 @@ public class ExcelImporter implements FileImporter{
                 return longList;
 
         }catch (Exception ex){
-            log.info(ex);
             return Collections.emptyList();
         }
     }
@@ -149,7 +144,6 @@ public class ExcelImporter implements FileImporter{
                 return row.getCell(positionInLine).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             }
         }catch (Exception ex){
-            log.info(ex);
             return null;
         }
         return null;

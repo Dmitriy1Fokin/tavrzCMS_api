@@ -41,10 +41,12 @@ public class PledgeAgreement {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dateEndPA;
 
+	@NotNull
 	@Convert(converter = TypeOfPledgeAgreement.Converter.class)
 	@Column(name ="perv_posl")
 	private TypeOfPledgeAgreement pervPosl;
 
+	@NotNull
 	@Convert(converter = StatusOfAgreement.Converter.class)
 	@Column(name ="status")
 	private StatusOfAgreement statusPA;

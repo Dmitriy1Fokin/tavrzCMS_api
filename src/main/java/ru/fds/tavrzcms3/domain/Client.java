@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
@@ -27,6 +28,7 @@ public class Client {
 	@Column(name ="client_id")
 	private Long clientId;
 
+	@NotNull
 	@Convert(converter = TypeOfClient.Converter.class)
 	@Column(name = "type_of_client")
 	private TypeOfClient typeOfClient;

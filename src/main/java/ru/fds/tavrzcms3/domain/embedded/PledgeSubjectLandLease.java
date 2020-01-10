@@ -55,6 +55,7 @@ public class PledgeSubjectLandLease{
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dateEndLease;
 
+	@NotNull
 	@Convert(converter = LandCategory.Converter.class)
     @Column(name ="land_category_land_lease", table = "pledge_realty_land_lease")
 	private LandCategory landCategory;

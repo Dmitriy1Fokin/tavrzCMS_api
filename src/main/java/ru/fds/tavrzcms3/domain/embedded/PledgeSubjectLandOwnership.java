@@ -42,6 +42,7 @@ public class PledgeSubjectLandOwnership {
 	@Column(name ="cadastral_num_of_building_land_own", table = "pledge_realty_land_ownership")
 	private String cadastralNumOfBuilding;
 
+    @NotNull
     @Convert(converter = LandCategory.Converter.class)
     @Column(name ="land_category_land_own", table = "pledge_realty_land_ownership")
 	private LandCategory landCategory;

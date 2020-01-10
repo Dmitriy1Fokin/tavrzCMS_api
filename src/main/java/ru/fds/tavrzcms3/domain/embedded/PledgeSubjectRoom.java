@@ -33,10 +33,12 @@ public class PledgeSubjectRoom{
 	@Column(name ="floor_location", table = "pledge_realty_room")
 	private String floorLocation;
 
+    @NotNull
 	@Convert(converter = MarketSegment.Converter.class)
     @Column(name ="market_segment_room", table = "pledge_realty_room")
 	private MarketSegment marketSegmentRoom;
 
+    @NotNull
 	@Convert(converter = MarketSegment.Converter.class)
     @Column(name ="market_segment_building", table = "pledge_realty_room")
 	private MarketSegment marketSegmentBuilding;

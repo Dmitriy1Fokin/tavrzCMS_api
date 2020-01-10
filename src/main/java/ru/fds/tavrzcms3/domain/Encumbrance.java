@@ -29,6 +29,7 @@ public class Encumbrance {
     @Column(name ="name")
     private String nameEncumbrance;
 
+    @NotNull
     @Convert(converter = TypeOfEncumbrance.Converter.class)
     @Column(name ="type_of_encumbrance")
     private TypeOfEncumbrance typeOfEncumbrance;
