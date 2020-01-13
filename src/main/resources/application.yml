@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/tavrzdb
-    username: dmitriy
-    password: nelson35
+    username: postgres
+    password: postgres
   jpa:
     properties:
       hibernate:
