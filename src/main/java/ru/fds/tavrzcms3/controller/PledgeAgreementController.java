@@ -64,14 +64,29 @@ public class PledgeAgreementController {
         this.validatorEntity = validatorEntity;
     }
 
-    @GetMapping("/current_pledge_agreement_for_client")
+    @GetMapping("/current_pa_for_client")
     public List<PledgeAgreementDto> getCurrentPledgeAgreementsByClient(@RequestParam("clientId") Long clientId){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getCurrentPledgeAgreementsByPledgor(clientId));
     }
 
-    @GetMapping("/closed_pledge_agreement_for_client")
+    @GetMapping("/closed_pa_for_client")
     public List<PledgeAgreementDto> getClosedPledgeAgreementsByClient(@RequestParam("clientId") Long clientId){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getClosedPledgeAgreementsByPledgor(clientId));
+    }
+
+    @GetMapping("/with_conclusion_not_done")
+    public List<PledgeAgreementDto> getPledgeAgreementsWithConclusionNotDone(@RequestParam("employeeId") Long employeeId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithConclusionNotDone(employeeId));
+    }
+
+    @GetMapping("/with_conclusion_is_done")
+    public List<PledgeAgreementDto> getPledgeAgreementListWithConclusionIsDone(@RequestParam("employeeId") Long employeeId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithConclusionIsDone(employeeId));
+    }
+
+    @GetMapping("/with_conclusion_overdue")
+    public List<PledgeAgreementDto> getPledgeAgreementListWithConclusionOverdue(@RequestParam("employeeId") Long employeeId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithConclusionOverdue(employeeId));
     }
 
 

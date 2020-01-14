@@ -205,27 +205,27 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.countOfConclusionsLessDate(employee.getEmployeeId(), firstDate);
     }
 
-    public List<PledgeAgreement> getPledgeAgreementWithConclusionNotDone(Employee employee){
+    public List<PledgeAgreement> getPledgeAgreementWithConclusionNotDone(Long employeeId){
         LocalDate now = LocalDate.now();
         LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonthValue(), 1);
         LocalDate secondDate = firstDate.plusMonths(1);
 
-        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsBetweenDates(employee.getEmployeeId(), firstDate, secondDate);
+        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsBetweenDates(employeeId, firstDate, secondDate);
     }
 
-    public List<PledgeAgreement> getPledgeAgreementWithConclusionIsDone(Employee employee){
+    public List<PledgeAgreement> getPledgeAgreementWithConclusionIsDone(Long employeeId){
         LocalDate now = LocalDate.now();
         LocalDate firstDate = LocalDate.of(now.getYear(), now.getMonth(), 1);
         LocalDate secondDate = firstDate.plusMonths(1);
 
-        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsBetweenDates(employee.getEmployeeId(), firstDate, secondDate);
+        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsBetweenDates(employeeId, firstDate, secondDate);
     }
 
-    public List<PledgeAgreement> getPledgeAgreementWithConclusionOverDue(Employee employee){
+    public List<PledgeAgreement> getPledgeAgreementWithConclusionOverdue(Long employeeId){
         LocalDate now = LocalDate.now();
         LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonth(), 1);
 
-        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsLessDate(employee.getEmployeeId(), firstDate);
+        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsLessDate(employeeId, firstDate);
     }
 
     public List<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException{

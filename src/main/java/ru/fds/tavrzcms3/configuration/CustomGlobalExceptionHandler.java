@@ -5,9 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,4 +38,21 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
         return new ResponseEntity<>(body, headers, status);
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<Object> handleBadValidation(ConstraintViolationException ex) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Ошибка валидации: ");
+        ex.getConstraintViolations().forEach(c ->
+                stringBuilder.append(c.getMessage())
+                        .append("(")
+                        .append(c.getInvalidValue())
+                        .append(") в поле: \"")
+                        .append(c.getPropertyPath())
+                        .append("\". "));
+
+        return new ResponseEntity<>(stringBuilder.toString(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
 }

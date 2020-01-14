@@ -196,7 +196,7 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
             pledgeAgreementsIds.add(pa.getPledgeAgreementId());
 
         List<Long> costHistoriesIds = new ArrayList<>();
-        for (CostHistory ch : costHistoryService.getCostHistoryPledgeSubject(entity))
+        for (CostHistory ch : costHistoryService.getCostHistoryPledgeSubject(entity.getPledgeSubjectId()))
             costHistoriesIds.add(ch.getCostHistoryId());
 
         List<Long> monitoringIds = new ArrayList<>();

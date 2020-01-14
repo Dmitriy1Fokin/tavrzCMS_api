@@ -32,11 +32,13 @@ public class Client {
 	@Convert(converter = TypeOfClient.Converter.class)
 	@Column(name = "type_of_client")
 	private TypeOfClient typeOfClient;
-	
+
+	@NotNull(message = "Обязательно для заполнения")
 	@ManyToOne()
 	@JoinColumn(name = "client_manager_id")
 	private ClientManager clientManager;
-	
+
+	@NotNull(message = "Обязательно для заполнения")
 	@ManyToOne()
 	@JoinColumn(name = "employee_id")
 	private Employee employee;

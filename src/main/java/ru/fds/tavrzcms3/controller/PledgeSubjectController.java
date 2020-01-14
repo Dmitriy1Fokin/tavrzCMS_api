@@ -6,9 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.fds.tavrzcms3.annotation.LogModificationDB;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 import ru.fds.tavrzcms3.domain.CostHistory;
@@ -41,7 +43,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Controller
+@RestController
 @RequestMapping("/pledge_subject")
 public class PledgeSubjectController {
 
@@ -75,6 +77,44 @@ public class PledgeSubjectController {
         this.dtoFactory = dtoFactory;
         this.validatorEntity = validatorEntity;
     }
+
+    @GetMapping("/{id}")
+    public PledgeSubjectDto getPledgeSubject(@PathVariable Long id){
+        Optional<PledgeSubject> pledgeSubject = pledgeSubjectService.getPledgeSubjectById(id);
+        return pledgeSubject.map(dtoFactory::getPledgeSubjectDto).orElse(null);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @GetMapping("/detail")
     public String pledgeSubjectDetailPage(@RequestParam("pledgeSubjectId") Long pledgeSubjectId,

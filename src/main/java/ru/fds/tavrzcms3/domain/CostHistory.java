@@ -73,7 +73,8 @@ public class CostHistory {
 	@Column(name ="date_appraisal_report", columnDefinition = "DATE")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate appraisalReportDate;
-	
+
+	@NotNull(message = "Обязательно для заполнения")
 	@ManyToOne()
 	@JoinColumn(name = "pledge_subject_id")
 	private PledgeSubject pledgeSubject;
