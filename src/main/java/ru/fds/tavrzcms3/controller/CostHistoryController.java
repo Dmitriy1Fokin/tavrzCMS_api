@@ -1,7 +1,9 @@
 package ru.fds.tavrzcms3.controller;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,6 +12,8 @@ import ru.fds.tavrzcms3.domain.CostHistory;
 import ru.fds.tavrzcms3.dto.CostHistoryDto;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.service.CostHistoryService;
+import ru.fds.tavrzcms3.validate.validationgroup.Exist;
+import ru.fds.tavrzcms3.validate.validationgroup.New;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -34,7 +38,14 @@ public class CostHistoryController {
     }
 
     @PostMapping("/insert")
-    public CostHistoryDto insertCostHistory(@Valid @RequestBody CostHistoryDto costHistoryDto){
+    public CostHistoryDto insertCostHistory(@Validated(New.class) @RequestBody CostHistoryDto costHistoryDto){
+        CostHistory costHistory = dtoFactory.getCostHistoryEntity(costHistoryDto);
+        costHistory = costHistoryService.insertCostHistory(costHistory);
+        return dtoFactory.getCostHistoryDto(costHistory);
+    }
+
+    @PutMapping("/update")
+    public CostHistoryDto updateCostHistory(@Validated(Exist.class) @RequestBody CostHistoryDto costHistoryDto){
         CostHistory costHistory = dtoFactory.getCostHistoryEntity(costHistoryDto);
         costHistory = costHistoryService.insertCostHistory(costHistory);
         return dtoFactory.getCostHistoryDto(costHistory);

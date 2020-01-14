@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.fds.tavrzcms3.validate.validationgroup.Exist;
+import ru.fds.tavrzcms3.validate.validationgroup.New;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,6 +21,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.PositiveOrZero;
 
 @Data
@@ -28,7 +31,9 @@ import javax.validation.constraints.PositiveOrZero;
 @Entity
 @Table(name = "cost_history")
 public class CostHistory {
-	
+
+	@NotNull(groups = Exist.class)
+	@Null(groups = New.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="cost_history_id")

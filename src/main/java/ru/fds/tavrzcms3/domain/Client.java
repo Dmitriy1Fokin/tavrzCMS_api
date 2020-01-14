@@ -4,12 +4,15 @@ import lombok.*;
 import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
 import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
+import ru.fds.tavrzcms3.validate.validationgroup.Exist;
+import ru.fds.tavrzcms3.validate.validationgroup.New;
 
 import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 @Data
 @NoArgsConstructor
@@ -22,7 +25,9 @@ import javax.validation.constraints.NotNull;
 		@SecondaryTable(name = "client_legal_entity", pkJoinColumns = @PrimaryKeyJoinColumn(name = "client_id"))
 })
 public class Client {
-	
+
+	@NotNull(groups = Exist.class)
+	@Null(groups = New.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="client_id")
