@@ -196,7 +196,7 @@ public class MonitoringService {
 
     @Transactional
     public List<Monitoring> insertMonitoringInPledgor(Client pledgor, Monitoring monitoring){
-        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByPledgor(pledgor);
+        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByPledgor(pledgor.getClientId());
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreements(pledgeAgreementList);
         List<Monitoring> monitoringList = new ArrayList<>();
         for(PledgeSubject ps : pledgeSubjectList){

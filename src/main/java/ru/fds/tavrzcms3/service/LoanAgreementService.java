@@ -88,12 +88,12 @@ public class LoanAgreementService {
         return repositoryLoanAgreement.findByClientInAndStatusLAEquals(clientList, StatusOfAgreement.OPEN);
     }
 
-    public List<LoanAgreement> getCurrentLoanAgreementsByLoaner(Client client){
-        return repositoryLoanAgreement.findByClientAndStatusLAEquals(client, StatusOfAgreement.OPEN);
+    public List<LoanAgreement> getCurrentLoanAgreementsByLoaner(Long clientId){
+        return repositoryLoanAgreement.getLoanAgreementsByClient(clientId, StatusOfAgreement.OPEN.getTranslate());
     }
 
-    public List<LoanAgreement> getClosedLoanAgreementsByLoaner(Client client){
-        return repositoryLoanAgreement.findByClientAndStatusLAEquals(client, StatusOfAgreement.CLOSED);
+    public List<LoanAgreement> getClosedLoanAgreementsByLoaner(Long clientId){
+        return repositoryLoanAgreement.getLoanAgreementsByClient(clientId, StatusOfAgreement.CLOSED.getTranslate());
     }
 
     public List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam){

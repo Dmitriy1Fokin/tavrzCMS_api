@@ -1,6 +1,5 @@
 package ru.fds.tavrzcms3.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -17,8 +16,11 @@ import ru.fds.tavrzcms3.service.AppUserDetailsService;
 @Profile("prod")
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    AppUserDetailsService appUserDetailsService;
+    private final AppUserDetailsService appUserDetailsService;
+
+    public SecurityConfiguration(AppUserDetailsService appUserDetailsService) {
+        this.appUserDetailsService = appUserDetailsService;
+    }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {

@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Controller
+@RestController
 @RequestMapping("/pledge_agreement")
 public class PledgeAgreementController {
 
@@ -64,6 +63,34 @@ public class PledgeAgreementController {
         this.dtoFactory = dtoFactory;
         this.validatorEntity = validatorEntity;
     }
+
+    @GetMapping("/current_pledge_agreement_for_client")
+    public List<PledgeAgreementDto> getCurrentPledgeAgreementsByClient(@RequestParam("clientId") Long clientId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getCurrentPledgeAgreementsByPledgor(clientId));
+    }
+
+    @GetMapping("/closed_pledge_agreement_for_client")
+    public List<PledgeAgreementDto> getClosedPledgeAgreementsByClient(@RequestParam("clientId") Long clientId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getClosedPledgeAgreementsByPledgor(clientId));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @GetMapping("/pledge_agreements")
     public String pledgeAgreementPage(@RequestParam("employeeId") Optional<Long> employeeId,

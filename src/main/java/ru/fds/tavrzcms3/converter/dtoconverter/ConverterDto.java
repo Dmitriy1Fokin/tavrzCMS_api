@@ -1,7 +1,7 @@
 package ru.fds.tavrzcms3.converter.dtoconverter;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public interface ConverterDto<E, D> {
 
@@ -9,16 +9,10 @@ public interface ConverterDto<E, D> {
     D toDto(E entity);
 
     default List<E> toEntity(List<D> dtoList){
-        List<E> eList = new ArrayList<>();
-        for(D d : dtoList)
-            eList.add(toEntity(d));
-        return eList;
+        return dtoList.stream().map(this::toEntity).collect(Collectors.toList());
     }
 
     default List<D> toDto(List<E> entityList){
-        List<D> dList = new ArrayList<>();
-        for(E e : entityList)
-            dList.add(toDto(e));
-        return dList;
+        return entityList.stream().map(this::toDto).collect(Collectors.toList());
     }
 }

@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +30,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Controller
+@RestController
 @RequestMapping("/loan_agreement")
 public class LoanAgreementController {
 
@@ -59,6 +58,28 @@ public class LoanAgreementController {
         this.dtoFactory = dtoFactory;
         this.validatorEntity = validatorEntity;
     }
+
+    @GetMapping("/current_loan_agreement_for_client")
+    public List<LoanAgreementDto> getCurrentLoanAgreementsByClient(@RequestParam("clientId") Long clientId){
+        return dtoFactory.getLoanAgreementsDto(loanAgreementService.getCurrentLoanAgreementsByLoaner(clientId));
+    }
+
+    @GetMapping("/closed_loan_agreement_for_client")
+    public List<LoanAgreementDto> getClosedLoanAgreementsByClient(@RequestParam("clientId") Long clientId){
+        return dtoFactory.getLoanAgreementsDto(loanAgreementService.getClosedLoanAgreementsByLoaner(clientId));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     @GetMapping("/loan_agreements")
     public String loanAgreementsPage(@RequestParam("employeeId") Optional<Long> employeeId,

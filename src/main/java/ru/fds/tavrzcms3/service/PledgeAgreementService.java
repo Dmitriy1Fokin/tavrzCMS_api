@@ -314,12 +314,12 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.findAll(specification);
     }
 
-    public List<PledgeAgreement> getCurrentPledgeAgreementsByPledgor(Client client){
-        return repositoryPledgeAgreement.findByClientAndStatusPA(client, StatusOfAgreement.OPEN);
+    public List<PledgeAgreement> getCurrentPledgeAgreementsByPledgor(Long clientId){
+        return  repositoryPledgeAgreement.getPledgeAgreementsByClient(clientId, StatusOfAgreement.OPEN.getTranslate());
     }
 
-    public List<PledgeAgreement> getClosedPledgeAgreementsByPledgor(Client client){
-        return repositoryPledgeAgreement.findByClientAndStatusPA(client, StatusOfAgreement.CLOSED);
+    public List<PledgeAgreement> getClosedPledgeAgreementsByPledgor(Long clientId){
+        return  repositoryPledgeAgreement.getPledgeAgreementsByClient(clientId, StatusOfAgreement.CLOSED.getTranslate());
     }
 
     public List<PledgeAgreement> getCurrentPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){

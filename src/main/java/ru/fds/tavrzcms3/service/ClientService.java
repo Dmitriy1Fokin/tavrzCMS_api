@@ -45,6 +45,10 @@ public class ClientService {
         return repositoryClient.findById(clientId);
     }
 
+    public List<Client> getAllClients(){
+        return repositoryClient.findAll();
+    }
+
     public List<Client> getClientsByIds(List<Long> ids){
         return repositoryClient.findAllByClientIdIn(ids);
     }

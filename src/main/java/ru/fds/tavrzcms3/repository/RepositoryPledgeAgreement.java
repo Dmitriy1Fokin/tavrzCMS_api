@@ -1,6 +1,5 @@
 package ru.fds.tavrzcms3.repository;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -23,7 +22,6 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     List<PledgeAgreement> findAllByClient(Client client);
     int countAllByClientInAndStatusPAEquals(List<Client> clients, StatusOfAgreement statusPA);
     int countAllByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, TypeOfPledgeAgreement perv, StatusOfAgreement statusPA);
-    List<PledgeAgreement> findByClientAndStatusPA(Client client, StatusOfAgreement statusPA);
     List<PledgeAgreement> findByLoanAgreements(LoanAgreement loanAgreement);
     List<PledgeAgreement> findByLoanAgreementsAndStatusPAEquals(LoanAgreement loanAgreement, StatusOfAgreement statusPA);
     List<PledgeAgreement> findByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, TypeOfPledgeAgreement pervPosl, StatusOfAgreement statusPA);
@@ -171,5 +169,13 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
                                         "and ps.date_conclusion < :firstDate")
     List<PledgeAgreement> getPledgeAgreementWithConclusionsLessDate(@Param("employeeId") Long employeeId,
                                                                     @Param("firstDate") LocalDate firstDate);
+
+    @Query(nativeQuery = true, value = "select d.*\n" +
+                                        "from dz d\n" +
+                                        "join client_prime cp on d.pledgor_id = cp.client_id\n" +
+                                        "where cp.client_id = :clientId\n" +
+                                        "and d.status = :statusPA")
+    List<PledgeAgreement> getPledgeAgreementsByClient(@Param("clientId") Long clientId,
+                                                      @Param("statusPA") String statusPA);
 
 }
