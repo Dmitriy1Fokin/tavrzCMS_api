@@ -153,6 +153,14 @@ public class DtoFactory {
         return clientManagerConverterDto.toDto(clientManagerList);
     }
 
+    public ClientManager getClientManagerEntity(ClientManagerDto clientManagerDto){
+        return clientManagerConverterDto.toEntity(clientManagerDto);
+    }
+
+    public List<ClientManager> getClientManagersEntity(List<ClientManagerDto> clientManagerDtoList){
+        return clientManagerConverterDto.toEntity(clientManagerDtoList);
+    }
+
     public EmployeeDto getEmployeeDto(Employee employee){
         return employeeConverterDto.toDto(employee);
     }

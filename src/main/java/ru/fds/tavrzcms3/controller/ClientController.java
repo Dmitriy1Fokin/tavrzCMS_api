@@ -52,8 +52,6 @@ public class ClientController {
 
     @PutMapping("/update")
     public ClientDto updateClient(@Validated(Exist.class) @RequestBody ClientDto clientDto){
-        Client client = dtoFactory.getClientEntity(clientDto);
-        client = clientService.updateInsertClient(client);
-        return dtoFactory.getClientDto(client);
+        return insertClient(clientDto);
     }
 }

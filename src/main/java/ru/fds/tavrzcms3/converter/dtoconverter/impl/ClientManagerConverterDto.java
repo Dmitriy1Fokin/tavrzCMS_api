@@ -8,6 +8,7 @@ import ru.fds.tavrzcms3.dto.ClientManagerDto;
 import ru.fds.tavrzcms3.service.ClientService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +23,10 @@ public class ClientManagerConverterDto implements ConverterDto<ClientManager, Cl
 
     @Override
     public ClientManager toEntity(ClientManagerDto dto) {
-        List<Client> clientList = clientService.getClientsByIds(dto.getClientsIds());
+        List<Client> clientList = Collections.emptyList();
+        if(Objects.nonNull(dto.getClientsIds())){
+            clientList = clientService.getClientsByIds(dto.getClientsIds());
+        }
 
         return ClientManager.builder()
                 .clientManagerId(dto.getClientManagerId())

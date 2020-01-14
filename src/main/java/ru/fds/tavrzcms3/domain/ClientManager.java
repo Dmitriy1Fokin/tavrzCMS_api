@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.domain;
 import lombok.*;
+import ru.fds.tavrzcms3.validate.validationgroup.Exist;
+import ru.fds.tavrzcms3.validate.validationgroup.New;
 
 import java.util.List;
 
@@ -11,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 @Data
 @NoArgsConstructor
@@ -20,6 +24,8 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "client_manager")
 public class ClientManager {
 
+	@NotNull(groups = Exist.class)
+	@Null(groups = New.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="client_manager_id")
@@ -36,6 +42,7 @@ public class ClientManager {
 	@Column(name = "patronymic")
 	private String patronymic;
 
+	@Null(groups = New.class)
 	@Singular
 	@OneToMany(mappedBy = "clientManager")
 	private List<Client> clients;

@@ -46,8 +46,6 @@ public class CostHistoryController {
 
     @PutMapping("/update")
     public CostHistoryDto updateCostHistory(@Validated(Exist.class) @RequestBody CostHistoryDto costHistoryDto){
-        CostHistory costHistory = dtoFactory.getCostHistoryEntity(costHistoryDto);
-        costHistory = costHistoryService.insertCostHistory(costHistory);
-        return dtoFactory.getCostHistoryDto(costHistory);
+        return insertCostHistory(costHistoryDto);
     }
 }
