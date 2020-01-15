@@ -38,6 +38,11 @@ public class LoanAgreementController {
                 .orElseThrow(()-> new NullPointerException("Loan agreement not found"));
     }
 
+    @GetMapping("/current")
+    public List<LoanAgreementDto> getLoanAgreements(){
+        return dtoFactory.getLoanAgreementsDto(loanAgreementService.getAllCurrentLoanAgreements());
+    }
+
     @GetMapping("/current_la_for_client")
     public List<LoanAgreementDto> getCurrentLoanAgreementsByClient(@RequestParam("clientId") Long clientId){
         return dtoFactory.getLoanAgreementsDto(loanAgreementService.getCurrentLoanAgreementsByLoaner(clientId));

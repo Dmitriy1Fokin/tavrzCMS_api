@@ -54,6 +54,10 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.findById(pledgeAgreementId);
     }
 
+    public List<PledgeAgreement> getPledgeAgreements(){
+        return repositoryPledgeAgreement.findAll();
+    }
+
     public List<PledgeAgreement> getPledgeAgreementsByIds(List<Long> ids){
         return repositoryPledgeAgreement.findAllByPledgeAgreementIdIn(ids);
     }
@@ -159,27 +163,27 @@ public class PledgeAgreementService {
         return repositoryPledgeAgreement.countOfMonitoringLessDate(employee.getEmployeeId(), firstDate);
     }
 
-    public List<PledgeAgreement> getPledgeAgreementWithMonitoringNotDone(Employee employee){
+    public List<PledgeAgreement> getPledgeAgreementWithMonitoringNotDone(Long employeeId){
         LocalDate now = LocalDate.now();
         LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonthValue(), 1);
         LocalDate secondDate = firstDate.plusMonths(1);
 
-        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringBetweenDates(employee.getEmployeeId(), firstDate, secondDate);
+        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringBetweenDates(employeeId, firstDate, secondDate);
     }
 
-    public List<PledgeAgreement> getPledgeAgreementWithMonitoringIsDone(Employee employee){
+    public List<PledgeAgreement> getPledgeAgreementWithMonitoringIsDone(Long employeeId){
         LocalDate now = LocalDate.now();
         LocalDate firstDate = LocalDate.of(now.getYear(), now.getMonthValue(), 1);
         LocalDate secondDate = firstDate.plusMonths(1);
 
-        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringBetweenDates(employee.getEmployeeId(), firstDate, secondDate);
+        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringBetweenDates(employeeId, firstDate, secondDate);
     }
 
-    public List<PledgeAgreement> getPledgeAgreementWithMonitoringOverDue(Employee employee){
+    public List<PledgeAgreement> getPledgeAgreementWithMonitoringOverDue(Long employeeId){
         LocalDate now = LocalDate.now();
         LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonth(), 1);
 
-        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringLessDate(employee.getEmployeeId(), firstDate);
+        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringLessDate(employeeId, firstDate);
     }
 
     public int countOfConclusionNotDone(Employee employee){

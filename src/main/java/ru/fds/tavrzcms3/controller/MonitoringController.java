@@ -88,11 +88,11 @@ public class MonitoringController {
         Employee employee = employeeService.getEmployeeById(employeeId)
                 .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
         List<PledgeAgreementDto> pledgeAgreementListWithMonitoringNotDone = dtoFactory
-                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(employee));
+                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(employee.getEmployeeId()));
         List<PledgeAgreementDto> pledgeAgreementListWithMonitoringIsDone = dtoFactory
-                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringIsDone(employee));
+                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringIsDone(employee.getEmployeeId()));
         List<PledgeAgreementDto> pledgeAgreementListWithMonitoringOverdue = dtoFactory
-                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringOverDue(employee));
+                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringOverDue(employee.getEmployeeId()));
         model.addAttribute("pledgeAgreementListWithMonitoringNotDone", pledgeAgreementListWithMonitoringNotDone);
         model.addAttribute("pledgeAgreementListWithMonitoringIsDone", pledgeAgreementListWithMonitoringIsDone);
         model.addAttribute("pledgeAgreementListWithMonitoringOverdue", pledgeAgreementListWithMonitoringOverdue);

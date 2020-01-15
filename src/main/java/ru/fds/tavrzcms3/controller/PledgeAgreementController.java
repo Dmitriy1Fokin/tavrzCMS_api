@@ -64,6 +64,30 @@ public class PledgeAgreementController {
         this.validatorEntity = validatorEntity;
     }
 
+    @GetMapping("/{id}")
+    public PledgeAgreementDto getPledgeAgreement(@PathVariable Long id){
+        Optional<PledgeAgreement> pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(id);
+        return pledgeAgreement.map(dtoFactory::getPledgeAgreementDto)
+                .orElseThrow(()-> new NullPointerException("Pledge agreement not found"));
+    }
+
+    @GetMapping("/current")
+    public List<PledgeAgreementDto> getCurrentPledgeAgreements(){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getAllCurrentPledgeAgreements());
+    }
+
+    @GetMapping("/current/perv")
+    public List<PledgeAgreementDto> getCurrentPervPledgeAgreements(){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
+                .getAllCurrentPledgeAgreements(TypeOfPledgeAgreement.PERV));
+    }
+
+    @GetMapping("/current/posl")
+    public List<PledgeAgreementDto> getCurrentPoslPledgeAgreements(){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
+                .getAllCurrentPledgeAgreements(TypeOfPledgeAgreement.POSL));
+    }
+
     @GetMapping("/current_pa_for_client")
     public List<PledgeAgreementDto> getCurrentPledgeAgreementsByClient(@RequestParam("clientId") Long clientId){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getCurrentPledgeAgreementsByPledgor(clientId));
@@ -89,6 +113,21 @@ public class PledgeAgreementController {
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithConclusionOverdue(employeeId));
     }
 
+    @GetMapping("/with_monitoring_not_done")
+    public List<PledgeAgreementDto> getPledgeAgreementsWithMonitoringNotDone(@RequestParam("employeeId") Long employeeId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(employeeId));
+    }
+
+    @GetMapping("/with_monitoring_is_done")
+    public List<PledgeAgreementDto> getPledgeAgreementsWithMonitoringIsDone(@RequestParam("employeeId") Long employeeId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringIsDone(employeeId));
+    }
+
+    @GetMapping("/with_monitoring_overdue")
+    public List<PledgeAgreementDto> getPledgeAgreementsWithMonitoringOverdue(@RequestParam("employeeId") Long employeeId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringOverDue(employeeId));
+    }
+
     @GetMapping("/current_pa_for_loan_agreement")
     public List<PledgeAgreementDto> getCurrentPledgeAgreementsByLoanAgreement(@RequestParam("loanAgreementId") Long loanAgreementId){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getCurrentPledgeAgreementsByLoanAgreement(loanAgreementId));
@@ -104,7 +143,23 @@ public class PledgeAgreementController {
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementsByNumPA(numPA));
     }
 
+    @GetMapping("/current_pa_for_employee")
+    public List<PledgeAgreementDto> getCurrentPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
+                .getCurrentPledgeAgreementsByEmployee(employeeId));
+    }
 
+    @GetMapping("/current_pa_for_employee/perv")
+    public List<PledgeAgreementDto> getCurrentPervPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
+                .getCurrentPledgeAgreementsByEmployee(employeeId, TypeOfPledgeAgreement.PERV));
+    }
+
+    @GetMapping("/current_pa_for_employee/posl")
+    public List<PledgeAgreementDto> getCurrentPoslPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
+                .getCurrentPledgeAgreementsByEmployee(employeeId, TypeOfPledgeAgreement.POSL));
+    }
 
 
 
