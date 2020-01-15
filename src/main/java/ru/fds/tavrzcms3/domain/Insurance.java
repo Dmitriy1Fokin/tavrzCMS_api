@@ -68,7 +68,8 @@ public class Insurance {
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name = "franchise_amount")
     private BigDecimal franchiseAmount;
-	
+
+	@NotNull(message = "Обязательно для заполнения")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pledgesubject_id")
 	private PledgeSubject pledgeSubject;

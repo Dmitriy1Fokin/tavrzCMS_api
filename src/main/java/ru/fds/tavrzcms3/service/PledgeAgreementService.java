@@ -322,12 +322,20 @@ public class PledgeAgreementService {
         return  repositoryPledgeAgreement.getPledgeAgreementsByClient(clientId, StatusOfAgreement.CLOSED.getTranslate());
     }
 
-    public List<PledgeAgreement> getCurrentPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){
-        return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPAEquals(loanAgreement, StatusOfAgreement.OPEN);
+    public List<PledgeAgreement> getCurrentPledgeAgreementsByLoanAgreement(Long loanAgreementId){
+        Optional<LoanAgreement> loanAgreement = repositoryLoanAgreement.findById(loanAgreementId);
+        if(loanAgreement.isPresent())
+            return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPAEquals(loanAgreement.get(), StatusOfAgreement.OPEN);
+        else
+            return Collections.emptyList();
     }
 
-    public List<PledgeAgreement> getClosedPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){
-        return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPAEquals(loanAgreement,StatusOfAgreement.CLOSED);
+    public List<PledgeAgreement> getClosedPledgeAgreementsByLoanAgreement(Long loanAgreementId){
+        Optional<LoanAgreement> loanAgreement = repositoryLoanAgreement.findById(loanAgreementId);
+        if(loanAgreement.isPresent())
+            return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPAEquals(loanAgreement.get(),StatusOfAgreement.CLOSED);
+        else
+            return Collections.emptyList();
     }
 
     public List<PledgeAgreement> getAllPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){

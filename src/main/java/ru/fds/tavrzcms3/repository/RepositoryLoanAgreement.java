@@ -30,5 +30,13 @@ public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Lo
     List<LoanAgreement> getLoanAgreementsByClient(@Param("clientId") Long clientId,
                                                     @Param("statusLA") String statusLA);
 
+    @Query(nativeQuery = true, value = "select k.*\n" +
+                                        "from kd k\n" +
+                                        "join client_prime cp on k.loaner_id = cp.client_id\n" +
+                                        "join employee e on cp.employee_id = e.employee_id\n" +
+                                        "where e.employee_id = 10\n" +
+                                        "and k.status = 'открыт'")
+    List<LoanAgreement> getLoanAgreementByEmployee(@Param("employeeId") Long employeeId,
+                                                   @Param("statusLA") String statusLA);
 
 }

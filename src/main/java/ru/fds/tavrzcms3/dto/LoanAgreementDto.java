@@ -57,6 +57,7 @@ public class LoanAgreementDto{
     @Max(value = 5, message = "Значение должно быть от 1 до 5")
     private byte qualityCategory;
 
+    @NotNull(message = "Обязательно для заполнения")
     private Long clientId;
 
     private List<Long> pledgeAgreementsIds;

@@ -83,9 +83,8 @@ public class LoanAgreementService {
         return repositoryLoanAgreement.findAllByStatusLAEquals(StatusOfAgreement.OPEN);
     }
 
-    public List<LoanAgreement> getCurrentLoanAgreementsByEmployee(Employee employee){
-        List<Client> clientList = repositoryClient.findByEmployee(employee);
-        return repositoryLoanAgreement.findByClientInAndStatusLAEquals(clientList, StatusOfAgreement.OPEN);
+    public List<LoanAgreement> getCurrentLoanAgreementsByEmployee(Long employeeId){
+        return repositoryLoanAgreement.getLoanAgreementByEmployee(employeeId, StatusOfAgreement.OPEN.getTranslate());
     }
 
     public List<LoanAgreement> getCurrentLoanAgreementsByLoaner(Long clientId){

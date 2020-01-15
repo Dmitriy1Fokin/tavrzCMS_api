@@ -48,5 +48,6 @@ public class InsuranceDto{
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
     private BigDecimal franchiseAmount;
 
+    @NotNull(message = "Обязательно для заполнения")
     private Long pledgeSubjectId;
 }

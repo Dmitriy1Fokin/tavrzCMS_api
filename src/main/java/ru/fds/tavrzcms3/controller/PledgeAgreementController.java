@@ -80,14 +80,31 @@ public class PledgeAgreementController {
     }
 
     @GetMapping("/with_conclusion_is_done")
-    public List<PledgeAgreementDto> getPledgeAgreementListWithConclusionIsDone(@RequestParam("employeeId") Long employeeId){
+    public List<PledgeAgreementDto> getPledgeAgreementsWithConclusionIsDone(@RequestParam("employeeId") Long employeeId){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithConclusionIsDone(employeeId));
     }
 
     @GetMapping("/with_conclusion_overdue")
-    public List<PledgeAgreementDto> getPledgeAgreementListWithConclusionOverdue(@RequestParam("employeeId") Long employeeId){
+    public List<PledgeAgreementDto> getPledgeAgreementsWithConclusionOverdue(@RequestParam("employeeId") Long employeeId){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithConclusionOverdue(employeeId));
     }
+
+    @GetMapping("/current_pa_for_loan_agreement")
+    public List<PledgeAgreementDto> getCurrentPledgeAgreementsByLoanAgreement(@RequestParam("loanAgreementId") Long loanAgreementId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getCurrentPledgeAgreementsByLoanAgreement(loanAgreementId));
+    }
+
+    @GetMapping("/closed_pa_for_loan_agreement")
+    public List<PledgeAgreementDto> getClosedPledgeAgreementsByLoanAgreement(@RequestParam("loanAgreementId") Long loanAgreementId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getClosedPledgeAgreementsByLoanAgreement(loanAgreementId));
+    }
+
+    @GetMapping("/search_by_num")
+    public List<PledgeAgreementDto> getPledgeAgreementsByNum(@RequestParam("numPA") String numPA){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementsByNumPA(numPA));
+    }
+
+
 
 
 

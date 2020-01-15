@@ -70,7 +70,8 @@ public class LoanAgreement {
 	@Max(value = 5, message = "Значение должно быть от 1 до 5")
 	@Column(name ="quality_category")
 	private byte qualityCategory;
-	
+
+	@NotNull(message = "Обязательно для заполнения")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "loaner_id")
 	private Client client;
