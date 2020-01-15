@@ -52,6 +52,7 @@ public class Encumbrance {
     @Column(name = "num_of_encumbrance")
     private String numOfEncumbrance;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pledgesubject_id")
     private PledgeSubject pledgeSubject;

@@ -22,6 +22,7 @@ public class EncumbranceDto{
     @NotBlank(message = "Обязательно для заполнения")
     private String nameEncumbrance;
 
+    @NotNull
     private TypeOfEncumbrance typeOfEncumbrance;
 
     @NotBlank(message = "Обязательно для заполнения")
@@ -38,5 +39,6 @@ public class EncumbranceDto{
     @NotBlank(message = "Обязательно для заполнения")
     private String numOfEncumbrance;
 
+    @NotNull
     private Long pledgeSubjectId;
 }

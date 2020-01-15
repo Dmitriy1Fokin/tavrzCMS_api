@@ -81,7 +81,8 @@ public class PledgeSubjectController {
     @GetMapping("/{id}")
     public PledgeSubjectDto getPledgeSubject(@PathVariable Long id){
         Optional<PledgeSubject> pledgeSubject = pledgeSubjectService.getPledgeSubjectById(id);
-        return pledgeSubject.map(dtoFactory::getPledgeSubjectDto).orElse(null);
+        return pledgeSubject.map(dtoFactory::getPledgeSubjectDto)
+                .orElseThrow(()-> new NullPointerException("PledgeSubject not found"));
     }
 
 

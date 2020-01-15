@@ -47,7 +47,6 @@ public class Employee {
 	@JoinColumn(name = "login")
 	private AppUser appUser;
 
-
 	@Singular
 	@OneToMany(mappedBy = "employee")
 	private List<Client> clients;
