@@ -169,6 +169,14 @@ public class DtoFactory {
         return employeeConverterDto.toDto(employeeList);
     }
 
+    public Employee getEmployeeEntity(EmployeeDto employeeDto){
+        return employeeConverterDto.toEntity(employeeDto);
+    }
+
+    public List<Employee> getEmployeesEntity(List<EmployeeDto> employeeDtoList){
+        return employeeConverterDto.toEntity(employeeDtoList);
+    }
+
     public EncumbranceDto getEncumbranceDto(Encumbrance encumbrance){
         return encumbranceConverterDto.toDto(encumbrance);
     }

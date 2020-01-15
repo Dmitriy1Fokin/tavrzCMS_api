@@ -3,6 +3,7 @@ package ru.fds.tavrzcms3.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data
@@ -18,9 +19,11 @@ public class AppUser {
     @Column(name ="user_id")
     private long userId;
 
+    @NotBlank
     @Column(name ="name")
     private String name;
 
+    @NotBlank
     @Column(name ="password")
     private String password;
 

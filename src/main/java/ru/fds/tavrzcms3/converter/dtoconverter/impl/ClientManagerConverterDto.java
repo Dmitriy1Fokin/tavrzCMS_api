@@ -43,13 +43,7 @@ public class ClientManagerConverterDto implements ConverterDto<ClientManager, Cl
         for (Client c : clientService.getAllClientsByClientManager(entity))
             clientDtoList.add(c.getClientId());
 
-        StringBuilder fullName = new StringBuilder();
-        if(Objects.nonNull(entity.getSurname()) && !entity.getSurname().isEmpty())
-            fullName.append(entity.getSurname());
-        if(Objects.nonNull(entity.getName()) && !entity.getName().isEmpty())
-            fullName.append(" ").append(entity.getName());
-        if(Objects.nonNull(entity.getPatronymic()) && !entity.getPatronymic().isEmpty())
-            fullName.append(" ").append(entity.getPatronymic());
+        String fullName = getFullName(entity.getSurname(), entity.getName(), entity.getPatronymic());
 
         return ClientManagerDto.builder()
                 .clientManagerId(entity.getClientManagerId())
@@ -57,7 +51,19 @@ public class ClientManagerConverterDto implements ConverterDto<ClientManager, Cl
                 .name(entity.getName())
                 .patronymic(entity.getPatronymic())
                 .clientsIds(clientDtoList)
-                .fullName(fullName.toString())
+                .fullName(fullName)
                 .build();
+    }
+
+    private static String getFullName(String surname, String name, String patronymic) {
+        StringBuilder fullName = new StringBuilder();
+        if(Objects.nonNull(surname) && !surname.isEmpty())
+            fullName.append(surname);
+        if(Objects.nonNull(name) && !name.isEmpty())
+            fullName.append(" ").append(name);
+        if(Objects.nonNull(patronymic) && !patronymic.isEmpty())
+            fullName.append(" ").append(patronymic);
+
+        return fullName.toString();
     }
 }

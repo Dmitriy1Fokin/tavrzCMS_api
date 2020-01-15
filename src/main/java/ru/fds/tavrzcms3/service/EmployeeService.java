@@ -3,6 +3,7 @@ package ru.fds.tavrzcms3.service;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.domain.AppUser;
 import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.repository.*;
@@ -47,5 +48,10 @@ public class EmployeeService {
 
     public Employee getEmployeeByPledgeAgreement(long pledgeAgreementId){
         return repositoryEmployee.getEmployeeByPledgeAgreement(pledgeAgreementId);
+    }
+
+    @Transactional
+    public Employee updateInsertEmployee(Employee employee){
+        return repositoryEmployee.save(employee);
     }
 }
