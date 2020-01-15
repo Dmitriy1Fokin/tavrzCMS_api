@@ -1,18 +1,32 @@
 package ru.fds.tavrzcms3.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Singular;
 import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
 import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
-import ru.fds.tavrzcms3.validate.validationgroup.Exist;
-import ru.fds.tavrzcms3.validate.validationgroup.New;
 
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
+import javax.persistence.SecondaryTables;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 
 @Data
 @NoArgsConstructor
@@ -26,14 +40,12 @@ import javax.validation.constraints.Null;
 })
 public class Client {
 
-	@NotNull(groups = Exist.class)
-	@Null(groups = New.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="client_id")
 	private Long clientId;
 
-	@NotNull
+	@NotNull(message = "Обязательно для заполнения")
 	@Convert(converter = TypeOfClient.Converter.class)
 	@Column(name = "type_of_client")
 	private TypeOfClient typeOfClient;

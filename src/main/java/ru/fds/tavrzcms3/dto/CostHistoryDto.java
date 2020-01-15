@@ -5,11 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.fds.tavrzcms3.validate.validationgroup.Exist;
-import ru.fds.tavrzcms3.validate.validationgroup.New;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,8 +17,6 @@ import java.time.LocalDate;
 @Builder
 public class CostHistoryDto{
 
-    @NotNull(groups = Exist.class)
-    @Null(groups = New.class)
     private Long costHistoryId;
 
     @NotNull(message = "Обязательно для заполнения")

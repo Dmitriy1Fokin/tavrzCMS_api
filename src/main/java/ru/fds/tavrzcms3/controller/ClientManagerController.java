@@ -1,6 +1,5 @@
 package ru.fds.tavrzcms3.controller;
 
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,9 +11,8 @@ import ru.fds.tavrzcms3.domain.ClientManager;
 import ru.fds.tavrzcms3.dto.ClientManagerDto;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.service.ClientManagerService;
-import ru.fds.tavrzcms3.validate.validationgroup.Exist;
-import ru.fds.tavrzcms3.validate.validationgroup.New;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -37,14 +35,14 @@ public class ClientManagerController {
     }
 
     @PostMapping("/insert")
-    public ClientManagerDto insertClientManager(@Validated(New.class) @RequestBody ClientManagerDto clientManagerDto){
+    public ClientManagerDto insertClientManager(@Valid @RequestBody ClientManagerDto clientManagerDto){
         ClientManager clientManager = dtoFactory.getClientManagerEntity(clientManagerDto);
         clientManager = clientManagerService.insertUpdateClientManager(clientManager);
         return dtoFactory.getClientManagerDto(clientManager);
     }
 
     @PutMapping("/update")
-    public ClientManagerDto updateClientManager(@Validated(Exist.class) @RequestBody ClientManagerDto clientManagerDto){
+    public ClientManagerDto updateClientManager(@Valid @RequestBody ClientManagerDto clientManagerDto){
         return insertClientManager(clientManagerDto);
     }
 }
