@@ -41,9 +41,13 @@ public class MonitoringService {
         return repositoryMonitoring.findById(monitoringId);
     }
 
-    public List<Monitoring> getMonitoringByPledgeSubject(PledgeSubject pledgeSubject){
-        Sort sortByDateMonitoring = new Sort(Sort.Direction.DESC, "dateMonitoring");
-        return repositoryMonitoring.findByPledgeSubject(pledgeSubject, sortByDateMonitoring);
+    public List<Monitoring> getMonitoringByPledgeSubject(Long pledgeSubjectId){
+        Optional<PledgeSubject> pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+        if(pledgeSubject.isPresent()){
+            Sort sortByDateMonitoring = new Sort(Sort.Direction.DESC, "dateMonitoring");
+            return repositoryMonitoring.findByPledgeSubject(pledgeSubject.get(), sortByDateMonitoring);
+        }else
+            return Collections.emptyList();
     }
 
     public List<Monitoring> getMonitoringByIds(Collection<Long> ids){

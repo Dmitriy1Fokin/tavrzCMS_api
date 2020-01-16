@@ -1,24 +1,24 @@
 package ru.fds.tavrzcms3.controller;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import ru.fds.tavrzcms3.annotation.LogModificationDB;
-import ru.fds.tavrzcms3.domain.*;
-import ru.fds.tavrzcms3.dto.ClientDto;
+import ru.fds.tavrzcms3.domain.Client;
+import ru.fds.tavrzcms3.domain.Monitoring;
+import ru.fds.tavrzcms3.domain.PledgeAgreement;
+import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.MonitoringDto;
-import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
-import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
-import ru.fds.tavrzcms3.service.*;
+import ru.fds.tavrzcms3.service.ClientService;
+import ru.fds.tavrzcms3.service.FilesService;
+import ru.fds.tavrzcms3.service.MonitoringService;
+import ru.fds.tavrzcms3.service.PledgeAgreementService;
+import ru.fds.tavrzcms3.service.PledgeSubjectService;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
 import javax.validation.ConstraintViolation;
@@ -36,33 +36,21 @@ public class MonitoringController {
 
     private final PledgeSubjectService pledgeSubjectService;
     private final MonitoringService monitoringService;
-    private final EmployeeService employeeService;
     private final PledgeAgreementService pledgeAgreementService;
     private final ClientService clientService;
     private final FilesService filesService;
     private final DtoFactory dtoFactory;
     private ValidatorEntity validatorEntity;
 
-    private static final String MSG_WRONG_LINK = "Неверная ссылка";
-    private static final String PAGE_CARD = "monitoring/card";
-    private static final String ATTR_PLEDGE_SUBJECT = "pledgeSubject";
-    private static final String ATTR_MONITORING_LIST = "monitoringList";
-    private static final String ATTR_WHERE_UPDATE_MONITORING = "whereUpdateMonitoring";
-    private static final String ATTR_PLEDGE_AGREEMENT = "pledgeAgreement";
-    private static final String ATTR_MONITORING = "monitoringDto";
-    private static final String ATTR_CLIENT = "client";
-    private static final String ATTR_COUNT_MONITORING = "countMonitoring";
 
     public MonitoringController(PledgeSubjectService pledgeSubjectService,
                                 MonitoringService monitoringService,
-                                EmployeeService employeeService,
                                 PledgeAgreementService pledgeAgreementService,
                                 ClientService clientService,
                                 FilesService filesService, DtoFactory dtoFactory,
                                 ValidatorEntity validatorEntity) {
         this.pledgeSubjectService = pledgeSubjectService;
         this.monitoringService = monitoringService;
-        this.employeeService = employeeService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.clientService = clientService;
         this.filesService = filesService;
@@ -70,7 +58,68 @@ public class MonitoringController {
         this.validatorEntity = validatorEntity;
     }
 
+    @GetMapping("/pledge_subject")
+    public List<MonitoringDto> getMonitoringsByPledgeSubject(@RequestParam("pledgeSubjectId") Long pledgeSubjectId){
+        return dtoFactory.getMonitoringsDto(monitoringService.getMonitoringByPledgeSubject(pledgeSubjectId));
+    }
 
+    @PostMapping("insert")
+    public MonitoringDto insertMonitoring(@Valid @RequestBody MonitoringDto monitoringDto,
+                                          @RequestParam("pledgeSubjectId") Long pledgeSubjectId){
+
+        Monitoring monitoring = dtoFactory.getMonitoringEntity(monitoringDto);
+
+        Set<ConstraintViolation<Monitoring>> violations =  validatorEntity.validateEntity(monitoring);
+        if(!violations.isEmpty())
+            throw new ConstraintViolationException(violations);
+
+        Optional<PledgeSubject> pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+        if(pledgeSubject.isEmpty())
+            throw new NullPointerException("Pledge subject not found");
+
+        monitoring.setPledgeSubject(pledgeSubject.get());
+        monitoring = monitoringService.insertMonitoringInPledgeSubject(monitoring);
+
+        return dtoFactory.getMonitoringDto(monitoring);
+    }
+
+    @PostMapping("/insert/pledge_agreement")
+    public List<MonitoringDto> insertMonitoringByPledgeAgreement(@Valid @RequestBody MonitoringDto monitoringDto,
+                                                                 @RequestParam("pledgeAgreementId") Long pledgeAgreementId){
+
+        Monitoring monitoring = dtoFactory.getMonitoringEntity(monitoringDto);
+
+        Set<ConstraintViolation<Monitoring>> violations =  validatorEntity.validateEntity(monitoring);
+        if(!violations.isEmpty())
+            throw new ConstraintViolationException(violations);
+
+        Optional<PledgeAgreement> pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId);
+        if(pledgeAgreement.isEmpty())
+            throw new NullPointerException("Pledge agreement not found");
+
+        List<Monitoring> monitoringList = monitoringService
+                .insertMonitoringInPledgeAgreement(pledgeAgreement.get(), monitoring);
+
+        return dtoFactory.getMonitoringsDto(monitoringList);
+    }
+
+    @PostMapping("insert/client")
+    public List<MonitoringDto> insertMonitoringByClient(@Valid @RequestBody MonitoringDto monitoringDto,
+                                                        @RequestParam("clientId") Long clienttId){
+        Monitoring monitoring = dtoFactory.getMonitoringEntity(monitoringDto);
+
+        Set<ConstraintViolation<Monitoring>> violations =  validatorEntity.validateEntity(monitoring);
+        if(!violations.isEmpty())
+            throw new ConstraintViolationException(violations);
+
+        Optional<Client> client = clientService.getClientById(clienttId);
+        if(client.isEmpty())
+            throw new NullPointerException("Client not found");
+
+        List<Monitoring> monitoringList = monitoringService.insertMonitoringInPledgor(client.get(), monitoring);
+
+        return dtoFactory.getMonitoringsDto(monitoringList);
+    }
 
     @PostMapping("/insert_from_file")
     public List<MonitoringDto> insertMonitoringFromFile(@RequestParam("file") MultipartFile file) throws IOException {
@@ -98,233 +147,5 @@ public class MonitoringController {
         monitoringList = monitoringService.insertMonitoringsInPledgeSubject(monitoringList);
 
         return dtoFactory.getMonitoringsDto(monitoringList);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @GetMapping("/pledge_subject")
-    public String monitoringPage(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
-                                 Model model){
-
-        PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId)
-                .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
-
-        PledgeSubjectDto pledgeSubjectDto = dtoFactory.getPledgeSubjectDto(pledgeSubject);
-        List<MonitoringDto> monitoringDtoList = dtoFactory.getMonitoringsDto(monitoringService.getMonitoringByPledgeSubject(pledgeSubject));
-
-        model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubjectDto);
-        model.addAttribute(ATTR_MONITORING_LIST, monitoringDtoList);
-
-        return "monitoring/pledge_subject";
-    }
-
-    @GetMapping("/pledge_agreements")
-    public String monitoringPledgeAgreementsPage(@RequestParam("employeeId") long employeeId,
-                                                 Model model){
-
-        Employee employee = employeeService.getEmployeeById(employeeId)
-                .orElseThrow(() -> new IllegalArgumentException(MSG_WRONG_LINK));
-        List<PledgeAgreementDto> pledgeAgreementListWithMonitoringNotDone = dtoFactory
-                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(employee.getEmployeeId()));
-        List<PledgeAgreementDto> pledgeAgreementListWithMonitoringIsDone = dtoFactory
-                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringIsDone(employee.getEmployeeId()));
-        List<PledgeAgreementDto> pledgeAgreementListWithMonitoringOverdue = dtoFactory
-                .getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringOverDue(employee.getEmployeeId()));
-        model.addAttribute("pledgeAgreementListWithMonitoringNotDone", pledgeAgreementListWithMonitoringNotDone);
-        model.addAttribute("pledgeAgreementListWithMonitoringIsDone", pledgeAgreementListWithMonitoringIsDone);
-        model.addAttribute("pledgeAgreementListWithMonitoringOverdue", pledgeAgreementListWithMonitoringOverdue);
-
-        return "monitoring/pledge_agreements";
-    }
-
-    @GetMapping("/card")
-    public String monitoringCardPage(@RequestParam("whereUpdateMonitoring") String whereUpdateMonitoring,
-                                        @RequestParam("pledgeAgreementId") Optional<Long> pledgeAgreementId,
-                                        @RequestParam("pledgeSubjectId") Optional<Long> pledgeSubjectId,
-                                        @RequestParam("pledgorId") Optional<Long> pledgorId,
-                                        Model model){
-
-        if(whereUpdateMonitoring.equals("pa")){
-
-            PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId
-                    .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
-                    .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
-
-            PledgeAgreementDto pledgeAgreementDto = dtoFactory.getPledgeAgreementDto(pledgeAgreement);
-
-            model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreementDto);
-            model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, whereUpdateMonitoring);
-            model.addAttribute(ATTR_MONITORING, new MonitoringDto());
-
-        }else if(whereUpdateMonitoring.equals("ps")){
-
-            PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId
-                    .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
-                    .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
-
-            PledgeSubjectDto pledgeSubjectDto = dtoFactory.getPledgeSubjectDto(pledgeSubject);
-
-            model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubjectDto);
-            model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, whereUpdateMonitoring);
-            model.addAttribute(ATTR_MONITORING, new MonitoringDto());
-
-        }else if(whereUpdateMonitoring.equals("pledgor")){
-
-            Client client = clientService.getClientById(pledgorId
-                    .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
-                    .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
-
-            ClientDto clientDto = dtoFactory.getClientDto(client);
-
-            model.addAttribute(ATTR_CLIENT, clientDto);
-            model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, whereUpdateMonitoring);
-            model.addAttribute(ATTR_MONITORING, new MonitoringDto());
-
-        }else{
-            throw new IllegalArgumentException(MSG_WRONG_LINK);
-        }
-
-        return PAGE_CARD;
-    }
-
-    @LogModificationDB
-    @PostMapping("/insert")
-    public String insertMonitoring(@AuthenticationPrincipal User user,
-                                   @Valid MonitoringDto monitoringDto,
-                                   BindingResult bindingResult,
-                                   @RequestParam("whereUpdateMonitoring") String whereUpdateMonitoring,
-                                   @RequestParam("pledgeAgreementId") Optional<Long> pledgeAgreementId,
-                                   @RequestParam("pledgeSubjectId") Optional<Long> pledgeSubjectId,
-                                   @RequestParam("pledgorId") Optional<Long> pledgorId,
-                                   Model model){
-
-        if(bindingResult.hasErrors()) {
-            if(whereUpdateMonitoring.equals("pa")){
-
-                PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId
-                        .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
-                        .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
-
-                PledgeAgreementDto pledgeAgreementDto = dtoFactory.getPledgeAgreementDto(pledgeAgreement);
-
-                model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreementDto);
-                model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, whereUpdateMonitoring);
-
-            }else if(whereUpdateMonitoring.equals("ps")){
-
-                PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId
-                        .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
-                        .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
-
-                PledgeSubjectDto pledgeSubjectDto = dtoFactory.getPledgeSubjectDto(pledgeSubject);
-
-                model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubjectDto);
-                model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, whereUpdateMonitoring);
-
-            }else if(whereUpdateMonitoring.equals("pledgor")){
-
-                Client client = clientService.getClientById(pledgorId
-                        .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
-                        .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
-
-                ClientDto clientDto = dtoFactory.getClientDto(client);
-
-                model.addAttribute(ATTR_CLIENT, clientDto);
-                model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, whereUpdateMonitoring);
-
-            }else {
-                throw new IllegalArgumentException(MSG_WRONG_LINK);
-            }
-            return PAGE_CARD;
-        }
-
-
-        Monitoring monitoring = dtoFactory.getMonitoringEntity(monitoringDto);
-        Set<ConstraintViolation<Monitoring>> violations =  validatorEntity.validateEntity(monitoring);
-        if(!violations.isEmpty())
-            throw new IllegalArgumentException(validatorEntity.getErrorMessage());
-
-
-        if(whereUpdateMonitoring.equals("pa")){
-
-            PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId
-                    .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
-                    .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
-
-            PledgeAgreementDto pledgeAgreementDto = dtoFactory.getPledgeAgreementDto(pledgeAgreement);
-            List<Monitoring> monitoringList = monitoringService.insertMonitoringInPledgeAgreement(pledgeAgreement, monitoring);
-
-
-            model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, "responseSuccessPledgeAgreement");
-            model.addAttribute(ATTR_COUNT_MONITORING , monitoringList.size());
-            model.addAttribute(ATTR_PLEDGE_AGREEMENT, pledgeAgreementDto);
-            return PAGE_CARD;
-
-        }else if(whereUpdateMonitoring.equals("ps")){
-
-            PledgeSubject pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId
-                    .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
-                    .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
-
-            monitoring.setPledgeSubject(pledgeSubject);
-            monitoringService.insertMonitoringInPledgeSubject(monitoring);
-
-            return monitoringPage(pledgeSubject.getPledgeSubjectId(), model);
-
-        }else if(whereUpdateMonitoring.equals("pledgor")){
-            Client client = clientService.getClientById(pledgorId
-                    .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK)))
-                    .orElseThrow(()-> new IllegalArgumentException(MSG_WRONG_LINK));
-
-            ClientDto clientDto = dtoFactory.getClientDto(client);
-
-            List<Monitoring> monitoringList = monitoringService.insertMonitoringInPledgor(client, monitoring);
-
-            model.addAttribute(ATTR_COUNT_MONITORING , monitoringList.size());
-            model.addAttribute(ATTR_WHERE_UPDATE_MONITORING, "responseSuccessClient");
-            model.addAttribute(ATTR_CLIENT, clientDto);
-
-            return PAGE_CARD;
-
-        }else{
-            throw new IllegalArgumentException(MSG_WRONG_LINK);
-        }
     }
 }

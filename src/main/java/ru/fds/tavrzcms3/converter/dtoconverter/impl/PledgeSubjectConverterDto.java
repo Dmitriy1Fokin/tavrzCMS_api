@@ -200,7 +200,7 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
             costHistoriesIds.add(ch.getCostHistoryId());
 
         List<Long> monitoringIds = new ArrayList<>();
-        for(Monitoring mon : monitoringService.getMonitoringByPledgeSubject(entity))
+        for(Monitoring mon : monitoringService.getMonitoringByPledgeSubject(entity.getPledgeSubjectId()))
             monitoringIds.add(mon.getMonitoringId());
 
         List<Long> encumbrancesIds = new ArrayList<>();
@@ -334,8 +334,7 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
             typeOfMainCharacteristic = typeOfMainCharacteristicForRealty;
 
         }else if(entity.getTypeOfCollateral() == TypeOfCollateral.TBO){
-            if(Objects.nonNull(entity.getPledgeSubjectTBO().getCountOfTBO()))
-                mainCharacteristic = String.valueOf(entity.getPledgeSubjectTBO().getCountOfTBO());
+            mainCharacteristic = String.valueOf(entity.getPledgeSubjectTBO().getCountOfTBO());
             typeOfMainCharacteristic = "кол-во";
 
         }else if(entity.getTypeOfCollateral() == TypeOfCollateral.VESSEL){

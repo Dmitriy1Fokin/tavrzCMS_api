@@ -12,7 +12,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -26,11 +25,13 @@ public class MonitoringDto{
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateMonitoring;
 
+    @NotNull(message = "Обязательно для заполнения")
     private StatusOfMonitoring statusMonitoring;
 
     @NotBlank(message = "Обязательно для заполнения")
     private String employee;
 
+    @NotNull(message = "Обязательно для заполнения")
     private TypeOfMonitoring typeOfMonitoring;
 
     private String notice;
@@ -38,5 +39,4 @@ public class MonitoringDto{
     private BigDecimal collateralValue;
 
     private Long pledgeSubjectId;
-
 }

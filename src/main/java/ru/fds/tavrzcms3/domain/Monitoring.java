@@ -33,7 +33,7 @@ public class Monitoring {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dateMonitoring;
 
-	@NotNull
+	@NotNull(message = "Обязательно для заполнения")
 	@Convert(converter = StatusOfMonitoring.Converter.class)
 	@Column(name ="status")
 	private StatusOfMonitoring statusMonitoring;
@@ -42,7 +42,7 @@ public class Monitoring {
 	@Column(name ="employee")
 	private String employee;
 
-	@NotNull
+	@NotNull(message = "Обязательно для заполнения")
 	@Convert(converter = TypeOfMonitoring.Converter.class)
 	@Column(name ="type")
 	private TypeOfMonitoring typeOfMonitoring;
