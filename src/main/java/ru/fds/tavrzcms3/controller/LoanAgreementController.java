@@ -65,6 +65,17 @@ public class LoanAgreementController {
         return dtoFactory.getLoanAgreementsDto(loanAgreementService.getCurrentLoanAgreementsByEmployee(employeeId));
     }
 
+    @GetMapping("/current_la_for_pledge_agreement")
+    public List<LoanAgreementDto> getCurrentLoanAgreementByPledgeAgreement(@RequestParam("pledgeAgreementId") Long pledgeAgreementId){
+        return dtoFactory.getLoanAgreementsDto(loanAgreementService
+                .getCurrentLoanAgreementsByPledgeAgreement(pledgeAgreementId));
+    }
+    @GetMapping("/closed_la_for_pledge_agreement")
+    public List<LoanAgreementDto> getClosedLoanAgreementByPledgeAgreement(@RequestParam("pledgeAgreementId") Long pledgeAgreementId){
+        return dtoFactory.getLoanAgreementsDto(loanAgreementService
+                .getClosedLoanAgreementsByPledgeAgreement(pledgeAgreementId));
+    }
+
     @PostMapping("/insert")
     public LoanAgreementDto insertLoanAgreement(@Valid @RequestBody LoanAgreementDto loanAgreementDto){
         LoanAgreement loanAgreement = dtoFactory.getLoanAgreementEntity(loanAgreementDto);

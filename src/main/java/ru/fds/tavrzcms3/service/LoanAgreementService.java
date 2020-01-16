@@ -26,16 +26,19 @@ import java.util.*;
 public class LoanAgreementService {
 
     private final RepositoryLoanAgreement repositoryLoanAgreement;
+    private final RepositoryPledgeAgreement repositoryPledgeAgreement;
     private final RepositoryClient repositoryClient;
     private final ClientService clientService;
 
     private final ExcelColumnNum excelColumnNum;
 
     public LoanAgreementService(RepositoryLoanAgreement repositoryLoanAgreement,
+                                RepositoryPledgeAgreement repositoryPledgeAgreement,
                                 RepositoryClient repositoryClient,
                                 ClientService clientService,
                                 ExcelColumnNum excelColumnNum) {
         this.repositoryLoanAgreement = repositoryLoanAgreement;
+        this.repositoryPledgeAgreement = repositoryPledgeAgreement;
         this.repositoryClient = repositoryClient;
         this.clientService = clientService;
         this.excelColumnNum = excelColumnNum;
@@ -62,12 +65,20 @@ public class LoanAgreementService {
         return repositoryLoanAgreement.findAllByPledgeAgreementsIn(pledgeAgreementList);
     }
 
-    public List<LoanAgreement> getCurrentLoanAgreementsByPledgeAgreement(PledgeAgreement pledgeAgreement){
-        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, StatusOfAgreement.OPEN);
+    public List<LoanAgreement> getCurrentLoanAgreementsByPledgeAgreement(Long pledgeAgreementId){
+        Optional<PledgeAgreement> pledgeAgreement = repositoryPledgeAgreement.findById(pledgeAgreementId);
+        if(pledgeAgreement.isPresent())
+            return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreement.get(), StatusOfAgreement.OPEN);
+        else
+            return Collections.emptyList();
     }
 
-    public List<LoanAgreement> getClosedLoanAgreementsByPledgeAgreement(PledgeAgreement pledgeAgreement){
-        return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreement, StatusOfAgreement.CLOSED);
+    public List<LoanAgreement> getClosedLoanAgreementsByPledgeAgreement(Long pledgeAgreementId){
+        Optional<PledgeAgreement> pledgeAgreement = repositoryPledgeAgreement.findById(pledgeAgreementId);
+        if(pledgeAgreement.isPresent())
+            return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreement.get(), StatusOfAgreement.CLOSED);
+        else
+            return Collections.emptyList();
     }
 
     public int countOfCurrentLoanAgreementsByEmployee(Employee employee){

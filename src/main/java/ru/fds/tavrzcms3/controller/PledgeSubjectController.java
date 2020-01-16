@@ -42,6 +42,7 @@ import ru.fds.tavrzcms3.validate.ValidatorEntity;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -90,6 +91,21 @@ public class PledgeSubjectController {
         Optional<PledgeSubject> pledgeSubject = pledgeSubjectService.getPledgeSubjectById(id);
         return pledgeSubject.map(dtoFactory::getPledgeSubjectDto)
                 .orElseThrow(()-> new NullPointerException("PledgeSubject not found"));
+    }
+
+    @GetMapping("/pledge_agreement")
+    public List<PledgeSubjectDto> getPledgeSubjectByPledgeAgreement(@RequestParam("pledgeAgreementId") Long pledgeAgreementId){
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId));
+    }
+
+    @GetMapping("/search_by_name")
+    public List<PledgeSubjectDto> getPledgeSubjectsByName(@RequestParam("namePS") @NotBlank String namePS){
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectService.getPledgeSubjectByName(namePS));
+    }
+
+    @GetMapping("/search_by_cadastral_num")
+    public List<PledgeSubjectDto> getPledgeSubjectsByCadastralNum(@RequestParam("cadastralNum") @NotBlank String cadastralNum){
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectService.getPledgeSubjectByCadastralNum(cadastralNum));
     }
 
     @PostMapping("/insert_from_file/auto")
@@ -190,6 +206,43 @@ public class PledgeSubjectController {
         }
 
         pledgeSubjectList = pledgeSubjectService.insertPledgeSubjects(pledgeSubjectList);
+
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
+    }
+
+    @PutMapping("withdraw_from_deposit_pledgeSubject")
+    public List<PledgeSubjectDto> withdrawFromDepositPledgeSubject(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
+                                                                   @RequestParam("pledgeAgreementId") long pledgeAgreementId){
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
+                .orElseThrow(() -> new NullPointerException("Pledge agreement not found"));
+
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId);
+
+        Optional<PledgeSubject> pledgeSubjectToRemove = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
+        if(pledgeSubjectToRemove.isPresent()){
+            pledgeSubjectList.remove(pledgeSubjectToRemove.get());
+            pledgeAgreement.setPledgeSubjects(pledgeSubjectList);
+            pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
+        }else
+            throw new NullPointerException("Pledge subject not found");
+
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
+    }
+
+    @PutMapping("/insert/current_in_pledge_agreement")
+    public List<PledgeSubjectDto> insertCurrentPledgeSubjectInPledgeAgreement(@RequestParam("pledgeSubjectsIdArray") long[] pledgeSubjectsIdArray,
+                                                                              @RequestParam("pledgeAgreementId") long pledgeAgreementId){
+        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
+                .orElseThrow(() -> new NullPointerException("Pledge agreement not found"));
+
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId);
+        for (long i : pledgeSubjectsIdArray) {
+            pledgeSubjectList.add(pledgeSubjectService.getPledgeSubjectById(i)
+                    .orElseThrow(() -> new NullPointerException("Pledge subject not found")));
+        }
+
+        pledgeAgreement.setPledgeSubjects(pledgeSubjectList);
+        pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
 
         return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }
