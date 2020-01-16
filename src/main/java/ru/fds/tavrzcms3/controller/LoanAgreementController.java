@@ -70,6 +70,7 @@ public class LoanAgreementController {
         return dtoFactory.getLoanAgreementsDto(loanAgreementService
                 .getCurrentLoanAgreementsByPledgeAgreement(pledgeAgreementId));
     }
+
     @GetMapping("/closed_la_for_pledge_agreement")
     public List<LoanAgreementDto> getClosedLoanAgreementByPledgeAgreement(@RequestParam("pledgeAgreementId") Long pledgeAgreementId){
         return dtoFactory.getLoanAgreementsDto(loanAgreementService

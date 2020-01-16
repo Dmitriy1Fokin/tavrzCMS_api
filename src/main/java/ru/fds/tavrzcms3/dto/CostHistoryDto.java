@@ -50,6 +50,5 @@ public class CostHistoryDto{
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate appraisalReportDate;
 
-    @NotNull
     private Long pledgeSubjectId;
 }

@@ -36,16 +36,19 @@ public class PledgeAgreementService {
 
     private final RepositoryPledgeAgreement repositoryPledgeAgreement;
     private final RepositoryLoanAgreement repositoryLoanAgreement;
+    private final RepositoryPledgeSubject repositoryPledgeSubject;
     private final ClientService clientService;
 
     private final ExcelColumnNum excelColumnNum;
 
     public PledgeAgreementService(RepositoryPledgeAgreement repositoryPledgeAgreement,
                                   RepositoryLoanAgreement repositoryLoanAgreement,
+                                  RepositoryPledgeSubject repositoryPledgeSubject,
                                   ClientService clientService,
                                   ExcelColumnNum excelColumnNum) {
         this.repositoryPledgeAgreement = repositoryPledgeAgreement;
         this.repositoryLoanAgreement = repositoryLoanAgreement;
+        this.repositoryPledgeSubject = repositoryPledgeSubject;
         this.clientService = clientService;
         this.excelColumnNum = excelColumnNum;
     }
@@ -116,8 +119,12 @@ public class PledgeAgreementService {
         return  repositoryPledgeAgreement.getTypeOfCollateral(pledgeAgreement.getPledgeAgreementId());
     }
 
-    public List<PledgeAgreement> getAllPledgeAgreementByPLedgeSubject(PledgeSubject pledgeSubject){
-        return repositoryPledgeAgreement.findAllByPledgeSubjects(pledgeSubject);
+    public List<PledgeAgreement> getAllPledgeAgreementByPLedgeSubject(Long pledgeSubjectId){
+        Optional<PledgeSubject> pledgeSubject = repositoryPledgeSubject.findById(pledgeSubjectId);
+        if(pledgeSubject.isPresent())
+            return repositoryPledgeAgreement.findAllByPledgeSubjects(pledgeSubject.get());
+        else
+            return Collections.emptyList();
     }
 
     public List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(long employeeId, TypeOfPledgeAgreement pervPosl){

@@ -192,7 +192,7 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
     @Override
     public PledgeSubjectDto toDto(PledgeSubject entity) {
         List<Long> pledgeAgreementsIds = new ArrayList<>();
-        for (PledgeAgreement pa : pledgeAgreementService.getAllPledgeAgreementByPLedgeSubject(entity))
+        for (PledgeAgreement pa : pledgeAgreementService.getAllPledgeAgreementByPLedgeSubject(entity.getPledgeSubjectId()))
             pledgeAgreementsIds.add(pa.getPledgeAgreementId());
 
         List<Long> costHistoriesIds = new ArrayList<>();

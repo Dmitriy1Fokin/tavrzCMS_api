@@ -144,6 +144,11 @@ public class PledgeAgreementController {
                 .getCurrentPledgeAgreementsByEmployee(employeeId, TypeOfPledgeAgreement.POSL));
     }
 
+    @GetMapping("/pledge_subject")
+    public List<PledgeAgreementDto> getPledgeAgreementsByPledgeSubjects(@RequestParam("pledgeSubjectId") Long pledgeSubjectId){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getAllPledgeAgreementByPLedgeSubject(pledgeSubjectId));
+    }
+
     @PostMapping("/insert")
     public PledgeAgreementDto insertPledgeAgreement(@Valid @RequestBody PledgeAgreementDto pledgeAgreementDto){
         PledgeAgreement pledgeAgreement = dtoFactory.getPledgeAgreementEntity(pledgeAgreementDto);
