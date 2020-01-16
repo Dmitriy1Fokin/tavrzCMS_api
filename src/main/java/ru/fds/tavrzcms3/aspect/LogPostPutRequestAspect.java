@@ -2,6 +2,7 @@ package ru.fds.tavrzcms3.aspect;
 
 import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,14 +12,17 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-@Log4j2
-public class LogPostMappingAspect {
+@Slf4j
+public class LogPostPutRequestAspect {
 
-    @Pointcut("@annotation(ru.fds.tavrzcms3.annotation.LogModificationDB) && args(user,..)")
-    public void methodsWithUser(User user) { }
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.PostMapping) && args(user,..)")
+    public void methodsWithPost(User user) { }
 
-    @After("methodsWithUser(user)")
-    public void afterCall(JoinPoint joinPoint, User user){
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.PutMapping) && args(user,..)")
+    public void methodsWithPut(User user) { }
+
+    @After("methodsWithPost(user)")
+    public void afterCallPost(JoinPoint joinPoint, User user){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder
                 .append("User: ").append(user.getUsername()).append(". ")
@@ -31,5 +35,10 @@ public class LogPostMappingAspect {
         stringBuilder.append(" ]");
 
         log.info(stringBuilder.toString());
+    }
+
+    @After("methodsWithPut(user)")
+    public void afterCallPut(JoinPoint joinPoint, User user){
+        afterCallPost(joinPoint, user);
     }
 }
