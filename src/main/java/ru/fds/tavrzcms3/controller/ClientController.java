@@ -6,16 +6,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.dto.ClientDto;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.service.ClientService;
+import ru.fds.tavrzcms3.service.FilesService;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -25,13 +31,16 @@ import java.util.Set;
 public class ClientController {
 
     private final ClientService clientService;
+    private final FilesService filesService;
     private final ValidatorEntity validatorEntity;
     private final DtoFactory dtoFactory;
 
     public ClientController(ClientService clientService,
+                            FilesService filesService,
                             ValidatorEntity validatorEntity,
                             DtoFactory dtoFactory) {
         this.clientService = clientService;
+        this.filesService = filesService;
         this.validatorEntity = validatorEntity;
         this.dtoFactory = dtoFactory;
     }
@@ -65,4 +74,49 @@ public class ClientController {
     public ClientDto updateClient(@Valid @RequestBody ClientDto clientDto){
         return insertClient(clientDto);
     }
+
+    @PostMapping(value = "insert_from_file/client_legal_entity")
+    public List<ClientDto> insertClientLegalEntityFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "client_legal_entity_new");
+        List<Client> clientList = clientService.getNewClientsFromFile(uploadFile, TypeOfClient.LEGAL_ENTITY);
+
+        return getPersistentClientsDto(clientList);
+    }
+
+    @PostMapping(value = "insert_from_file/client_individual")
+    public List<ClientDto> insertClientIndividualFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "client_individual_new");
+        List<Client> clientList = clientService.getNewClientsFromFile(uploadFile, TypeOfClient.INDIVIDUAL);
+
+        return getPersistentClientsDto(clientList);
+    }
+
+    @PutMapping(value = "update_from_file/client_legal_entity")
+    public List<ClientDto> updateClientLegalEntityFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "client_legal_entity_update");
+        List<Client> clientList = clientService.getCurrentClientsFromFile(uploadFile);
+
+        return getPersistentClientsDto(clientList);
+    }
+
+    @PutMapping(value = "update_from_file/client_individual")
+    public List<ClientDto> updateClientIndividualFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "client_individual_update");
+        List<Client> clientList = clientService.getCurrentClientsFromFile(uploadFile);
+
+        return getPersistentClientsDto(clientList);
+    }
+
+    private List<ClientDto> getPersistentClientsDto(List<Client> clientList) {
+        for(int i = 0; i < clientList.size(); i++){
+            Set<ConstraintViolation<Client>> violations =  validatorEntity.validateEntity(clientList.get(i));
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + (i+1), violations);
+        }
+
+        clientList = clientService.updateInsertClients(clientList);
+
+        return dtoFactory.getClientsDto(clientList);
+    }
+
 }

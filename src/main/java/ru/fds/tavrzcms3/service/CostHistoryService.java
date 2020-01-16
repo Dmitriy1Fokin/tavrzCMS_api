@@ -155,12 +155,12 @@ public class CostHistoryService {
     }
 
     @Transactional
-    public CostHistory insertCostHistory(CostHistory costHistory){
+    public CostHistory updateInsertCostHistory(CostHistory costHistory){
         return repositoryCostHistory.save(costHistory);
     }
 
     @Transactional
-    public List<CostHistory> insertCostHistories(List<CostHistory> costHistoryList){
+    public List<CostHistory> updateInsertCostHistories(List<CostHistory> costHistoryList){
         return repositoryCostHistory.saveAll(costHistoryList);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.annotation.LogModificationDB;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
@@ -18,13 +19,17 @@ import ru.fds.tavrzcms3.dto.LoanAgreementDto;
 import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.service.EmployeeService;
+import ru.fds.tavrzcms3.service.FilesService;
 import ru.fds.tavrzcms3.service.LoanAgreementService;
 import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +45,7 @@ public class PledgeAgreementController {
     private final PledgeSubjectService pledgeSubjectService;
     private final EmployeeService employeeService;
     private final LoanAgreementService loanAgreementService;
-
+    private final FilesService filesService;
     private final DtoFactory dtoFactory;
 
     private final ValidatorEntity validatorEntity;
@@ -54,12 +59,14 @@ public class PledgeAgreementController {
                                      PledgeSubjectService pledgeSubjectService,
                                      EmployeeService employeeService,
                                      LoanAgreementService loanAgreementService,
+                                     FilesService filesService,
                                      DtoFactory dtoFactory,
                                      ValidatorEntity validatorEntity) {
         this.pledgeAgreementService = pledgeAgreementService;
         this.pledgeSubjectService = pledgeSubjectService;
         this.employeeService = employeeService;
         this.loanAgreementService = loanAgreementService;
+        this.filesService = filesService;
         this.dtoFactory = dtoFactory;
         this.validatorEntity = validatorEntity;
     }
@@ -160,6 +167,63 @@ public class PledgeAgreementController {
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
                 .getCurrentPledgeAgreementsByEmployee(employeeId, TypeOfPledgeAgreement.POSL));
     }
+
+    @PostMapping("/insert_from_file")
+    public List<PledgeAgreementDto> insertPledgeAgreementFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "pledge_agreement_new");
+        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getNewPledgeAgreementsFromFile(uploadFile);
+
+        return getPersistentPledgeAgreementsDto(pledgeAgreementList);
+    }
+
+    @PutMapping("/update_from_file")
+    public List<PledgeAgreementDto> updatePledgeAgreementFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "pledge_agreement_update");
+        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsFromFile(uploadFile);
+
+        return getPersistentPledgeAgreementsDto(pledgeAgreementList);
+    }
+
+    private List<PledgeAgreementDto> getPersistentPledgeAgreementsDto(List<PledgeAgreement> pledgeAgreementList) {
+        for(int i = 0; i < pledgeAgreementList.size(); i++){
+            Set<ConstraintViolation<PledgeAgreement>> violations =  validatorEntity.validateEntity(pledgeAgreementList.get(i));
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + (i+1), violations);
+        }
+
+        pledgeAgreementList = pledgeAgreementService.updateInsertPledgeAgreements(pledgeAgreementList);
+
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementList);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

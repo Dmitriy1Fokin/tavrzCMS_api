@@ -101,7 +101,7 @@ public class ClientManagerService {
     }
 
     @Transactional
-    public List<ClientManager> insertClientManagers(List<ClientManager> clientManagerList){
+    public List<ClientManager> updateInsertClientManagers(List<ClientManager> clientManagerList){
         return repositoryClientManager.saveAll(clientManagerList);
     }
 }

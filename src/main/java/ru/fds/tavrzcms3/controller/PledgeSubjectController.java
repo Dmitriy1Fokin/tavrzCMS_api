@@ -2,15 +2,16 @@ package ru.fds.tavrzcms3.controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.annotation.LogModificationDB;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
 import ru.fds.tavrzcms3.domain.CostHistory;
@@ -32,13 +33,17 @@ import ru.fds.tavrzcms3.dto.PledgeSubjectRoomDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectSecuritiesDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectTboDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectVesselDto;
+import ru.fds.tavrzcms3.service.FilesService;
 import ru.fds.tavrzcms3.service.LoanAgreementService;
 import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -50,7 +55,7 @@ public class PledgeSubjectController {
     private final PledgeSubjectService pledgeSubjectService;
     private final PledgeAgreementService pledgeAgreementService;
     private final LoanAgreementService loanAgreementService;
-
+    private final FilesService filesService;
     private final DtoFactory dtoFactory;
     private final ValidatorEntity validatorEntity;
 
@@ -69,11 +74,13 @@ public class PledgeSubjectController {
     public PledgeSubjectController(PledgeSubjectService pledgeSubjectService,
                                    PledgeAgreementService pledgeAgreementService,
                                    LoanAgreementService loanAgreementService,
+                                   FilesService filesService, 
                                    DtoFactory dtoFactory,
                                    ValidatorEntity validatorEntity) {
         this.pledgeSubjectService = pledgeSubjectService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.loanAgreementService = loanAgreementService;
+        this.filesService = filesService;
         this.dtoFactory = dtoFactory;
         this.validatorEntity = validatorEntity;
     }
@@ -83,6 +90,108 @@ public class PledgeSubjectController {
         Optional<PledgeSubject> pledgeSubject = pledgeSubjectService.getPledgeSubjectById(id);
         return pledgeSubject.map(dtoFactory::getPledgeSubjectDto)
                 .orElseThrow(()-> new NullPointerException("PledgeSubject not found"));
+    }
+
+    @PostMapping("/insert_from_file/auto")
+    public List<PledgeSubjectDto> insertPledgeSubjectAutoFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "pledge_subject_new_auto");
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
+                .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.AUTO);
+        
+        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+    }
+
+    @PostMapping("/insert_from_file/equipment")
+    public List<PledgeSubjectDto> insertPledgeSubjectEquipmentFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "pledge_subject_new_equipment");
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
+                .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.EQUIPMENT);
+
+        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+    }
+
+    @PostMapping("/insert_from_file/building")
+    public List<PledgeSubjectDto> insertPledgeSubjectBuildingFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "pledge_subject_new_building");
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
+                .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.BUILDING);
+
+        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+    }
+
+    @PostMapping("/insert_from_file/land_lease")
+    public List<PledgeSubjectDto> insertPledgeSubjectLandLeaseFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "pledge_subject_new_land_lease");
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
+                .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.LAND_LEASE);
+
+        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+    }
+
+    @PostMapping("/insert_from_file/land_ownership")
+    public List<PledgeSubjectDto> insertPledgeSubjectLandOwnershipFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "pledge_subject_new_land_ownership");
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
+                .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.LAND_OWNERSHIP);
+
+        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+    }
+
+    @PostMapping("/insert_from_file/premise")
+    public List<PledgeSubjectDto> insertPledgeSubjectPremiseFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "pledge_subject_new_premise");
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
+                .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.PREMISE);
+
+        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+    }
+
+    @PostMapping("/insert_from_file/securities")
+    public List<PledgeSubjectDto> insertPledgeSubjectSecuritiesFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "pledge_subject_new_securities");
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
+                .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.SECURITIES);
+
+        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+    }
+
+    @PostMapping("/insert_from_file/tbo")
+    public List<PledgeSubjectDto> insertPledgeSubjectTboFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "pledge_subject_new_tbo");
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
+                .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.TBO);
+
+        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+    }
+
+    @PostMapping("/insert_from_file/vessel")
+    public List<PledgeSubjectDto> insertPledgeSubjectVesselFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "pledge_subject_new_vessel");
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
+                .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.VESSEL);
+
+        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+    }
+    
+    @PutMapping("/update_from_file")
+    public List<PledgeSubjectDto> updatePledgeSubjectFromFile(@RequestParam("file") MultipartFile file) throws IOException {
+        File uploadFile = filesService.uploadFile(file, "pledge_subject_update");
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
+                .getCurrentPledgeSubjectsFromFile(uploadFile);
+
+        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+    }
+
+    private List<PledgeSubjectDto> getPersistentPledgeSubjectsDto(List<PledgeSubject> pledgeSubjectList) {
+        for(int i = 0; i < pledgeSubjectList.size(); i++){
+            Set<ConstraintViolation<PledgeSubject>> violations =  validatorEntity.validateEntity(pledgeSubjectList.get(i));
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + (i+1), violations);
+        }
+
+        pledgeSubjectList = pledgeSubjectService.insertPledgeSubjects(pledgeSubjectList);
+
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }
 
 

@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,12 +72,12 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         }
 
         body.put(ERRORS, errors);
-        body.put(MESSAGE, "validation error");
+        body.put(MESSAGE, "validation error. " + ex.getMessage());
 
         return new ResponseEntity<>(body, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({NullPointerException.class, IllegalArgumentException.class})
+    @ExceptionHandler({NullPointerException.class, IllegalArgumentException.class, IOException.class})
     protected ResponseEntity<Object> handleException(Exception ex){
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP, LocalDateTime.now());
