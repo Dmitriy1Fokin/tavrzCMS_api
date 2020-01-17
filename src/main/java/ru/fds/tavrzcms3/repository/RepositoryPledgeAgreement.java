@@ -20,63 +20,64 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     List<PledgeAgreement> findAllByPledgeAgreementIdIn(Collection<Long> ids);
     List<PledgeAgreement> findAllByPledgeSubjects(PledgeSubject pledgeSubject);
     List<PledgeAgreement> findAllByClient(Client client);
-    int countAllByClientInAndStatusPAEquals(List<Client> clients, StatusOfAgreement statusPA);
-    int countAllByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, TypeOfPledgeAgreement perv, StatusOfAgreement statusPA);
+    Integer countAllByClientInAndStatusPAEquals(List<Client> clients, StatusOfAgreement statusPA);
+    Integer countAllByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, TypeOfPledgeAgreement perv, StatusOfAgreement statusPA);
     List<PledgeAgreement> findByLoanAgreements(LoanAgreement loanAgreement);
     List<PledgeAgreement> findByLoanAgreementsAndStatusPAEquals(LoanAgreement loanAgreement, StatusOfAgreement statusPA);
     List<PledgeAgreement> findByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, TypeOfPledgeAgreement pervPosl, StatusOfAgreement statusPA);
     List<PledgeAgreement> findAllByNumPAContainingIgnoreCase(String numPA);
     List<PledgeAgreement> findAllByStatusPAEquals(StatusOfAgreement statusPA);
     List<PledgeAgreement> findAllByStatusPAEqualsAndPervPoslEquals(StatusOfAgreement statusPA, TypeOfPledgeAgreement typeOfPledgeAgreement);
-    int countAllByStatusPAEquals(StatusOfAgreement statusPA);
-    int countAllByStatusPAEqualsAndPervPoslEquals(StatusOfAgreement statusPA, TypeOfPledgeAgreement typeOfPledgeAgreement);
+    Integer countAllByStatusPAEquals(StatusOfAgreement statusPA);
+    Integer countAllByStatusPAEqualsAndPervPoslEquals(StatusOfAgreement statusPA, TypeOfPledgeAgreement typeOfPledgeAgreement);
 
     @Query(nativeQuery = true, value = "select distinct ps.date_conclusion " +
                                         "from pledge_subject as ps " +
                                         "join dz_ps as dzps on dzps.pledge_subject_id = ps.pledge_subject_id " +
                                         "join dz as d on d.dz_id = dzps.dz_id " +
-                                        "where d.dz_id = ?1")
-    List<Date> getDatesOfConclusion(long pledgeAgreementId);
+                                        "where d.dz_id = :pledgeAgreementId")
+    List<Date> getDatesOfConclusion(@Param("pledgeAgreementId") Long pledgeAgreementId);
 
     @Query(nativeQuery = true, value = "select distinct ps.date_monitoring " +
                                         "from pledge_subject as ps " +
                                         "join dz_ps as dzps on dzps.pledge_subject_id = ps.pledge_subject_id " +
                                         "join dz as d on d.dz_id = dzps.dz_id " +
-                                        "where d.dz_id = ?1")
-    List<Date> getDatesOMonitorings(long pledgeAgreementId);
+                                        "where d.dz_id = :pledgeAgreementId")
+    List<Date> getDatesOMonitorings(@Param("pledgeAgreementId") Long pledgeAgreementId);
 
     @Query(nativeQuery = true, value = "select distinct ps.status_monitoring " +
                                         "from pledge_subject as ps " +
                                         "join dz_ps as dzps on dzps.pledge_subject_id = ps.pledge_subject_id " +
                                         "join dz as d on d.dz_id = dzps.dz_id " +
-                                        "where d.dz_id = ?1")
-    List<String> getResultsOfMonitoring(long pledgeAgreementId);
+                                        "where d.dz_id = :pledgeAgreementId")
+    List<String> getResultsOfMonitoring(@Param("pledgeAgreementId") Long pledgeAgreementId);
 
     @Query(nativeQuery = true, value = "select distinct ps.type_of_collateral " +
                                         "from pledge_subject as ps " +
                                         "join dz_ps as dzps on dzps.pledge_subject_id = ps.pledge_subject_id " +
                                         "join dz as d on d.dz_id = dzps.dz_id " +
-                                        "where d.dz_id = ?1")
-    List<String> getTypeOfCollateral(long pledgeAgreementId);
+                                        "where d.dz_id = :pledgeAgreementId")
+    List<String> getTypeOfCollateral(@Param("pledgeAgreementId") Long pledgeAgreementId);
 
     @Query(nativeQuery = true, value = "select d.* " +
                                         "from employee as emp " +
                                         "join client_prime as cp on cp.employee_id = emp.employee_id " +
                                         "join dz as d on d.pledgor_id = cp.client_id " +
                                         "where d.status = 'открыт' " +
-                                        "and d.perv_posl = ?2 " +
-                                        "and emp.employee_id = ?1 " +
+                                        "and d.perv_posl = :pervPosl " +
+                                        "and emp.employee_id = :employeeId " +
                                         "order by d.pledgor_id")
-    List<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(long employee, String pervPosl);
+    List<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(@Param("employeeId") Long employeeId,
+                                                                @Param("pervPosl") String pervPosl);
 
     @Query(nativeQuery = true, value = "select d.* " +
                                         "from employee as emp " +
                                         "join client_prime as cp on cp.employee_id = emp.employee_id " +
                                         "join dz as d on d.pledgor_id = cp.client_id " +
                                         "where d.status = 'открыт' " +
-                                        "and emp.employee_id = ?1 " +
+                                        "and emp.employee_id = :employeeId " +
                                         "order by d.pledgor_id")
-    List<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(long employee);
+    List<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(@Param("employeeId") Long employeeId);
 
     @Query(nativeQuery = true, value = "select count(distinct d.dz_id)\n" +
                                         "from pledge_subject as ps\n" +

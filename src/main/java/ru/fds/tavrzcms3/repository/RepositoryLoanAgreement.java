@@ -16,10 +16,9 @@ public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Lo
     List<LoanAgreement> findAllByPledgeAgreements(PledgeAgreement pledgeAgreement);
     List<LoanAgreement> findAllByPledgeAgreementsIn(List<PledgeAgreement> pledgeAgreement);
     List<LoanAgreement> findByPledgeAgreementsAndStatusLAEquals(PledgeAgreement pledgeAgreement, StatusOfAgreement statusLA);
-    int countAllByClientInAndStatusLAEquals(List<Client> clients, StatusOfAgreement statusLA);
+    Integer countAllByClientInAndStatusLAEquals(List<Client> clients, StatusOfAgreement statusLA);
     List<LoanAgreement> findAllByClient(Client client);
-    List<LoanAgreement> findByClientInAndStatusLAEquals(List<Client> clients, StatusOfAgreement statusLA);
-    int countAllByStatusLAEquals(StatusOfAgreement statusOfAgreement);
+    Integer countAllByStatusLAEquals(StatusOfAgreement statusOfAgreement);
     List<LoanAgreement> findAllByStatusLAEquals(StatusOfAgreement statusOfAgreement);
 
     @Query(nativeQuery = true, value = "select k.*\n" +
@@ -28,7 +27,7 @@ public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Lo
                                         "where cp.client_id = :clientId\n" +
                                         "and k.status = :statusLA")
     List<LoanAgreement> getLoanAgreementsByClient(@Param("clientId") Long clientId,
-                                                    @Param("statusLA") String statusLA);
+                                                  @Param("statusLA") String statusLA);
 
     @Query(nativeQuery = true, value = "select k.*\n" +
                                         "from kd k\n" +

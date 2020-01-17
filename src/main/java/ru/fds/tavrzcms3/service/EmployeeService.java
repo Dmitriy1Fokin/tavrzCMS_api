@@ -16,17 +16,9 @@ import java.util.Optional;
 public class EmployeeService {
 
     private final RepositoryEmployee repositoryEmployee;
-    private final RepositoryAppUser repositoryAppUser;
 
-    public EmployeeService(RepositoryEmployee repositoryEmployee,
-                           RepositoryAppUser repositoryAppUser) {
+    public EmployeeService(RepositoryEmployee repositoryEmployee) {
         this.repositoryEmployee = repositoryEmployee;
-        this.repositoryAppUser = repositoryAppUser;
-    }
-
-    public Employee getEmployeeByUser(User user){
-        AppUser appUser = repositoryAppUser.findByName(user.getUsername());
-        return repositoryEmployee.findByAppUser(appUser);
     }
 
     public Optional<Employee> getEmployeeById(long employeeId){

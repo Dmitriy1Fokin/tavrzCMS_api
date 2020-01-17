@@ -1107,10 +1107,10 @@ public class PledgeSubjectService {
 
     public List<PledgeSubject> getPledgeSubjectByCadastralNum(String cadastralNum){
         List<PledgeSubject> pledgeSubjectList = new ArrayList<>();
-        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectBuilding_CadastralNumContainingIgnoreCase(cadastralNum));
-        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectLandLease_CadastralNumContainingIgnoreCase(cadastralNum));
-        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectLandOwnership_CadastralNumContainingIgnoreCase(cadastralNum));
-        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectRoom_CadastralNumContainingIgnoreCase(cadastralNum));
+        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectBuildingCadastralNumContainingIgnoreCase(cadastralNum));
+        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectLandLeaseCadastralNumContainingIgnoreCase(cadastralNum));
+        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectLandOwnershipCadastralNumContainingIgnoreCase(cadastralNum));
+        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectRoomCadastralNumContainingIgnoreCase(cadastralNum));
 
         return pledgeSubjectList;
     }
