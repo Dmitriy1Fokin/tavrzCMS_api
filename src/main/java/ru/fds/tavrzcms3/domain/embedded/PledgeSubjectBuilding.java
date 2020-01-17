@@ -18,6 +18,7 @@ public class PledgeSubjectBuilding{
     @Column(name ="area_building", table = "pledge_realty_building")
     private double area;
 
+	@NotNull(message = "Обязательно для заполнения")
     @Pattern(regexp = "[0-9]{2}:[0-9]{2}:[0-9]{3,7}:[0-9]+",
             message = "Неверное значение")
     @Column(name ="cadastral_num_building", table = "pledge_realty_building")

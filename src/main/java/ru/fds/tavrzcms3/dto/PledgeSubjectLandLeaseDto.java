@@ -1,16 +1,18 @@
 package ru.fds.tavrzcms3.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.LandCategory;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @EqualsAndHashCode
@@ -23,6 +25,7 @@ public class PledgeSubjectLandLeaseDto{
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
     private double area;
 
+    @NotNull(message = "Обязательно для заполнения")
     @Pattern(regexp = "[0-9]{2}:[0-9]{2}:[0-9]{3,7}:[0-9]+",
             message = "Неверное значение")
     private String cadastralNum;

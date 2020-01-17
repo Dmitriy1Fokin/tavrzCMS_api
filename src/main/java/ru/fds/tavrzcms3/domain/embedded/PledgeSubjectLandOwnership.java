@@ -1,9 +1,14 @@
 package ru.fds.tavrzcms3.domain.embedded;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.fds.tavrzcms3.dictionary.LandCategory;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -21,6 +26,7 @@ public class PledgeSubjectLandOwnership {
     @Column(name ="area_land_own", table = "pledge_realty_land_ownership")
     private double area;
 
+    @NotNull(message = "Обязательно для заполнения")
     @Pattern(regexp = "[0-9]{2}:[0-9]{2}:[0-9]{3,7}:[0-9]+",
             message = "Неверное значение")
     @Column(name ="cadastral_num_land_own", table = "pledge_realty_land_ownership")

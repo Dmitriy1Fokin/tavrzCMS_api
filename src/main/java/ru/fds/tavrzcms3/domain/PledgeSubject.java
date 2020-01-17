@@ -92,18 +92,22 @@ public class PledgeSubject {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dateConclusion;
 
+	@NotNull(message = "Обязательно для заполнения")
     @Convert(converter = StatusOfMonitoring.Converter.class)
 	@Column(name ="status_monitoring")
 	private StatusOfMonitoring statusMonitoring;
 
+	@NotNull(message = "Обязательно для заполнения")
     @Convert(converter = TypeOfCollateral.Converter.class)
 	@Column(name ="type_of_collateral")
 	private TypeOfCollateral typeOfCollateral;
 
+	@NotNull(message = "Обязательно для заполнения")
     @Convert(converter = TypeOfPledge.Converter.class)
 	@Column(name ="type_of_pledge")
 	private TypeOfPledge typeOfPledge;
 
+	@NotNull(message = "Обязательно для заполнения")
     @Convert(converter = TypeOfMonitoring.Converter.class)
 	@Column(name ="type_of_monitoring")
 	private TypeOfMonitoring typeOfMonitoring;

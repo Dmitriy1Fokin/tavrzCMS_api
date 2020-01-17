@@ -1,11 +1,18 @@
 package ru.fds.tavrzcms3.dto;
 
-import lombok.*;
-import org.hibernate.validator.constraints.Length;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import ru.fds.tavrzcms3.dictionary.MarketSegment;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.PositiveOrZero;
 
 @Data
 @EqualsAndHashCode
@@ -18,6 +25,7 @@ public class PledgeSubjectBuildingDto{
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
     private double area;
 
+    @NotNull(message = "Обязательно для заполнения")
     @Pattern(regexp = "[0-9]{2}:[0-9]{2}:[0-9]{3,7}:[0-9]+",
             message = "Неверное значение")
     private String cadastralNum;

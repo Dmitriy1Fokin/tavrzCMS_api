@@ -1,9 +1,5 @@
 package ru.fds.tavrzcms3.controller;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,20 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import ru.fds.tavrzcms3.annotation.LogModificationDB;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
-import ru.fds.tavrzcms3.domain.CostHistory;
-import ru.fds.tavrzcms3.domain.Monitoring;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
-import ru.fds.tavrzcms3.dto.CostHistoryDto;
 import ru.fds.tavrzcms3.dto.DtoFactory;
-import ru.fds.tavrzcms3.dto.MonitoringDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.service.FilesService;
 import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
+import ru.fds.tavrzcms3.wrapper.PledgeSubjectDtoNewWrapper;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -47,12 +39,6 @@ public class PledgeSubjectController {
     private final FilesService filesService;
     private final DtoFactory dtoFactory;
     private final ValidatorEntity validatorEntity;
-
-    private static final String PAGE_CARD_NEW = "pledge_subject/card_new";
-
-    private static final String ATTR_PLEDGE_SUBJECT = "pledgeSubjectDto";
-    private static final String ATTR_COST_HISTORY = "costHistoryDto";
-    private static final String ATTR_MONITORING = "monitoringDto";
 
     public PledgeSubjectController(PledgeSubjectService pledgeSubjectService,
                                    PledgeAgreementService pledgeAgreementService,
@@ -86,6 +72,16 @@ public class PledgeSubjectController {
     @GetMapping("/search_by_cadastral_num")
     public List<PledgeSubjectDto> getPledgeSubjectsByCadastralNum(@RequestParam("cadastralNum") @NotBlank String cadastralNum){
         return dtoFactory.getPledgeSubjectsDto(pledgeSubjectService.getPledgeSubjectByCadastralNum(cadastralNum));
+    }
+
+    @PostMapping("/insert")
+    public PledgeSubjectDto insertPledgeSubject(@Valid @RequestBody PledgeSubjectDtoNewWrapper pledgeSubjectDtoNewWrapper){
+        PledgeSubject pledgeSubject = pledgeSubjectService
+                .insertPledgeSubject(dtoFactory.getPledgeSubjectEntity(pledgeSubjectDtoNewWrapper.getPledgeSubjectDto()),
+                        dtoFactory.getCostHistoryEntity(pledgeSubjectDtoNewWrapper.getCostHistoryDto()),
+                        dtoFactory.getMonitoringEntity(pledgeSubjectDtoNewWrapper.getMonitoringDto()));
+
+        return dtoFactory.getPledgeSubjectDto(pledgeSubject);
     }
 
     @PutMapping("/update")
@@ -238,91 +234,5 @@ public class PledgeSubjectController {
         pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
 
         return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @LogModificationDB
-    @PostMapping("/insert_pledge_subject")
-    public String insertNewPledgeSubject(@AuthenticationPrincipal User user,
-                                         @Valid PledgeSubjectDto pledgeSubjectDto,
-                                         BindingResult bindingResult,
-                                         @Valid CostHistoryDto costHistoryDto,
-                                         BindingResult bindingResultCostHistory,
-                                         @Valid MonitoringDto monitoringDto,
-                                         BindingResult bindingResultMonitoring,
-                                         Model model){
-
-        if(bindingResult.hasErrors()){
-            model.addAttribute(ATTR_COST_HISTORY, costHistoryDto);
-            model.addAttribute(ATTR_MONITORING, monitoringDto);
-            return PAGE_CARD_NEW;
-
-        }else if(bindingResultCostHistory.hasErrors()){
-            model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubjectDto);
-            model.addAttribute(ATTR_MONITORING, monitoringDto);
-
-            return PAGE_CARD_NEW;
-
-        }else if(bindingResultMonitoring.hasErrors()){
-            model.addAttribute(ATTR_PLEDGE_SUBJECT, pledgeSubjectDto);
-            model.addAttribute(ATTR_COST_HISTORY, costHistoryDto);
-
-            return PAGE_CARD_NEW;
-        }
-
-        PledgeSubject pledgeSubject = dtoFactory.getPledgeSubjectEntity(pledgeSubjectDto);
-        Set<ConstraintViolation<PledgeSubject>> violations =  validatorEntity.validateEntity(pledgeSubject);
-        if(!violations.isEmpty())
-            throw new IllegalArgumentException(validatorEntity.getErrorMessage());
-
-        CostHistory costHistory = dtoFactory.getCostHistoryEntity(costHistoryDto);
-        Set<ConstraintViolation<CostHistory>> violationsCostHistory =  validatorEntity.validateEntity(costHistory);
-        if(!violationsCostHistory.isEmpty())
-            throw new IllegalArgumentException(validatorEntity.getErrorMessage());
-
-        Monitoring monitoring = dtoFactory.getMonitoringEntity(monitoringDto);
-        Set<ConstraintViolation<Monitoring>> violationsMonitoring =  validatorEntity.validateEntity(monitoring);
-        if(!violationsMonitoring.isEmpty())
-            throw new IllegalArgumentException(validatorEntity.getErrorMessage());
-
-        pledgeSubjectService.insertPledgeSubject(pledgeSubject, costHistory, monitoring);
-
-        return null;
     }
 }

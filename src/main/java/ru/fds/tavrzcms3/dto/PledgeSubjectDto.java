@@ -1,8 +1,16 @@
 package ru.fds.tavrzcms3.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Singular;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.fds.tavrzcms3.dictionary.*;
+import ru.fds.tavrzcms3.dictionary.Liquidity;
+import ru.fds.tavrzcms3.dictionary.StatusOfMonitoring;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
+import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
+import ru.fds.tavrzcms3.dictionary.TypeOfPledge;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -11,7 +19,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -55,12 +62,16 @@ public class PledgeSubjectDto{
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateConclusion;
 
+    @NotNull(message = "Обязательно для заполнения")
     private StatusOfMonitoring statusMonitoring;
 
+    @NotNull(message = "Обязательно для заполнения")
     private TypeOfCollateral typeOfCollateral;
 
+    @NotNull(message = "Обязательно для заполнения")
     private TypeOfPledge typeOfPledge;
 
+    @NotNull(message = "Обязательно для заполнения")
     private TypeOfMonitoring typeOfMonitoring;
 
     @NotBlank(message = "Обязательно для заполнения")
