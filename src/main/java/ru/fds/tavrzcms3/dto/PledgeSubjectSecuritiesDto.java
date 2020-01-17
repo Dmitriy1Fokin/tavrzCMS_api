@@ -17,11 +17,11 @@ public class PledgeSubjectSecuritiesDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double nominalValue;
+    private Double nominalValue;
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double actualValue;
+    private Double actualValue;
 
     private TypeOfSecurities typeOfSecurities;
 }

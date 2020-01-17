@@ -18,12 +18,12 @@ public class PledgeSubjectSecurities{
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="nominal_value", table = "pledge_securities")
-	private double nominalValue;
+	private Double nominalValue;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="actual_value", table = "pledge_securities")
-	private double actualValue;
+	private Double actualValue;
 
 	@NotNull
 	@Convert(converter = TypeOfSecurities.Converter.class)

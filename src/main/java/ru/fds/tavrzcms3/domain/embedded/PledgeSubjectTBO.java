@@ -16,11 +16,11 @@ public class PledgeSubjectTBO{
 
 	@Positive(message = "Значение должно быть больше нуля")
 	@Column(name ="count_of_tbo", table = "pledge_tbo")
-	private int countOfTBO;
+	private Integer countOfTBO;
 
 	@Positive(message = "Значение должно быть больше нуля")
 	@Column(name ="carrying_amount", table = "pledge_tbo")
-	private double carryingAmount;
+	private Double carryingAmount;
 
 	@NotNull
 	@Convert(converter = TypeOfTBO.Converter.class)

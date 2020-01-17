@@ -45,17 +45,17 @@ public class LoanAgreementDto{
     @NotNull(message = "Обязательно для заполнения")
     @Positive(message = "Значение должно быть больше нуля")
     @Max(value = 1, message = "Значение не может быть больше 1")
-    private double interestRateLA;
+    private Double interestRateLA;
 
     @NotNull(message = "Обязательно для заполнения")
     @Min(value = 1, message = "Значение должно быть от 1 до 5")
     @Max(value = 5, message = "Значение должно быть от 1 до 5")
-    private byte pfo;
+    private Byte pfo;
 
     @NotNull(message = "Обязательно для заполнения")
     @Min(value = 1, message = "Значение должно быть от 1 до 5")
     @Max(value = 5, message = "Значение должно быть от 1 до 5")
-    private byte qualityCategory;
+    private Byte qualityCategory;
 
     @NotNull(message = "Обязательно для заполнения")
     private Long clientId;

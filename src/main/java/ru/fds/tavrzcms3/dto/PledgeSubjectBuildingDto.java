@@ -23,7 +23,7 @@ public class PledgeSubjectBuildingDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
-    private double area;
+    private Double area;
 
     @NotNull(message = "Обязательно для заполнения")
     @Pattern(regexp = "[0-9]{2}:[0-9]{2}:[0-9]{3,7}:[0-9]+",
@@ -35,12 +35,12 @@ public class PledgeSubjectBuildingDto{
     @NotNull(message = "Обязательно для заполнения")
     @Min(value = 1, message = "Неверное значение")
     @Max(value = 100, message = "Неверное значение")
-    private int readinessDegree;
+    private Integer readinessDegree;
 
     @NotNull(message = "Обязательно для заполнения")
     @Min(value = 1800, message = "Неверное значение")
     @Max(value = 2100, message = "Неверное значение")
-    private int yearOfConstruction;
+    private Integer yearOfConstruction;
 
     private MarketSegment marketSegment;
 }

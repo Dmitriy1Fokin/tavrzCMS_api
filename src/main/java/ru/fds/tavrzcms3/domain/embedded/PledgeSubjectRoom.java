@@ -24,7 +24,7 @@ public class PledgeSubjectRoom{
     @NotNull(message = "Обязательно для заполнения")
     @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
     @Column(name ="area_room", table = "pledge_realty_room")
-    private double area;
+    private Double area;
 
     @NotNull(message = "Обязательно для заполнения")
     @Pattern(regexp = "[0-9]{2}:[0-9]{2}:[0-9]{3,7}:[0-9]+",

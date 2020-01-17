@@ -15,10 +15,10 @@ import javax.validation.constraints.Positive;
 public class PledgeSubjectTboDto{
 
     @Positive(message = "Значение должно быть больше нуля")
-    private int countOfTBO;
+    private Integer countOfTBO;
 
     @Positive(message = "Значение должно быть больше нуля")
-    private double carryingAmount;
+    private Double carryingAmount;
 
     private TypeOfTBO typeOfTBO;
 }

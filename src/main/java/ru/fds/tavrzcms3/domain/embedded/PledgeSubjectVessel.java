@@ -46,18 +46,18 @@ public class PledgeSubjectVessel{
 	@NotNull(message = "Обязательно для заполнения")
 	@Positive(message = "Значение должно быть больше нуля")
 	@Column(name ="gross_tonnage", table = "pledge_vessel")
-	private int grossTonnage;
+	private Integer grossTonnage;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@Positive(message = "Значение должно быть больше нуля")
 	@Column(name ="deadweight", table = "pledge_vessel")
-	private int deadweight;
+	private Integer deadweight;
 
 	@Min(value = 1900, message = "Неверное значение")
 	@Max(value = 2100, message = "Неверное значение")
 	@NotNull(message = "Обязательно для заполнения")
 	@Column(name ="year_built", table = "pledge_vessel")
-	private int yearBuilt;
+	private Integer yearBuilt;
 
 	@NotBlank(message = "Обязательно для заполнения")
 	@Column(name ="status", table = "pledge_vessel")

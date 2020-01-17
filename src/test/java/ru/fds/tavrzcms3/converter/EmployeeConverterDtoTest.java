@@ -40,7 +40,7 @@ public class EmployeeConverterDtoTest {
         assertEquals(employeeDto.getSurname(), employee.getSurname());
         assertEquals(employeeDto.getName(), employee.getName());
         assertEquals(employeeDto.getPatronymic(), employee.getPatronymic());
-        assertEquals((long)employeeDto.getAppUserId(), employee.getAppUser().getUserId());
+        assertEquals(employeeDto.getAppUserId(), employee.getAppUser().getUserId());
         assertEquals(employeeDto.getClientsIds().size(), employee.getClients().size());
 
     }
@@ -62,7 +62,7 @@ public class EmployeeConverterDtoTest {
         assertEquals(employeeDto.getSurname(), employee.getSurname());
         assertEquals(employeeDto.getName(), employee.getName());
         assertEquals(employeeDto.getPatronymic(), employee.getPatronymic());
-        assertEquals((long)employeeDto.getAppUserId(), employee.getAppUser().getUserId());
+        assertEquals(employeeDto.getAppUserId(), employee.getAppUser().getUserId());
         assertEquals("QWE ASD ZXC", employeeDto.getFullName());
 
     }

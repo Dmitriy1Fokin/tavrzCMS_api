@@ -57,19 +57,19 @@ public class LoanAgreement {
 	@Positive(message = "Значение должно быть больше нуля")
 	@Max(value = 1, message = "Значение не может быть больше 1")
 	@Column(name ="interest_rate")
-	private double interestRateLA;
+	private Double interestRateLA;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@Min(value = 1, message = "Значение должно быть от 1 до 5")
 	@Max(value = 5, message = "Значение должно быть от 1 до 5")
 	@Column(name ="pfo")
-	private byte pfo;
+	private Byte pfo;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@Min(value = 1, message = "Значение должно быть от 1 до 5")
 	@Max(value = 5, message = "Значение должно быть от 1 до 5")
 	@Column(name ="quality_category")
-	private byte qualityCategory;
+	private Byte qualityCategory;
 
 	@NotNull(message = "Обязательно для заполнения")
 	@ManyToOne(fetch = FetchType.LAZY)

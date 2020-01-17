@@ -27,16 +27,16 @@ public class PledgeSubjectVesselDto{
 
     @NotNull(message = "Обязательно для заполнения")
     @Positive(message = "Значение должно быть больше нуля")
-    private int grossTonnage;
+    private Integer grossTonnage;
 
     @NotNull(message = "Обязательно для заполнения")
     @Positive(message = "Значение должно быть больше нуля")
-    private int deadweight;
+    private Integer deadweight;
 
     @NotNull(message = "Обязательно для заполнения")
     @Min(value = 1900, message = "Неверное значение")
     @Max(value = 2100, message = "Неверное значение")
-    private int yearBuilt;
+    private Integer yearBuilt;
 
     @NotBlank(message = "Обязательно для заполнения")
     @Column(name ="status")
