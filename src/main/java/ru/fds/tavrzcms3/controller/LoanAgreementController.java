@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -39,10 +38,9 @@ public class LoanAgreementController {
         this.validatorEntity = validatorEntity;
     }
 
-    @GetMapping("/{id}")
-    public LoanAgreementDto getLoanAgreement(@PathVariable Long id){
-        Optional<LoanAgreement> loanAgreement = loanAgreementService.getLoanAgreementById(id);
-        return loanAgreement.map(dtoFactory::getLoanAgreementDto)
+    @GetMapping("/{loanAgreementId}")
+    public LoanAgreementDto getLoanAgreement(@PathVariable("loanAgreementId") Long loanAgreementId){
+        return loanAgreementService.getLoanAgreementById(loanAgreementId).map(dtoFactory::getLoanAgreementDto)
                 .orElseThrow(()-> new NullPointerException("Loan agreement not found"));
     }
 
@@ -81,18 +79,14 @@ public class LoanAgreementController {
     @GetMapping("/search")
     public List<LoanAgreementDto> getLoanAgreementBySearchCriteria(@RequestParam Map<String, String> reqParam){
         List<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementFromSearch(reqParam);
+
         return dtoFactory.getLoanAgreementsDto(loanAgreementList);
     }
 
     @PostMapping("/insert")
     public LoanAgreementDto insertLoanAgreement(@Valid @RequestBody LoanAgreementDto loanAgreementDto){
-        LoanAgreement loanAgreement = dtoFactory.getLoanAgreementEntity(loanAgreementDto);
+        LoanAgreement loanAgreement = loanAgreementService.updateInsertLoanAgreement(dtoFactory.getLoanAgreementEntity(loanAgreementDto));
 
-        Set<ConstraintViolation<LoanAgreement>> violations =  validatorEntity.validateEntity(loanAgreement);
-        if(!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-
-        loanAgreement = loanAgreementService.updateInsertLoanAgreement(loanAgreement);
         return dtoFactory.getLoanAgreementDto(loanAgreement);
     }
 

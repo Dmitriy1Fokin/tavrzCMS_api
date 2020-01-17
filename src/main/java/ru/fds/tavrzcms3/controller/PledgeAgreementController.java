@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -48,10 +47,9 @@ public class PledgeAgreementController {
         this.validatorEntity = validatorEntity;
     }
 
-    @GetMapping("/{id}")
-    public PledgeAgreementDto getPledgeAgreement(@PathVariable Long id){
-        Optional<PledgeAgreement> pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(id);
-        return pledgeAgreement.map(dtoFactory::getPledgeAgreementDto)
+    @GetMapping("/{pledgeAgreementId}")
+    public PledgeAgreementDto getPledgeAgreement(@PathVariable("pledgeAgreementId") Long pledgeAgreementId){
+        return pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId).map(dtoFactory::getPledgeAgreementDto)
                 .orElseThrow(()-> new NullPointerException("Pledge agreement not found"));
     }
 
@@ -158,13 +156,8 @@ public class PledgeAgreementController {
 
     @PostMapping("/insert")
     public PledgeAgreementDto insertPledgeAgreement(@Valid @RequestBody PledgeAgreementDto pledgeAgreementDto){
-        PledgeAgreement pledgeAgreement = dtoFactory.getPledgeAgreementEntity(pledgeAgreementDto);
-
-        Set<ConstraintViolation<PledgeAgreement>> violations =  validatorEntity.validateEntity(pledgeAgreement);
-        if(!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-
-        pledgeAgreement = pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
+        PledgeAgreement pledgeAgreement = pledgeAgreementService
+                .updateInsertPledgeAgreement(dtoFactory.getPledgeAgreementEntity(pledgeAgreementDto));
 
         return dtoFactory.getPledgeAgreementDto(pledgeAgreement);
     }
@@ -174,7 +167,7 @@ public class PledgeAgreementController {
         return insertPledgeAgreement(pledgeAgreementDto);
     }
 
-    @PostMapping("/insert_from_file")
+    @PostMapping("/insert/file")
     public List<PledgeAgreementDto> insertPledgeAgreementFromFile(@RequestParam("file") MultipartFile file) throws IOException {
         File uploadFile = filesService.uploadFile(file, "pledge_agreement_new");
         List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getNewPledgeAgreementsFromFile(uploadFile);
@@ -182,7 +175,7 @@ public class PledgeAgreementController {
         return getPersistentPledgeAgreementsDto(pledgeAgreementList);
     }
 
-    @PutMapping("/update_from_file")
+    @PutMapping("/update/file")
     public List<PledgeAgreementDto> updatePledgeAgreementFromFile(@RequestParam("file") MultipartFile file) throws IOException {
         File uploadFile = filesService.uploadFile(file, "pledge_agreement_update");
         List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsFromFile(uploadFile);
@@ -200,5 +193,19 @@ public class PledgeAgreementController {
         pledgeAgreementList = pledgeAgreementService.updateInsertPledgeAgreements(pledgeAgreementList);
 
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementList);
+    }
+
+    @PutMapping("update/withdraw_pledge_subject")
+    public PledgeAgreementDto withdrawPledgeSubjectFromPledgeAgreement(@RequestParam("pledgeSubjectId") Long pledgeSubjectId,
+                                                                       @RequestParam("pledgeAgreementId") Long pledgeAgreementId){
+        return dtoFactory.getPledgeAgreementDto(pledgeAgreementService
+                .withdrawPledgeSubjectFromPledgeAgreement(pledgeAgreementId, pledgeSubjectId));
+    }
+
+    @PutMapping("/update/insert_current_pledge_subject")
+    public PledgeAgreementDto insertCurrentPledgeSubjectInPledgeAgreement(@RequestParam("pledgeSubjectsIdArray") List<Long> pledgeSubjectsIdArray,
+                                                                          @RequestParam("pledgeAgreementId") Long pledgeAgreementId){
+        return dtoFactory.getPledgeAgreementDto(pledgeAgreementService.
+                insertCurrentPledgeSubjectsInPledgeAgreement(pledgeAgreementId, pledgeSubjectsIdArray));
     }
 }

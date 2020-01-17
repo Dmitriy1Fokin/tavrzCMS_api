@@ -513,4 +513,40 @@ public class PledgeAgreementService {
     public List<PledgeAgreement> updateInsertPledgeAgreements(List<PledgeAgreement> pledgeAgreementList){
         return repositoryPledgeAgreement.saveAll(pledgeAgreementList);
     }
+
+    @Transactional
+    public PledgeAgreement withdrawPledgeSubjectFromPledgeAgreement(Long pledgeAgreementId ,Long pledgeSubjectId){
+        PledgeAgreement pledgeAgreement = getPledgeAgreementById(pledgeAgreementId)
+                .orElseThrow(() -> new NullPointerException("Pledge agreement not found"));
+
+        PledgeSubject pledgeSubject = repositoryPledgeSubject.findById(pledgeSubjectId)
+                .orElseThrow(() -> new NullPointerException("Pledge subject not found"));
+
+        List<PledgeSubject> pledgeSubjectList = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
+
+        pledgeSubjectList.remove(pledgeSubject);
+        pledgeAgreement.setPledgeSubjects(pledgeSubjectList);
+
+        return repositoryPledgeAgreement.save(pledgeAgreement);
+    }
+
+    @Transactional
+    public PledgeAgreement insertCurrentPledgeSubjectsInPledgeAgreement(Long pledgeAgreementId ,List<Long> pledgeSubjectsIds){
+        PledgeAgreement pledgeAgreement = getPledgeAgreementById(pledgeAgreementId)
+                .orElseThrow(() -> new NullPointerException("Pledge agreement not found"));
+
+        List<PledgeSubject> pledgeSubjectListCurrent = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
+
+        List<PledgeSubject> pledgeSubjectListNew = repositoryPledgeSubject.findAllByPledgeSubjectIdIn(pledgeSubjectsIds);
+
+        pledgeSubjectListNew.forEach(pledgeSubject -> {
+            if(!pledgeSubjectListCurrent.contains(pledgeSubject)){
+                pledgeSubjectListCurrent.add(pledgeSubject);
+            }
+        });
+
+        pledgeAgreement.setPledgeSubjects(pledgeSubjectListCurrent);
+
+        return repositoryPledgeAgreement.save(pledgeAgreement);
+    }
 }

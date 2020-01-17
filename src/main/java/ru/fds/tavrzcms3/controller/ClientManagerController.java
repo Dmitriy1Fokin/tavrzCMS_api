@@ -22,7 +22,6 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -44,22 +43,17 @@ public class ClientManagerController {
         this.dtoFactory = dtoFactory;
     }
 
-    @GetMapping("/{id}")
-    public ClientManagerDto getClientManager(@PathVariable Long id){
-        Optional<ClientManager> clientManager = clientManagerService.getClientManagerById(id);
-        return clientManager.map(dtoFactory::getClientManagerDto)
+    @GetMapping("/{clientManagerId}")
+    public ClientManagerDto getClientManager(@PathVariable("clientManagerId") Long clientManagerId){
+        return clientManagerService.getClientManagerById(clientManagerId).map(dtoFactory::getClientManagerDto)
                 .orElseThrow(()-> new NullPointerException("Client manager not found"));
     }
 
     @PostMapping("/insert")
     public ClientManagerDto insertClientManager(@Valid @RequestBody ClientManagerDto clientManagerDto){
-        ClientManager clientManager = dtoFactory.getClientManagerEntity(clientManagerDto);
+        ClientManager clientManager = clientManagerService
+                .insertUpdateClientManager(dtoFactory.getClientManagerEntity(clientManagerDto));
 
-        Set<ConstraintViolation<ClientManager>> violations =  validatorEntity.validateEntity(clientManager);
-        if(!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-
-        clientManager = clientManagerService.insertUpdateClientManager(clientManager);
         return dtoFactory.getClientManagerDto(clientManager);
     }
 

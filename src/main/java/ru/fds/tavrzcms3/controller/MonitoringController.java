@@ -69,15 +69,11 @@ public class MonitoringController {
 
         Monitoring monitoring = dtoFactory.getMonitoringEntity(monitoringDto);
 
-        Set<ConstraintViolation<Monitoring>> violations =  validatorEntity.validateEntity(monitoring);
-        if(!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-
         Optional<PledgeSubject> pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
-        if(pledgeSubject.isEmpty())
-            throw new NullPointerException("Pledge subject not found");
 
-        monitoring.setPledgeSubject(pledgeSubject.get());
+        monitoring.setPledgeSubject(pledgeSubject
+                .orElseThrow(() -> new NullPointerException("Pledge subject not found")));
+
         monitoring = monitoringService.insertMonitoringInPledgeSubject(monitoring);
 
         return dtoFactory.getMonitoringDto(monitoring);
@@ -89,16 +85,11 @@ public class MonitoringController {
 
         Monitoring monitoring = dtoFactory.getMonitoringEntity(monitoringDto);
 
-        Set<ConstraintViolation<Monitoring>> violations =  validatorEntity.validateEntity(monitoring);
-        if(!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-
         Optional<PledgeAgreement> pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId);
-        if(pledgeAgreement.isEmpty())
-            throw new NullPointerException("Pledge agreement not found");
 
         List<Monitoring> monitoringList = monitoringService
-                .insertMonitoringInPledgeAgreement(pledgeAgreement.get(), monitoring);
+                .insertMonitoringInPledgeAgreement(pledgeAgreement
+                        .orElseThrow(() -> new NullPointerException("Pledge agreement not found")), monitoring);
 
         return dtoFactory.getMonitoringsDto(monitoringList);
     }
@@ -108,15 +99,10 @@ public class MonitoringController {
                                                         @RequestParam("clientId") Long clienttId){
         Monitoring monitoring = dtoFactory.getMonitoringEntity(monitoringDto);
 
-        Set<ConstraintViolation<Monitoring>> violations =  validatorEntity.validateEntity(monitoring);
-        if(!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-
         Optional<Client> client = clientService.getClientById(clienttId);
-        if(client.isEmpty())
-            throw new NullPointerException("Client not found");
 
-        List<Monitoring> monitoringList = monitoringService.insertMonitoringInPledgor(client.get(), monitoring);
+        List<Monitoring> monitoringList = monitoringService.insertMonitoringInPledgor(client
+                .orElseThrow(() -> new NullPointerException("Client not found")), monitoring);
 
         return dtoFactory.getMonitoringsDto(monitoringList);
     }

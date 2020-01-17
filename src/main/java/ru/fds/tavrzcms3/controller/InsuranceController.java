@@ -22,7 +22,6 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -45,22 +44,16 @@ public class InsuranceController {
         this.validatorEntity = validatorEntity;
     }
 
-    @GetMapping("/{id}")
-    public InsuranceDto getInsurance(@PathVariable Long id){
-        Optional<Insurance> insurance = insuranceService.getInsuranceById(id);
-        return insurance.map(dtoFactory::getInsuranceDto)
+    @GetMapping("/{insuranceId}")
+    public InsuranceDto getInsurance(@PathVariable("insuranceId") Long insuranceId){
+        return insuranceService.getInsuranceById(insuranceId).map(dtoFactory::getInsuranceDto)
                 .orElseThrow(()-> new NullPointerException("Insurance not found"));
     }
 
     @PostMapping("/insert")
     public InsuranceDto insertInsurance(@Valid @RequestBody InsuranceDto insuranceDto){
-        Insurance insurance = dtoFactory.getInsuranceEntity(insuranceDto);
+        Insurance insurance = insuranceService.updateInsertInsurance(dtoFactory.getInsuranceEntity(insuranceDto));
 
-        Set<ConstraintViolation<Insurance>> violations =  validatorEntity.validateEntity(insurance);
-        if(!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-
-        insurance = insuranceService.updateInsertInsurance(insurance);
         return dtoFactory.getInsuranceDto(insurance);
     }
 

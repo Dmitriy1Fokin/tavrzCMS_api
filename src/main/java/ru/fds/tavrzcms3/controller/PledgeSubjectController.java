@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
-import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.dto.CostHistoryDto;
 import ru.fds.tavrzcms3.dto.DtoFactory;
+import ru.fds.tavrzcms3.dto.MonitoringDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.service.FilesService;
-import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
 import ru.fds.tavrzcms3.wrapper.PledgeSubjectDtoNewWrapper;
@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -36,27 +35,23 @@ import java.util.Set;
 public class PledgeSubjectController {
 
     private final PledgeSubjectService pledgeSubjectService;
-    private final PledgeAgreementService pledgeAgreementService;
     private final FilesService filesService;
     private final DtoFactory dtoFactory;
     private final ValidatorEntity validatorEntity;
 
     public PledgeSubjectController(PledgeSubjectService pledgeSubjectService,
-                                   PledgeAgreementService pledgeAgreementService,
                                    FilesService filesService,
                                    DtoFactory dtoFactory,
                                    ValidatorEntity validatorEntity) {
         this.pledgeSubjectService = pledgeSubjectService;
-        this.pledgeAgreementService = pledgeAgreementService;
         this.filesService = filesService;
         this.dtoFactory = dtoFactory;
         this.validatorEntity = validatorEntity;
     }
 
-    @GetMapping("/{id}")
-    public PledgeSubjectDto getPledgeSubject(@PathVariable Long id){
-        Optional<PledgeSubject> pledgeSubject = pledgeSubjectService.getPledgeSubjectById(id);
-        return pledgeSubject.map(dtoFactory::getPledgeSubjectDto)
+    @GetMapping("/{pledgeSubjectId}")
+    public PledgeSubjectDto getPledgeSubject(@PathVariable("pledgeSubjectId") Long pledgeSubjectId){
+        return pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId).map(dtoFactory::getPledgeSubjectDto)
                 .orElseThrow(()-> new NullPointerException("PledgeSubject not found"));
     }
 
@@ -83,23 +78,21 @@ public class PledgeSubjectController {
 
     @PostMapping("/insert")
     public PledgeSubjectDto insertPledgeSubject(@Valid @RequestBody PledgeSubjectDtoNewWrapper pledgeSubjectDtoNewWrapper){
+        PledgeSubjectDto pledgeSubjectDto = pledgeSubjectDtoNewWrapper.getPledgeSubjectDto();
+        CostHistoryDto costHistoryDto = pledgeSubjectDtoNewWrapper.getCostHistoryDto();
+        MonitoringDto monitoringDto = pledgeSubjectDtoNewWrapper.getMonitoringDto();
+
         PledgeSubject pledgeSubject = pledgeSubjectService
-                .insertPledgeSubject(dtoFactory.getPledgeSubjectEntity(pledgeSubjectDtoNewWrapper.getPledgeSubjectDto()),
-                        dtoFactory.getCostHistoryEntity(pledgeSubjectDtoNewWrapper.getCostHistoryDto()),
-                        dtoFactory.getMonitoringEntity(pledgeSubjectDtoNewWrapper.getMonitoringDto()));
+                .insertPledgeSubject(dtoFactory.getPledgeSubjectEntity(pledgeSubjectDto),
+                        dtoFactory.getCostHistoryEntity(costHistoryDto),
+                        dtoFactory.getMonitoringEntity(monitoringDto));
 
         return dtoFactory.getPledgeSubjectDto(pledgeSubject);
     }
 
     @PutMapping("/update")
     public PledgeSubjectDto updatePledgeSubject(@Valid @RequestBody PledgeSubjectDto pledgeSubjectDto){
-        PledgeSubject pledgeSubject = dtoFactory.getPledgeSubjectEntity(pledgeSubjectDto);
-
-        Set<ConstraintViolation<PledgeSubject>> violations =  validatorEntity.validateEntity(pledgeSubject);
-        if(!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-
-        pledgeSubject = pledgeSubjectService.updatePledgeSubject(pledgeSubject);
+        PledgeSubject pledgeSubject = pledgeSubjectService.updatePledgeSubject(dtoFactory.getPledgeSubjectEntity(pledgeSubjectDto));
 
         return dtoFactory.getPledgeSubjectDto(pledgeSubject);
     }
@@ -202,43 +195,6 @@ public class PledgeSubjectController {
         }
 
         pledgeSubjectList = pledgeSubjectService.insertPledgeSubjects(pledgeSubjectList);
-
-        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
-    }
-
-    @PutMapping("withdraw_from_deposit_pledgeSubject")
-    public List<PledgeSubjectDto> withdrawFromDepositPledgeSubject(@RequestParam("pledgeSubjectId") long pledgeSubjectId,
-                                                                   @RequestParam("pledgeAgreementId") long pledgeAgreementId){
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
-                .orElseThrow(() -> new NullPointerException("Pledge agreement not found"));
-
-        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId);
-
-        Optional<PledgeSubject> pledgeSubjectToRemove = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
-        if(pledgeSubjectToRemove.isPresent()){
-            pledgeSubjectList.remove(pledgeSubjectToRemove.get());
-            pledgeAgreement.setPledgeSubjects(pledgeSubjectList);
-            pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
-        }else
-            throw new NullPointerException("Pledge subject not found");
-
-        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
-    }
-
-    @PutMapping("/insert/current_in_pledge_agreement")
-    public List<PledgeSubjectDto> insertCurrentPledgeSubjectInPledgeAgreement(@RequestParam("pledgeSubjectsIdArray") long[] pledgeSubjectsIdArray,
-                                                                              @RequestParam("pledgeAgreementId") long pledgeAgreementId){
-        PledgeAgreement pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
-                .orElseThrow(() -> new NullPointerException("Pledge agreement not found"));
-
-        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId);
-        for (long i : pledgeSubjectsIdArray) {
-            pledgeSubjectList.add(pledgeSubjectService.getPledgeSubjectById(i)
-                    .orElseThrow(() -> new NullPointerException("Pledge subject not found")));
-        }
-
-        pledgeAgreement.setPledgeSubjects(pledgeSubjectList);
-        pledgeAgreementService.updateInsertPledgeAgreement(pledgeAgreement);
 
         return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }

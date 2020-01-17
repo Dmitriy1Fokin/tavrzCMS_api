@@ -26,7 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -51,19 +50,21 @@ public class ClientController {
     @GetMapping
     public List<ClientDto> getAllClients(){
         List<Client> clientList = clientService.getAllClients() ;
+
         return dtoFactory.getClientsDto(clientList);
     }
 
-    @GetMapping("/{id}")
-    public ClientDto getClient(@PathVariable Long id){
-        Optional<Client> client = clientService.getClientById(id);
-        return client.map(dtoFactory::getClientDto)
+    @GetMapping("/{clientId}")
+    public ClientDto getClient(@PathVariable("clientId") Long clientId){
+        return clientService.getClientById(clientId)
+                .map(dtoFactory::getClientDto)
                 .orElseThrow(()-> new NullPointerException("Client not found"));
     }
 
     @GetMapping("/search")
     public List<ClientDto> getClientBySearchCriteria(@RequestParam Map<String, String> reqParam){
         List<Client> clientList = clientService.getClientFromSearch(reqParam);
+
         return dtoFactory.getClientsDto(clientList);
     }
 
@@ -71,13 +72,8 @@ public class ClientController {
     @PostMapping("/insert")
     public ClientDto insertClient(@AuthenticationPrincipal User user,
                                   @Valid @RequestBody ClientDto clientDto){
-        Client client = dtoFactory.getClientEntity(clientDto);
+        Client client = clientService.updateInsertClient(dtoFactory.getClientEntity(clientDto));
 
-        Set<ConstraintViolation<Client>> violations =  validatorEntity.validateEntity(client);
-        if(!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-
-        client = clientService.updateInsertClient(client);
         return dtoFactory.getClientDto(client);
     }
 

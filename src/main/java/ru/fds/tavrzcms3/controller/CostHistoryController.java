@@ -50,13 +50,9 @@ public class CostHistoryController {
 
     @PostMapping("/insert")
     public CostHistoryDto insertCostHistory(@Valid @RequestBody CostHistoryDto costHistoryDto){
-        CostHistory costHistory = dtoFactory.getCostHistoryEntity(costHistoryDto);
+        CostHistory costHistory = costHistoryService
+                .updateInsertCostHistory( dtoFactory.getCostHistoryEntity(costHistoryDto));
 
-        Set<ConstraintViolation<CostHistory>> violations =  validatorEntity.validateEntity(costHistory);
-        if(!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-
-        costHistory = costHistoryService.updateInsertCostHistory(costHistory);
         return dtoFactory.getCostHistoryDto(costHistory);
     }
 

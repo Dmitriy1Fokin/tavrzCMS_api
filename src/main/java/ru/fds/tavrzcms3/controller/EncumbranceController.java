@@ -22,7 +22,6 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -44,22 +43,17 @@ public class EncumbranceController {
         this.validatorEntity = validatorEntity;
     }
 
-    @GetMapping("/{id}")
-    public EncumbranceDto getEncumbrance(@PathVariable Long id){
-        Optional<Encumbrance> encumbrance = encumbranceService.getEncumbranceById(id);
-        return encumbrance.map(dtoFactory::getEncumbranceDto)
+    @GetMapping("/{encumbranceId}")
+    public EncumbranceDto getEncumbrance(@PathVariable("encumbranceId") Long encumbranceId){
+        return encumbranceService.getEncumbranceById(encumbranceId).map(dtoFactory::getEncumbranceDto)
                 .orElseThrow(()-> new NullPointerException("Encumbrance not found"));
     }
 
     @PostMapping("/insert")
     public EncumbranceDto insertEncumbrance(@Valid @RequestBody EncumbranceDto encumbranceDto){
-        Encumbrance encumbrance = dtoFactory.getEncumbranceEntity(encumbranceDto);
+        Encumbrance encumbrance = encumbranceService
+                .updateInsertEncumbrance(dtoFactory.getEncumbranceEntity(encumbranceDto));
 
-        Set<ConstraintViolation<Encumbrance>> violations =  validatorEntity.validateEntity(encumbrance);
-        if(!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-
-        encumbrance = encumbranceService.updateInsertEncumbrance(encumbrance);
         return dtoFactory.getEncumbranceDto(encumbrance);
     }
 
