@@ -27,6 +27,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -72,6 +73,12 @@ public class PledgeSubjectController {
     @GetMapping("/search_by_cadastral_num")
     public List<PledgeSubjectDto> getPledgeSubjectsByCadastralNum(@RequestParam("cadastralNum") @NotBlank String cadastralNum){
         return dtoFactory.getPledgeSubjectsDto(pledgeSubjectService.getPledgeSubjectByCadastralNum(cadastralNum));
+    }
+
+    @GetMapping("/search")
+    public List<PledgeSubjectDto> getPledgeSubjectBySearchCriteria(@RequestParam Map<String, String> reqParam) throws ReflectiveOperationException {
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsFromSearch(reqParam);
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }
 
     @PostMapping("/insert")

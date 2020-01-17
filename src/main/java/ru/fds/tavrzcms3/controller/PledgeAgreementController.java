@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -147,6 +148,12 @@ public class PledgeAgreementController {
     @GetMapping("/pledge_subject")
     public List<PledgeAgreementDto> getPledgeAgreementsByPledgeSubjects(@RequestParam("pledgeSubjectId") Long pledgeSubjectId){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getAllPledgeAgreementByPLedgeSubject(pledgeSubjectId));
+    }
+
+    @GetMapping("/search")
+    public List<PledgeAgreementDto> getPledgeAgreementBySearchCriteria(@RequestParam Map<String, String> reqParam) throws ReflectiveOperationException {
+        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementFromSearch(reqParam);
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementList);
     }
 
     @PostMapping("/insert")

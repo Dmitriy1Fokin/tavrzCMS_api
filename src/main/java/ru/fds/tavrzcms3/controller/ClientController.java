@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -59,6 +60,13 @@ public class ClientController {
         return client.map(dtoFactory::getClientDto)
                 .orElseThrow(()-> new NullPointerException("Client not found"));
     }
+
+    @GetMapping("/search")
+    public List<ClientDto> getClientBySearchCriteria(@RequestParam Map<String, String> reqParam){
+        List<Client> clientList = clientService.getClientFromSearch(reqParam);
+        return dtoFactory.getClientsDto(clientList);
+    }
+
 
     @PostMapping("/insert")
     public ClientDto insertClient(@AuthenticationPrincipal User user,

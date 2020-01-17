@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -75,6 +76,12 @@ public class LoanAgreementController {
     public List<LoanAgreementDto> getClosedLoanAgreementByPledgeAgreement(@RequestParam("pledgeAgreementId") Long pledgeAgreementId){
         return dtoFactory.getLoanAgreementsDto(loanAgreementService
                 .getClosedLoanAgreementsByPledgeAgreement(pledgeAgreementId));
+    }
+
+    @GetMapping("/search")
+    public List<LoanAgreementDto> getLoanAgreementBySearchCriteria(@RequestParam Map<String, String> reqParam){
+        List<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementFromSearch(reqParam);
+        return dtoFactory.getLoanAgreementsDto(loanAgreementList);
     }
 
     @PostMapping("/insert")
