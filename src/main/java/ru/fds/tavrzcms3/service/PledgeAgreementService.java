@@ -252,7 +252,7 @@ public class PledgeAgreementService {
                             .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
                             .predicate(false)
                             .build();
-                    builder.with(searchCriteria);
+                    builder.withCriteria(searchCriteria);
                 }else if(field.getType().getSuperclass() == Enum.class && !searchParam.get(field.getName()).isEmpty()){
                     Method method = field.getType().getMethod("valueOf", String.class);
                     Class enumClass = field.getType();
@@ -262,7 +262,7 @@ public class PledgeAgreementService {
                             .operation(Operations.EQUAL_IGNORE_CASE)
                             .predicate(false)
                             .build();
-                    builder.with(searchCriteria);
+                    builder.withCriteria(searchCriteria);
                 }else if(field.getType() == Client.class && !searchParam.get(field.getName()).isEmpty()){
                     Map<String, String> searchParamClient = new HashMap<>();
                     searchParamClient.put("typeOfClient", searchParam.get("typeOfClient"));
@@ -275,7 +275,7 @@ public class PledgeAgreementService {
                                 .operation(Operations.EQUAL_IGNORE_CASE)
                                 .predicate(false)
                                 .build();
-                        builder.with(searchCriteria);
+                        builder.withCriteria(searchCriteria);
                     }else if(clientList.size() == 1){
                         SearchCriteria searchCriteria = SearchCriteria.builder()
                                 .key(field.getName())
@@ -283,7 +283,7 @@ public class PledgeAgreementService {
                                 .operation(Operations.EQUAL_IGNORE_CASE)
                                 .predicate(false)
                                 .build();
-                        builder.with(searchCriteria);
+                        builder.withCriteria(searchCriteria);
 
                     }else {
                         SearchCriteria searchCriteriaFirst = SearchCriteria.builder()
@@ -292,7 +292,7 @@ public class PledgeAgreementService {
                                 .operation(Operations.EQUAL_IGNORE_CASE)
                                 .predicate(false)
                                 .build();
-                        builder.with(searchCriteriaFirst);
+                        builder.withCriteria(searchCriteriaFirst);
 
                         for(int i = 1; i < clientList.size(); i++){
                             SearchCriteria searchCriteria = SearchCriteria.builder()
@@ -301,7 +301,7 @@ public class PledgeAgreementService {
                                     .operation(Operations.EQUAL_IGNORE_CASE)
                                     .predicate(true)
                                     .build();
-                            builder.with(searchCriteria);
+                            builder.withCriteria(searchCriteria);
                         }
                     }
 
@@ -316,12 +316,12 @@ public class PledgeAgreementService {
                                 .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
                                 .predicate(false)
                                 .build();
-                        builder.with(searchCriteria);
+                        builder.withCriteria(searchCriteria);
                 }
             }
         }
 
-        Specification specification = builder.build();
+        Specification specification = builder.buildSpecification();
         return repositoryPledgeAgreement.findAll(specification);
     }
 

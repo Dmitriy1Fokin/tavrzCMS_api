@@ -8,7 +8,7 @@ import ru.fds.tavrzcms3.specification.SpecificationBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpecificationBuilderImpl implements SpecificationBuilder {
+public class SpecificationBuilderImpl<T> implements SpecificationBuilder<T> {
 
     private final List<SearchCriteria> searchCriteriaList;
     private final List<SearchCriteriaNestedAttribute> searchCriteriaNestedAttributeList;
@@ -19,31 +19,28 @@ public class SpecificationBuilderImpl implements SpecificationBuilder {
     }
 
     @Override
-    public void with(SearchCriteria searchCriteria) {
+    public void withCriteria(SearchCriteria searchCriteria) {
         searchCriteriaList.add(searchCriteria);
     }
 
     @Override
-    public void withNestedAttribute(SearchCriteriaNestedAttribute searchCriteriaNestedAttribute) {
+    public void withNestedAttributeCriteria(SearchCriteriaNestedAttribute searchCriteriaNestedAttribute) {
         searchCriteriaNestedAttributeList.add(searchCriteriaNestedAttribute);
     }
 
     @Override
-    public Specification build() {
+    public Specification<T> buildSpecification() {
         if(searchCriteriaList.isEmpty() && searchCriteriaNestedAttributeList.isEmpty()){
             return null;
         }
 
-        List<Specification> specs = new ArrayList<>();
-        for (SearchCriteria sc : searchCriteriaList)
-            specs.add(new SpecificationImpl(sc));
+        List<Specification<T>> specs = new ArrayList<>(searchCriteriaList.size());
+        searchCriteriaList.forEach(searchCriteria -> specs.add(new SpecificationImpl<>(searchCriteria)));
 
-        List<Specification> specsNested = new ArrayList<>();
-        for (SearchCriteriaNestedAttribute sc : searchCriteriaNestedAttributeList)
-            specsNested.add(new SpecificationNestedAttribute(sc));
+        List<Specification<T>> specsNested = new ArrayList<>(searchCriteriaNestedAttributeList.size());
+        searchCriteriaNestedAttributeList.forEach(criteria -> specsNested.add(new SpecificationNestedAttributeImpl<>(criteria)));
 
-
-        Specification result = specs.get(0);
+        Specification<T> result = specs.get(0);
 
         for(int i = 1; i < searchCriteriaList.size(); i++){
             result = searchCriteriaList.get(i).isPredicate() ? Specification.where(result).or(specs.get(i)) : Specification.where(result).and(specs.get(i));

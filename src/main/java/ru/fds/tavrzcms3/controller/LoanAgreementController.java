@@ -77,7 +77,7 @@ public class LoanAgreementController {
     }
 
     @GetMapping("/search")
-    public List<LoanAgreementDto> getLoanAgreementBySearchCriteria(@RequestParam Map<String, String> reqParam){
+    public List<LoanAgreementDto> getLoanAgreementBySearchCriteria(@RequestParam Map<String, String> reqParam) throws ReflectiveOperationException {
         List<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementFromSearch(reqParam);
 
         return dtoFactory.getLoanAgreementsDto(loanAgreementList);

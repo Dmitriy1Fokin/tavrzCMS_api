@@ -62,7 +62,7 @@ public class ClientController {
     }
 
     @GetMapping("/search")
-    public List<ClientDto> getClientBySearchCriteria(@RequestParam Map<String, String> reqParam){
+    public List<ClientDto> getClientBySearchCriteria(@RequestParam Map<String, String> reqParam) throws ReflectiveOperationException {
         List<Client> clientList = clientService.getClientFromSearch(reqParam);
 
         return dtoFactory.getClientsDto(clientList);

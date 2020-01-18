@@ -117,7 +117,7 @@ public class PledgeSubjectService {
                             .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                             .predicate(false)
                             .build();
-                    builder.with(searchCriteria);
+                    builder.withCriteria(searchCriteria);
 
                 }else if(field.getType().getSuperclass() == Enum.class && !searchParam.get(field.getName()).isEmpty()){
                     Method method = field.getType().getMethod("valueOf", String.class);
@@ -128,7 +128,7 @@ public class PledgeSubjectService {
                             .operation(Operations.EQUAL_IGNORE_CASE)
                             .predicate(false)
                             .build();
-                    builder.with(searchCriteria);
+                    builder.withCriteria(searchCriteria);
                 } else if(field.getType() == LocalDate.class && !searchParam.get(field.getName()).isEmpty()){
 
                     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
@@ -140,7 +140,7 @@ public class PledgeSubjectService {
                             .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
                             .predicate(false)
                             .build();
-                    builder.with(searchCriteria);
+                    builder.withCriteria(searchCriteria);
                 }
             }
         }
@@ -159,7 +159,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }else if(field.getType() == TypeOfAuto.class && !searchParam.get(field.getName()).isEmpty()){
                             SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
                                     .nestedObjectName("pledgeSubjectAuto")
@@ -168,7 +168,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.EQUAL_IGNORE_CASE)
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }
                     }
                 }
@@ -185,7 +185,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }else if(field.getType() == TypeOfEquip.class && !searchParam.get(field.getName()).isEmpty()){
                             SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
                                     .nestedObjectName("pledgeSubjectEquipment")
@@ -194,7 +194,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.EQUAL_IGNORE_CASE)
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }
                     }
                 }
@@ -211,7 +211,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }else if(field.getType() == MarketSegment.class && !searchParam.get(field.getName()).isEmpty()){
                             SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
                                     .nestedObjectName("pledgeSubjectBuilding")
@@ -220,7 +220,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.EQUAL_IGNORE_CASE)
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }
                     }
                 }
@@ -237,7 +237,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }else if(field.getType() == LandCategory.class && !searchParam.get(field.getName()).isEmpty()){
                             SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
                                     .nestedObjectName("pledgeSubjectLandLease")
@@ -246,7 +246,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.EQUAL_IGNORE_CASE)
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }else if(field.getType() == LocalDate.class && !searchParam.get(field.getName()).isEmpty()){
 
                             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
@@ -259,7 +259,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }
                     }
                 }
@@ -276,7 +276,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }else if(field.getType() == LandCategory.class && !searchParam.get(field.getName()).isEmpty()){
                             SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
                                     .nestedObjectName("pledgeSubjectLandOwnership")
@@ -285,7 +285,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.EQUAL_IGNORE_CASE)
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }
                     }
                 }
@@ -302,7 +302,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }else if(field.getType() == MarketSegment.class && !searchParam.get(field.getName()).isEmpty()){
                             SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
                                     .nestedObjectName("pledgeSubjectRoom")
@@ -311,7 +311,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.EQUAL_IGNORE_CASE)
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }
                     }
                 }
@@ -327,7 +327,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }else if(field.getType() == TypeOfSecurities.class && !searchParam.get(field.getName()).isEmpty()){
                             SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
                                     .nestedObjectName("pledgeSubjectSecurities")
@@ -336,7 +336,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.EQUAL_IGNORE_CASE)
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }
                     }
                 }
@@ -352,7 +352,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }else if(field.getType() == TypeOfTBO.class && !searchParam.get(field.getName()).isEmpty()){
                             SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
                                     .nestedObjectName("pledgeSubjectTBO")
@@ -361,7 +361,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.EQUAL_IGNORE_CASE)
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }
                     }
                 }
@@ -378,7 +378,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }else if(field.getType() == TypeOfVessel.class && !searchParam.get(field.getName()).isEmpty()){
                             SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
                                     .nestedObjectName("pledgeSubjectVessel")
@@ -387,7 +387,7 @@ public class PledgeSubjectService {
                                     .operation(Operations.EQUAL_IGNORE_CASE)
                                     .predicate(false)
                                     .build();
-                            builder.withNestedAttribute(searchCriteriaNestedAttribute);
+                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
                         }
                     }
                 }
@@ -395,7 +395,7 @@ public class PledgeSubjectService {
             }
         }
 
-        Specification<PledgeSubject> spec = builder.build();
+        Specification<PledgeSubject> spec = builder.buildSpecification();
 
         return repositoryPledgeSubject.findAll(spec);
 

@@ -10,7 +10,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 
-public class SpecificationImpl implements Specification {
+public class SpecificationImpl<T> implements Specification<T> {
 
     private SearchCriteria criteria;
 
@@ -19,15 +19,14 @@ public class SpecificationImpl implements Specification {
     }
 
     @Override
-    public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder criteriaBuilder) {
-
+    public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 
         if(criteria.getOperation() == Operations.GREATER){
             if(criteria.getValue().getClass() == String.class) {
-                return criteriaBuilder.greaterThan(root.<String>get(criteria.getKey()), criteria.getValue().toString());
+                return criteriaBuilder.greaterThan(root.get(criteria.getKey()), criteria.getValue().toString());
             }
             else if(criteria.getValue().getClass() == LocalDate.class){
-                return criteriaBuilder.greaterThan(root.<LocalDate> get(criteria.getKey()), (LocalDate) criteria.getValue());
+                return criteriaBuilder.greaterThan(root.get(criteria.getKey()), (LocalDate) criteria.getValue());
             }
             else {
                 return null;
@@ -35,10 +34,10 @@ public class SpecificationImpl implements Specification {
         }
         if(criteria.getOperation() == Operations.GREATER_EQUAL){
             if(criteria.getValue().getClass() == String.class) {
-                return criteriaBuilder.greaterThanOrEqualTo(root.<String>get(criteria.getKey()), criteria.getValue().toString());
+                return criteriaBuilder.greaterThanOrEqualTo(root.get(criteria.getKey()), criteria.getValue().toString());
             }
             else if(criteria.getValue().getClass() == LocalDate.class){
-                return criteriaBuilder.greaterThanOrEqualTo(root.<LocalDate> get(criteria.getKey()), (LocalDate) criteria.getValue());
+                return criteriaBuilder.greaterThanOrEqualTo(root.get(criteria.getKey()), (LocalDate) criteria.getValue());
             }
             else {
                 return null;
@@ -46,10 +45,10 @@ public class SpecificationImpl implements Specification {
         }
         if(criteria.getOperation() == Operations.LESS){
             if(criteria.getValue().getClass() == String.class) {
-                return criteriaBuilder.lessThan(root.<String>get(criteria.getKey()), criteria.getValue().toString());
+                return criteriaBuilder.lessThan(root.get(criteria.getKey()), criteria.getValue().toString());
             }
             else if(criteria.getValue().getClass() == LocalDate.class){
-                return criteriaBuilder.lessThan(root.<LocalDate> get(criteria.getKey()), (LocalDate) criteria.getValue());
+                return criteriaBuilder.lessThan(root.get(criteria.getKey()), (LocalDate) criteria.getValue());
             }
             else {
                 return null;
@@ -57,10 +56,10 @@ public class SpecificationImpl implements Specification {
         }
         if(criteria.getOperation() == Operations.LESS_EQUAL){
             if(criteria.getValue().getClass() == String.class) {
-                return criteriaBuilder.lessThanOrEqualTo(root.<String>get(criteria.getKey()), criteria.getValue().toString());
+                return criteriaBuilder.lessThanOrEqualTo(root.get(criteria.getKey()), criteria.getValue().toString());
             }
             else if(criteria.getValue().getClass() == LocalDate.class){
-                return criteriaBuilder.lessThanOrEqualTo(root.<LocalDate> get(criteria.getKey()), (LocalDate) criteria.getValue());
+                return criteriaBuilder.lessThanOrEqualTo(root.get(criteria.getKey()), (LocalDate) criteria.getValue());
             }
             else {
                 return null;
@@ -68,7 +67,7 @@ public class SpecificationImpl implements Specification {
         }
         if(criteria.getOperation() == Operations.EQUAL_IGNORE_CASE){
             if(root.get(criteria.getKey()).getJavaType() == String.class){
-                return criteriaBuilder.like(criteriaBuilder.lower(root.<String> get(criteria.getKey())), "%" + criteria.getValue().toString().toLowerCase() + "%");
+                return criteriaBuilder.like(criteriaBuilder.lower(root.get(criteria.getKey())), "%" + criteria.getValue().toString().toLowerCase() + "%");
             }
             else {
                 return criteriaBuilder.equal(root.get(criteria.getKey()), criteria.getValue());
