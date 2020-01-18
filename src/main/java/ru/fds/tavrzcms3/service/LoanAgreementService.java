@@ -9,28 +9,26 @@ import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
+import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
+import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.specification.Search;
 import ru.fds.tavrzcms3.specification.SearchCriteria;
-import ru.fds.tavrzcms3.specification.SpecificationBuilder;
-import ru.fds.tavrzcms3.specification.impl.SpecificationBuilderImpl;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class LoanAgreementService {
@@ -104,15 +102,14 @@ public class LoanAgreementService {
         final String CLIENT = "client";
 
         Search<LoanAgreement> loanAgreementSearch = new Search<>(LoanAgreement.class);
-        loanAgreementSearch.withParam(searchParam);
 
-        if(searchParam.containsKey("typeOfClient") &&
-                (searchParam.containsKey("surname") ||
-                searchParam.containsKey("name") ||
-                searchParam.containsKey("patronymic") ||
-                searchParam.containsKey("pasportNum") ||
-                searchParam.containsKey("organizationalForm") ||
-                searchParam.containsKey("inn"))){
+        Set<String> clientAttributes = new HashSet<>();
+        Arrays.stream(Client.class.getDeclaredFields()).forEach(field -> clientAttributes.add(field.getName()));
+        Arrays.stream(ClientIndividual.class.getDeclaredFields()).forEach(field -> clientAttributes.add(field.getName()));
+        Arrays.stream(ClientLegalEntity.class.getDeclaredFields()).forEach(field -> clientAttributes.add(field.getName()));
+        clientAttributes.retainAll(searchParam.keySet());
+
+        if(!clientAttributes.isEmpty() && clientAttributes.contains("typeOfClient")){
             List<Client> clientList = clientService.getClientFromSearch(searchParam);
             if(clientList.isEmpty()){
                 SearchCriteria searchCriteria = SearchCriteria.builder()
@@ -122,21 +119,12 @@ public class LoanAgreementService {
                         .predicate(false)
                         .build();
                 loanAgreementSearch.withCriteria(searchCriteria);
-            }else if(clientList.size() == 1){
-                SearchCriteria searchCriteria = SearchCriteria.builder()
-                        .key(CLIENT)
-                        .value(clientList.get(0))
-                        .operation(Operations.EQUAL_IGNORE_CASE)
-                        .predicate(false)
-                        .build();
-                loanAgreementSearch.withCriteria(searchCriteria);
-
             }else {
                 SearchCriteria searchCriteriaFirst = SearchCriteria.builder()
                         .key(CLIENT)
                         .value(clientList.get(0))
                         .operation(Operations.EQUAL_IGNORE_CASE)
-                        .predicate(true)
+                        .predicate(false)
                         .build();
                 loanAgreementSearch.withCriteria(searchCriteriaFirst);
 
@@ -145,105 +133,19 @@ public class LoanAgreementService {
                             .key(CLIENT)
                             .value(clientList.get(i))
                             .operation(Operations.EQUAL_IGNORE_CASE)
-                            .predicate(false)
+                            .predicate(true)
                             .build();
                     loanAgreementSearch.withCriteria(searchCriteria);
                 }
             }
         }
 
+        loanAgreementSearch.withParam(searchParam);
+
         Specification<LoanAgreement> specification = loanAgreementSearch.getSpecification();
 
         return repositoryLoanAgreement.findAll(specification);
     }
-
-
-//    public List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException {
-//
-//        SpecificationBuilder builder = new SpecificationBuilderImpl();
-//
-//        for(Field field : LoanAgreement.class.getDeclaredFields()){
-//            if(searchParam.containsKey(field.getName())){
-//                if((field.getType()==String.class || field.getType()==double.class || field.getType()==byte.class || field.getType().getSuperclass()== Number.class)
-//                        && !searchParam.get(field.getName()).isEmpty()){
-//                    SearchCriteria searchCriteria = SearchCriteria.builder()
-//                            .key(field.getName())
-//                            .value(searchParam.get(field.getName()))
-//                            .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
-//                            .predicate(false)
-//                            .build();
-//                    builder.withCriteria(searchCriteria);
-//
-//                }else if(field.getType() == StatusOfAgreement.class && !searchParam.get(field.getName()).isEmpty()){
-//                    SearchCriteria searchCriteria = SearchCriteria.builder()
-//                            .key(field.getName())
-//                            .value(StatusOfAgreement.valueOf(searchParam.get(field.getName())))
-//                            .operation(Operations.EQUAL_IGNORE_CASE)
-//                            .predicate(false)
-//                            .build();
-//                    builder.withCriteria(searchCriteria);
-//                }else if(field.getType() == Client.class && !searchParam.get(field.getName()).isEmpty()){
-//                    Map<String, String> searchParamClient = new HashMap<>();
-//                    searchParamClient.put("typeOfClient", searchParam.get("typeOfClient"));
-//                    searchParamClient.put("clientName", searchParam.get(field.getName()));
-//                    List<Client> clientList = clientService.getClientFromSearch(searchParam);
-//                    if(clientList.isEmpty()){
-//                        SearchCriteria searchCriteria = SearchCriteria.builder()
-//                                .key(field.getName())
-//                                .value(null)
-//                                .operation(Operations.EQUAL_IGNORE_CASE)
-//                                .predicate(false)
-//                                .build();
-//                        builder.withCriteria(searchCriteria);
-//                    }else if(clientList.size() == 1){
-//                        SearchCriteria searchCriteria = SearchCriteria.builder()
-//                                .key(field.getName())
-//                                .value(clientList.get(0))
-//                                .operation(Operations.EQUAL_IGNORE_CASE)
-//                                .predicate(false)
-//                                .build();
-//                        builder.withCriteria(searchCriteria);
-//
-//                    }else {
-//                        SearchCriteria searchCriteriaFirst = SearchCriteria.builder()
-//                                .key(field.getName())
-//                                .value(clientList.get(0))
-//                                .operation(Operations.EQUAL_IGNORE_CASE)
-//                                .predicate(false)
-//                                .build();
-//                        builder.withCriteria(searchCriteriaFirst);
-//
-//                        for(int i = 1; i < clientList.size(); i++){
-//                            SearchCriteria searchCriteria = SearchCriteria.builder()
-//                                    .key(field.getName())
-//                                    .value(clientList.get(i))
-//                                    .operation(Operations.EQUAL_IGNORE_CASE)
-//                                    .predicate(true)
-//                                    .build();
-//                            builder.withCriteria(searchCriteria);
-//                        }
-//                    }
-//                }else if(field.getType() == LocalDate.class && !searchParam.get(field.getName()).isEmpty()){
-//
-//                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
-//                    LocalDate localDate = LocalDate.parse(searchParam.get(field.getName()), dateTimeFormatter);
-//
-//                    SearchCriteria searchCriteria = SearchCriteria.builder()
-//                            .key(field.getName())
-//                            .value(localDate)
-//                            .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
-//                            .predicate(false)
-//                            .build();
-//                    builder.withCriteria(searchCriteria);
-//                }
-//            }
-//        }
-//
-//        Specification<LoanAgreement> spec = builder.buildSpecification();
-//
-//        return repositoryLoanAgreement.findAll(spec);
-//    }
-
 
     public List<LoanAgreement> getNewLoanAgreementsFromFile(File file) throws IOException {
         FileImporter fileImporter = FileImporterFactory.getInstance(file);

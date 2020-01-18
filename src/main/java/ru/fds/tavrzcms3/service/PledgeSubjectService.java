@@ -1,13 +1,11 @@
 package ru.fds.tavrzcms3.service;
 
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
 import ru.fds.tavrzcms3.dictionary.LandCategory;
 import ru.fds.tavrzcms3.dictionary.Liquidity;
 import ru.fds.tavrzcms3.dictionary.MarketSegment;
-import ru.fds.tavrzcms3.dictionary.Operations;
 import ru.fds.tavrzcms3.dictionary.StatusOfMonitoring;
 import ru.fds.tavrzcms3.dictionary.TypeOfAuto;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
@@ -36,18 +34,10 @@ import ru.fds.tavrzcms3.repository.RepositoryCostHistory;
 import ru.fds.tavrzcms3.repository.RepositoryMonitoring;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
-import ru.fds.tavrzcms3.specification.SearchCriteria;
-import ru.fds.tavrzcms3.specification.SearchCriteriaNestedAttribute;
-import ru.fds.tavrzcms3.specification.SpecificationBuilder;
-import ru.fds.tavrzcms3.specification.impl.SpecificationBuilderImpl;
+import ru.fds.tavrzcms3.specification.Search;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -103,302 +93,32 @@ public class PledgeSubjectService {
 
     public List<PledgeSubject> getPledgeSubjectsFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException{
         final String SEARCH_PARAM_TYPE_OF_COLLATERAL = "typeOfCollateral";
-        final String SEARCH_PARAM_POSTFIX = "Option";
 
-        SpecificationBuilder builder = new SpecificationBuilderImpl();
-
-        for(Field field : PledgeSubject.class.getDeclaredFields()){
-            if(searchParam.containsKey(field.getName())){
-                if((field.getType() == String.class || field.getType() == BigDecimal.class)
-                        && !searchParam.get(field.getName()).isEmpty()){
-                    SearchCriteria searchCriteria = SearchCriteria.builder()
-                            .key(field.getName())
-                            .value(searchParam.get(field.getName()))
-                            .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
-                            .predicate(false)
-                            .build();
-                    builder.withCriteria(searchCriteria);
-
-                }else if(field.getType().getSuperclass() == Enum.class && !searchParam.get(field.getName()).isEmpty()){
-                    Method method = field.getType().getMethod("valueOf", String.class);
-                    Class enumClass = field.getType();
-                    SearchCriteria searchCriteria = SearchCriteria.builder()
-                            .key(field.getName())
-                            .value(method.invoke(enumClass, searchParam.get(field.getName())))
-                            .operation(Operations.EQUAL_IGNORE_CASE)
-                            .predicate(false)
-                            .build();
-                    builder.withCriteria(searchCriteria);
-                } else if(field.getType() == LocalDate.class && !searchParam.get(field.getName()).isEmpty()){
-
-                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
-                    LocalDate localDate = LocalDate.parse(searchParam.get(field.getName()), dateTimeFormatter);
-
-                    SearchCriteria searchCriteria = SearchCriteria.builder()
-                            .key(field.getName())
-                            .value(localDate)
-                            .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
-                            .predicate(false)
-                            .build();
-                    builder.withCriteria(searchCriteria);
-                }
-            }
-        }
-
+        Search<PledgeSubject> pledgeSubjectSearch = new Search<>(PledgeSubject.class);
+        pledgeSubjectSearch.withParam(searchParam);
         if(searchParam.containsKey(SEARCH_PARAM_TYPE_OF_COLLATERAL) && !searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).isEmpty()){
-
             if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.AUTO.name())){
-                for(Field field : PledgeSubjectAuto.class.getDeclaredFields()){
-                    if(searchParam.containsKey(field.getName())){
-                        if((field.getType() == String.class || field.getType() == Double.class || field.getType() == Integer.class)
-                                && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectAuto")
-                                    .key(field.getName())
-                                    .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }else if(field.getType() == TypeOfAuto.class && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectAuto")
-                                    .key(field.getName())
-                                    .value(TypeOfAuto.valueOf(searchParam.get(field.getName())))
-                                    .operation(Operations.EQUAL_IGNORE_CASE)
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }
-                    }
-                }
-
+                pledgeSubjectSearch.withNestedAttributeParam(searchParam, "pledgeSubjectAuto");
             }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.EQUIPMENT.name())){
-                for (Field field : PledgeSubjectEquipment.class.getDeclaredFields()){
-                    if(searchParam.containsKey(field.getName())){
-                        if((field.getType() == String.class || field.getType() == Double.class || field.getType() == Integer.class)
-                                && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectEquipment")
-                                    .key(field.getName())
-                                    .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }else if(field.getType() == TypeOfEquip.class && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectEquipment")
-                                    .key(field.getName())
-                                    .value(TypeOfEquip.valueOf(searchParam.get(field.getName())))
-                                    .operation(Operations.EQUAL_IGNORE_CASE)
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }
-                    }
-                }
-
+                pledgeSubjectSearch.withNestedAttributeParam(searchParam, "pledgeSubjectEquipment");
             }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.BUILDING.name())){
-                for (Field field : PledgeSubjectBuilding.class.getDeclaredFields()){
-                    if(searchParam.containsKey(field.getName())){
-                        if((field.getType() == String.class || field.getType() == double.class || field.getType() == int.class)
-                                && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectBuilding")
-                                    .key(field.getName())
-                                    .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }else if(field.getType() == MarketSegment.class && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectBuilding")
-                                    .key(field.getName())
-                                    .value(MarketSegment.valueOf(searchParam.get(field.getName())))
-                                    .operation(Operations.EQUAL_IGNORE_CASE)
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }
-                    }
-                }
-
+                pledgeSubjectSearch.withNestedAttributeParam(searchParam, "pledgeSubjectBuilding");
             }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.LAND_LEASE.name())){
-                for(Field field : PledgeSubjectLandLease.class.getDeclaredFields()){
-                    if(searchParam.containsKey(field.getName())){
-                        if((field.getType() == String.class || field.getType() == double.class)
-                                && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectLandLease")
-                                    .key(field.getName())
-                                    .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }else if(field.getType() == LandCategory.class && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectLandLease")
-                                    .key(field.getName())
-                                    .value(LandCategory.valueOf(searchParam.get(field.getName())))
-                                    .operation(Operations.EQUAL_IGNORE_CASE)
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }else if(field.getType() == LocalDate.class && !searchParam.get(field.getName()).isEmpty()){
-
-                            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
-                            LocalDate localDate = LocalDate.parse(searchParam.get(field.getName()), dateTimeFormatter);
-
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectLandLease")
-                                    .key(field.getName())
-                                    .value(localDate)
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }
-                    }
-                }
-
+                pledgeSubjectSearch.withNestedAttributeParam(searchParam, "pledgeSubjectLandLease");
             }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.LAND_OWNERSHIP.name())){
-                for(Field field : PledgeSubjectLandOwnership.class.getDeclaredFields()){
-                    if(searchParam.containsKey(field.getName())){
-                        if((field.getType() == String.class || field.getType() == double.class)
-                                && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectLandOwnership")
-                                    .key(field.getName())
-                                    .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }else if(field.getType() == LandCategory.class && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectLandOwnership")
-                                    .key(field.getName())
-                                    .value(LandCategory.valueOf(searchParam.get(field.getName())))
-                                    .operation(Operations.EQUAL_IGNORE_CASE)
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }
-                    }
-                }
-
+                pledgeSubjectSearch.withNestedAttributeParam(searchParam, "pledgeSubjectLandOwnership");
             }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.PREMISE.name())){
-                for(Field field : PledgeSubjectRoom.class.getDeclaredFields()){
-                    if(searchParam.containsKey(field.getName())){
-                        if((field.getType() == String.class || field.getType() == double.class)
-                                && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectRoom")
-                                    .key(field.getName())
-                                    .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }else if(field.getType() == MarketSegment.class && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectRoom")
-                                    .key(field.getName())
-                                    .value(MarketSegment.valueOf(searchParam.get(field.getName())))
-                                    .operation(Operations.EQUAL_IGNORE_CASE)
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }
-                    }
-                }
-
+                pledgeSubjectSearch.withNestedAttributeParam(searchParam, "pledgeSubjectRoom");
             }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.SECURITIES.name())){
-                for(Field field : PledgeSubjectSecurities.class.getDeclaredFields()){
-                    if(searchParam.containsKey(field.getName())){
-                        if(field.getType() == double.class && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectSecurities")
-                                    .key(field.getName())
-                                    .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }else if(field.getType() == TypeOfSecurities.class && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectSecurities")
-                                    .key(field.getName())
-                                    .value(TypeOfSecurities.valueOf(searchParam.get(field.getName())))
-                                    .operation(Operations.EQUAL_IGNORE_CASE)
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }
-                    }
-                }
-
+                pledgeSubjectSearch.withNestedAttributeParam(searchParam, "pledgeSubjectSecurities");
             }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.TBO.name())){
-                for(Field field : PledgeSubjectTBO.class.getDeclaredFields()){
-                    if(searchParam.containsKey(field.getName())){
-                        if((field.getType() == double.class || field.getType() == int.class)&& !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectTBO")
-                                    .key(field.getName())
-                                    .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }else if(field.getType() == TypeOfTBO.class && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectTBO")
-                                    .key(field.getName())
-                                    .value(TypeOfTBO.valueOf(searchParam.get(field.getName())))
-                                    .operation(Operations.EQUAL_IGNORE_CASE)
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }
-                    }
-                }
-
+                pledgeSubjectSearch.withNestedAttributeParam(searchParam, "pledgeSubjectTBO");
             }else if(searchParam.get(SEARCH_PARAM_TYPE_OF_COLLATERAL).equals(TypeOfCollateral.VESSEL.name())){
-                for(Field field : PledgeSubjectVessel.class.getDeclaredFields()){
-                    if(searchParam.containsKey(field.getName())){
-                        if((field.getType() == Integer.class || field.getType() == int.class || field.getType() == String.class)
-                                && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectVessel")
-                                    .key(field.getName())
-                                    .value(searchParam.get(field.getName()))
-                                    .operation(Operations.valueOf(searchParam.get(field.getName() + SEARCH_PARAM_POSTFIX)))
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }else if(field.getType() == TypeOfVessel.class && !searchParam.get(field.getName()).isEmpty()){
-                            SearchCriteriaNestedAttribute searchCriteriaNestedAttribute = SearchCriteriaNestedAttribute.builder()
-                                    .nestedObjectName("pledgeSubjectVessel")
-                                    .key(field.getName())
-                                    .value(TypeOfVessel.valueOf(searchParam.get(field.getName())))
-                                    .operation(Operations.EQUAL_IGNORE_CASE)
-                                    .predicate(false)
-                                    .build();
-                            builder.withNestedAttributeCriteria(searchCriteriaNestedAttribute);
-                        }
-                    }
-                }
-
+                pledgeSubjectSearch.withNestedAttributeParam(searchParam, "pledgeSubjectVessel");
             }
         }
 
-        Specification<PledgeSubject> spec = builder.buildSpecification();
-
-        return repositoryPledgeSubject.findAll(spec);
-
+        return repositoryPledgeSubject.findAll(pledgeSubjectSearch.getSpecification());
     }
 
     public List<PledgeSubject> getNewPledgeSubjectsFromFile(File file, TypeOfCollateral typeOfCollateral) throws IOException {

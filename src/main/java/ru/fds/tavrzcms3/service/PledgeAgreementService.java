@@ -7,29 +7,34 @@ import ru.fds.tavrzcms3.dictionary.Operations;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
-import ru.fds.tavrzcms3.domain.*;
+import ru.fds.tavrzcms3.domain.Client;
+import ru.fds.tavrzcms3.domain.Employee;
+import ru.fds.tavrzcms3.domain.LoanAgreement;
+import ru.fds.tavrzcms3.domain.PledgeAgreement;
+import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
+import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
-import ru.fds.tavrzcms3.repository.*;
+import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
+import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
+import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
+import ru.fds.tavrzcms3.specification.Search;
 import ru.fds.tavrzcms3.specification.SearchCriteria;
-import ru.fds.tavrzcms3.specification.SpecificationBuilder;
-import ru.fds.tavrzcms3.specification.impl.SpecificationBuilderImpl;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PledgeAgreementService {
@@ -38,7 +43,6 @@ public class PledgeAgreementService {
     private final RepositoryLoanAgreement repositoryLoanAgreement;
     private final RepositoryPledgeSubject repositoryPledgeSubject;
     private final ClientService clientService;
-
     private final ExcelColumnNum excelColumnNum;
 
     public PledgeAgreementService(RepositoryPledgeAgreement repositoryPledgeAgreement,
@@ -240,88 +244,51 @@ public class PledgeAgreementService {
     }
 
     public List<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException{
+        final String CLIENT = "client";
 
-        SpecificationBuilder builder = new SpecificationBuilderImpl();
+        Search<PledgeAgreement> pledgeAgreementSearch = new Search<>(PledgeAgreement.class);
 
-        for(Field field : PledgeAgreement.class.getDeclaredFields()){
-            if(searchParam.containsKey(field.getName())){
-                if((field.getType() == String.class || field.getType() == BigDecimal.class) && !searchParam.get(field.getName()).isEmpty()){
+        Set<String> clientAttributes = new HashSet<>();
+        Arrays.stream(Client.class.getDeclaredFields()).forEach(field -> clientAttributes.add(field.getName()));
+        Arrays.stream(ClientIndividual.class.getDeclaredFields()).forEach(field -> clientAttributes.add(field.getName()));
+        Arrays.stream(ClientLegalEntity.class.getDeclaredFields()).forEach(field -> clientAttributes.add(field.getName()));
+        clientAttributes.retainAll(searchParam.keySet());
+
+        if(!clientAttributes.isEmpty() && clientAttributes.contains("typeOfClient")){
+            List<Client> clientList = clientService.getClientFromSearch(searchParam);
+            if(clientList.isEmpty()){
+                SearchCriteria searchCriteria = SearchCriteria.builder()
+                        .key(CLIENT)
+                        .value(null)
+                        .operation(Operations.EQUAL_IGNORE_CASE)
+                        .predicate(false)
+                        .build();
+                pledgeAgreementSearch.withCriteria(searchCriteria);
+            }else {
+                SearchCriteria searchCriteriaFirst = SearchCriteria.builder()
+                        .key(CLIENT)
+                        .value(clientList.get(0))
+                        .operation(Operations.EQUAL_IGNORE_CASE)
+                        .predicate(false)
+                        .build();
+                pledgeAgreementSearch.withCriteria(searchCriteriaFirst);
+
+                for(int i = 1; i < clientList.size(); i++){
                     SearchCriteria searchCriteria = SearchCriteria.builder()
-                            .key(field.getName())
-                            .value(searchParam.get(field.getName()))
-                            .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
-                            .predicate(false)
-                            .build();
-                    builder.withCriteria(searchCriteria);
-                }else if(field.getType().getSuperclass() == Enum.class && !searchParam.get(field.getName()).isEmpty()){
-                    Method method = field.getType().getMethod("valueOf", String.class);
-                    Class enumClass = field.getType();
-                    SearchCriteria searchCriteria = SearchCriteria.builder()
-                            .key(field.getName())
-                            .value(method.invoke(enumClass, searchParam.get(field.getName())))
+                            .key(CLIENT)
+                            .value(clientList.get(i))
                             .operation(Operations.EQUAL_IGNORE_CASE)
-                            .predicate(false)
+                            .predicate(true)
                             .build();
-                    builder.withCriteria(searchCriteria);
-                }else if(field.getType() == Client.class && !searchParam.get(field.getName()).isEmpty()){
-                    Map<String, String> searchParamClient = new HashMap<>();
-                    searchParamClient.put("typeOfClient", searchParam.get("typeOfClient"));
-                    searchParamClient.put("clientName", searchParam.get(field.getName()));
-                    List<Client> clientList = clientService.getClientFromSearch(searchParamClient);
-                    if(clientList.isEmpty()){
-                        SearchCriteria searchCriteria = SearchCriteria.builder()
-                                .key(field.getName())
-                                .value(null)
-                                .operation(Operations.EQUAL_IGNORE_CASE)
-                                .predicate(false)
-                                .build();
-                        builder.withCriteria(searchCriteria);
-                    }else if(clientList.size() == 1){
-                        SearchCriteria searchCriteria = SearchCriteria.builder()
-                                .key(field.getName())
-                                .value(clientList.get(0))
-                                .operation(Operations.EQUAL_IGNORE_CASE)
-                                .predicate(false)
-                                .build();
-                        builder.withCriteria(searchCriteria);
-
-                    }else {
-                        SearchCriteria searchCriteriaFirst = SearchCriteria.builder()
-                                .key(field.getName())
-                                .value(clientList.get(0))
-                                .operation(Operations.EQUAL_IGNORE_CASE)
-                                .predicate(false)
-                                .build();
-                        builder.withCriteria(searchCriteriaFirst);
-
-                        for(int i = 1; i < clientList.size(); i++){
-                            SearchCriteria searchCriteria = SearchCriteria.builder()
-                                    .key(field.getName())
-                                    .value(clientList.get(i))
-                                    .operation(Operations.EQUAL_IGNORE_CASE)
-                                    .predicate(true)
-                                    .build();
-                            builder.withCriteria(searchCriteria);
-                        }
-                    }
-
-                }else if(field.getType() == LocalDate.class && !searchParam.get(field.getName()).isEmpty()){
-
-                        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
-                        LocalDate localDate = LocalDate.parse(searchParam.get(field.getName()), dateTimeFormatter);
-
-                        SearchCriteria searchCriteria = SearchCriteria.builder()
-                                .key(field.getName())
-                                .value(localDate)
-                                .operation(Operations.valueOf(searchParam.get(field.getName() + "Option")))
-                                .predicate(false)
-                                .build();
-                        builder.withCriteria(searchCriteria);
+                    pledgeAgreementSearch.withCriteria(searchCriteria);
                 }
             }
         }
 
-        Specification specification = builder.buildSpecification();
+        pledgeAgreementSearch.withParam(searchParam);
+
+        Specification<PledgeAgreement> specification = pledgeAgreementSearch.getSpecification();
+
         return repositoryPledgeAgreement.findAll(specification);
     }
 
