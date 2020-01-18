@@ -29,15 +29,17 @@ public class AppUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String name){
-        AppUser appUser = repositoryAppUser.findByName(name).orElseThrow(() -> new NullPointerException("User not found"));
+        AppUser appUser = repositoryAppUser.findByName(name)
+                .orElseThrow(() -> new NullPointerException("User not found"));
+
         List<AppRole> appRoleList = repositoryAppRole.findAllByAppUsers(appUser);
 
         List<GrantedAuthority> authorityList = new ArrayList<>();
         if(!appRoleList.isEmpty()){
-            for(AppRole role : appRoleList){
-                GrantedAuthority authority = new SimpleGrantedAuthority(role.getName());
+            appRoleList.forEach(appRole -> {
+                GrantedAuthority authority = new SimpleGrantedAuthority(appRole.getName());
                 authorityList.add(authority);
-            }
+            });
         }
 
         return new User(appUser.getName(), appUser.getPassword(), authorityList);

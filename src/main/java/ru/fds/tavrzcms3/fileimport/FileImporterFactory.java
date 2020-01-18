@@ -21,7 +21,7 @@ public class FileImporterFactory {
         }else if(extension == FileExtension.CSV || extension == FileExtension.NONE || extension == FileExtension.TXT){
             return new CsvImporter(new FileReader(file));
         }else{
-            return null;
+            throw new IOException("Wrong file type");
         }
 
     }

@@ -49,6 +49,11 @@ public class ClientManagerController {
                 .orElseThrow(()-> new NullPointerException("Client manager not found"));
     }
 
+    @GetMapping("/all")
+    public List<ClientManagerDto> getAllClientManagers(){
+        return dtoFactory.getClientManagersDto(clientManagerService.getAllClientManager());
+    }
+
     @PostMapping("/insert")
     public ClientManagerDto insertClientManager(@Valid @RequestBody ClientManagerDto clientManagerDto){
         ClientManager clientManager = clientManagerService

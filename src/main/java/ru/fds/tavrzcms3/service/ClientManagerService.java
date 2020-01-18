@@ -20,7 +20,6 @@ import java.util.Optional;
 public class ClientManagerService {
 
     private final RepositoryClientManager repositoryClientManager;
-
     private final ExcelColumnNum excelColumnNum;
 
     public ClientManagerService(RepositoryClientManager repositoryClientManager,
@@ -78,7 +77,7 @@ public class ClientManagerService {
             }
 
             Optional<ClientManager> clientManager = getClientManagerById(fileImporter.getLong(excelColumnNum.getClientManagerUpdate().getClientManagerId()));
-            if(!clientManager.isPresent()){
+            if(clientManager.isEmpty()){
                 throw new IOException("Клиентский менеджер с таким id отсутствует ("
                         + fileImporter.getLong(excelColumnNum.getClientManagerUpdate().getClientManagerId())
                         + "). Строка: " + countRow);
