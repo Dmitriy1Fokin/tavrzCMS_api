@@ -25,8 +25,10 @@ public class CostHistoryService {
 
     private final RepositoryCostHistory repositoryCostHistory;
     private final RepositoryPledgeSubject repositoryPledgeSubject;
-
     private final ExcelColumnNum excelColumnNum;
+
+    private static final String MSG_WRONG_ID = "Неверный id{";
+    private static final String MSG_LINE = "). Строка: ";
 
     public CostHistoryService(RepositoryCostHistory repositoryCostHistory,
                               RepositoryPledgeSubject repositoryPledgeSubject,
@@ -36,7 +38,7 @@ public class CostHistoryService {
         this.excelColumnNum = excelColumnNum;
     }
 
-    public Optional<CostHistory> getCostHistoryById(Long costHistoryId){
+    private Optional<CostHistory> getCostHistoryById(Long costHistoryId){
         return repositoryCostHistory.findById(costHistoryId);
     }
 
@@ -66,18 +68,6 @@ public class CostHistoryService {
         do{
             countRow += 1;
 
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getCostHistoryNew().getPledgeSubjectId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getCostHistoryNew().getPledgeSubjectId()) + ") предмета залога.");
-            }
-            Optional<PledgeSubject> pledgeSubject = repositoryPledgeSubject
-                    .findById(fileImporter.getLong(excelColumnNum.getCostHistoryNew().getPledgeSubjectId()));
-            if(!pledgeSubject.isPresent()){
-                throw new IOException("Предмет залога с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getCostHistoryNew().getPledgeSubjectId())
-                        + "). Строка: " + countRow);
-            }
-
             CostHistory costHistory = CostHistory.builder()
                     .dateConclusion(fileImporter.getLocalDate(excelColumnNum.getCostHistoryNew().getDate()))
                     .zsDz(fileImporter.getBigDecimal(excelColumnNum.getCostHistoryNew().getZsDz()))
@@ -88,7 +78,7 @@ public class CostHistoryService {
                     .appraiser(fileImporter.getString(excelColumnNum.getCostHistoryNew().getAppraiser()))
                     .appraisalReportNum(fileImporter.getString(excelColumnNum.getCostHistoryNew().getNumAppraisalReport()))
                     .appraisalReportDate(fileImporter.getLocalDate(excelColumnNum.getCostHistoryNew().getDateAppraisalReport()))
-                    .pledgeSubject(pledgeSubject.get())
+                    .pledgeSubject(setPledgeSubject(fileImporter, countRow))
                     .build();
 
             costHistoryList.add(costHistory);
@@ -96,6 +86,19 @@ public class CostHistoryService {
         }while (fileImporter.nextLine());
 
         return costHistoryList;
+    }
+
+    private PledgeSubject setPledgeSubject(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getCostHistoryNew().getPledgeSubjectId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getCostHistoryNew().getPledgeSubjectId()) + ") предмета залога.");
+        }
+
+        return repositoryPledgeSubject
+                .findById(fileImporter.getLong(excelColumnNum.getCostHistoryNew().getPledgeSubjectId()))
+                .orElseThrow(() -> new IOException("Предмет залога с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getCostHistoryNew().getPledgeSubjectId())
+                        + MSG_LINE + countRow));
     }
 
     public List<CostHistory> getCurrentCostHistoriesFromFile(File file) throws IOException{
@@ -110,48 +113,48 @@ public class CostHistoryService {
         do{
             countRow += 1;
 
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getCostHistoryId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getCostHistoryId()) + ") истории стоимотей.");
-            }
+            CostHistory costHistory = setCurrentCostHistory(fileImporter, countRow);
 
-            Optional<CostHistory> costHistory = getCostHistoryById(fileImporter
-                    .getLong(excelColumnNum.getCostHistoryUpdate().getCostHistoryId()));
-            if(!costHistory.isPresent()){
-                throw new IOException("История стоимостей с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getCostHistoryId())
-                        + "). Строка: " + countRow);
-            }
+            costHistory.setDateConclusion(fileImporter.getLocalDate(excelColumnNum.getCostHistoryUpdate().getDate()));
+            costHistory.setZsDz(fileImporter.getBigDecimal(excelColumnNum.getCostHistoryUpdate().getZsDz()));
+            costHistory.setZsZz(fileImporter.getBigDecimal(excelColumnNum.getCostHistoryUpdate().getZsZz()));
+            costHistory.setRsDz(fileImporter.getBigDecimal(excelColumnNum.getCostHistoryUpdate().getRsDz()));
+            costHistory.setRsZz(fileImporter.getBigDecimal(excelColumnNum.getCostHistoryUpdate().getRsZZ()));
+            costHistory.setSs(fileImporter.getBigDecimal(excelColumnNum.getCostHistoryUpdate().getSs()));
+            costHistory.setAppraiser(fileImporter.getString(excelColumnNum.getCostHistoryUpdate().getAppraiser()));
+            costHistory.setAppraisalReportNum(fileImporter.getString(excelColumnNum.getCostHistoryUpdate().getNumAppraisalReport()));
+            costHistory.setAppraisalReportDate(fileImporter.getLocalDate(excelColumnNum.getCostHistoryUpdate().getDateAppraisalReport()));
+            costHistory.setPledgeSubject(setPledgeSubjectInCurrentCostHistory(fileImporter, countRow));
 
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getPledgeSubjectId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getPledgeSubjectId()) + ") предмета залога.");
-            }
-
-            Optional<PledgeSubject> pledgeSubject = repositoryPledgeSubject
-                    .findById(fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getPledgeSubjectId()));
-            if(!pledgeSubject.isPresent()){
-                throw new IOException("Предмет залога с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getPledgeSubjectId())
-                        + "). Строка: " + countRow);
-            }
-
-            costHistory.get().setDateConclusion(fileImporter.getLocalDate(excelColumnNum.getCostHistoryUpdate().getDate()));
-            costHistory.get().setZsDz(fileImporter.getBigDecimal(excelColumnNum.getCostHistoryUpdate().getZsDz()));
-            costHistory.get().setZsZz(fileImporter.getBigDecimal(excelColumnNum.getCostHistoryUpdate().getZsZz()));
-            costHistory.get().setRsDz(fileImporter.getBigDecimal(excelColumnNum.getCostHistoryUpdate().getRsDz()));
-            costHistory.get().setRsZz(fileImporter.getBigDecimal(excelColumnNum.getCostHistoryUpdate().getRsZZ()));
-            costHistory.get().setSs(fileImporter.getBigDecimal(excelColumnNum.getCostHistoryUpdate().getSs()));
-            costHistory.get().setAppraiser(fileImporter.getString(excelColumnNum.getCostHistoryUpdate().getAppraiser()));
-            costHistory.get().setAppraisalReportNum(fileImporter.getString(excelColumnNum.getCostHistoryUpdate().getNumAppraisalReport()));
-            costHistory.get().setAppraisalReportDate(fileImporter.getLocalDate(excelColumnNum.getCostHistoryUpdate().getDateAppraisalReport()));
-            costHistory.get().setPledgeSubject(pledgeSubject.get());
-
-            costHistoryList.add(costHistory.get());
+            costHistoryList.add(costHistory);
 
         }while (fileImporter.nextLine());
 
         return costHistoryList;
+    }
+
+    private CostHistory setCurrentCostHistory(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getCostHistoryId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getCostHistoryId()) + ") истории стоимотей.");
+        }
+
+        return getCostHistoryById(fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getCostHistoryId()))
+                .orElseThrow(() -> new IOException("История стоимостей с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getCostHistoryId())
+                        + MSG_LINE + countRow));
+    }
+
+    private PledgeSubject setPledgeSubjectInCurrentCostHistory(FileImporter fileImporter, int countRow) throws IOException{
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getPledgeSubjectId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getPledgeSubjectId()) + ") предмета залога.");
+        }
+
+        return  repositoryPledgeSubject.findById(fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getPledgeSubjectId()))
+                .orElseThrow(() -> new IOException("Предмет залога с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getPledgeSubjectId())
+                        + MSG_LINE + countRow));
     }
 
     @Transactional
