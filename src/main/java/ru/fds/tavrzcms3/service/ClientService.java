@@ -14,6 +14,8 @@ import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryClient;
+import ru.fds.tavrzcms3.repository.RepositoryClientManager;
+import ru.fds.tavrzcms3.repository.RepositoryEmployee;
 import ru.fds.tavrzcms3.specification.Search;
 
 import java.io.File;
@@ -28,19 +30,20 @@ import java.util.Optional;
 @Service
 public class ClientService {
 
+    private static final String MSG_WRONG_ID = "Неверный id{";
+    private static final String MSG_LINE = ") отсутствует. Строка: ";
     private final RepositoryClient repositoryClient;
-    private final ClientManagerService clientManagerService;
-    private final EmployeeService employeeService;
-
+    private final RepositoryEmployee repositoryEmployee;
+    private final RepositoryClientManager repositoryClientManager;
     private final ExcelColumnNum excelColumnNum;
 
     public ClientService(RepositoryClient repositoryClient,
-                         ClientManagerService clientManagerService,
-                         EmployeeService employeeService,
+                         RepositoryEmployee repositoryEmployee,
+                         RepositoryClientManager repositoryClientManager,
                          ExcelColumnNum excelColumnNum) {
         this.repositoryClient = repositoryClient;
-        this.clientManagerService = clientManagerService;
-        this.employeeService = employeeService;
+        this.repositoryEmployee = repositoryEmployee;
+        this.repositoryClientManager = repositoryClientManager;
         this.excelColumnNum = excelColumnNum;
     }
 
@@ -127,51 +130,12 @@ public class ClientService {
             Client client = new Client();
             client.setTypeOfClient(typeOfClient);
             if(typeOfClient == TypeOfClient.LEGAL_ENTITY){
-
-                String inn = "";
-                if(Objects.nonNull(fileImporter.getInteger(excelColumnNum.getClientNew().getLegalEntity().getInn()))){
-                    inn = fileImporter.getInteger(excelColumnNum.getClientNew().getLegalEntity().getInn()).toString();
-                }
-
-                ClientLegalEntity clientLegalEntity = ClientLegalEntity.builder()
-                        .organizationalForm(fileImporter.getString(excelColumnNum.getClientNew().getLegalEntity().getOrganizationForm()))
-                        .name(fileImporter.getString(excelColumnNum.getClientNew().getLegalEntity().getName()))
-                        .inn(inn)
-                        .build();
-                client.setClientLegalEntity(clientLegalEntity);
-
+                setNewClientLegalEntity(fileImporter, client);
             }else if(typeOfClient == TypeOfClient.INDIVIDUAL){
-                ClientIndividual clientIndividual = ClientIndividual.builder()
-                        .surname(fileImporter.getString(excelColumnNum.getClientNew().getIndividual().getSurname()))
-                        .name(fileImporter.getString(excelColumnNum.getClientNew().getIndividual().getName()))
-                        .patronymic(fileImporter.getString(excelColumnNum.getClientNew().getIndividual().getPatronymic()))
-                        .pasportNum(fileImporter.getString(excelColumnNum.getClientNew().getIndividual().getPasport()))
-                        .build();
-                client.setClientIndividual(clientIndividual);
-
+               setNewClientIndividual(fileImporter, client);
             }
-
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getClientNew().getClientManager()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getClientNew().getClientManager()) + ") клиентского менеджера. Строка: " + countRow);
-            }
-            Optional<ClientManager> clientManager = clientManagerService.getClientManagerById(fileImporter.getLong(excelColumnNum.getClientNew().getClientManager()));
-            if(clientManager.isPresent()){
-                client.setClientManager(clientManager.get());
-            }else{
-                throw new IOException("Клиентский менеджер с таким id(" + fileImporter.getLong(excelColumnNum.getClientNew().getClientManager()) + ") отсутствует. Строка: " + countRow);
-            }
-
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getClientNew().getEmployee()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getClientNew().getEmployee()) + ") ответственного сотрудника. Строка: " + countRow);
-            }
-            Optional<Employee> employee= employeeService.getEmployeeById(fileImporter.getLong(excelColumnNum.getClientNew().getEmployee()));
-            if(employee.isPresent()){
-                client.setEmployee(employee.get());
-            }else{
-                throw new IOException("Сотрудник с таким id(" + fileImporter.getLong(excelColumnNum.getClientNew().getEmployee()) + ") отсутствует. Строка: " + countRow);
-            }
+            setNewClientManager(fileImporter, client, countRow);
+            setNewEmployee(fileImporter, client, countRow);
 
             clientList.add(client);
 
@@ -179,6 +143,63 @@ public class ClientService {
 
         return clientList;
     }
+
+    private void setNewClientLegalEntity(FileImporter fileImporter, Client client){
+        String inn = "";
+        if(Objects.nonNull(fileImporter.getInteger(excelColumnNum.getClientNew().getLegalEntity().getInn()))){
+            inn = fileImporter.getInteger(excelColumnNum.getClientNew().getLegalEntity().getInn()).toString();
+        }
+
+        ClientLegalEntity clientLegalEntity = ClientLegalEntity.builder()
+                .organizationalForm(fileImporter.getString(excelColumnNum.getClientNew().getLegalEntity().getOrganizationForm()))
+                .name(fileImporter.getString(excelColumnNum.getClientNew().getLegalEntity().getName()))
+                .inn(inn)
+                .build();
+        client.setClientLegalEntity(clientLegalEntity);
+    }
+
+    private void setNewClientIndividual(FileImporter fileImporter, Client client){
+        ClientIndividual clientIndividual = ClientIndividual.builder()
+                .surname(fileImporter.getString(excelColumnNum.getClientNew().getIndividual().getSurname()))
+                .name(fileImporter.getString(excelColumnNum.getClientNew().getIndividual().getName()))
+                .patronymic(fileImporter.getString(excelColumnNum.getClientNew().getIndividual().getPatronymic()))
+                .pasportNum(fileImporter.getString(excelColumnNum.getClientNew().getIndividual().getPasport()))
+                .build();
+        client.setClientIndividual(clientIndividual);
+    }
+
+    private void setNewClientManager(FileImporter fileImporter, Client client, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getClientNew().getClientManager()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getClientNew().getClientManager()) + ") клиентского менеджера. Строка: " + countRow);
+        }
+
+        ClientManager clientManager = repositoryClientManager
+                .findById(fileImporter.getLong(excelColumnNum.getClientNew().getClientManager()))
+                .orElseThrow(() -> new IOException("Клиентский менеджер с таким id(" +
+                        fileImporter.getLong(excelColumnNum.getClientNew().getClientManager()) +
+                        MSG_LINE +
+                        countRow));
+
+        client.setClientManager(clientManager);
+    }
+
+    private void setNewEmployee(FileImporter fileImporter, Client client, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getClientNew().getEmployee()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getClientNew().getEmployee()) + ") ответственного сотрудника. Строка: " + countRow);
+        }
+
+        Employee employee = repositoryEmployee
+                .findById(fileImporter.getLong(excelColumnNum.getClientNew().getEmployee()))
+                .orElseThrow(() -> new IOException("Сотрудник с таким id(" +
+                        fileImporter.getLong(excelColumnNum.getClientNew().getEmployee()) +
+                        MSG_LINE +
+                        countRow));
+
+        client.setEmployee(employee);
+    }
+
 
     public List<Client> getCurrentClientsFromFile(File file) throws IOException{
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
@@ -192,63 +213,83 @@ public class ClientService {
         do{
             countRow += 1;
 
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getClientUpdate().getClientId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getClientUpdate().getClientId()) + ") клиента.");
+            Client client = setCurrentClient(fileImporter, countRow);
+            setCurrentClientManager(fileImporter, client, countRow);
+            setCurrentEmployee(fileImporter, client, countRow);
+
+            if(Objects.nonNull(client.getClientLegalEntity())){
+                setCurrentClientLegalEntity(fileImporter, client);
+            }else if(Objects.nonNull(client.getClientIndividual())){
+                setCurrentClientIndividual(fileImporter, client);
             }
 
-            Optional<Client> client = getClientById(fileImporter.getLong(excelColumnNum.getClientUpdate().getClientId()));
-            if(!client.isPresent()){
-                throw new IOException("Клиент с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getClientUpdate().getClientId())
-                        + "). Строка: " + countRow);
-            }
-
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getClientUpdate().getClientManager()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getClientUpdate().getClientManager()) + ") клиентского менеджера. Строка: " + countRow);
-            }
-            Optional<ClientManager> clientManager = clientManagerService.getClientManagerById(fileImporter.getLong(excelColumnNum.getClientUpdate().getClientManager()));
-            if(clientManager.isPresent()){
-                client.get().setClientManager(clientManager.get());
-            }else{
-                throw new IOException("Клиентский менеджер с таким id(" + fileImporter.getLong(excelColumnNum.getClientUpdate().getClientManager()) + ") отсутствует. Строка: " + countRow);
-            }
-
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getClientUpdate().getEmployee()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getClientUpdate().getEmployee()) + ") ответственного сотрудника. Строка: " + countRow);
-            }
-            Optional<Employee> employee= employeeService.getEmployeeById(fileImporter.getLong(excelColumnNum.getClientUpdate().getEmployee()));
-            if(employee.isPresent()){
-                client.get().setEmployee(employee.get());
-            }else{
-                throw new IOException("Сотрудник с таким id(" + fileImporter.getLong(excelColumnNum.getClientUpdate().getEmployee()) + ") отсутствует. Строка: " + countRow);
-            }
-
-            if(Objects.nonNull(client.get().getClientLegalEntity())){
-
-                String inn = "";
-                if(Objects.nonNull(fileImporter.getInteger(excelColumnNum.getClientUpdate().getLegalEntity().getInn()))){
-                    inn = fileImporter.getInteger(excelColumnNum.getClientUpdate().getLegalEntity().getInn()).toString();
-                }
-                client.get().getClientLegalEntity().setOrganizationalForm(fileImporter.getString(excelColumnNum.getClientUpdate().getLegalEntity().getOrganizationForm()));
-                client.get().getClientLegalEntity().setName(fileImporter.getString(excelColumnNum.getClientUpdate().getLegalEntity().getName()));
-                client.get().getClientLegalEntity().setInn(inn);
-            }else if(Objects.nonNull(client.get().getClientIndividual())){
-
-                client.get().getClientIndividual().setSurname(fileImporter.getString(excelColumnNum.getClientUpdate().getIndividual().getSurname()));
-                client.get().getClientIndividual().setName(fileImporter.getString(excelColumnNum.getClientUpdate().getIndividual().getName()));
-                client.get().getClientIndividual().setPatronymic(fileImporter.getString(excelColumnNum.getClientUpdate().getIndividual().getPatronymic()));
-                client.get().getClientIndividual().setPasportNum(fileImporter.getString(excelColumnNum.getClientUpdate().getIndividual().getPasport()));
-            }
-
-            clientList.add(client.get());
+            clientList.add(client);
 
         }while (fileImporter.nextLine());
 
         return clientList;
     }
+
+    private Client setCurrentClient(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getClientUpdate().getClientId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getClientUpdate().getClientId()) + ") клиента. Строка: " + countRow);
+        }
+
+        return getClientById(fileImporter.getLong(excelColumnNum.getClientUpdate().getClientId()))
+                .orElseThrow(() -> new IOException("Клиент с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getClientUpdate().getClientId())
+                        + "). Строка: " + countRow));
+    }
+
+    private void setCurrentClientManager(FileImporter fileImporter, Client client, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getClientUpdate().getClientManager()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getClientUpdate().getClientManager()) +
+                    ") клиентского менеджера. Строка: " + countRow);
+        }
+
+        ClientManager clientManager = repositoryClientManager
+                .findById(fileImporter.getLong(excelColumnNum.getClientUpdate().getClientManager()))
+                .orElseThrow(() -> new IOException("Клиентский менеджер с таким id(" +
+                        fileImporter.getLong(excelColumnNum.getClientUpdate().getClientManager()) +
+                        MSG_LINE + countRow));
+
+        client.setClientManager(clientManager);
+    }
+
+    private void setCurrentEmployee(FileImporter fileImporter, Client client, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getClientUpdate().getEmployee()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getClientUpdate().getEmployee()) +
+                    ") ответственного сотрудника. Строка: " + countRow);
+        }
+
+        Employee employee = repositoryEmployee.findById(fileImporter.getLong(excelColumnNum.getClientUpdate().getEmployee()))
+                .orElseThrow(() -> new IOException("Сотрудник с таким id(" +
+                        fileImporter.getLong(excelColumnNum.getClientUpdate().getEmployee()) +
+                        MSG_LINE + countRow));
+
+        client.setEmployee(employee);
+    }
+
+    private void setCurrentClientLegalEntity(FileImporter fileImporter, Client client){
+        String inn = "";
+        if(Objects.nonNull(fileImporter.getInteger(excelColumnNum.getClientUpdate().getLegalEntity().getInn()))){
+            inn = fileImporter.getInteger(excelColumnNum.getClientUpdate().getLegalEntity().getInn()).toString();
+        }
+        client.getClientLegalEntity().setOrganizationalForm(fileImporter.getString(excelColumnNum.getClientUpdate().getLegalEntity().getOrganizationForm()));
+        client.getClientLegalEntity().setName(fileImporter.getString(excelColumnNum.getClientUpdate().getLegalEntity().getName()));
+        client.getClientLegalEntity().setInn(inn);
+    }
+
+    private void setCurrentClientIndividual(FileImporter fileImporter, Client client){
+        client.getClientIndividual().setSurname(fileImporter.getString(excelColumnNum.getClientUpdate().getIndividual().getSurname()));
+        client.getClientIndividual().setName(fileImporter.getString(excelColumnNum.getClientUpdate().getIndividual().getName()));
+        client.getClientIndividual().setPatronymic(fileImporter.getString(excelColumnNum.getClientUpdate().getIndividual().getPatronymic()));
+        client.getClientIndividual().setPasportNum(fileImporter.getString(excelColumnNum.getClientUpdate().getIndividual().getPasport()));
+    }
+
 
     @Transactional
     public Client updateInsertClient(Client client){
