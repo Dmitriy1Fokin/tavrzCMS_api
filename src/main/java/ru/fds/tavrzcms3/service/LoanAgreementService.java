@@ -99,8 +99,6 @@ public class LoanAgreementService {
     }
 
     public List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException {
-        final String CLIENT = "client";
-
         Search<LoanAgreement> loanAgreementSearch = new Search<>(LoanAgreement.class);
 
         Set<String> clientAttributes = new HashSet<>();
@@ -111,33 +109,7 @@ public class LoanAgreementService {
 
         if(!clientAttributes.isEmpty() && clientAttributes.contains("typeOfClient")){
             List<Client> clientList = clientService.getClientFromSearch(searchParam);
-            if(clientList.isEmpty()){
-                SearchCriteria searchCriteria = SearchCriteria.builder()
-                        .key(CLIENT)
-                        .value(null)
-                        .operation(Operations.EQUAL_IGNORE_CASE)
-                        .predicate(false)
-                        .build();
-                loanAgreementSearch.withCriteria(searchCriteria);
-            }else {
-                SearchCriteria searchCriteriaFirst = SearchCriteria.builder()
-                        .key(CLIENT)
-                        .value(clientList.get(0))
-                        .operation(Operations.EQUAL_IGNORE_CASE)
-                        .predicate(false)
-                        .build();
-                loanAgreementSearch.withCriteria(searchCriteriaFirst);
-
-                for(int i = 1; i < clientList.size(); i++){
-                    SearchCriteria searchCriteria = SearchCriteria.builder()
-                            .key(CLIENT)
-                            .value(clientList.get(i))
-                            .operation(Operations.EQUAL_IGNORE_CASE)
-                            .predicate(true)
-                            .build();
-                    loanAgreementSearch.withCriteria(searchCriteria);
-                }
-            }
+            loanAgreementSearch.withParamClient(clientList);
         }
 
         loanAgreementSearch.withParam(searchParam);

@@ -2,12 +2,14 @@ package ru.fds.tavrzcms3.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 import ru.fds.tavrzcms3.dictionary.Operations;
+import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.specification.impl.SpecificationBuilderImpl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 public class Search<T> {
@@ -97,12 +99,38 @@ public class Search<T> {
         }
     }
 
-    public void withCriteria(SearchCriteria criteria){
-        builder.withCriteria(criteria);
+    public void withParamClient(List<Client> clientList){
+        final String CLIENT = "client";
+
+        if(clientList.isEmpty()){
+            SearchCriteria searchCriteria = SearchCriteria.builder()
+                    .key(CLIENT)
+                    .value(null)
+                    .operation(Operations.EQUAL_IGNORE_CASE)
+                    .predicate(false)
+                    .build();
+            builder.withCriteria(searchCriteria);
+        }else {
+            SearchCriteria searchCriteriaFirst = SearchCriteria.builder()
+                    .key(CLIENT)
+                    .value(clientList.get(0))
+                    .operation(Operations.EQUAL_IGNORE_CASE)
+                    .predicate(false)
+                    .build();
+            builder.withCriteria(searchCriteriaFirst);
+            for(int i = 1; i < clientList.size(); i++){
+                SearchCriteria searchCriteria = SearchCriteria.builder()
+                        .key(CLIENT)
+                        .value(clientList.get(i))
+                        .operation(Operations.EQUAL_IGNORE_CASE)
+                        .predicate(true)
+                        .build();
+                builder.withCriteria(searchCriteria);
+            }
+        }
     }
 
     public Specification<T> getSpecification(){
         return builder.buildSpecification();
     }
-
 }

@@ -244,8 +244,6 @@ public class PledgeAgreementService {
     }
 
     public List<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException{
-        final String CLIENT = "client";
-
         Search<PledgeAgreement> pledgeAgreementSearch = new Search<>(PledgeAgreement.class);
 
         Set<String> clientAttributes = new HashSet<>();
@@ -256,33 +254,7 @@ public class PledgeAgreementService {
 
         if(!clientAttributes.isEmpty() && clientAttributes.contains("typeOfClient")){
             List<Client> clientList = clientService.getClientFromSearch(searchParam);
-            if(clientList.isEmpty()){
-                SearchCriteria searchCriteria = SearchCriteria.builder()
-                        .key(CLIENT)
-                        .value(null)
-                        .operation(Operations.EQUAL_IGNORE_CASE)
-                        .predicate(false)
-                        .build();
-                pledgeAgreementSearch.withCriteria(searchCriteria);
-            }else {
-                SearchCriteria searchCriteriaFirst = SearchCriteria.builder()
-                        .key(CLIENT)
-                        .value(clientList.get(0))
-                        .operation(Operations.EQUAL_IGNORE_CASE)
-                        .predicate(false)
-                        .build();
-                pledgeAgreementSearch.withCriteria(searchCriteriaFirst);
-
-                for(int i = 1; i < clientList.size(); i++){
-                    SearchCriteria searchCriteria = SearchCriteria.builder()
-                            .key(CLIENT)
-                            .value(clientList.get(i))
-                            .operation(Operations.EQUAL_IGNORE_CASE)
-                            .predicate(true)
-                            .build();
-                    pledgeAgreementSearch.withCriteria(searchCriteria);
-                }
-            }
+            pledgeAgreementSearch.withParamClient(clientList);
         }
 
         pledgeAgreementSearch.withParam(searchParam);
