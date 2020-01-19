@@ -78,7 +78,7 @@ public class CostHistoryService {
                     .appraiser(fileImporter.getString(excelColumnNum.getCostHistoryNew().getAppraiser()))
                     .appraisalReportNum(fileImporter.getString(excelColumnNum.getCostHistoryNew().getNumAppraisalReport()))
                     .appraisalReportDate(fileImporter.getLocalDate(excelColumnNum.getCostHistoryNew().getDateAppraisalReport()))
-                    .pledgeSubject(setPledgeSubject(fileImporter, countRow))
+                    .pledgeSubject(setPledgeSubjectInNewCostHistory(fileImporter, countRow))
                     .build();
 
             costHistoryList.add(costHistory);
@@ -88,10 +88,11 @@ public class CostHistoryService {
         return costHistoryList;
     }
 
-    private PledgeSubject setPledgeSubject(FileImporter fileImporter, int countRow) throws IOException {
+    private PledgeSubject setPledgeSubjectInNewCostHistory(FileImporter fileImporter, int countRow) throws IOException {
         if(Objects.isNull(fileImporter.getLong(excelColumnNum.getCostHistoryNew().getPledgeSubjectId()))){
             throw new IOException(MSG_WRONG_ID
-                    + fileImporter.getLong(excelColumnNum.getCostHistoryNew().getPledgeSubjectId()) + ") предмета залога.");
+                    + fileImporter.getLong(excelColumnNum.getCostHistoryNew().getPledgeSubjectId())
+                    + ") предмета залога. Строка: " + countRow);
         }
 
         return repositoryPledgeSubject
@@ -136,7 +137,8 @@ public class CostHistoryService {
     private CostHistory setCurrentCostHistory(FileImporter fileImporter, int countRow) throws IOException {
         if(Objects.isNull(fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getCostHistoryId()))){
             throw new IOException(MSG_WRONG_ID
-                    + fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getCostHistoryId()) + ") истории стоимотей.");
+                    + fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getCostHistoryId())
+                    + ") истории стоимотей. Строка: " + countRow);
         }
 
         return getCostHistoryById(fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getCostHistoryId()))
@@ -148,7 +150,8 @@ public class CostHistoryService {
     private PledgeSubject setPledgeSubjectInCurrentCostHistory(FileImporter fileImporter, int countRow) throws IOException{
         if(Objects.isNull(fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getPledgeSubjectId()))){
             throw new IOException(MSG_WRONG_ID
-                    + fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getPledgeSubjectId()) + ") предмета залога.");
+                    + fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getPledgeSubjectId())
+                    + ") предмета залога. Строка: " + countRow);
         }
 
         return  repositoryPledgeSubject.findById(fileImporter.getLong(excelColumnNum.getCostHistoryUpdate().getPledgeSubjectId()))

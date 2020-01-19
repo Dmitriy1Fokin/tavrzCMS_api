@@ -10,9 +10,7 @@ import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryEncumbrance;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
-import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
-import javax.validation.ConstraintViolation;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,15 +18,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class EncumbranceService {
 
+
     private final RepositoryEncumbrance repositoryEncumbrance;
     private final RepositoryPledgeSubject repositoryPledgeSubject;
-
     private final ExcelColumnNum excelColumnNum;
+
+    private static final String MSG_WRONG_ID = "Неверный id{";
+    private static final String MSG_LINE = "). Строка: ";
 
     public EncumbranceService(RepositoryEncumbrance repositoryEncumbrance,
                               RepositoryPledgeSubject repositoryPledgeSubject,
@@ -61,18 +61,6 @@ public class EncumbranceService {
         do{
             countRow += 1;
 
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getEncumbranceNew().getPledgeSubjectId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getEncumbranceNew().getPledgeSubjectId()) + ") предмета залога.");
-            }
-            Optional<PledgeSubject> pledgeSubject = repositoryPledgeSubject
-                    .findById(fileImporter.getLong(excelColumnNum.getEncumbranceNew().getPledgeSubjectId()));
-            if(!pledgeSubject.isPresent()){
-                throw new IOException("Предмет залога с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getEncumbranceNew().getPledgeSubjectId())
-                        + "). Строка: " + countRow);
-            }
-
             TypeOfEncumbrance typeOfEncumbrance;
             try {
                 typeOfEncumbrance = TypeOfEncumbrance.valueOf(fileImporter.getString(excelColumnNum.getEncumbranceNew().getTypeOfEncumbrance()));
@@ -87,7 +75,7 @@ public class EncumbranceService {
                     .dateBegin(fileImporter.getLocalDate(excelColumnNum.getEncumbranceNew().getDateBegin()))
                     .dateEnd(fileImporter.getLocalDate(excelColumnNum.getEncumbranceNew().getDateEnd()))
                     .numOfEncumbrance(fileImporter.getString(excelColumnNum.getEncumbranceNew().getNumOfEncumbrance()))
-                    .pledgeSubject(pledgeSubject.get())
+                    .pledgeSubject(setPledgeSubjectInNewEncumbrance(fileImporter, countRow))
                     .build();
 
             encumbranceList.add(encumbrance);
@@ -95,6 +83,19 @@ public class EncumbranceService {
         }while (fileImporter.nextLine());
 
         return encumbranceList;
+    }
+
+    private PledgeSubject setPledgeSubjectInNewEncumbrance(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getEncumbranceNew().getPledgeSubjectId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getEncumbranceNew().getPledgeSubjectId())
+                    + ") предмета залога. Строка: " + countRow);
+        }
+
+        return repositoryPledgeSubject.findById(fileImporter.getLong(excelColumnNum.getEncumbranceNew().getPledgeSubjectId()))
+                .orElseThrow(() -> new IOException("Предмет залога с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getEncumbranceNew().getPledgeSubjectId())
+                        + MSG_LINE + countRow));
     }
 
     public List<Encumbrance> getCurrentEncumbranceFromFile(File file) throws IOException{
@@ -109,29 +110,7 @@ public class EncumbranceService {
         do{
             countRow += 1;
 
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getEncumbranceId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getEncumbranceId()) + ") обременения.");
-            }
-            Optional<Encumbrance> encumbrance = getEncumbranceById(fileImporter
-                    .getLong(excelColumnNum.getEncumbranceUpdate().getEncumbranceId()));
-            if(!encumbrance.isPresent()){
-                throw new IOException("Обременение с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getEncumbranceId())
-                        + "). Строка: " + countRow);
-            }
-
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getPledgeSubjectId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getPledgeSubjectId()) + ") предмета залога.");
-            }
-            Optional<PledgeSubject> pledgeSubject = repositoryPledgeSubject
-                    .findById(fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getPledgeSubjectId()));
-            if(!pledgeSubject.isPresent()){
-                throw new IOException("Предмет залога с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getPledgeSubjectId())
-                        + "). Строка: " + countRow);
-            }
+            Encumbrance encumbrance = setCurrentEncumbrance(fileImporter, countRow);
 
             TypeOfEncumbrance typeOfEncumbrance;
             try {
@@ -140,19 +119,45 @@ public class EncumbranceService {
                 typeOfEncumbrance = null;
             }
 
-            encumbrance.get().setNameEncumbrance(fileImporter.getString(excelColumnNum.getEncumbranceUpdate().getName()));
-            encumbrance.get().setTypeOfEncumbrance(typeOfEncumbrance);
-            encumbrance.get().setInFavorOfWhom(fileImporter.getString(excelColumnNum.getEncumbranceUpdate().getInFavorOfWhom()));
-            encumbrance.get().setDateBegin(fileImporter.getLocalDate(excelColumnNum.getEncumbranceUpdate().getDateBegin()));
-            encumbrance.get().setDateEnd(fileImporter.getLocalDate(excelColumnNum.getEncumbranceUpdate().getDateEnd()));
-            encumbrance.get().setNumOfEncumbrance(fileImporter.getString(excelColumnNum.getEncumbranceUpdate().getNumOfEncumbrance()));
-            encumbrance.get().setPledgeSubject(pledgeSubject.get());
+            encumbrance.setNameEncumbrance(fileImporter.getString(excelColumnNum.getEncumbranceUpdate().getName()));
+            encumbrance.setTypeOfEncumbrance(typeOfEncumbrance);
+            encumbrance.setInFavorOfWhom(fileImporter.getString(excelColumnNum.getEncumbranceUpdate().getInFavorOfWhom()));
+            encumbrance.setDateBegin(fileImporter.getLocalDate(excelColumnNum.getEncumbranceUpdate().getDateBegin()));
+            encumbrance.setDateEnd(fileImporter.getLocalDate(excelColumnNum.getEncumbranceUpdate().getDateEnd()));
+            encumbrance.setNumOfEncumbrance(fileImporter.getString(excelColumnNum.getEncumbranceUpdate().getNumOfEncumbrance()));
+            encumbrance.setPledgeSubject(setPledgeSubjectInCurrentEncumbrance(fileImporter, countRow));
 
-            encumbranceList.add(encumbrance.get());
+            encumbranceList.add(encumbrance);
 
         }while (fileImporter.nextLine());
 
         return encumbranceList;
+    }
+
+    private Encumbrance setCurrentEncumbrance(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getEncumbranceId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getEncumbranceId())
+                    + ") обременения. Строка: " + countRow);
+        }
+
+        return getEncumbranceById(fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getEncumbranceId()))
+                .orElseThrow(() -> new IOException("Обременение с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getEncumbranceId())
+                        + MSG_LINE + countRow));
+    }
+
+    private PledgeSubject setPledgeSubjectInCurrentEncumbrance(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getPledgeSubjectId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getPledgeSubjectId())
+                    + ") предмета залога. Строка: " + countRow);
+        }
+
+        return repositoryPledgeSubject.findById(fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getPledgeSubjectId()))
+                .orElseThrow(() -> new IOException("Предмет залога с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getEncumbranceUpdate().getPledgeSubjectId())
+                        + MSG_LINE + countRow));
     }
 
     @Transactional

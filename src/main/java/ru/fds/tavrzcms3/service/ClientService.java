@@ -194,8 +194,7 @@ public class ClientService {
                 .findById(fileImporter.getLong(excelColumnNum.getClientNew().getEmployee()))
                 .orElseThrow(() -> new IOException("Сотрудник с таким id(" +
                         fileImporter.getLong(excelColumnNum.getClientNew().getEmployee()) +
-                        MSG_LINE +
-                        countRow));
+                        MSG_LINE + countRow));
 
         client.setEmployee(employee);
     }
