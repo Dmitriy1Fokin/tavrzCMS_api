@@ -10,9 +10,7 @@ import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryInsurance;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
-import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
-import javax.validation.ConstraintViolation;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,15 +18,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class InsuranceService {
 
     private final RepositoryInsurance repositoryInsurance;
     private final RepositoryPledgeSubject repositoryPledgeSubject;
-
     private final ExcelColumnNum excelColumnNum;
+
+    private static final String MSG_WRONG_ID = "Неверный id{";
+    private static final String MSG_LINE = "). Строка: ";
 
     public InsuranceService(RepositoryInsurance repositoryInsurance,
                             RepositoryPledgeSubject repositoryPledgeSubject,
@@ -63,19 +62,6 @@ public class InsuranceService {
         do{
             countRow += 1;
 
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getInsuranceNew().getPledgeSubjectId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getInsuranceNew().getPledgeSubjectId()) + ") предмета залога.");
-            }
-
-            Optional<PledgeSubject> pledgeSubject = repositoryPledgeSubject
-                    .findById(fileImporter.getLong(excelColumnNum.getInsuranceNew().getPledgeSubjectId()));
-            if(!pledgeSubject.isPresent()){
-                throw new IOException("Предмет залога с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getInsuranceNew().getPledgeSubjectId())
-                        + "). Строка: " + countRow);
-            }
-
             Insurance insurance = Insurance.builder()
                 .numInsurance(fileImporter.getString(excelColumnNum.getInsuranceNew().getNumInsurance()))
                 .dateBeginInsurance(fileImporter.getLocalDate(excelColumnNum.getInsuranceNew().getDateBegin()))
@@ -84,7 +70,7 @@ public class InsuranceService {
                 .dateInsuranceContract(fileImporter.getLocalDate(excelColumnNum.getInsuranceNew().getDateInsuranceContract()))
                 .paymentOfInsurancePremium(fileImporter.getString(excelColumnNum.getInsuranceNew().getPaymentOfInsurancePremium()))
                 .franchiseAmount(fileImporter.getBigDecimal(excelColumnNum.getInsuranceNew().getFranchiseAmount()))
-                .pledgeSubject(pledgeSubject.get())
+                .pledgeSubject(setPledgeSubjectInNewInsurance(fileImporter, countRow))
                 .build();
 
             insuranceList.add(insurance);
@@ -92,6 +78,19 @@ public class InsuranceService {
         }while (fileImporter.nextLine());
 
         return insuranceList;
+    }
+
+    private PledgeSubject setPledgeSubjectInNewInsurance(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getInsuranceNew().getPledgeSubjectId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getInsuranceNew().getPledgeSubjectId())
+                    + ") предмета залога. Строка: " + countRow);
+        }
+
+        return repositoryPledgeSubject.findById(fileImporter.getLong(excelColumnNum.getInsuranceNew().getPledgeSubjectId()))
+                .orElseThrow(() -> new IOException("Предмет залога с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getInsuranceNew().getPledgeSubjectId())
+                        + MSG_LINE + countRow));
     }
 
     public List<Insurance> getCurrentInsurancesFromFile(File file) throws IOException{
@@ -106,47 +105,53 @@ public class InsuranceService {
         do{
             countRow += 1;
 
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getInsuranceId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getInsuranceId()) + ") договора страхования.");
-            }
+            Insurance insurance = setCurrentInsurance(fileImporter, countRow);
 
-            Optional<Insurance> insurance = getInsuranceById(fileImporter
-                    .getLong(excelColumnNum.getInsuranceUpdate().getInsuranceId()));
-            if(!insurance.isPresent()){
-                throw new IOException("Договора страхования с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getInsuranceId())
-                        + "). Строка: " + countRow);
-            }
 
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getPledgeSubjectId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getPledgeSubjectId()) + ") предмета залога.");
-            }
 
-            Optional<PledgeSubject> pledgeSubject = repositoryPledgeSubject
-                    .findById(fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getPledgeSubjectId()));
-            if(!pledgeSubject.isPresent()){
-                throw new IOException("Предмет залога с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getPledgeSubjectId())
-                        + "). Строка: " + countRow);
-            }
+            insurance.setNumInsurance(fileImporter.getString(excelColumnNum.getInsuranceUpdate().getNumInsurance()));
+            insurance.setDateBeginInsurance(fileImporter.getLocalDate(excelColumnNum.getInsuranceUpdate().getDateBegin()));
+            insurance.setDateEndInsurance(fileImporter.getLocalDate(excelColumnNum.getInsuranceUpdate().getDateEnd()));
+            insurance.setSumInsured(fileImporter.getBigDecimal(excelColumnNum.getInsuranceUpdate().getSumInsured()));
+            insurance.setDateInsuranceContract(fileImporter.getLocalDate(excelColumnNum.getInsuranceUpdate().getDateInsuranceContract()));
+            insurance.setPaymentOfInsurancePremium(fileImporter.getString(excelColumnNum.getInsuranceUpdate().getPaymentOfInsurancePremium()));
+            insurance.setFranchiseAmount(fileImporter.getBigDecimal(excelColumnNum.getInsuranceUpdate().getFranchiseAmount()));
+            insurance.setPledgeSubject(setPledgeSubjectInCurrentInsurance(fileImporter, countRow));
 
-            insurance.get().setNumInsurance(fileImporter.getString(excelColumnNum.getInsuranceUpdate().getNumInsurance()));
-            insurance.get().setDateBeginInsurance(fileImporter.getLocalDate(excelColumnNum.getInsuranceUpdate().getDateBegin()));
-            insurance.get().setDateEndInsurance(fileImporter.getLocalDate(excelColumnNum.getInsuranceUpdate().getDateEnd()));
-            insurance.get().setSumInsured(fileImporter.getBigDecimal(excelColumnNum.getInsuranceUpdate().getSumInsured()));
-            insurance.get().setDateInsuranceContract(fileImporter.getLocalDate(excelColumnNum.getInsuranceUpdate().getDateInsuranceContract()));
-            insurance.get().setPaymentOfInsurancePremium(fileImporter.getString(excelColumnNum.getInsuranceUpdate().getPaymentOfInsurancePremium()));
-            insurance.get().setFranchiseAmount(fileImporter.getBigDecimal(excelColumnNum.getInsuranceUpdate().getFranchiseAmount()));
-            insurance.get().setPledgeSubject(pledgeSubject.get());
-
-            insuranceList.add(insurance.get());
+            insuranceList.add(insurance);
 
         }while (fileImporter.nextLine());
 
         return insuranceList;
     }
+
+    private Insurance setCurrentInsurance(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getInsuranceId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getInsuranceId())
+                    + ") договора страхования. Строка: " + countRow);
+        }
+
+        return getInsuranceById(fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getInsuranceId()))
+                .orElseThrow(() -> new IOException("Договора страхования с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getInsuranceId())
+                        + MSG_LINE + countRow));
+    }
+
+    private PledgeSubject setPledgeSubjectInCurrentInsurance(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getPledgeSubjectId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getPledgeSubjectId())
+                    + ") предмета залога. Строка: " + countRow);
+        }
+
+        return repositoryPledgeSubject
+                .findById(fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getPledgeSubjectId()))
+                .orElseThrow(() -> new IOException("Предмет залога с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getInsuranceUpdate().getPledgeSubjectId())
+                        + MSG_LINE + countRow));
+    }
+
 
     @Transactional
     public Insurance updateInsertInsurance(Insurance insurance){
