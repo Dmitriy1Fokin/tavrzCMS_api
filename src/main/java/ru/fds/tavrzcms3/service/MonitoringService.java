@@ -26,11 +26,14 @@ import java.util.Optional;
 @Service
 public class MonitoringService {
 
+
     private final RepositoryMonitoring repositoryMonitoring;
     private final PledgeSubjectService pledgeSubjectService;
     private final PledgeAgreementService pledgeAgreementService;
-
     private final ExcelColumnNum excelColumnNum;
+
+    private static final String MSG_WRONG_ID = "Неверный id{";
+    private static final String MSG_LINE = "). Строка: ";
 
     public MonitoringService(RepositoryMonitoring repositoryMonitoring,
                              PledgeSubjectService pledgeSubjectService,
@@ -42,7 +45,7 @@ public class MonitoringService {
         this.excelColumnNum = excelColumnNum;
     }
 
-    public Optional<Monitoring> getMonitoringById(Long monitoringId){
+    private Optional<Monitoring> getMonitoringById(Long monitoringId){
         return repositoryMonitoring.findById(monitoringId);
     }
 
@@ -71,18 +74,6 @@ public class MonitoringService {
         do{
             countRow += 1;
 
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getMonitoringNew().getPledgeSubjectId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getMonitoringNew().getPledgeSubjectId()) + ") предмета залога.");
-            }
-            Optional<PledgeSubject> pledgeSubject = pledgeSubjectService
-                    .getPledgeSubjectById(fileImporter.getLong(excelColumnNum.getMonitoringNew().getPledgeSubjectId()));
-            if(!pledgeSubject.isPresent()){
-                throw new IOException("Предмет залога с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getMonitoringNew().getPledgeSubjectId())
-                        + "). Строка: " + countRow);
-            }
-
             StatusOfMonitoring statusOfMonitoring;
             try {
                 statusOfMonitoring = StatusOfMonitoring.valueOf(fileImporter.getString(excelColumnNum.getMonitoringNew().getStatus()));
@@ -104,7 +95,7 @@ public class MonitoringService {
                     .typeOfMonitoring(typeOfMonitoring)
                     .notice(fileImporter.getString(excelColumnNum.getMonitoringNew().getNotice()))
                     .collateralValue(fileImporter.getBigDecimal(excelColumnNum.getMonitoringNew().getCollateralValue()))
-                    .pledgeSubject(pledgeSubject.get())
+                    .pledgeSubject(setPledgeSubjectInNewMonitoring(fileImporter, countRow))
                     .build();
 
             monitoringList.add(monitoring);
@@ -112,6 +103,20 @@ public class MonitoringService {
         }while (fileImporter.nextLine());
 
         return monitoringList;
+    }
+
+    private PledgeSubject setPledgeSubjectInNewMonitoring(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getMonitoringNew().getPledgeSubjectId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getMonitoringNew().getPledgeSubjectId())
+                    + ") предмета залога. Строка: " + countRow);
+        }
+
+        return pledgeSubjectService
+                .getPledgeSubjectById(fileImporter.getLong(excelColumnNum.getMonitoringNew().getPledgeSubjectId()))
+                .orElseThrow(() -> new IOException("Предмет залога с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getMonitoringNew().getPledgeSubjectId())
+                        + MSG_LINE + countRow));
     }
 
     public List<Monitoring> getCurrentMonitoringsFromFile(File file) throws IOException{
@@ -126,29 +131,7 @@ public class MonitoringService {
         do{
             countRow += 1;
 
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getMonitoringId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getMonitoringId()) + ") мониторинга.");
-            }
-            Optional<Monitoring> monitoring = getMonitoringById(fileImporter
-                    .getLong(excelColumnNum.getMonitoringUpdate().getMonitoringId()));
-            if(!monitoring.isPresent()){
-                throw new IOException("Мониторинг с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getMonitoringId())
-                        + "). Строка: " + countRow);
-            }
-
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getPledgeSubjectId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getPledgeSubjectId()) + ") предмета залога.");
-            }
-            Optional<PledgeSubject> pledgeSubject = pledgeSubjectService
-                    .getPledgeSubjectById(fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getPledgeSubjectId()));
-            if(!pledgeSubject.isPresent()){
-                throw new IOException("Предмет залога с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getPledgeSubjectId())
-                        + "). Строка: " + countRow);
-            }
+            Monitoring monitoring = setCurrentMonitoring(fileImporter, countRow);
 
             StatusOfMonitoring statusOfMonitoring;
             try {
@@ -164,19 +147,45 @@ public class MonitoringService {
                 typeOfMonitoring = null;
             }
 
-            monitoring.get().setDateMonitoring(fileImporter.getLocalDate(excelColumnNum.getMonitoringUpdate().getDate()));
-            monitoring.get().setStatusMonitoring(statusOfMonitoring);
-            monitoring.get().setEmployee(fileImporter.getString(excelColumnNum.getMonitoringUpdate().getEmployee()));
-            monitoring.get().setTypeOfMonitoring(typeOfMonitoring);
-            monitoring.get().setNotice(fileImporter.getString(excelColumnNum.getMonitoringUpdate().getNotice()));
-            monitoring.get().setCollateralValue(fileImporter.getBigDecimal(excelColumnNum.getMonitoringUpdate().getCollateralValue()));
-            monitoring.get().setPledgeSubject(pledgeSubject.get());
+            monitoring.setDateMonitoring(fileImporter.getLocalDate(excelColumnNum.getMonitoringUpdate().getDate()));
+            monitoring.setStatusMonitoring(statusOfMonitoring);
+            monitoring.setEmployee(fileImporter.getString(excelColumnNum.getMonitoringUpdate().getEmployee()));
+            monitoring.setTypeOfMonitoring(typeOfMonitoring);
+            monitoring.setNotice(fileImporter.getString(excelColumnNum.getMonitoringUpdate().getNotice()));
+            monitoring.setCollateralValue(fileImporter.getBigDecimal(excelColumnNum.getMonitoringUpdate().getCollateralValue()));
+            monitoring.setPledgeSubject(setPledgeSubjectInCurrentMonitoring(fileImporter, countRow));
 
-            monitoringList.add(monitoring.get());
+            monitoringList.add(monitoring);
 
         }while (fileImporter.nextLine());
 
         return monitoringList;
+    }
+
+    private Monitoring setCurrentMonitoring(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getMonitoringId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getMonitoringId())
+                    + ") мониторинга. Строка: " + countRow);
+        }
+
+        return getMonitoringById(fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getMonitoringId()))
+                .orElseThrow(() -> new IOException("Мониторинг с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getMonitoringId())
+                        + MSG_LINE + countRow));
+    }
+
+    private PledgeSubject setPledgeSubjectInCurrentMonitoring(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getPledgeSubjectId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getPledgeSubjectId())
+                    + ") предмета залога. Строка: " + countRow);
+        }
+
+        return pledgeSubjectService.getPledgeSubjectById(fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getPledgeSubjectId()))
+                .orElseThrow(() -> new IOException("Предмет залога с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getMonitoringUpdate().getPledgeSubjectId())
+                        + MSG_LINE + countRow));
     }
 
     @Transactional

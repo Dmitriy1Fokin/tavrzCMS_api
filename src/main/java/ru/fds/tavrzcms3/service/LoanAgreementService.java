@@ -3,7 +3,6 @@ package ru.fds.tavrzcms3.service;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.fds.tavrzcms3.dictionary.Operations;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
 import ru.fds.tavrzcms3.domain.Client;
@@ -16,7 +15,6 @@ import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.specification.Search;
-import ru.fds.tavrzcms3.specification.SearchCriteria;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,8 +34,10 @@ public class LoanAgreementService {
     private final RepositoryLoanAgreement repositoryLoanAgreement;
     private final RepositoryPledgeAgreement repositoryPledgeAgreement;
     private final ClientService clientService;
-
     private final ExcelColumnNum excelColumnNum;
+
+    private static final String MSG_WRONG_ID = "Неверный id{";
+    private static final String MSG_LINE = "). Строка: ";
 
     public LoanAgreementService(RepositoryLoanAgreement repositoryLoanAgreement,
                                 RepositoryPledgeAgreement repositoryPledgeAgreement,
@@ -131,19 +131,6 @@ public class LoanAgreementService {
         do {
             countRow += 1;
 
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getLoanAgreementNew().getClientId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getLoanAgreementNew().getClientId()) + ") клиента.");
-            }
-
-            Optional<Client> client = clientService.getClientById(fileImporter
-                    .getLong(excelColumnNum.getLoanAgreementNew().getClientId()));
-            if(!client.isPresent()){
-                throw new IOException("Клиента с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getLoanAgreementNew().getClientId())
-                        + "). Строка: " + countRow);
-            }
-
             StatusOfAgreement statusOfAgreement;
             try {
                 statusOfAgreement = StatusOfAgreement.valueOf(fileImporter.getString(excelColumnNum.getLoanAgreementNew().getStatus()));
@@ -161,7 +148,7 @@ public class LoanAgreementService {
                     .interestRateLA(fileImporter.getDouble(excelColumnNum.getLoanAgreementNew().getInterestRate()))
                     .pfo(Byte.valueOf(fileImporter.getInteger(excelColumnNum.getLoanAgreementNew().getPfo()).toString()))
                     .qualityCategory(Byte.valueOf(fileImporter.getInteger(excelColumnNum.getLoanAgreementNew().getQuality()).toString()))
-                    .client(client.get())
+                    .client(setClientInNewLoanAgreement(fileImporter, countRow))
                     .build();
 
             loanAgreementList.add(loanAgreement);
@@ -169,6 +156,19 @@ public class LoanAgreementService {
         }while (fileImporter.nextLine());
 
         return loanAgreementList;
+    }
+
+    private Client setClientInNewLoanAgreement(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getLoanAgreementNew().getClientId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getLoanAgreementNew().getClientId())
+                    + ") клиента. Строка: " + countRow);
+        }
+
+        return clientService.getClientById(fileImporter.getLong(excelColumnNum.getLoanAgreementNew().getClientId()))
+                .orElseThrow(() -> new IOException("Клиента с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getLoanAgreementNew().getClientId())
+                        + MSG_LINE + countRow));
     }
 
     public List<LoanAgreement> getCurrentLoanAgreementsFromFile(File file) throws IOException {
@@ -183,29 +183,7 @@ public class LoanAgreementService {
         do {
             countRow += 1;
 
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getLoanAgreementId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getLoanAgreementId()) + ") кредитного догоаора.");
-            }
-            Optional<LoanAgreement> loanAgreement = getLoanAgreementById(fileImporter
-                    .getLong(excelColumnNum.getLoanAgreementUpdate().getLoanAgreementId()));
-            if(!loanAgreement.isPresent()){
-                throw new IOException("Кредитного договора с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getLoanAgreementId())
-                        + "). Строка: " + countRow);
-            }
-
-            if(Objects.isNull(fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getClientId()))){
-                throw new IOException("Неверный id{"
-                        + fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getClientId()) + ") клиента.");
-            }
-            Optional<Client> client = clientService.getClientById(fileImporter
-                    .getLong(excelColumnNum.getLoanAgreementUpdate().getClientId()));
-            if(!client.isPresent()){
-                throw new IOException("Клиента с таким id отсутствует ("
-                        + fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getClientId())
-                        + "). Строка: " + countRow);
-            }
+            LoanAgreement loanAgreement = setCurrentLoanAgreement(fileImporter, countRow);
 
             StatusOfAgreement statusOfAgreement;
             try {
@@ -214,23 +192,50 @@ public class LoanAgreementService {
                 statusOfAgreement = null;
             }
 
-            loanAgreement.get().setNumLA(fileImporter.getString(excelColumnNum.getLoanAgreementUpdate().getNumLA()));
-            loanAgreement.get().setDateBeginLA(fileImporter.getLocalDate(excelColumnNum.getLoanAgreementUpdate().getDateBegin()));
-            loanAgreement.get().setDateEndLA(fileImporter.getLocalDate(excelColumnNum.getLoanAgreementUpdate().getDateEnd()));
-            loanAgreement.get().setStatusLA(statusOfAgreement);
-            loanAgreement.get().setAmountLA(fileImporter.getBigDecimal(excelColumnNum.getLoanAgreementUpdate().getAmount()));
-            loanAgreement.get().setDebtLA(fileImporter.getBigDecimal(excelColumnNum.getLoanAgreementUpdate().getDebt()));
-            loanAgreement.get().setInterestRateLA(fileImporter.getDouble(excelColumnNum.getLoanAgreementUpdate().getInterestRate()));
-            loanAgreement.get().setPfo(Byte.valueOf(fileImporter.getInteger(excelColumnNum.getLoanAgreementUpdate().getPfo()).toString()));
-            loanAgreement.get().setQualityCategory(Byte.valueOf(fileImporter.getInteger(excelColumnNum.getLoanAgreementUpdate().getQuality()).toString()));
-            loanAgreement.get().setClient(client.get());
+            loanAgreement.setNumLA(fileImporter.getString(excelColumnNum.getLoanAgreementUpdate().getNumLA()));
+            loanAgreement.setDateBeginLA(fileImporter.getLocalDate(excelColumnNum.getLoanAgreementUpdate().getDateBegin()));
+            loanAgreement.setDateEndLA(fileImporter.getLocalDate(excelColumnNum.getLoanAgreementUpdate().getDateEnd()));
+            loanAgreement.setStatusLA(statusOfAgreement);
+            loanAgreement.setAmountLA(fileImporter.getBigDecimal(excelColumnNum.getLoanAgreementUpdate().getAmount()));
+            loanAgreement.setDebtLA(fileImporter.getBigDecimal(excelColumnNum.getLoanAgreementUpdate().getDebt()));
+            loanAgreement.setInterestRateLA(fileImporter.getDouble(excelColumnNum.getLoanAgreementUpdate().getInterestRate()));
+            loanAgreement.setPfo(Byte.valueOf(fileImporter.getInteger(excelColumnNum.getLoanAgreementUpdate().getPfo()).toString()));
+            loanAgreement.setQualityCategory(Byte.valueOf(fileImporter.getInteger(excelColumnNum.getLoanAgreementUpdate().getQuality()).toString()));
+            loanAgreement.setClient(setClientInCurrentLoanAgreement(fileImporter, countRow));
 
-            loanAgreementList.add(loanAgreement.get());
+            loanAgreementList.add(loanAgreement);
 
         }while (fileImporter.nextLine());
 
         return loanAgreementList;
     }
+
+    private LoanAgreement setCurrentLoanAgreement(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getLoanAgreementId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getLoanAgreementId())
+                    + ") кредитного догоаора. Строка: " + countRow);
+        }
+
+        return getLoanAgreementById(fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getLoanAgreementId()))
+                .orElseThrow(() -> new IOException("Кредитного договора с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getLoanAgreementId())
+                        + MSG_LINE + countRow));
+    }
+
+    private Client setClientInCurrentLoanAgreement(FileImporter fileImporter, int countRow) throws IOException {
+        if(Objects.isNull(fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getClientId()))){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getClientId())
+                    + ") клиента. Строка: " + countRow);
+        }
+
+        return clientService.getClientById(fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getClientId()))
+                .orElseThrow(() -> new IOException("Клиента с таким id отсутствует ("
+                        + fileImporter.getLong(excelColumnNum.getLoanAgreementUpdate().getClientId())
+                        + MSG_LINE + countRow));
+    }
+
 
     @Transactional
     public LoanAgreement updateInsertLoanAgreement(LoanAgreement loanAgreement){
