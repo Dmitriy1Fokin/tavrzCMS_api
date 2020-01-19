@@ -1,30 +1,16 @@
 package ru.fds.tavrzcms3.service;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
-import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
-import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
-import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
-import ru.fds.tavrzcms3.domain.LoanAgreement;
-import ru.fds.tavrzcms3.domain.PledgeAgreement;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 
 @Service
 public class FilesService {
@@ -33,27 +19,30 @@ public class FilesService {
     private String pathExcelImport;
 
 
-    public File uploadFile(MultipartFile file, String prefixName) throws IOException{
+    public File uploadFile(MultipartFile file, String prefixName) throws IOException {
 
         InputStream inputStream = file.getInputStream();
 
         File inputDir = new File(pathExcelImport);
-        String extension = getExtension(file.getOriginalFilename());
+        String extension = getExtension(Objects.requireNonNull(file.getOriginalFilename()));
         String fileLocation = inputDir
                 + File.separator
                 + prefixName
                 + new SimpleDateFormat("'_'yyyy-MM-dd'_'HH-mm-ss").format(new Date())
                 + "." + extension;
 
-        FileOutputStream fileOutputStream = new FileOutputStream(fileLocation);
-        int ch = 0;
-        while ((ch = inputStream.read()) != -1)
-            fileOutputStream.write(ch);
 
-        fileOutputStream.flush();
-        fileOutputStream.close();
+        try (FileOutputStream fileOutputStream = new FileOutputStream(fileLocation)){
+            int ch;
+            while ((ch = inputStream.read()) != -1)
+                fileOutputStream.write(ch);
 
-        return new File(fileLocation);
+            fileOutputStream.flush();
+
+            return new File(fileLocation);
+        }catch (IOException ex){
+            throw new IOException(ex.getMessage());
+        }
     }
 
     private String getExtension(String fileName){
