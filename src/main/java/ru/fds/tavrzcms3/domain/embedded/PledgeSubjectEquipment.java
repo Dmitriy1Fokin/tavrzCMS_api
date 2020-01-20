@@ -1,7 +1,7 @@
 package ru.fds.tavrzcms3.domain.embedded;
 
 import lombok.*;
-import ru.fds.tavrzcms3.dictionary.TypeOfEquip;
+import ru.fds.tavrzcms3.dictionary.TypeOfEquipment;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -33,9 +33,9 @@ public class PledgeSubjectEquipment{
 	private String inventoryNumEquip;
 
 	@NotNull
-	@Convert(converter = TypeOfEquip.Converter.class)
+	@Convert(converter = TypeOfEquipment.Converter.class)
 	@Column(name ="type_of_equipment", table = "pledge_equipment")
-	private TypeOfEquip typeOfEquipment;
+	private TypeOfEquipment typeOfEquipment;
 
 	@Positive(message = "Значение должно быть больше нуля")
 	@Column(name = "productivity", table = "pledge_equipment")

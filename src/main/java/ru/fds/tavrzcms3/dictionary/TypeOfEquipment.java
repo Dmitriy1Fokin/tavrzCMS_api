@@ -1,6 +1,12 @@
 package ru.fds.tavrzcms3.dictionary;
 
-public enum TypeOfEquip implements BasicEnum<String>{
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public enum TypeOfEquipment implements BasicEnum<String>{
 
     METALWORKING("металлообработка"),
     FOREST_PROCCESSING("лесообработка"),
@@ -27,8 +33,9 @@ public enum TypeOfEquip implements BasicEnum<String>{
     OTHER("иное");
 
     private String translate;
+    private static final Map<String, TypeOfEquipment> stringToEnum = Stream.of(values()).collect(Collectors.toMap(Objects::toString, e -> e));
 
-    TypeOfEquip(String translate){
+    TypeOfEquipment(String translate){
         this.translate = translate;
     }
 
@@ -37,9 +44,13 @@ public enum TypeOfEquip implements BasicEnum<String>{
         return translate;
     }
 
-    public static class Converter extends EnumConverter<TypeOfEquip, String>{
+    public static Optional<TypeOfEquipment> valueOfString(String name){
+        return Optional.ofNullable(stringToEnum.get(name));
+    }
+
+    public static class Converter extends EnumConverter<TypeOfEquipment, String>{
         public Converter(){
-            super(TypeOfEquip.class);
+            super(TypeOfEquipment.class);
         }
     }
 }

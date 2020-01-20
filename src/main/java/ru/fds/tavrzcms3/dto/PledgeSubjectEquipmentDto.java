@@ -1,11 +1,8 @@
 package ru.fds.tavrzcms3.dto;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.validator.constraints.Length;
-import ru.fds.tavrzcms3.dictionary.TypeOfEquip;
+import ru.fds.tavrzcms3.dictionary.TypeOfEquipment;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -32,7 +29,7 @@ public class PledgeSubjectEquipmentDto{
 
     private String inventoryNum;
 
-    private TypeOfEquip typeOfEquipment;
+    private TypeOfEquipment typeOfEquipment;
 
     @Positive(message = "Значение должно быть больше нуля")
     private Double productivity;
