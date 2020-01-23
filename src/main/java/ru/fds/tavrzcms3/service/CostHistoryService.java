@@ -14,8 +14,6 @@ import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -43,17 +41,8 @@ public class CostHistoryService {
     }
 
     public List<CostHistory> getCostHistoryPledgeSubject(Long pledgeSubjectId){
-        Optional<PledgeSubject> pledgeSubject = repositoryPledgeSubject.findById(pledgeSubjectId);
-        if(pledgeSubject.isPresent()){
-            Sort sortByDateConclusion = new Sort(Sort.Direction.DESC, "dateConclusion");
-            return repositoryCostHistory.findByPledgeSubject(pledgeSubject.get(), sortByDateConclusion);
-        }
-        else
-            return Collections.emptyList();
-    }
-
-    public List<CostHistory> getCostHistoryByIds(Collection<Long> ids){
-        return repositoryCostHistory.findAllByCostHistoryIdIn(ids);
+        Sort sortByDateConclusion = new Sort(Sort.Direction.DESC, "dateConclusion");
+        return repositoryCostHistory.findByPledgeSubject(pledgeSubjectId, sortByDateConclusion);
     }
 
     public List<CostHistory> getNewCostHistoriesFromFile(File file) throws IOException{

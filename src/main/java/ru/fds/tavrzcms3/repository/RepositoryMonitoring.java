@@ -2,13 +2,13 @@ package ru.fds.tavrzcms3.repository;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.fds.tavrzcms3.domain.Monitoring;
-import ru.fds.tavrzcms3.domain.PledgeSubject;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface RepositoryMonitoring extends JpaRepository<Monitoring, Long> {
-    List<Monitoring> findByPledgeSubject(PledgeSubject pledgeSubject, Sort sort);
-    List<Monitoring> findAllByMonitoringIdIn(Collection<Long> ids);
+    @Query("select m from Monitoring m where m.pledgeSubject.pledgeSubjectId = :pledgeSubjectId")
+    List<Monitoring> findByPledgeSubject(@Param("pledgeSubjectId") Long pledgeSubjectId, Sort sort);
 }

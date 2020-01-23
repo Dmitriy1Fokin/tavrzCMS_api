@@ -9,7 +9,6 @@ import ru.fds.tavrzcms3.dto.ClientDto;
 import ru.fds.tavrzcms3.dto.ClientIndividualDto;
 import ru.fds.tavrzcms3.dto.ClientLegalEntityDto;
 import ru.fds.tavrzcms3.service.ClientManagerService;
-import ru.fds.tavrzcms3.service.ClientService;
 import ru.fds.tavrzcms3.service.EmployeeService;
 
 import java.util.Objects;
@@ -19,19 +18,16 @@ public class ClientConverterDto implements ConverterDto<Client,ClientDto> {
 
     private final ClientManagerService clientManagerService;
     private final EmployeeService employeeService;
-    private final ClientService clientService;
 
     private final ClientIndividualConverterDto clientIndividualConverterDto;
     private final ClientLegalEntityConverterDto clientLegalEntityConverterDto;
 
     public ClientConverterDto(ClientManagerService clientManagerService,
                               EmployeeService employeeService,
-                              ClientService clientService,
                               ClientIndividualConverterDto clientIndividualConverterDto,
                               ClientLegalEntityConverterDto clientLegalEntityConverterDto) {
         this.clientManagerService = clientManagerService;
         this.employeeService = employeeService;
-        this.clientService = clientService;
         this.clientIndividualConverterDto = clientIndividualConverterDto;
         this.clientLegalEntityConverterDto = clientLegalEntityConverterDto;
     }
@@ -72,7 +68,6 @@ public class ClientConverterDto implements ConverterDto<Client,ClientDto> {
                 .employeeId(entity.getEmployee().getEmployeeId())
                 .clientIndividualDto(clientIndividualDto)
                 .clientLegalEntityDto(clientLegalEntityDto)
-                .fullName(clientService.getFullNameClient(entity.getClientId()))
                 .build();
     }
 }

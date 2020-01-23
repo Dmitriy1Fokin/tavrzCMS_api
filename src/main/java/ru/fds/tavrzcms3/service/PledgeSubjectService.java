@@ -89,10 +89,6 @@ public class PledgeSubjectService {
         return repositoryPledgeSubject.findById(pledgeSubjectId);
     }
 
-    public List<PledgeSubject> getPledgeSubjectByIds(List<Long> ids){
-        return repositoryPledgeSubject.findAllByPledgeSubjectIdIn(ids);
-    }
-
     public List<PledgeSubject> getPledgeSubjectsByPledgeAgreement(long pledgeAgreementId){
         Optional<PledgeAgreement> pledgeAgreement = repositoryPledgeAgreement.findById(pledgeAgreementId);
         if(pledgeAgreement.isPresent()){

@@ -31,6 +31,4 @@ public class ClientDto{
 
     @Valid
     private ClientIndividualDto clientIndividualDto;
-
-    private String fullName;
 }

@@ -62,6 +62,4 @@ public class LoanAgreementDto{
 
     @NotNull(message = "Обязательно для заполнения")
     private Long clientId;
-
-    private String clientName;
 }

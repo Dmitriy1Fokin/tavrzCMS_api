@@ -14,7 +14,6 @@ import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -44,10 +43,6 @@ public class EncumbranceService {
     public List<Encumbrance> getEncumbranceByPledgeSubject(Long pledgeSubjectId){
         return repositoryPledgeSubject.findById(pledgeSubjectId).map(repositoryEncumbrance::findAllByPledgeSubject)
                 .orElseThrow(() -> new NullPointerException("Pledge subject not found"));
-    }
-
-    public List<Encumbrance> getEncumbranceByIds(Collection<Long> ids){
-        return repositoryEncumbrance.findAllByEncumbranceIdIn(ids);
     }
 
     public List<Encumbrance> getNewEncumbranceFromFile(File file) throws IOException{

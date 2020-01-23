@@ -14,7 +14,6 @@ import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -46,10 +45,6 @@ public class InsuranceService {
                 .map(pledgeSubject -> repositoryInsurance.findAllByPledgeSubject(pledgeSubject,
                         new Sort(Sort.Direction.DESC, "dateEndInsurance")))
                 .orElseThrow(() -> new NullPointerException("Pledge subject not found"));
-    }
-
-    public List<Insurance> getInsurancesByIds(Collection<Long> ids){
-        return repositoryInsurance.findAllByInsuranceIdIn(ids);
     }
 
     public List<Insurance> getNewInsurancesFromFile(File file) throws IOException{

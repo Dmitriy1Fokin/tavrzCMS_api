@@ -244,14 +244,6 @@ public class PledgeAgreementService {
             return Collections.emptyList();
     }
 
-    public List<PledgeAgreement> getAllPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){
-        return repositoryPledgeAgreement.findByLoanAgreement(loanAgreement);
-    }
-
-    public List<PledgeAgreement> getAllPledgeAgreementsByPledgor(Client client){
-        return repositoryPledgeAgreement.findAllByClient(client);
-    }
-
     @Transactional
     public List<PledgeAgreement> getNewPledgeAgreementsFromFile(File file) throws IOException {
         FileImporter fileImporter = FileImporterFactory.getInstance(file);

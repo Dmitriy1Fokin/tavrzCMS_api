@@ -17,7 +17,6 @@ import ru.fds.tavrzcms3.repository.RepositoryMonitoring;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -50,16 +49,8 @@ public class MonitoringService {
     }
 
     public List<Monitoring> getMonitoringByPledgeSubject(Long pledgeSubjectId){
-        Optional<PledgeSubject> pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
-        if(pledgeSubject.isPresent()){
-            Sort sortByDateMonitoring = new Sort(Sort.Direction.DESC, "dateMonitoring");
-            return repositoryMonitoring.findByPledgeSubject(pledgeSubject.get(), sortByDateMonitoring);
-        }else
-            return Collections.emptyList();
-    }
-
-    public List<Monitoring> getMonitoringByIds(Collection<Long> ids){
-        return repositoryMonitoring.findAllByMonitoringIdIn(ids);
+        Sort sortByDateMonitoring = new Sort(Sort.Direction.DESC, "dateMonitoring");
+        return repositoryMonitoring.findByPledgeSubject(pledgeSubjectId, sortByDateMonitoring);
     }
 
     public List<Monitoring> getNewMonitoringsFromFile(File file) throws IOException{

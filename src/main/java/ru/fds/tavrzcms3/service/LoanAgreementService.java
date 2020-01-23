@@ -54,18 +54,6 @@ public class LoanAgreementService {
         return repositoryLoanAgreement.findById(loanAgreementId);
     }
 
-    public List<LoanAgreement> getLoanAgreementsByIds(List<Long> ids){
-        return repositoryLoanAgreement.findAllByLoanAgreementIdIn(ids);
-    }
-
-    public List<LoanAgreement> getAllLoanAgreementsByLoaner(Client client){
-        return repositoryLoanAgreement.findAllByClient(client);
-    }
-
-    public List<LoanAgreement> getAllLoanAgreementByPledgeAgreement(PledgeAgreement pledgeAgreement){
-        return repositoryLoanAgreement.findByPledgeAgreement(pledgeAgreement);
-    }
-
     public List<LoanAgreement> getCurrentLoanAgreementsByPledgeAgreement(Long pledgeAgreementId){
         Optional<PledgeAgreement> pledgeAgreement = repositoryPledgeAgreement.findById(pledgeAgreementId);
         if(pledgeAgreement.isPresent())
