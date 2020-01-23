@@ -11,6 +11,7 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -73,7 +74,7 @@ public class CostHistory {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate appraisalReportDate;
 
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pledge_subject_id")
 	private PledgeSubject pledgeSubject;
 

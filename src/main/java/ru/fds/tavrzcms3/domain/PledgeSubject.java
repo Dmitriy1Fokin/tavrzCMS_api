@@ -1,9 +1,15 @@
 package ru.fds.tavrzcms3.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.fds.tavrzcms3.dictionary.*;
+import ru.fds.tavrzcms3.dictionary.Liquidity;
+import ru.fds.tavrzcms3.dictionary.StatusOfMonitoring;
+import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
+import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
+import ru.fds.tavrzcms3.dictionary.TypeOfPledge;
 import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectAuto;
 import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectBuilding;
 import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectEquipment;
@@ -16,9 +22,18 @@ import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectVessel;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
+import javax.persistence.SecondaryTables;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -134,32 +149,6 @@ public class PledgeSubject {
     @Pattern(regexp = "да|нет", message = "Возможные варианты: да, нет")
 	@Column(name ="insurance_obligation")
 	private String insuranceObligation;
-
-    @Singular
-	@ManyToMany
-	@JoinTable(name = "dz_ps", joinColumns = @JoinColumn(name ="pledge_subject_id"), inverseJoinColumns = @JoinColumn(name ="dz_id"))
-    @JsonIgnore
-	private List<PledgeAgreement> pledgeAgreements;
-
-    @Singular
-	@OneToMany(mappedBy = "pledgeSubject")
-    @JsonIgnore
-    private List<CostHistory> costHistories;
-
-    @Singular
-	@OneToMany(mappedBy = "pledgeSubject")
-    @JsonIgnore
-    private List<Monitoring> monitorings;
-
-    @Singular
-	@OneToMany(mappedBy = "pledgeSubject")
-    @JsonIgnore
-    private List<Encumbrance> encumbrances;
-
-    @Singular
-    @OneToMany(mappedBy = "pledgeSubject")
-    @JsonIgnore
-    private List<Insurance> insurances;
 
     @Valid
 	@Embedded

@@ -41,9 +41,11 @@ public class InsuranceService {
         return repositoryInsurance.findById(insuranceId);
     }
 
-    public List<Insurance> getInsurancesByPledgeSubject(PledgeSubject pledgeSubject){
-        Sort sortByDateEnd = new Sort(Sort.Direction.DESC, "dateEndInsurance");
-        return repositoryInsurance.findAllByPledgeSubject(pledgeSubject, sortByDateEnd);
+    public List<Insurance> getInsurancesByPledgeSubject(Long pledgeSubjectId){
+        return repositoryPledgeSubject.findById(pledgeSubjectId)
+                .map(pledgeSubject -> repositoryInsurance.findAllByPledgeSubject(pledgeSubject,
+                        new Sort(Sort.Direction.DESC, "dateEndInsurance")))
+                .orElseThrow(() -> new NullPointerException("Pledge subject not found"));
     }
 
     public List<Insurance> getInsurancesByIds(Collection<Long> ids){

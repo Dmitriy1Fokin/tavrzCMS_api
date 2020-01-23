@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.Monitoring;
-import ru.fds.tavrzcms3.domain.PledgeAgreement;
-import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.MonitoringDto;
 import ru.fds.tavrzcms3.service.ClientService;
@@ -69,9 +67,7 @@ public class MonitoringController {
 
         Monitoring monitoring = dtoFactory.getMonitoringEntity(monitoringDto);
 
-        Optional<PledgeSubject> pledgeSubject = pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId);
-
-        monitoring.setPledgeSubject(pledgeSubject
+        monitoring.setPledgeSubject(pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId)
                 .orElseThrow(() -> new NullPointerException("Pledge subject not found")));
 
         monitoring = monitoringService.insertMonitoringInPledgeSubject(monitoring);
@@ -85,10 +81,8 @@ public class MonitoringController {
 
         Monitoring monitoring = dtoFactory.getMonitoringEntity(monitoringDto);
 
-        Optional<PledgeAgreement> pledgeAgreement = pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId);
-
         List<Monitoring> monitoringList = monitoringService
-                .insertMonitoringInPledgeAgreement(pledgeAgreement
+                .insertMonitoringInPledgeAgreement(pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
                         .orElseThrow(() -> new NullPointerException("Pledge agreement not found")), monitoring);
 
         return dtoFactory.getMonitoringsDto(monitoringList);

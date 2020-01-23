@@ -17,6 +17,7 @@ import ru.fds.tavrzcms3.dictionary.TypeOfTBO;
 import ru.fds.tavrzcms3.dictionary.TypeOfVessel;
 import ru.fds.tavrzcms3.domain.CostHistory;
 import ru.fds.tavrzcms3.domain.Monitoring;
+import ru.fds.tavrzcms3.domain.jointable.PaJoinPs;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectAuto;
@@ -32,10 +33,14 @@ import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryCostHistory;
 import ru.fds.tavrzcms3.repository.RepositoryMonitoring;
+import ru.fds.tavrzcms3.repository.RepositoryPaJoinPs;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 import ru.fds.tavrzcms3.specification.Search;
+import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PledgeSubjectService {
@@ -52,18 +58,27 @@ public class PledgeSubjectService {
     private final RepositoryPledgeAgreement repositoryPledgeAgreement;
     private final RepositoryCostHistory repositoryCostHistory;
     private final RepositoryMonitoring repositoryMonitoring;
-
+    private final RepositoryPaJoinPs repositoryPaJoinPs;
+    private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
+
+    private static final String MSG_OBJECT = "object ";
+    private static final String MSG_WRONG_ID = "Неверный id{";
+    private static final String MSG_LINE = "). Строка: ";
 
     public PledgeSubjectService(RepositoryPledgeSubject repositoryPledgeSubject,
                                 RepositoryPledgeAgreement repositoryPledgeAgreement,
                                 RepositoryCostHistory repositoryCostHistory,
                                 RepositoryMonitoring repositoryMonitoring,
+                                RepositoryPaJoinPs repositoryPaJoinPs,
+                                ValidatorEntity validatorEntity,
                                 ExcelColumnNum excelColumnNum) {
         this.repositoryPledgeSubject = repositoryPledgeSubject;
         this.repositoryPledgeAgreement = repositoryPledgeAgreement;
         this.repositoryCostHistory = repositoryCostHistory;
         this.repositoryMonitoring = repositoryMonitoring;
+        this.repositoryPaJoinPs = repositoryPaJoinPs;
+        this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
     }
 
@@ -78,17 +93,17 @@ public class PledgeSubjectService {
         return repositoryPledgeSubject.findAllByPledgeSubjectIdIn(ids);
     }
 
-    public List<PledgeSubject> getPledgeSubjectsForPledgeAgreement(long pledgeAgreementId){
-        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.getOne(pledgeAgreementId);
-        return repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
+    public List<PledgeSubject> getPledgeSubjectsByPledgeAgreement(long pledgeAgreementId){
+        Optional<PledgeAgreement> pledgeAgreement = repositoryPledgeAgreement.findById(pledgeAgreementId);
+        if(pledgeAgreement.isPresent()){
+            return repositoryPledgeSubject.findPledgeSubjectByPledgeAgreement(pledgeAgreement.get());
+        }else {
+            return Collections.emptyList();
+        }
     }
 
-    public List<PledgeSubject> getPledgeSubjectByPledgeAgreement(PledgeAgreement pledgeAgreement){
-        return repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-    }
-
-    public List<PledgeSubject> getPledgeSubjectsForPledgeAgreements(List<PledgeAgreement> pledgeAgreementList){
-        return repositoryPledgeSubject.findByPledgeAgreementsIn(pledgeAgreementList);
+    public List<PledgeSubject> getPledgeSubjectsByPledgeAgreements(List<PledgeAgreement> pledgeAgreementList){
+        return repositoryPledgeSubject.findPledgeSubjectByPledgeAgreements(pledgeAgreementList);
     }
 
     public List<PledgeSubject> getPledgeSubjectsFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException{
@@ -121,6 +136,21 @@ public class PledgeSubjectService {
         return repositoryPledgeSubject.findAll(pledgeSubjectSearch.getSpecification());
     }
 
+    public List<PledgeSubject> getPledgeSubjectByCadastralNum(String cadastralNum){
+        List<PledgeSubject> pledgeSubjectList = new ArrayList<>();
+        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectBuildingCadastralNumContainingIgnoreCase(cadastralNum));
+        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectLandLeaseCadastralNumContainingIgnoreCase(cadastralNum));
+        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectLandOwnershipCadastralNumContainingIgnoreCase(cadastralNum));
+        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectRoomCadastralNumContainingIgnoreCase(cadastralNum));
+
+        return pledgeSubjectList;
+    }
+
+    public List<PledgeSubject> getPledgeSubjectByName(String name){
+        return repositoryPledgeSubject.findAllByNameContainingIgnoreCase(name);
+    }
+
+    @Transactional
     public List<PledgeSubject> getNewPledgeSubjectsFromFile(File file, TypeOfCollateral typeOfCollateral) throws IOException {
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -129,6 +159,9 @@ public class PledgeSubjectService {
         int countRow = excelColumnNum.getStartRow();
 
         List<PledgeSubject> pledgeSubjectList = new ArrayList<>();
+        List<List<PledgeAgreement>> pledgeAgreementsList = new ArrayList<>();
+        List<CostHistory> costHistoryList = new ArrayList<>();
+        List<Monitoring> monitoringList = new ArrayList<>();
 
         do {
             countRow += 1;
@@ -173,7 +206,6 @@ public class PledgeSubjectService {
                             .getString(excelColumnNum.getPledgeSubjectNew().getTypeOfPledge())).orElse(null))
                     .typeOfMonitoring(TypeOfMonitoring.valueOfString(fileImporter
                             .getString(excelColumnNum.getPledgeSubjectNew().getTypeOfMonitoring())).orElse(null))
-                    .pledgeAgreements(setPledgeAgreementsInNewPledgeSubject(fileImporter, countRow))
                     .build();
 
             if(typeOfCollateral == TypeOfCollateral.AUTO){
@@ -196,19 +228,25 @@ public class PledgeSubjectService {
                 pledgeSubject.setPledgeSubjectVessel(setVesselInNewPledgeSubject(fileImporter));
             }
 
-            pledgeSubject.setCostHistories(Collections.singletonList(setCostHistoryInNewPledgeSubject(fileImporter)));
-            pledgeSubject.setMonitorings(Collections.singletonList(setMonitoringInNewPledgeSubject(fileImporter)));
+            Set<ConstraintViolation<PledgeSubject>> violations =  validatorEntity.validateEntity(pledgeSubject);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException(MSG_OBJECT + countRow, violations);
 
             pledgeSubjectList.add(pledgeSubject);
+            pledgeAgreementsList.add(setPledgeAgreementsInNewPledgeSubject(fileImporter, countRow));
+            costHistoryList.add(setCostHistoryInNewPledgeSubject(fileImporter, countRow));
+            monitoringList.add(setMonitoringInNewPledgeSubject(fileImporter, countRow));
 
         }while (fileImporter.nextLine());
+
+        pledgeSubjectList = insertPledgeSubjects(pledgeSubjectList, pledgeAgreementsList, costHistoryList, monitoringList);
 
         return pledgeSubjectList;
     }
 
     private List<PledgeAgreement> setPledgeAgreementsInNewPledgeSubject(FileImporter fileImporter, int countRow) throws IOException {
         if(fileImporter.getLongList(excelColumnNum.getPledgeSubjectNew().getPledgeAgreementsIds(), excelColumnNum.getDelimiter()).isEmpty()){
-            throw new IOException("Неверный id{"
+            throw new IOException(MSG_WRONG_ID
                     + fileImporter.getLongList(excelColumnNum.getPledgeSubjectNew().getPledgeAgreementsIds(), excelColumnNum.getDelimiter())
                     + ") договора залога. Строка: " + countRow);
         }
@@ -219,7 +257,7 @@ public class PledgeSubjectService {
         if(pledgeAgreementList.isEmpty()){
             throw new IOException("Договор залога с таким id отсутствует ("
                     + fileImporter.getLongList(excelColumnNum.getPledgeSubjectNew().getPledgeAgreementsIds(), excelColumnNum.getDelimiter())
-                    + "). Строка: " + countRow);
+                    + MSG_LINE + countRow);
         }
 
         return pledgeAgreementList;
@@ -396,8 +434,8 @@ public class PledgeSubjectService {
                 .build();
     }
     
-    private CostHistory setCostHistoryInNewPledgeSubject(FileImporter fileImporter){
-        return CostHistory.builder()
+    private CostHistory setCostHistoryInNewPledgeSubject(FileImporter fileImporter, int countRow){
+        CostHistory costHistory =  CostHistory.builder()
                 .dateConclusion(fileImporter.getLocalDate(excelColumnNum.getPledgeSubjectNew().getDateConclusion()))
                 .zsDz(fileImporter.getBigDecimal(excelColumnNum.getPledgeSubjectNew().getZsDz()))
                 .zsZz(fileImporter.getBigDecimal(excelColumnNum.getPledgeSubjectNew().getZsZz()))
@@ -408,10 +446,16 @@ public class PledgeSubjectService {
                 .appraisalReportNum(fileImporter.getString(excelColumnNum.getPledgeSubjectNew().getNumAppraisalReport()))
                 .appraisalReportDate(fileImporter.getLocalDate(excelColumnNum.getPledgeSubjectNew().getDateAppraisalReport()))
                 .build();
+
+        Set<ConstraintViolation<CostHistory>> violations =  validatorEntity.validateEntity(costHistory);
+        if(!violations.isEmpty())
+            throw new ConstraintViolationException(MSG_OBJECT + countRow, violations);
+
+        return costHistory;
     }
     
-    private Monitoring setMonitoringInNewPledgeSubject(FileImporter fileImporter){
-        return Monitoring.builder()
+    private Monitoring setMonitoringInNewPledgeSubject(FileImporter fileImporter, int countRow){
+        Monitoring monitoring =  Monitoring.builder()
                 .dateMonitoring(fileImporter.getLocalDate(excelColumnNum.getPledgeSubjectNew().getDateMonitoring()))
                 .statusMonitoring(StatusOfMonitoring.valueOfString(fileImporter
                         .getString(excelColumnNum.getPledgeSubjectNew().getStatusMonitoring())).orElse(null))
@@ -421,8 +465,15 @@ public class PledgeSubjectService {
                 .notice(fileImporter.getString(excelColumnNum.getPledgeSubjectNew().getNotice()))
                 .collateralValue(fileImporter.getBigDecimal(excelColumnNum.getPledgeSubjectNew().getCollateralValue()))
                 .build();
+
+        Set<ConstraintViolation<Monitoring>> violations =  validatorEntity.validateEntity(monitoring);
+        if(!violations.isEmpty())
+            throw new ConstraintViolationException(MSG_OBJECT + countRow, violations);
+
+        return monitoring;
     }
 
+    @Transactional
     public List<PledgeSubject> getCurrentPledgeSubjectsFromFile(File file) throws IOException{
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -431,6 +482,7 @@ public class PledgeSubjectService {
         int countRow = excelColumnNum.getStartRow();
 
         List<PledgeSubject> pledgeSubjectList = new ArrayList<>();
+        List<List<PledgeAgreement>> pledgeAgreementsList = new ArrayList<>();
 
         do{
             countRow += 1;
@@ -478,15 +530,18 @@ public class PledgeSubjectService {
             }
 
             pledgeSubjectList.add(pledgeSubject);
+            pledgeAgreementsList.add(setPledgeAgreementsInCurrentPledgeSubject(fileImporter, countRow));
 
         }while (fileImporter.nextLine());
+
+        pledgeSubjectList = updatePledgeSubjects(pledgeSubjectList, pledgeAgreementsList);
 
         return pledgeSubjectList;
     }
     
     private PledgeSubject setCurrentPledgeSubject(FileImporter fileImporter, int countRow) throws IOException {
         if(Objects.isNull(fileImporter.getLong(excelColumnNum.getPledgeSubjectUpdate().getPledgeSubjectId()))){
-            throw new IOException("Неверный id{"
+            throw new IOException(MSG_WRONG_ID
                     + fileImporter.getLong(excelColumnNum.getPledgeSubjectUpdate().getPledgeSubjectId()) 
                     + ") предмета залога. Строка: " + countRow);
         }
@@ -494,7 +549,7 @@ public class PledgeSubjectService {
         return getPledgeSubjectById(fileImporter.getLong(excelColumnNum.getPledgeSubjectUpdate().getPledgeSubjectId()))
                 .orElseThrow(() -> new IOException("Предмет залога с таким id отсутствует ("
                         + fileImporter.getLong(excelColumnNum.getPledgeSubjectUpdate().getPledgeSubjectId())
-                        + "). Строка: " + countRow));
+                        + MSG_LINE + countRow));
     }
     
     private void setCurrentAuto(FileImporter fileImporter, PledgeSubject pledgeSubject){
@@ -650,15 +705,80 @@ public class PledgeSubjectService {
                 .getString(excelColumnNum.getPledgeSubjectUpdate().getVessel().getStatus()));
     }
 
+    private List<PledgeAgreement> setPledgeAgreementsInCurrentPledgeSubject(FileImporter fileImporter, int countRow) throws IOException {
+        if(fileImporter.getLongList(excelColumnNum.getPledgeSubjectUpdate().getPledgeAgreementsIds(), excelColumnNum.getDelimiter()).isEmpty()){
+            throw new IOException(MSG_WRONG_ID
+                    + fileImporter.getLongList(excelColumnNum.getPledgeSubjectUpdate().getPledgeAgreementsIds(), excelColumnNum.getDelimiter())
+                    + ") договора залога. Строка: " + countRow);
+        }
 
+        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement
+                .findAllByPledgeAgreementIdIn(fileImporter
+                        .getLongList(excelColumnNum.getPledgeSubjectUpdate().getPledgeAgreementsIds(), excelColumnNum.getDelimiter()));
+        if(pledgeAgreementList.isEmpty()){
+            throw new IOException("Договор залога с таким id отсутствует ("
+                    + fileImporter.getLongList(excelColumnNum.getPledgeSubjectUpdate().getPledgeAgreementsIds(), excelColumnNum.getDelimiter())
+                    + MSG_LINE + countRow);
+        }
 
-    @Transactional
-    public PledgeSubject updatePledgeSubject(PledgeSubject pledgeSubject) {
-        return repositoryPledgeSubject.save(pledgeSubject);
+        return pledgeAgreementList;
     }
 
     @Transactional
-    public PledgeSubject insertPledgeSubject(PledgeSubject pledgeSubject, CostHistory costHistory, Monitoring monitoring){
+    public PledgeSubject updatePledgeSubject(PledgeSubject pledgeSubject, List<Long> pledgeAgreementsIds) {
+        pledgeSubject = repositoryPledgeSubject.save(pledgeSubject);
+
+        List<PledgeAgreement> pledgeAgreementListFromRequest = repositoryPledgeAgreement.findAllByPledgeAgreementIdIn(pledgeAgreementsIds);
+        if(pledgeAgreementListFromRequest.size() < pledgeAgreementsIds.size()){
+            throw new NullPointerException("Not all pledge agreements were found");
+        }
+
+        List<PledgeAgreement> pledgeAgreementListFromDB = repositoryPledgeAgreement.findByPledgeSubject(pledgeSubject);
+        List<PledgeAgreement> pledgeAgreementListToDelete = new ArrayList<>(pledgeAgreementListFromDB);
+        pledgeAgreementListToDelete.removeAll(pledgeAgreementListFromRequest);
+        repositoryPaJoinPs.deleteByPledgeAgreementInAndPledgeSubject(pledgeAgreementListToDelete, pledgeSubject);
+
+        List<PledgeAgreement> pledgeAgreementListToInsert = new ArrayList<>(pledgeAgreementListFromRequest);
+        pledgeAgreementListToInsert.removeAll(pledgeAgreementListFromDB);
+        List<PaJoinPs> paJoinPsList = new ArrayList<>(pledgeAgreementListToInsert.size());
+        for(PledgeAgreement pledgeAgreement : pledgeAgreementListToInsert){
+            paJoinPsList.add(new PaJoinPs(pledgeAgreement, pledgeSubject));
+        }
+
+        repositoryPaJoinPs.saveAll(paJoinPsList);
+
+        return pledgeSubject;
+    }
+
+    @Transactional
+    public List<PledgeSubject> updatePledgeSubjects(List<PledgeSubject> pledgeSubjectList,
+                                                    List<List<PledgeAgreement>> pledgeAgreementList){
+        pledgeSubjectList = repositoryPledgeSubject.saveAll(pledgeSubjectList);
+
+        List<PaJoinPs> paJoinPsList = new ArrayList<>();
+        for(int i = 0; i < pledgeSubjectList.size(); i++){
+            List<PledgeAgreement> pledgeAgreementListFromDB = repositoryPledgeAgreement.findByPledgeSubject(pledgeSubjectList.get(i));
+            List<PledgeAgreement> pledgeAgreementListToDelete = new ArrayList<>(pledgeAgreementListFromDB);
+            pledgeAgreementListToDelete.removeAll(pledgeAgreementList.get(i));
+            repositoryPaJoinPs.deleteByPledgeAgreementInAndPledgeSubject(pledgeAgreementListToDelete, pledgeSubjectList.get(i));
+
+            List<PledgeAgreement> pledgeAgreementListToInsert = new ArrayList<>(pledgeAgreementList.get(i));
+            pledgeAgreementListToInsert.removeAll(pledgeAgreementListFromDB);
+            for(PledgeAgreement pledgeAgreement : pledgeAgreementListToInsert){
+                paJoinPsList.add(new PaJoinPs(pledgeAgreement, pledgeSubjectList.get(i)));
+            }
+        }
+
+        repositoryPaJoinPs.saveAll(paJoinPsList);
+
+        return pledgeSubjectList;
+    }
+
+    @Transactional
+    public PledgeSubject insertPledgeSubject(PledgeSubject pledgeSubject,
+                                             List<PledgeAgreement> pledgeAgreementList,
+                                             CostHistory costHistory,
+                                             Monitoring monitoring){
 
         pledgeSubject = repositoryPledgeSubject.save(pledgeSubject);
 
@@ -668,37 +788,36 @@ public class PledgeSubjectService {
         monitoring.setPledgeSubject(pledgeSubject);
         repositoryMonitoring.save(monitoring);
 
+        List<PaJoinPs> paJoinPsList = new ArrayList<>(pledgeAgreementList.size());
+        for(PledgeAgreement pledgeAgreement : pledgeAgreementList) {
+            paJoinPsList.add(new PaJoinPs(pledgeAgreement, pledgeSubject));
+        }
+        repositoryPaJoinPs.saveAll(paJoinPsList);
+
         return pledgeSubject;
     }
 
     @Transactional
-    public List<PledgeSubject> insertPledgeSubjects(List<PledgeSubject> pledgeSubjectList){
-        for(PledgeSubject ps : pledgeSubjectList){
-            ps = repositoryPledgeSubject.save(ps);
+    public List<PledgeSubject> insertPledgeSubjects(List<PledgeSubject> pledgeSubjectList,
+                                                    List<List<PledgeAgreement>> pledgeAgreementList,
+                                                    List<CostHistory> costHistoryList,
+                                                    List<Monitoring> monitoringList){
 
-            CostHistory costHistory = ps.getCostHistories().get(0);
-            costHistory.setPledgeSubject(ps);
-            repositoryCostHistory.save(costHistory);
+        pledgeSubjectList = repositoryPledgeSubject.saveAll(pledgeSubjectList);
 
-            Monitoring monitoring = ps.getMonitorings().get(0);
-            monitoring.setPledgeSubject(ps);
-            repositoryMonitoring.save(monitoring);
+        List<PaJoinPs> paJoinPsList = new ArrayList<>(pledgeSubjectList.size());
+        for (int i = 0; i < pledgeSubjectList.size(); i++){
+            costHistoryList.get(i).setPledgeSubject(pledgeSubjectList.get(i));
+            monitoringList.get(i).setPledgeSubject(pledgeSubjectList.get(i));
+            for(PledgeAgreement pledgeAgreement : pledgeAgreementList.get(i)){
+                paJoinPsList.add(new PaJoinPs(pledgeAgreement, pledgeSubjectList.get(i)));
+            }
         }
-        return pledgeSubjectList;
-    }
 
-
-    public List<PledgeSubject> getPledgeSubjectByCadastralNum(String cadastralNum){
-        List<PledgeSubject> pledgeSubjectList = new ArrayList<>();
-        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectBuildingCadastralNumContainingIgnoreCase(cadastralNum));
-        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectLandLeaseCadastralNumContainingIgnoreCase(cadastralNum));
-        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectLandOwnershipCadastralNumContainingIgnoreCase(cadastralNum));
-        pledgeSubjectList.addAll(repositoryPledgeSubject.findByPledgeSubjectRoomCadastralNumContainingIgnoreCase(cadastralNum));
+        repositoryCostHistory.saveAll(costHistoryList);
+        repositoryMonitoring.saveAll(monitoringList);
+        repositoryPaJoinPs.saveAll(paJoinPsList);
 
         return pledgeSubjectList;
-    }
-
-    public List<PledgeSubject> getPledgeSubjectByName(String name){
-        return repositoryPledgeSubject.findAllByNameContainingIgnoreCase(name);
     }
 }

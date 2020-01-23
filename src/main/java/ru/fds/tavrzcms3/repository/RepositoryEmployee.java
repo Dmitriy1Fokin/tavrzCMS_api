@@ -3,14 +3,11 @@ package ru.fds.tavrzcms3.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.fds.tavrzcms3.domain.AppUser;
 import ru.fds.tavrzcms3.domain.Employee;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface RepositoryEmployee extends JpaRepository<Employee, Long> {
-    Optional<Employee> findByAppUser(AppUser appUser);
     List<Employee> findAllByEmployeeIdNot(Long employeeId);
 
     @Query(nativeQuery = true, value = "select distinct(emp.*)\n" +

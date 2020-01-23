@@ -41,8 +41,9 @@ public class EncumbranceService {
     public Optional<Encumbrance> getEncumbranceById(Long encumbranceId){
         return repositoryEncumbrance.findById(encumbranceId);
     }
-    public List<Encumbrance> getEncumbranceByPledgeSubject(PledgeSubject pledgeSubject){
-        return repositoryEncumbrance.findAllByPledgeSubject(pledgeSubject);
+    public List<Encumbrance> getEncumbranceByPledgeSubject(Long pledgeSubjectId){
+        return repositoryPledgeSubject.findById(pledgeSubjectId).map(repositoryEncumbrance::findAllByPledgeSubject)
+                .orElseThrow(() -> new NullPointerException("Pledge subject not found"));
     }
 
     public List<Encumbrance> getEncumbranceByIds(Collection<Long> ids){

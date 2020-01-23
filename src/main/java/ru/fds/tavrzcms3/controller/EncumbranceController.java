@@ -49,6 +49,11 @@ public class EncumbranceController {
                 .orElseThrow(()-> new NullPointerException("Encumbrance not found"));
     }
 
+    @GetMapping("pledge_subject")
+    public List<EncumbranceDto> getEncumbrancesByPledgeSubject(@RequestParam("pledgeSubjectId") Long pledgeSubjectId){
+        return dtoFactory.getEncumbrancesDto(encumbranceService.getEncumbranceByPledgeSubject(pledgeSubjectId));
+    }
+
     @PostMapping("/insert")
     public EncumbranceDto insertEncumbrance(@Valid @RequestBody EncumbranceDto encumbranceDto){
         Encumbrance encumbrance = encumbranceService

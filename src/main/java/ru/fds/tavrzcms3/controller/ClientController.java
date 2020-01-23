@@ -49,9 +49,7 @@ public class ClientController {
 
     @GetMapping
     public List<ClientDto> getAllClients(){
-        List<Client> clientList = clientService.getAllClients() ;
-
-        return dtoFactory.getClientsDto(clientList);
+        return dtoFactory.getClientsDto(clientService.getAllClients());
     }
 
     @GetMapping("/{clientId}")
@@ -63,9 +61,7 @@ public class ClientController {
 
     @GetMapping("/search")
     public List<ClientDto> getClientBySearchCriteria(@RequestParam Map<String, String> reqParam) throws ReflectiveOperationException {
-        List<Client> clientList = clientService.getClientFromSearch(reqParam);
-
-        return dtoFactory.getClientsDto(clientList);
+        return dtoFactory.getClientsDto(clientService.getClientFromSearch(reqParam));
     }
 
 
@@ -83,7 +79,7 @@ public class ClientController {
         return insertClient(user, clientDto);
     }
 
-    @PostMapping(value = "insert_from_file/client_legal_entity")
+    @PostMapping("insert_from_file/client_legal_entity")
     public List<ClientDto> insertClientLegalEntityFromFile(@AuthenticationPrincipal User user,
                                                            @RequestParam("file") MultipartFile file) throws IOException {
         File uploadFile = filesService.uploadFile(file, "client_legal_entity_new");

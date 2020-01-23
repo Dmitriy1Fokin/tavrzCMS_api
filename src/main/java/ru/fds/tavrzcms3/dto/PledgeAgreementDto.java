@@ -10,9 +10,9 @@ import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -34,27 +34,36 @@ public class PledgeAgreementDto{
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateEndPA;
 
+    @NotNull
     private TypeOfPledgeAgreement pervPosl;
 
+    @NotNull
     private StatusOfAgreement statusPA;
 
     private String noticePA;
 
+    @NotNull(message = "Обязательно для заполнения")
+    @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
     private BigDecimal zsDz;
 
+    @NotNull(message = "Обязательно для заполнения")
+    @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
     private BigDecimal zsZz;
 
+    @NotNull(message = "Обязательно для заполнения")
+    @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
     private BigDecimal rsDz;
 
+    @NotNull(message = "Обязательно для заполнения")
+    @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
     private BigDecimal rsZz;
 
+    @NotNull(message = "Обязательно для заполнения")
+    @PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
     private BigDecimal ss;
 
-    private List<Long> loanAgreementsIds;
-
+    @NotNull
     private Long clientId;
-
-    private List<Long> pledgeSubjectsIds;
 
     private List<String> briefInfoAboutCollateral;
 

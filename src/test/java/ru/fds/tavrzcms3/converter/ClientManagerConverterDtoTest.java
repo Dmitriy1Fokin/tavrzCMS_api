@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.fds.tavrzcms3.converter.dtoconverter.impl.ClientManagerConverterDto;
-import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.ClientManager;
 import ru.fds.tavrzcms3.dto.ClientManagerDto;
 
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -28,7 +26,6 @@ public class ClientManagerConverterDtoTest {
                 .surname("QWE")
                 .name("ASD")
                 .patronymic("ZXC")
-                .clientsIds(Arrays.asList(6L, 7L))
                 .fullName("QWE ASD ZXC")
                 .build();
 
@@ -38,7 +35,6 @@ public class ClientManagerConverterDtoTest {
         assertEquals(clientManagerDto.getSurname(), clientManager.getSurname());
         assertEquals(clientManagerDto.getName(), clientManager.getName());
         assertEquals(clientManagerDto.getPatronymic(), clientManager.getPatronymic());
-        assertEquals(clientManagerDto.getClientsIds().size(), clientManager.getClients().size());
     }
 
     @Test
@@ -48,7 +44,6 @@ public class ClientManagerConverterDtoTest {
                 .surname("QWE")
                 .name("ASD")
                 .patronymic("ZXC")
-                .client(new Client().builder().clientId(3L).build())
                 .build();
 
         ClientManagerDto clientManagerDto = clientManagerConverter.toDto(clientManager);

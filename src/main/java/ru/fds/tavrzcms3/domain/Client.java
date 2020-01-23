@@ -4,23 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
 import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
 import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
-
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
 import javax.persistence.SecondaryTables;
@@ -51,12 +48,12 @@ public class Client {
 	private TypeOfClient typeOfClient;
 
 	@NotNull(message = "Обязательно для заполнения")
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "client_manager_id")
 	private ClientManager clientManager;
 
 	@NotNull(message = "Обязательно для заполнения")
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_id")
 	private Employee employee;
 
@@ -67,14 +64,6 @@ public class Client {
 	@Valid
     @Embedded
 	private ClientLegalEntity clientLegalEntity;
-
-	@Singular
-	@OneToMany(mappedBy = "client")
-	private List<LoanAgreement> loanAgreements;
-
-	@Singular
-	@OneToMany(mappedBy = "client")
-	private List<PledgeAgreement> pledgeAgreements;
 
     @Override
     public String toString() {

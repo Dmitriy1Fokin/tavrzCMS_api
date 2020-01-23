@@ -51,11 +51,6 @@ public class PledgeSubjectConverterDtoTest {
                 .adressBuilbing("2")
                 .adressPemises("23-Y")
                 .insuranceObligation("да")
-                .pledgeAgreementsId(12L)
-                .costHistoriesId(23L)
-                .monitoringId(34L)
-                .encumbrancesId(76L)
-                .insurancesId(99L)
                 .fullAddress("SPB, Prim, SPB2, Nev, 2, 23-Y")
                 .mainCharacteristic(new MainCharacteristic("123", "qwe"))
                 .build();
@@ -88,8 +83,6 @@ public class PledgeSubjectConverterDtoTest {
         PledgeSubjectDto pledgeSubjectDtoTBO = pledgeSubjectConverterDto.toDto(pledgeSubjectTBO);
         PledgeSubjectDto pledgeSubjectDtoVessel = pledgeSubjectConverterDto.toDto(pledgeSubjectVessel);
 
-//        PledgeSubjectAutoDto pledgeSubjectDto = pledgeSubjectAutoConverter.toDto((PledgeSubjectAuto) pledgeSubjectAuto);
-//        System.out.println(pledgeSubjectDto);
 
         System.out.println(pledgeSubjectDtoAuto);
         System.out.println(pledgeSubjectDtoEquip);

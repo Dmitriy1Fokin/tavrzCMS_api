@@ -10,54 +10,53 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
+import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.dto.CostHistoryDto;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.MonitoringDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
 import ru.fds.tavrzcms3.service.FilesService;
+import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
-import ru.fds.tavrzcms3.validate.ValidatorEntity;
 import ru.fds.tavrzcms3.wrapper.PledgeSubjectDtoNewWrapper;
+import ru.fds.tavrzcms3.wrapper.PledgeSubjectUpdateDtoWrapper;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/pledge_subject")
 public class PledgeSubjectController {
 
     private final PledgeSubjectService pledgeSubjectService;
+    private final PledgeAgreementService pledgeAgreementService;
     private final FilesService filesService;
     private final DtoFactory dtoFactory;
-    private final ValidatorEntity validatorEntity;
 
     public PledgeSubjectController(PledgeSubjectService pledgeSubjectService,
+                                   PledgeAgreementService pledgeAgreementService,
                                    FilesService filesService,
-                                   DtoFactory dtoFactory,
-                                   ValidatorEntity validatorEntity) {
+                                   DtoFactory dtoFactory) {
         this.pledgeSubjectService = pledgeSubjectService;
+        this.pledgeAgreementService = pledgeAgreementService;
         this.filesService = filesService;
         this.dtoFactory = dtoFactory;
-        this.validatorEntity = validatorEntity;
     }
 
     @GetMapping("/{pledgeSubjectId}")
     public PledgeSubjectDto getPledgeSubject(@PathVariable("pledgeSubjectId") Long pledgeSubjectId){
         return pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId).map(dtoFactory::getPledgeSubjectDto)
-                .orElseThrow(()-> new NullPointerException("PledgeSubject not found"));
+                .orElseThrow(()-> new NullPointerException("Pledge subject not found"));
     }
 
     @GetMapping("/pledge_agreement")
     public List<PledgeSubjectDto> getPledgeSubjectByPledgeAgreement(@RequestParam("pledgeAgreementId") Long pledgeAgreementId){
-        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreementId));
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectService.getPledgeSubjectsByPledgeAgreement(pledgeAgreementId));
     }
 
     @GetMapping("/search_by_name")
@@ -82,8 +81,11 @@ public class PledgeSubjectController {
         CostHistoryDto costHistoryDto = pledgeSubjectDtoNewWrapper.getCostHistoryDto();
         MonitoringDto monitoringDto = pledgeSubjectDtoNewWrapper.getMonitoringDto();
 
+        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementsByIds(pledgeSubjectDtoNewWrapper.getPledgeAgreementsIds());
+
         PledgeSubject pledgeSubject = pledgeSubjectService
                 .insertPledgeSubject(dtoFactory.getPledgeSubjectEntity(pledgeSubjectDto),
+                        pledgeAgreementList,
                         dtoFactory.getCostHistoryEntity(costHistoryDto),
                         dtoFactory.getMonitoringEntity(monitoringDto));
 
@@ -91,8 +93,11 @@ public class PledgeSubjectController {
     }
 
     @PutMapping("/update")
-    public PledgeSubjectDto updatePledgeSubject(@Valid @RequestBody PledgeSubjectDto pledgeSubjectDto){
-        PledgeSubject pledgeSubject = pledgeSubjectService.updatePledgeSubject(dtoFactory.getPledgeSubjectEntity(pledgeSubjectDto));
+    public PledgeSubjectDto updatePledgeSubject(@Valid @RequestBody PledgeSubjectUpdateDtoWrapper pledgeSubjectUpdateDtoWrapper){
+        PledgeSubject pledgeSubject = pledgeSubjectService
+                .updatePledgeSubject(dtoFactory.
+                        getPledgeSubjectEntity(pledgeSubjectUpdateDtoWrapper.getPledgeSubjectDto()),
+                        pledgeSubjectUpdateDtoWrapper.getPledgeAgreementsIds());
 
         return dtoFactory.getPledgeSubjectDto(pledgeSubject);
     }
@@ -103,7 +108,7 @@ public class PledgeSubjectController {
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
                 .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.AUTO);
         
-        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }
 
     @PostMapping("/insert_from_file/equipment")
@@ -112,7 +117,7 @@ public class PledgeSubjectController {
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
                 .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.EQUIPMENT);
 
-        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }
 
     @PostMapping("/insert_from_file/building")
@@ -121,7 +126,7 @@ public class PledgeSubjectController {
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
                 .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.BUILDING);
 
-        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }
 
     @PostMapping("/insert_from_file/land_lease")
@@ -130,7 +135,7 @@ public class PledgeSubjectController {
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
                 .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.LAND_LEASE);
 
-        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }
 
     @PostMapping("/insert_from_file/land_ownership")
@@ -139,7 +144,7 @@ public class PledgeSubjectController {
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
                 .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.LAND_OWNERSHIP);
 
-        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }
 
     @PostMapping("/insert_from_file/premise")
@@ -148,7 +153,7 @@ public class PledgeSubjectController {
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
                 .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.PREMISE);
 
-        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }
 
     @PostMapping("/insert_from_file/securities")
@@ -157,7 +162,7 @@ public class PledgeSubjectController {
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
                 .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.SECURITIES);
 
-        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }
 
     @PostMapping("/insert_from_file/tbo")
@@ -166,7 +171,7 @@ public class PledgeSubjectController {
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
                 .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.TBO);
 
-        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }
 
     @PostMapping("/insert_from_file/vessel")
@@ -175,7 +180,7 @@ public class PledgeSubjectController {
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
                 .getNewPledgeSubjectsFromFile(uploadFile, TypeOfCollateral.VESSEL);
 
-        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }
     
     @PutMapping("/update_from_file")
@@ -184,18 +189,7 @@ public class PledgeSubjectController {
         List<PledgeSubject> pledgeSubjectList = pledgeSubjectService
                 .getCurrentPledgeSubjectsFromFile(uploadFile);
 
-        return getPersistentPledgeSubjectsDto(pledgeSubjectList);
-    }
-
-    private List<PledgeSubjectDto> getPersistentPledgeSubjectsDto(List<PledgeSubject> pledgeSubjectList) {
-        for(int i = 0; i < pledgeSubjectList.size(); i++){
-            Set<ConstraintViolation<PledgeSubject>> violations =  validatorEntity.validateEntity(pledgeSubjectList.get(i));
-            if(!violations.isEmpty())
-                throw new ConstraintViolationException("object " + (i+1), violations);
-        }
-
-        pledgeSubjectList = pledgeSubjectService.insertPledgeSubjects(pledgeSubjectList);
-
         return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
     }
+
 }

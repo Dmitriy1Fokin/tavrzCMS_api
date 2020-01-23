@@ -30,7 +30,6 @@ public class EmployeeConverterDtoTest {
                 .name("ASD")
                 .patronymic("ZXC")
                 .appUserId(1L)
-                .clientsIds(Arrays.asList(6L, 7L))
                 .fullName("QWE ASD ZXC")
                 .build();
 
@@ -41,7 +40,6 @@ public class EmployeeConverterDtoTest {
         assertEquals(employeeDto.getName(), employee.getName());
         assertEquals(employeeDto.getPatronymic(), employee.getPatronymic());
         assertEquals(employeeDto.getAppUserId(), employee.getAppUser().getUserId());
-        assertEquals(employeeDto.getClientsIds().size(), employee.getClients().size());
 
     }
 
@@ -53,7 +51,6 @@ public class EmployeeConverterDtoTest {
                 .name("ASD")
                 .patronymic("ZXC")
                 .appUser(new AppUser().builder().userId(1L).build())
-                .client(new Client().builder().clientId(1L).build())
                 .build();
 
         EmployeeDto employeeDto = employeeConverter.toDto(employee);

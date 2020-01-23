@@ -11,7 +11,16 @@ import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -53,7 +62,7 @@ public class Monitoring {
 	@Column(name = "collateral_value")
 	private BigDecimal collateralValue;
 
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pledge_subject_id")
 	private PledgeSubject pledgeSubject;
 

@@ -2,7 +2,9 @@ package ru.fds.tavrzcms3.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import ru.fds.tavrzcms3.domain.*;
+import ru.fds.tavrzcms3.domain.Client;
+import ru.fds.tavrzcms3.domain.ClientManager;
+import ru.fds.tavrzcms3.domain.Employee;
 
 import java.util.List;
 

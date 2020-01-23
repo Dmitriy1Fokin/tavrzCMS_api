@@ -39,7 +39,6 @@ public class LoanAgreementConverterDtoTest {
                 .pfo((byte) 2)
                 .qualityCategory((byte)4)
                 .clientId(2L)
-                .pledgeAgreementsIds(Arrays.asList(6L, 7L))
                 .build();
 
         LoanAgreement loanAgreement = loanAgreementConverter.toEntity(loanAgreementDto);
@@ -55,7 +54,6 @@ public class LoanAgreementConverterDtoTest {
         assertEquals(loanAgreement.getPfo(), loanAgreementDto.getPfo());
         assertEquals(loanAgreement.getQualityCategory(), loanAgreementDto.getQualityCategory());
         assertEquals(loanAgreement.getClient().getClientId(), loanAgreementDto.getClientId());
-        assertEquals(loanAgreement.getPledgeAgreements().size(), loanAgreementDto.getPledgeAgreementsIds().size());
     }
 
     @Test
@@ -72,7 +70,6 @@ public class LoanAgreementConverterDtoTest {
                 .pfo((byte) 2)
                 .qualityCategory((byte)4)
                 .client(new Client().builder().clientId(2L).build())
-                .pledgeAgreement(new PledgeAgreement().builder().pledgeAgreementId(3L).build())
                 .build();
 
         LoanAgreementDto loanAgreementDto = loanAgreementConverter.toDto(loanAgreement);
@@ -88,6 +85,5 @@ public class LoanAgreementConverterDtoTest {
         assertEquals(loanAgreement.getPfo(), loanAgreementDto.getPfo());
         assertEquals(loanAgreement.getQualityCategory(), loanAgreementDto.getQualityCategory());
         assertEquals(loanAgreement.getClient().getClientId(), loanAgreementDto.getClientId());
-        assertEquals(loanAgreement.getPledgeAgreements().size(), loanAgreementDto.getPledgeAgreementsIds().size());
     }
 }

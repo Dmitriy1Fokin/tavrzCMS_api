@@ -36,7 +36,8 @@ public final class PledgeSubjectUpdateColumn {
         this.tbo = tbo;
         this.vessel = vessel;
     }
-
+    @Value("${excel_table.import.pledge_subject_update.pledge_agreement_id}")
+    int pledgeAgreementsIds;
     @Value("${excel_table.import.pledge_subject_update.pledge_subject_id}")
     int pledgeSubjectId;
     @Value("${excel_table.import.pledge_subject_update.name}")

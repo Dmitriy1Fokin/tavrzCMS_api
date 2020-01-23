@@ -3,58 +3,38 @@ package ru.fds.tavrzcms3.converter.dtoconverter.impl;
 import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.converter.dtoconverter.ConverterDto;
 import ru.fds.tavrzcms3.domain.AppUser;
-import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.dto.EmployeeDto;
 import ru.fds.tavrzcms3.service.AppUserDetailsService;
-import ru.fds.tavrzcms3.service.ClientService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Component
 public class EmployeeConverterDto implements ConverterDto<Employee, EmployeeDto> {
 
     private final AppUserDetailsService appUserDetailsService;
-    private final ClientService clientService;
 
-    public EmployeeConverterDto(AppUserDetailsService appUserDetailsService,
-                                ClientService clientService) {
+    public EmployeeConverterDto(AppUserDetailsService appUserDetailsService) {
         this.appUserDetailsService = appUserDetailsService;
-        this.clientService = clientService;
     }
 
     @Override
     public Employee toEntity(EmployeeDto dto) {
-        Optional<AppUser> appUser = Optional.empty();
+       AppUser appUser = null;
         if(Objects.nonNull(dto.getEmployeeId())){
-            appUser = appUserDetailsService.getAppUserByEmployeeId(dto.getEmployeeId());
+            appUser = appUserDetailsService.getAppUserByEmployeeId(dto.getEmployeeId()).orElse(null);
         }
-
-        List<Long> clientsIds = Collections.emptyList();
-        if(Objects.nonNull(dto.getClientsIds())){
-            clientsIds = dto.getClientsIds();
-        }
-
         return Employee.builder()
                 .employeeId(dto.getEmployeeId())
                 .surname(dto.getSurname())
                 .name(dto.getName())
                 .patronymic(dto.getPatronymic())
-                .appUser(appUser.orElse(null))
-                .clients(clientService.getClientsByIds(clientsIds))
+                .appUser(appUser)
                 .build();
     }
 
     @Override
     public EmployeeDto toDto(Employee entity) {
-        List<Long> clientsIdsList = new ArrayList<>();
-        for(Client c : clientService.getClientByEmployee(entity))
-            clientsIdsList.add(c.getClientId());
-
         String fullName = getFullName(entity.getSurname(), entity.getName(), entity.getPatronymic());
 
         Long appUserId = null;
@@ -67,7 +47,6 @@ public class EmployeeConverterDto implements ConverterDto<Employee, EmployeeDto>
                 .name(entity.getName())
                 .patronymic(entity.getPatronymic())
                 .appUserId(appUserId)
-                .clientsIds(clientsIdsList)
                 .fullName(fullName)
                 .build();
     }

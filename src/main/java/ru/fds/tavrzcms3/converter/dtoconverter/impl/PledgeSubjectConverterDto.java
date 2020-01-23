@@ -3,11 +3,6 @@ package ru.fds.tavrzcms3.converter.dtoconverter.impl;
 import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.converter.dtoconverter.ConverterDto;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
-import ru.fds.tavrzcms3.domain.CostHistory;
-import ru.fds.tavrzcms3.domain.Encumbrance;
-import ru.fds.tavrzcms3.domain.Insurance;
-import ru.fds.tavrzcms3.domain.Monitoring;
-import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectAuto;
 import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectBuilding;
@@ -30,25 +25,11 @@ import ru.fds.tavrzcms3.dto.PledgeSubjectSecuritiesDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectTboDto;
 import ru.fds.tavrzcms3.dto.PledgeSubjectVesselDto;
 import ru.fds.tavrzcms3.dto.PrimaryIdentifier;
-import ru.fds.tavrzcms3.service.CostHistoryService;
-import ru.fds.tavrzcms3.service.EncumbranceService;
-import ru.fds.tavrzcms3.service.InsuranceService;
-import ru.fds.tavrzcms3.service.MonitoringService;
-import ru.fds.tavrzcms3.service.PledgeAgreementService;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 @Component
 public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, PledgeSubjectDto> {
 
-    private final PledgeAgreementService pledgeAgreementService;
-    private final CostHistoryService costHistoryService;
-    private final MonitoringService monitoringService;
-    private final EncumbranceService encumbranceService;
-    private final InsuranceService insuranceService;
     private final PledgeSubjectAutoConverter pledgeSubjectAutoConverter;
     private final PledgeSubjectEquipmentConverter pledgeSubjectEquipmentConverter;
     private final PledgeSubjectBuildingConverter pledgeSubjectBuildingConverter;
@@ -59,12 +40,7 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
     private final PledgeSubjectTboConverter pledgeSubjectTboConverter;
     private final PledgeSubjectVesselConverter pledgeSubjectVesselConverter;
 
-    public PledgeSubjectConverterDto(PledgeAgreementService pledgeAgreementService,
-                                     CostHistoryService costHistoryService,
-                                     MonitoringService monitoringService,
-                                     EncumbranceService encumbranceService,
-                                     InsuranceService insuranceService,
-                                     PledgeSubjectAutoConverter pledgeSubjectAutoConverter,
+    public PledgeSubjectConverterDto(PledgeSubjectAutoConverter pledgeSubjectAutoConverter,
                                      PledgeSubjectEquipmentConverter pledgeSubjectEquipmentConverter,
                                      PledgeSubjectBuildingConverter pledgeSubjectBuildingConverter,
                                      PledgeSubjectLandLeaseConverter pledgeSubjectLandLeaseConverter,
@@ -73,11 +49,6 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
                                      PledgeSubjectSecuritiesConverter pledgeSubjectSecuritiesConverter,
                                      PledgeSubjectTboConverter pledgeSubjectTboConverter,
                                      PledgeSubjectVesselConverter pledgeSubjectVesselConverter) {
-        this.pledgeAgreementService = pledgeAgreementService;
-        this.costHistoryService = costHistoryService;
-        this.monitoringService = monitoringService;
-        this.encumbranceService = encumbranceService;
-        this.insuranceService = insuranceService;
         this.pledgeSubjectAutoConverter = pledgeSubjectAutoConverter;
         this.pledgeSubjectEquipmentConverter = pledgeSubjectEquipmentConverter;
         this.pledgeSubjectBuildingConverter = pledgeSubjectBuildingConverter;
@@ -91,36 +62,6 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
 
     @Override
     public PledgeSubject toEntity(PledgeSubjectDto dto) {
-        List<PledgeAgreement> pledgeAgreementList;
-        if(Objects.nonNull(dto.getPledgeAgreementsIds()))
-            pledgeAgreementList = pledgeAgreementService.getPledgeAgreementsByIds(dto.getPledgeAgreementsIds());
-        else
-            pledgeAgreementList = Collections.emptyList();
-
-        List<CostHistory> costHistoryList;
-        if(Objects.nonNull(dto.getCostHistoriesIds()))
-            costHistoryList = costHistoryService.getCostHistoryByIds(dto.getCostHistoriesIds());
-        else
-            costHistoryList = Collections.emptyList();
-
-        List<Monitoring> monitoringList;
-        if(Objects.nonNull(dto.getMonitoringIds()))
-            monitoringList = monitoringService.getMonitoringByIds(dto.getMonitoringIds());
-        else
-            monitoringList = Collections.emptyList();
-
-        List<Encumbrance> encumbranceList;
-        if(Objects.nonNull(dto.getEncumbrancesIds()))
-            encumbranceList = encumbranceService.getEncumbranceByIds(dto.getEncumbrancesIds());
-        else
-            encumbranceList = Collections.emptyList();
-
-        List<Insurance> insuranceList;
-        if(Objects.nonNull(dto.getInsurancesIds()))
-            insuranceList = insuranceService.getInsurancesByIds(dto.getInsurancesIds());
-        else
-            insuranceList = Collections.emptyList();
-
         PledgeSubjectAuto pledgeSubjectAuto = null;
         PledgeSubjectEquipment pledgeSubjectEquipment = null;
         PledgeSubjectBuilding pledgeSubjectBuilding = null;
@@ -172,11 +113,6 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
                 .adressBuilbing(dto.getAdressBuilbing())
                 .adressPemises(dto.getAdressPemises())
                 .insuranceObligation(dto.getInsuranceObligation())
-                .pledgeAgreements(pledgeAgreementList)
-                .costHistories(costHistoryList)
-                .monitorings(monitoringList)
-                .encumbrances(encumbranceList)
-                .insurances(insuranceList)
                 .pledgeSubjectAuto(pledgeSubjectAuto)
                 .pledgeSubjectEquipment(pledgeSubjectEquipment)
                 .pledgeSubjectBuilding(pledgeSubjectBuilding)
@@ -191,26 +127,6 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
 
     @Override
     public PledgeSubjectDto toDto(PledgeSubject entity) {
-        List<Long> pledgeAgreementsIds = new ArrayList<>();
-        for (PledgeAgreement pa : pledgeAgreementService.getAllPledgeAgreementByPLedgeSubject(entity.getPledgeSubjectId()))
-            pledgeAgreementsIds.add(pa.getPledgeAgreementId());
-
-        List<Long> costHistoriesIds = new ArrayList<>();
-        for (CostHistory ch : costHistoryService.getCostHistoryPledgeSubject(entity.getPledgeSubjectId()))
-            costHistoriesIds.add(ch.getCostHistoryId());
-
-        List<Long> monitoringIds = new ArrayList<>();
-        for(Monitoring mon : monitoringService.getMonitoringByPledgeSubject(entity.getPledgeSubjectId()))
-            monitoringIds.add(mon.getMonitoringId());
-
-        List<Long> encumbrancesIds = new ArrayList<>();
-        for(Encumbrance enc : encumbranceService.getEncumbranceByPledgeSubject(entity))
-            encumbrancesIds.add(enc.getEncumbranceId());
-
-        List<Long> insurancesIds = new ArrayList<>();
-        for(Insurance ins : insuranceService.getInsurancesByPledgeSubject(entity))
-            insurancesIds.add(ins.getInsuranceId());
-
         PledgeSubjectAutoDto pledgeSubjectAutoDto = null;
         PledgeSubjectEquipmentDto pledgeSubjectEquipmentDto = null;
         PledgeSubjectBuildingDto pledgeSubjectBuildingDto = null;
@@ -262,11 +178,6 @@ public class PledgeSubjectConverterDto implements ConverterDto<PledgeSubject, Pl
                 .adressBuilbing(entity.getAdressBuilbing())
                 .adressPemises(entity.getAdressPemises())
                 .insuranceObligation(entity.getInsuranceObligation())
-                .pledgeAgreementsIds(pledgeAgreementsIds)
-                .costHistoriesIds(costHistoriesIds)
-                .monitoringIds(monitoringIds)
-                .encumbrancesIds(encumbrancesIds)
-                .insurancesIds(insurancesIds)
                 .fullAddress(getFullAddress(entity))
                 .mainCharacteristic(getMainCharacteristic(entity))
                 .primaryIdentifier(getPrimaryIdentifier(entity))

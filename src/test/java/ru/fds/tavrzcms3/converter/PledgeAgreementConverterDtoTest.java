@@ -42,9 +42,7 @@ public class PledgeAgreementConverterDtoTest {
                 .rsDz(BigDecimal.valueOf(3))
                 .rsZz(BigDecimal.valueOf(4))
                 .ss(BigDecimal.valueOf(5))
-                .loanAgreementsIds(Arrays.asList(1L, 3L, 5L))
                 .clientId(2L)
-                .pledgeSubjectsIds(Arrays.asList(2L, 4L))
                 .briefInfoAboutCollateral(Arrays.asList("qwe, asd", "wert"))
                 .typesOfCollateral(Arrays.asList("gfd", "bnht"))
                 .datesOfConclusions(Arrays.asList(LocalDate.now(), LocalDate.now()))
@@ -66,9 +64,7 @@ public class PledgeAgreementConverterDtoTest {
         assertEquals(pledgeAgreement.getRsDz(), pledgeAgreementDto.getRsDz());
         assertEquals(pledgeAgreement.getRsZz(), pledgeAgreementDto.getRsZz());
         assertEquals(pledgeAgreement.getSs(), pledgeAgreementDto.getSs());
-        assertEquals(pledgeAgreement.getLoanAgreements().size(), pledgeAgreementDto.getLoanAgreementsIds().size());
         assertEquals(pledgeAgreement.getClient().getClientId(), pledgeAgreementDto.getClientId());
-        assertEquals(pledgeAgreement.getPledgeSubjects().size(), pledgeAgreementDto.getPledgeSubjectsIds().size());
     }
 
     @Test
@@ -86,9 +82,7 @@ public class PledgeAgreementConverterDtoTest {
                 .rsDz(BigDecimal.valueOf(3))
                 .rsZz(BigDecimal.valueOf(4))
                 .ss(BigDecimal.valueOf(5))
-                .loanAgreement(new LoanAgreement().builder().loanAgreementId(1L).build())
                 .client(new Client().builder().clientId(2L).build())
-                .pledgeSubject(new PledgeSubject().builder().pledgeSubjectId(4L).build())
                 .build();
 
         PledgeAgreementDto pledgeAgreementDto = pledgeAgreementConverter.toDto(pledgeAgreement);
@@ -105,7 +99,6 @@ public class PledgeAgreementConverterDtoTest {
         assertEquals(pledgeAgreement.getRsDz(), pledgeAgreementDto.getRsDz());
         assertEquals(pledgeAgreement.getRsZz(), pledgeAgreementDto.getRsZz());
         assertEquals(pledgeAgreement.getSs(), pledgeAgreementDto.getSs());
-        assertEquals(pledgeAgreement.getLoanAgreements().size(), pledgeAgreementDto.getLoanAgreementsIds().size());
         assertEquals(pledgeAgreement.getClient().getClientId(), pledgeAgreementDto.getClientId());
 
     }

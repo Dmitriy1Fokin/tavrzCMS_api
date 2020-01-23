@@ -9,10 +9,11 @@ import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.Employee;
+import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
-import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.repository.RepositoryClient;
 import ru.fds.tavrzcms3.repository.RepositoryEmployee;
+import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
@@ -41,6 +42,8 @@ public class PledgeAgreementServiceTest {
     RepositoryClient repositoryClient;
     @Autowired
     ValidatorEntity validatorEntity;
+    @Autowired
+    RepositoryLoanAgreement repositoryLoanAgreement;
 
 
 
@@ -57,11 +60,11 @@ public class PledgeAgreementServiceTest {
     public void getDatesOfConclusion() {
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findById(126L).orElseThrow(()-> new NullPointerException("Нет такого ДЗ!"));
 
-        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
+//        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         List<LocalDate> datesTest = new ArrayList<>();
-        for(PledgeSubject ps : pledgeSubjects)
-            if(!datesTest.contains(ps.getDateConclusion()))
-                datesTest.add(ps.getDateConclusion());
+//        for(PledgeSubject ps : pledgeSubjects)
+//            if(!datesTest.contains(ps.getDateConclusion()))
+//                datesTest.add(ps.getDateConclusion());
 
         List<LocalDate> datesResult = pledgeAgreementService.getDatesOfConclusion(pledgeAgreement);
 
@@ -73,11 +76,11 @@ public class PledgeAgreementServiceTest {
     public void getDatesOfMonitoring() {
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findById(213L).orElseThrow(()-> new NullPointerException("Нет такого ДЗ!"));
 
-        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
+//        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         List<LocalDate> datesTest = new ArrayList<>();
-        for(PledgeSubject ps : pledgeSubjects)
-            if(!datesTest.contains(ps.getDateMonitoring()))
-                datesTest.add(ps.getDateMonitoring());
+//        for(PledgeSubject ps : pledgeSubjects)
+//            if(!datesTest.contains(ps.getDateMonitoring()))
+//                datesTest.add(ps.getDateMonitoring());
 
         List<LocalDate> datesResult = pledgeAgreementService.getDatesOfMonitoring(pledgeAgreement);
 
@@ -89,11 +92,11 @@ public class PledgeAgreementServiceTest {
     public void getResultsOfMonitoring() {
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findById(214L).orElseThrow(()-> new NullPointerException("Нет такого ДЗ!"));
 
-        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
+//        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         List<String> monitoringResultTest = new ArrayList<>();
-        for (PledgeSubject ps : pledgeSubjects)
-            if(!monitoringResultTest.contains(ps.getStatusMonitoring()))
-                monitoringResultTest.add(ps.getStatusMonitoring().getTranslate());
+//        for (PledgeSubject ps : pledgeSubjects)
+//            if(!monitoringResultTest.contains(ps.getStatusMonitoring()))
+//                monitoringResultTest.add(ps.getStatusMonitoring().getTranslate());
 
         List<String> monitoringResultResult = pledgeAgreementService.getResultsOfMonitoring(pledgeAgreement);
 
@@ -113,11 +116,11 @@ public class PledgeAgreementServiceTest {
     public void getTypeOfCollateral() {
         PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findById(214L).orElseThrow(()-> new NullPointerException("Нет такого ДЗ!"));
 
-        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
+//        List<PledgeSubject> pledgeSubjects = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
         List<String> typeOfCollateralTest = new ArrayList<>();
-        for (PledgeSubject ps : pledgeSubjects)
-            if(!typeOfCollateralTest.contains(ps.getTypeOfCollateral()))
-                typeOfCollateralTest.add(ps.getTypeOfCollateral().getTranslate());
+//        for (PledgeSubject ps : pledgeSubjects)
+//            if(!typeOfCollateralTest.contains(ps.getTypeOfCollateral()))
+//                typeOfCollateralTest.add(ps.getTypeOfCollateral().getTranslate());
 
         List<String> typeOfCollateralResult = pledgeAgreementService.getTypeOfCollateral(pledgeAgreement);
 
@@ -142,100 +145,18 @@ public class PledgeAgreementServiceTest {
     }
 
     @Test
-    public void getCurrentLoanAgreementsForPledgeAgreement() {
+    public void getAllPledgeAgreementByPLedgeSubject(){
+        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getAllPledgeAgreementByPLedgeSubject(10L);
+        pledgeAgreementList.forEach(x -> System.out.println(x));
     }
 
-    @Test
-    public void countOfClosedLoanAgreementsForPledgeAgreement() {
-    }
 
-    @Test
-    public void getClosedLoanAgreementsForPledgeAgreement() {
-    }
 
-    @Test
-    public void getCurrentPledgeAgreementsForEmployee() {
-    }
 
-    @Test
-    public void getCurrentPledgeAgreementsForEmployee1() {
-    }
 
-    @Test
-    public void getCurrentPledgeAgreementsForEmployee2() {
-    }
 
-    @Test
-    public void countOfCurrentPledgeAgreementForEmployee() {
-    }
 
-    @Test
-    public void countOfCurrentPledgeAgreementForEmployee1() {
-    }
 
-    @Test
-    public void countOfMonitoringNotDone() {
-    }
-
-    @Test
-    public void countOfMonitoringIsDone() {
-    }
-
-    @Test
-    public void countOfMonitoringOverdue() {
-    }
-
-    @Test
-    public void getPledgeAgreementWithMonitoringNotDone() {
-    }
-
-    @Test
-    public void getPledgeAgreementWithMonitoringIsDone() {
-    }
-
-    @Test
-    public void getPledgeAgreementWithMonitoringOverDue() {
-    }
-
-    @Test
-    public void countOfConclusionNotDone() {
-    }
-
-    @Test
-    public void countOfConclusionIsDone() {
-    }
-
-    @Test
-    public void countOfConclusionOverdue() {
-    }
-
-    @Test
-    public void getPledgeAgreementWithConclusionNotDone() {
-    }
-
-    @Test
-    public void getPledgeAgreementWithConclusionIsDone() {
-    }
-
-    @Test
-    public void getPledgeAgreementWithConclusionOverDue() {
-    }
-
-    @Test
-    public void getPledgeAgreementFromSearch() {
-    }
-
-    @Test
-    public void getCurrentPledgeAgreementsByPledgor() {
-    }
-
-    @Test
-    public void updateInsertPledgeAgreement() {
-    }
-
-    @Test
-    public void updateInsertPledgeAgreementList() {
-    }
 
     @Test
     public void getNewPledgeAgreementsFromFile() {
@@ -291,5 +212,12 @@ public class PledgeAgreementServiceTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void getLaByPA(){
+        PledgeAgreement pledgeAgreement = repositoryPledgeAgreement.findById(10L).get();
+        List<LoanAgreement> loanAgreementList = repositoryLoanAgreement.findByPledgeAgreement(pledgeAgreement);
+        loanAgreementList.forEach(System.out::println);
     }
 }

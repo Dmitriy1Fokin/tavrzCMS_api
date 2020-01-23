@@ -1,10 +1,12 @@
 package ru.fds.tavrzcms3.dto;
 
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import ru.fds.tavrzcms3.dictionary.TypeOfTBO;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 @Data

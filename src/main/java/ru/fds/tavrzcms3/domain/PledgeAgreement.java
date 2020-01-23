@@ -1,18 +1,29 @@
 package ru.fds.tavrzcms3.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Data
 @NoArgsConstructor
@@ -54,37 +65,35 @@ public class PledgeAgreement {
 	@Column(name ="notice")
 	private String noticePA;
 
+	@NotNull(message = "Обязательно для заполнения")
+	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="zs_dz")
 	private BigDecimal zsDz;
 
+	@NotNull(message = "Обязательно для заполнения")
+	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="zs_zz")
 	private BigDecimal zsZz;
 
+	@NotNull(message = "Обязательно для заполнения")
+	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="rs_dz")
 	private BigDecimal rsDz;
 
+	@NotNull(message = "Обязательно для заполнения")
+	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="rs_zz")
 	private BigDecimal rsZz;
 
+	@NotNull(message = "Обязательно для заполнения")
+	@PositiveOrZero(message = "Значение должно быть больше или ровно нулю")
 	@Column(name ="ss")
 	private BigDecimal ss;
 
-	@Singular
-	@JsonIgnore
-	@ManyToMany()
-	@JoinTable(name = "kd_dz", joinColumns = @JoinColumn(name ="dz_id"), inverseJoinColumns = @JoinColumn(name ="kd_id"))
-	private List<LoanAgreement> loanAgreements;
-
-	@JsonIgnore
-	@ManyToOne()
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pledgor_id")
 	private Client client;
-
-	@Singular
-	@JsonIgnore
-	@ManyToMany()
-	@JoinTable(name = "dz_ps", joinColumns = @JoinColumn(name ="dz_id"), inverseJoinColumns = @JoinColumn(name ="pledge_subject_id"))
-	private List<PledgeSubject> pledgeSubjects;
 
 	@Override
 	public String toString() {

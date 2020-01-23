@@ -50,6 +50,11 @@ public class InsuranceController {
                 .orElseThrow(()-> new NullPointerException("Insurance not found"));
     }
 
+    @GetMapping("pledge_subject")
+    public List<InsuranceDto> getInsurancesByPledgeSubject(@RequestParam("pledgeSubjectId") Long pledgeSubjectId){
+        return dtoFactory.getInsurancesDto(insuranceService.getInsurancesByPledgeSubject(pledgeSubjectId));
+    }
+
     @PostMapping("/insert")
     public InsuranceDto insertInsurance(@Valid @RequestBody InsuranceDto insuranceDto){
         Insurance insurance = insuranceService.updateInsertInsurance(dtoFactory.getInsuranceEntity(insuranceDto));

@@ -32,8 +32,7 @@ public class AppUserDetailsService implements UserDetailsService {
         AppUser appUser = repositoryAppUser.findByName(name)
                 .orElseThrow(() -> new NullPointerException("User not found"));
 
-        List<AppRole> appRoleList = repositoryAppRole.findAllByAppUsers(appUser);
-
+        List<AppRole> appRoleList = repositoryAppRole.findByAppUser(appUser);
         List<GrantedAuthority> authorityList = new ArrayList<>();
         if(!appRoleList.isEmpty()){
             appRoleList.forEach(appRole -> {

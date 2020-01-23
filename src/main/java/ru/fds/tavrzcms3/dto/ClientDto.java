@@ -8,7 +8,6 @@ import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,12 +25,6 @@ public class ClientDto{
 
     @NotNull
     private Long employeeId;
-
-    @NotNull
-    private List<Long> loanAgreementsIds;
-
-    @NotNull
-    private List<Long> pledgeAgreementsIds;
 
     @Valid
     private ClientLegalEntityDto clientLegalEntityDto;

@@ -63,13 +63,13 @@ public class LoanAgreementService {
     }
 
     public List<LoanAgreement> getAllLoanAgreementByPledgeAgreement(PledgeAgreement pledgeAgreement){
-        return repositoryLoanAgreement.findAllByPledgeAgreements(pledgeAgreement);
+        return repositoryLoanAgreement.findByPledgeAgreement(pledgeAgreement);
     }
 
     public List<LoanAgreement> getCurrentLoanAgreementsByPledgeAgreement(Long pledgeAgreementId){
         Optional<PledgeAgreement> pledgeAgreement = repositoryPledgeAgreement.findById(pledgeAgreementId);
         if(pledgeAgreement.isPresent())
-            return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreement.get(), StatusOfAgreement.OPEN);
+            return repositoryLoanAgreement.findByPledgeAgreementAndStatusLA(pledgeAgreement.get(), StatusOfAgreement.OPEN);
         else
             return Collections.emptyList();
     }
@@ -77,7 +77,7 @@ public class LoanAgreementService {
     public List<LoanAgreement> getClosedLoanAgreementsByPledgeAgreement(Long pledgeAgreementId){
         Optional<PledgeAgreement> pledgeAgreement = repositoryPledgeAgreement.findById(pledgeAgreementId);
         if(pledgeAgreement.isPresent())
-            return repositoryLoanAgreement.findByPledgeAgreementsAndStatusLAEquals(pledgeAgreement.get(), StatusOfAgreement.CLOSED);
+            return repositoryLoanAgreement.findByPledgeAgreementAndStatusLA(pledgeAgreement.get(), StatusOfAgreement.CLOSED);
         else
             return Collections.emptyList();
     }

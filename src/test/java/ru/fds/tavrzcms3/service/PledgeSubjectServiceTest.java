@@ -5,27 +5,18 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.fds.tavrzcms3.dictionary.Liquidity;
-import ru.fds.tavrzcms3.dictionary.MarketSegment;
-import ru.fds.tavrzcms3.dictionary.StatusOfMonitoring;
 import ru.fds.tavrzcms3.dictionary.TypeOfCollateral;
-import ru.fds.tavrzcms3.dictionary.TypeOfMonitoring;
-import ru.fds.tavrzcms3.dictionary.TypeOfPledge;
+import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
-import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectRoom;
 import ru.fds.tavrzcms3.dto.DtoFactory;
-import ru.fds.tavrzcms3.dto.PledgeSubjectDto;
+import ru.fds.tavrzcms3.repository.RepositoryPaJoinPs;
+import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
 import javax.validation.ConstraintViolation;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -41,9 +32,13 @@ public class PledgeSubjectServiceTest {
     @Autowired
     RepositoryPledgeSubject repositoryPledgeSubject;
     @Autowired
+    RepositoryPledgeAgreement repositoryPledgeAgreement;
+    @Autowired
     DtoFactory dtoFactory;
     @Autowired
     ValidatorEntity validatorEntity;
+    @Autowired
+    RepositoryPaJoinPs repositoryPaJoinPs;
 
     @Test
     public void getNewPledgeSubjectsFromFile(){
@@ -436,5 +431,37 @@ public class PledgeSubjectServiceTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testRepo(){
+//        PledgeSubject pledgeSubject = repositoryPledgeSubject.findById(1L).get();
+//        System.out.println(pledgeSubject);
+//
+//
+//        List<PledgeSubject> pledgeSubjectByPA = pledgeSubjectService.getPledgeSubjectsByPledgeAgreement(10L);
+//        pledgeSubjectByPA.forEach(System.out::println);
+//
+        PledgeAgreement pledgeAgreement1 = repositoryPledgeAgreement.findById(10L).get();
+        PledgeAgreement pledgeAgreement2 = repositoryPledgeAgreement.findById(11L).get();
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//
+//        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsByPledgeAgreements(List.of(pledgeAgreement1, pledgeAgreement2));
+//        pledgeSubjectList.forEach(System.out::println);
+
+
+//        List<PledgeSubject> pledgeSubjectList = repositoryPaJoinPs.findPledgeSubjectByPledgeAgreement(pledgeAgreement1);
+//        pledgeSubjectList.forEach(System.out::println);
+//        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//
+//        List<PledgeSubject> pledgeSubjectList1 = repositoryPaJoinPs.findPledgeSubjectByPledgeAgreements(List.of(pledgeAgreement1, pledgeAgreement2));
+//        pledgeSubjectList1.forEach(System.out::println);
+//        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+//        List<PaJoinPs> paJoinPsList = repositoryPaJoinPs.findAllByPledgeAgreementIn(List.of(pledgeAgreement1, pledgeAgreement2));
+//        List<PledgeSubject> pledgeSubjectList1 = new ArrayList<>(paJoinPsList.size());
+//        paJoinPsList.forEach(paJoinPs -> pledgeSubjectList.add(paJoinPs.getPledgeSubject()));
+
+
     }
 }

@@ -7,11 +7,14 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -59,8 +62,6 @@ public class LoanAgreementDto{
 
     @NotNull(message = "Обязательно для заполнения")
     private Long clientId;
-
-    private List<Long> pledgeAgreementsIds;
 
     private String clientName;
 }

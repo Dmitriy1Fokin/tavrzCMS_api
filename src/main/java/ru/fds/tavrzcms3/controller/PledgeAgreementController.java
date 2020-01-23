@@ -15,16 +15,13 @@ import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
 import ru.fds.tavrzcms3.service.FilesService;
 import ru.fds.tavrzcms3.service.PledgeAgreementService;
-import ru.fds.tavrzcms3.validate.ValidatorEntity;
+import ru.fds.tavrzcms3.wrapper.PledgeAgreementDtoWrapper;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/pledge_agreement")
@@ -34,17 +31,12 @@ public class PledgeAgreementController {
     private final FilesService filesService;
     private final DtoFactory dtoFactory;
 
-    private final ValidatorEntity validatorEntity;
-
-
     public PledgeAgreementController(PledgeAgreementService pledgeAgreementService,
                                      FilesService filesService,
-                                     DtoFactory dtoFactory,
-                                     ValidatorEntity validatorEntity) {
+                                     DtoFactory dtoFactory) {
         this.pledgeAgreementService = pledgeAgreementService;
         this.filesService = filesService;
         this.dtoFactory = dtoFactory;
-        this.validatorEntity = validatorEntity;
     }
 
     @GetMapping("/{pledgeAgreementId}")
@@ -155,16 +147,19 @@ public class PledgeAgreementController {
     }
 
     @PostMapping("/insert")
-    public PledgeAgreementDto insertPledgeAgreement(@Valid @RequestBody PledgeAgreementDto pledgeAgreementDto){
-        PledgeAgreement pledgeAgreement = pledgeAgreementService
-                .updateInsertPledgeAgreement(dtoFactory.getPledgeAgreementEntity(pledgeAgreementDto));
+    public PledgeAgreementDto insertPledgeAgreement(@Valid @RequestBody PledgeAgreementDtoWrapper pledgeAgreementDtoWrapper){
+        PledgeAgreement pledgeAgreement = dtoFactory.getPledgeAgreementEntity(pledgeAgreementDtoWrapper.getPledgeAgreementDto());
+        List<Long> loanAgreementsIds = pledgeAgreementDtoWrapper.getLoanAgreementsIds();
+
+        pledgeAgreement = pledgeAgreementService
+                .insertUpdatePledgeAgreement(pledgeAgreement, loanAgreementsIds);
 
         return dtoFactory.getPledgeAgreementDto(pledgeAgreement);
     }
 
     @PutMapping("/update")
-    public PledgeAgreementDto updatePledgeAgreement(@Valid @RequestBody PledgeAgreementDto pledgeAgreementDto){
-        return insertPledgeAgreement(pledgeAgreementDto);
+    public PledgeAgreementDto updatePledgeAgreement(@Valid @RequestBody PledgeAgreementDtoWrapper pledgeAgreementDtoWrapper){
+        return insertPledgeAgreement(pledgeAgreementDtoWrapper);
     }
 
     @PostMapping("/insert/file")
@@ -172,25 +167,13 @@ public class PledgeAgreementController {
         File uploadFile = filesService.uploadFile(file, "pledge_agreement_new");
         List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getNewPledgeAgreementsFromFile(uploadFile);
 
-        return getPersistentPledgeAgreementsDto(pledgeAgreementList);
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementList);
     }
 
     @PutMapping("/update/file")
     public List<PledgeAgreementDto> updatePledgeAgreementFromFile(@RequestParam("file") MultipartFile file) throws IOException {
         File uploadFile = filesService.uploadFile(file, "pledge_agreement_update");
         List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsFromFile(uploadFile);
-
-        return getPersistentPledgeAgreementsDto(pledgeAgreementList);
-    }
-
-    private List<PledgeAgreementDto> getPersistentPledgeAgreementsDto(List<PledgeAgreement> pledgeAgreementList) {
-        for(int i = 0; i < pledgeAgreementList.size(); i++){
-            Set<ConstraintViolation<PledgeAgreement>> violations =  validatorEntity.validateEntity(pledgeAgreementList.get(i));
-            if(!violations.isEmpty())
-                throw new ConstraintViolationException("object " + (i+1), violations);
-        }
-
-        pledgeAgreementList = pledgeAgreementService.updateInsertPledgeAgreements(pledgeAgreementList);
 
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementList);
     }

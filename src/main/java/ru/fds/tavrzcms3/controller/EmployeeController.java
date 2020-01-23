@@ -36,7 +36,6 @@ public class EmployeeController {
     @PostMapping("/insert")
     public EmployeeDto insertEmployee(@Valid @RequestBody EmployeeDto employeeDto){
         Employee employee = employeeService.updateInsertEmployee(dtoFactory.getEmployeeEntity(employeeDto));
-
         return dtoFactory.getEmployeeDto(employee);
     }
 

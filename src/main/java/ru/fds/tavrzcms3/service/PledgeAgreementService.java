@@ -7,20 +7,28 @@ import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
 import ru.fds.tavrzcms3.domain.Client;
+import ru.fds.tavrzcms3.domain.jointable.LaJoinPa;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
+import ru.fds.tavrzcms3.domain.jointable.PaJoinPs;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
 import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
+import ru.fds.tavrzcms3.repository.RepositoryLaJoinPa;
 import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
+import ru.fds.tavrzcms3.repository.RepositoryPaJoinPs;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 import ru.fds.tavrzcms3.specification.Search;
+import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,8 +47,11 @@ public class PledgeAgreementService {
     private final RepositoryPledgeAgreement repositoryPledgeAgreement;
     private final RepositoryLoanAgreement repositoryLoanAgreement;
     private final RepositoryPledgeSubject repositoryPledgeSubject;
+    private final RepositoryPaJoinPs repositoryPaJoinPs;
+    private final RepositoryLaJoinPa repositoryLaJoinPa;
     private final ClientService clientService;
     private final ExcelColumnNum excelColumnNum;
+    private final ValidatorEntity validatorEntity;
 
     private static final String MSG_WRONG_ID = "Неверный id{";
     private static final String MSG_LINE = "). Строка: ";
@@ -48,13 +59,19 @@ public class PledgeAgreementService {
     public PledgeAgreementService(RepositoryPledgeAgreement repositoryPledgeAgreement,
                                   RepositoryLoanAgreement repositoryLoanAgreement,
                                   RepositoryPledgeSubject repositoryPledgeSubject,
+                                  RepositoryPaJoinPs repositoryPaJoinPs,
+                                  RepositoryLaJoinPa repositoryLaJoinPa,
                                   ClientService clientService,
-                                  ExcelColumnNum excelColumnNum) {
+                                  ExcelColumnNum excelColumnNum,
+                                  ValidatorEntity validatorEntity) {
         this.repositoryPledgeAgreement = repositoryPledgeAgreement;
         this.repositoryLoanAgreement = repositoryLoanAgreement;
         this.repositoryPledgeSubject = repositoryPledgeSubject;
+        this.repositoryPaJoinPs = repositoryPaJoinPs;
+        this.repositoryLaJoinPa = repositoryLaJoinPa;
         this.clientService = clientService;
         this.excelColumnNum = excelColumnNum;
+        this.validatorEntity = validatorEntity;
     }
 
     public Optional<PledgeAgreement> getPledgeAgreementById(long pledgeAgreementId){
@@ -115,10 +132,15 @@ public class PledgeAgreementService {
         return  repositoryPledgeAgreement.getTypeOfCollateral(pledgeAgreement.getPledgeAgreementId());
     }
 
+    public List<String> getBriefInfoAboutCollateral(PledgeAgreement pledgeAgreement){
+        return repositoryPledgeAgreement.getBriefInfoAboutCollateral(pledgeAgreement.getPledgeAgreementId());
+    }
+
     public List<PledgeAgreement> getAllPledgeAgreementByPLedgeSubject(Long pledgeSubjectId){
         Optional<PledgeSubject> pledgeSubject = repositoryPledgeSubject.findById(pledgeSubjectId);
-        if(pledgeSubject.isPresent())
-            return repositoryPledgeAgreement.findAllByPledgeSubjects(pledgeSubject.get());
+        if(pledgeSubject.isPresent()){
+            return repositoryPledgeAgreement.getPledgeAgreementByPLedgeSubject(pledgeSubjectId);
+        }
         else
             return Collections.emptyList();
     }
@@ -209,7 +231,7 @@ public class PledgeAgreementService {
     public List<PledgeAgreement> getCurrentPledgeAgreementsByLoanAgreement(Long loanAgreementId){
         Optional<LoanAgreement> loanAgreement = repositoryLoanAgreement.findById(loanAgreementId);
         if(loanAgreement.isPresent())
-            return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPAEquals(loanAgreement.get(), StatusOfAgreement.OPEN);
+            return repositoryPledgeAgreement.findByLoanAgreementAndStatusPA(loanAgreement.get(), StatusOfAgreement.OPEN);
         else
             return Collections.emptyList();
     }
@@ -217,19 +239,20 @@ public class PledgeAgreementService {
     public List<PledgeAgreement> getClosedPledgeAgreementsByLoanAgreement(Long loanAgreementId){
         Optional<LoanAgreement> loanAgreement = repositoryLoanAgreement.findById(loanAgreementId);
         if(loanAgreement.isPresent())
-            return repositoryPledgeAgreement.findByLoanAgreementsAndStatusPAEquals(loanAgreement.get(),StatusOfAgreement.CLOSED);
+            return repositoryPledgeAgreement.findByLoanAgreementAndStatusPA(loanAgreement.get(),StatusOfAgreement.CLOSED);
         else
             return Collections.emptyList();
     }
 
     public List<PledgeAgreement> getAllPledgeAgreementsByLoanAgreement(LoanAgreement loanAgreement){
-        return repositoryPledgeAgreement.findByLoanAgreements(loanAgreement);
+        return repositoryPledgeAgreement.findByLoanAgreement(loanAgreement);
     }
 
     public List<PledgeAgreement> getAllPledgeAgreementsByPledgor(Client client){
         return repositoryPledgeAgreement.findAllByClient(client);
     }
 
+    @Transactional
     public List<PledgeAgreement> getNewPledgeAgreementsFromFile(File file) throws IOException {
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -238,37 +261,36 @@ public class PledgeAgreementService {
         int countRow = excelColumnNum.getStartRow();
 
         List<PledgeAgreement> pledgeAgreementList = new ArrayList<>();
+        List<List<LoanAgreement>> loanAgreementsList = new ArrayList<>();
 
         do {
             countRow += 1;
-
-            TypeOfPledgeAgreement typeOfPledgeAgreement;
-            try {
-                typeOfPledgeAgreement = TypeOfPledgeAgreement.valueOf(fileImporter.getString(excelColumnNum.getPledgeAgreementNew().getPervPosl()));
-            }catch (IllegalArgumentException ex){
-                typeOfPledgeAgreement = null;
-            }
-
-            StatusOfAgreement statusOfAgreement;
-            try {
-                statusOfAgreement = StatusOfAgreement.valueOf(fileImporter.getString(excelColumnNum.getPledgeAgreementNew().getStatus()));
-            }catch (IllegalArgumentException ex){
-                statusOfAgreement = null;
-            }
 
             PledgeAgreement pledgeAgreement = PledgeAgreement.builder()
                     .numPA(fileImporter.getString(excelColumnNum.getPledgeAgreementNew().getNumPA()))
                     .dateBeginPA(fileImporter.getLocalDate(excelColumnNum.getPledgeAgreementNew().getDateBegin()))
                     .dateEndPA(fileImporter.getLocalDate(excelColumnNum.getPledgeAgreementNew().getDateEnd()))
-                    .pervPosl(typeOfPledgeAgreement)
-                    .statusPA(statusOfAgreement)
+                    .pervPosl(TypeOfPledgeAgreement.valueOfString(fileImporter.getString(excelColumnNum.getPledgeAgreementNew().getPervPosl())).orElse(null))
+                    .statusPA(StatusOfAgreement.valueOfString(fileImporter.getString(excelColumnNum.getPledgeAgreementNew().getStatus())).orElse(null))
                     .noticePA(fileImporter.getString(excelColumnNum.getPledgeAgreementNew().getNotice()))
-                    .loanAgreements(setLoanAgreementsInNewPledgeAgreement(fileImporter, countRow))
                     .client(setClientInNewPledgeAgreement(fileImporter, countRow))
+                    .rsDz(BigDecimal.ZERO)
+                    .rsZz(BigDecimal.ZERO)
+                    .zsDz(BigDecimal.ZERO)
+                    .zsZz(BigDecimal.ZERO)
+                    .ss(BigDecimal.ZERO)
                     .build();
 
+            Set<ConstraintViolation<PledgeAgreement>> violations =  validatorEntity.validateEntity(pledgeAgreement);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("Object " + countRow, violations);
+
             pledgeAgreementList.add(pledgeAgreement);
+            loanAgreementsList.add(setLoanAgreementsInNewPledgeAgreement(fileImporter, countRow));
+
         }while (fileImporter.nextLine());
+
+        pledgeAgreementList = insertUpdatePledgeAgreements(pledgeAgreementList, loanAgreementsList);
 
         return pledgeAgreementList;
     }
@@ -305,6 +327,7 @@ public class PledgeAgreementService {
         return loanAgreementList;
     }
 
+    @Transactional
     public List<PledgeAgreement> getCurrentPledgeAgreementsFromFile(File file) throws IOException {
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -313,42 +336,31 @@ public class PledgeAgreementService {
         int countRow = excelColumnNum.getStartRow();
 
         List<PledgeAgreement> pledgeAgreementList = new ArrayList<>();
+        List<List<LoanAgreement>> loanAgreementsList = new ArrayList<>();
 
         do {
             countRow += 1;
 
             PledgeAgreement pledgeAgreement = setCurrentPledgeAgreement(fileImporter, countRow);
 
-
-
-
-
-            TypeOfPledgeAgreement typeOfPledgeAgreement;
-            try {
-                typeOfPledgeAgreement = TypeOfPledgeAgreement.valueOf(fileImporter.getString(excelColumnNum.getPledgeAgreementUpdate().getPervPosl()));
-            }catch (IllegalArgumentException ex){
-                typeOfPledgeAgreement = null;
-            }
-
-            StatusOfAgreement statusOfAgreement;
-            try {
-                statusOfAgreement = StatusOfAgreement.valueOf(fileImporter.getString(excelColumnNum.getPledgeAgreementUpdate().getStatus()));
-            }catch (IllegalArgumentException ex){
-                statusOfAgreement = null;
-            }
-
             pledgeAgreement.setNumPA(fileImporter.getString(excelColumnNum.getPledgeAgreementUpdate().getNumPA()));
             pledgeAgreement.setDateBeginPA(fileImporter.getLocalDate(excelColumnNum.getPledgeAgreementUpdate().getDateBegin()));
             pledgeAgreement.setDateEndPA(fileImporter.getLocalDate(excelColumnNum.getPledgeAgreementUpdate().getDateEnd()));
-            pledgeAgreement.setPervPosl(typeOfPledgeAgreement);
-            pledgeAgreement.setStatusPA(statusOfAgreement);
+            pledgeAgreement.setPervPosl(TypeOfPledgeAgreement.valueOfString(fileImporter.getString(excelColumnNum.getPledgeAgreementUpdate().getPervPosl())).orElse(null));
+            pledgeAgreement.setStatusPA(StatusOfAgreement.valueOfString(fileImporter.getString(excelColumnNum.getPledgeAgreementUpdate().getStatus())).orElse(null));
             pledgeAgreement.setNoticePA(fileImporter.getString(excelColumnNum.getPledgeAgreementUpdate().getNotice()));
             pledgeAgreement.setClient(setClientInCurrentPledgeAgreement(fileImporter, countRow));
-            pledgeAgreement.setLoanAgreements(setLoanAgreementsInCurrentPledgeAgreement(fileImporter, countRow));
+
+            Set<ConstraintViolation<PledgeAgreement>> violations =  validatorEntity.validateEntity(pledgeAgreement);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("Object " + countRow, violations);
 
             pledgeAgreementList.add(pledgeAgreement);
+            loanAgreementsList.add(setLoanAgreementsInCurrentPledgeAgreement(fileImporter, countRow));
 
         }while (fileImporter.nextLine());
+
+        pledgeAgreementList = insertUpdatePledgeAgreements(pledgeAgreementList, loanAgreementsList);
 
         return pledgeAgreementList;
     }
@@ -399,13 +411,52 @@ public class PledgeAgreementService {
     }
 
     @Transactional
-    public PledgeAgreement updateInsertPledgeAgreement(PledgeAgreement pledgeAgreement){
-        return repositoryPledgeAgreement.save(pledgeAgreement);
+    public PledgeAgreement insertUpdatePledgeAgreement(PledgeAgreement pledgeAgreement, List<Long> loanAgreementsIds){
+        pledgeAgreement = repositoryPledgeAgreement.save(pledgeAgreement);
+
+        List<LoanAgreement> loanAgreementListFromDB = repositoryLoanAgreement.findByPledgeAgreement(pledgeAgreement);
+        List<LoanAgreement> loanAgreementListFromRequest = repositoryLoanAgreement.findAllByLoanAgreementIdIn(loanAgreementsIds);
+        if(loanAgreementListFromRequest.size() < loanAgreementsIds.size()){
+            throw new NullPointerException("Not all loan agreements were found");
+        }
+
+        List<LoanAgreement> loanAgreementListToDelete = new ArrayList<>(loanAgreementListFromDB);
+        loanAgreementListToDelete.removeAll(loanAgreementListFromRequest);
+        repositoryLaJoinPa.deleteByLoanAgreementInAndPledgeAgreement(loanAgreementListToDelete, pledgeAgreement);
+
+        List<LoanAgreement> loanAgreementListToInsert = new ArrayList<>(loanAgreementListFromRequest);
+        loanAgreementListToInsert.removeAll(loanAgreementListFromDB);
+        List<LaJoinPa> laJoinPaList = new ArrayList<>();
+        for(LoanAgreement loanAgreement : loanAgreementListToInsert){
+            laJoinPaList.add(new LaJoinPa(loanAgreement, pledgeAgreement));
+        }
+        repositoryLaJoinPa.saveAll(laJoinPaList);
+
+        return pledgeAgreement;
     }
 
     @Transactional
-    public List<PledgeAgreement> updateInsertPledgeAgreements(List<PledgeAgreement> pledgeAgreementList){
-        return repositoryPledgeAgreement.saveAll(pledgeAgreementList);
+    public List<PledgeAgreement> insertUpdatePledgeAgreements(List<PledgeAgreement> pledgeAgreementList,
+                                                              List<List<LoanAgreement>> loanAgreementsList){
+
+        pledgeAgreementList = repositoryPledgeAgreement.saveAll(pledgeAgreementList);
+        List<LaJoinPa> laJoinPaList = new ArrayList<>();
+        for(int i = 0; i < pledgeAgreementList.size(); i++){
+            List<LoanAgreement> loanAgreementListFromDB = repositoryLoanAgreement.findByPledgeAgreement(pledgeAgreementList.get(i));
+            List<LoanAgreement> loanAgreementListToDelete = new ArrayList<>(loanAgreementListFromDB);
+            loanAgreementListToDelete.removeAll(loanAgreementsList.get(i));
+            repositoryLaJoinPa.deleteByLoanAgreementInAndPledgeAgreement(loanAgreementListToDelete, pledgeAgreementList.get(i));
+
+            List<LoanAgreement> loanAgreementListToInsert = new ArrayList<>(loanAgreementsList.get(i));
+            loanAgreementListToInsert.removeAll(loanAgreementListFromDB);
+            for(LoanAgreement loanAgreement : loanAgreementListToInsert){
+                laJoinPaList.add(new LaJoinPa(loanAgreement, pledgeAgreementList.get(i)));
+            }
+        }
+
+        repositoryLaJoinPa.saveAll(laJoinPaList);
+
+        return pledgeAgreementList;
     }
 
     @Transactional
@@ -416,12 +467,9 @@ public class PledgeAgreementService {
         PledgeSubject pledgeSubject = repositoryPledgeSubject.findById(pledgeSubjectId)
                 .orElseThrow(() -> new NullPointerException("Pledge subject not found"));
 
-        List<PledgeSubject> pledgeSubjectList = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
+        repositoryPaJoinPs.deleteByPledgeAgreementAndPledgeSubject(pledgeAgreement, pledgeSubject);
 
-        pledgeSubjectList.remove(pledgeSubject);
-        pledgeAgreement.setPledgeSubjects(pledgeSubjectList);
-
-        return repositoryPledgeAgreement.save(pledgeAgreement);
+        return pledgeAgreement;
     }
 
     @Transactional
@@ -429,18 +477,20 @@ public class PledgeAgreementService {
         PledgeAgreement pledgeAgreement = getPledgeAgreementById(pledgeAgreementId)
                 .orElseThrow(() -> new NullPointerException("Pledge agreement not found"));
 
-        List<PledgeSubject> pledgeSubjectListCurrent = repositoryPledgeSubject.findByPledgeAgreements(pledgeAgreement);
-
         List<PledgeSubject> pledgeSubjectListNew = repositoryPledgeSubject.findAllByPledgeSubjectIdIn(pledgeSubjectsIds);
+        if(pledgeSubjectListNew.size() < pledgeSubjectsIds.size()){
+            throw new NullPointerException("Not all pledge subjects were found");
+        }
 
+        List<PaJoinPs> paJoinPsList = new ArrayList<>(pledgeSubjectListNew.size());
         pledgeSubjectListNew.forEach(pledgeSubject -> {
-            if(!pledgeSubjectListCurrent.contains(pledgeSubject)){
-                pledgeSubjectListCurrent.add(pledgeSubject);
+            if(!repositoryPaJoinPs.existsByPledgeAgreementAndPledgeSubject(pledgeAgreement, pledgeSubject)){
+                paJoinPsList.add(new PaJoinPs(pledgeAgreement, pledgeSubject));
             }
         });
 
-        pledgeAgreement.setPledgeSubjects(pledgeSubjectListCurrent);
+        repositoryPaJoinPs.saveAll(paJoinPsList);
 
-        return repositoryPledgeAgreement.save(pledgeAgreement);
+        return pledgeAgreement;
     }
 }

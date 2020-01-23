@@ -1,9 +1,17 @@
 package ru.fds.tavrzcms3.domain;
 
-import lombok.*;
 
-import javax.persistence.*;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
 @NoArgsConstructor
@@ -20,13 +28,6 @@ public class AppRole {
 
     @Column(name ="name")
     private String name;
-
-    @Singular
-    @ManyToMany
-    @JoinTable(name = "db_user_role", joinColumns = @JoinColumn(name ="role_id"), inverseJoinColumns = @JoinColumn(name ="user_id"))
-    private List<AppUser> appUsers;
-
-
 
     @Override
     public String toString() {

@@ -1,16 +1,33 @@
 package ru.fds.tavrzcms3.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
+@EqualsAndHashCode
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -75,11 +92,6 @@ public class LoanAgreement {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "loaner_id")
 	private Client client;
-
-	@Singular
-	@ManyToMany
-	@JoinTable(name = "kd_dz", joinColumns = @JoinColumn(name ="kd_id"), inverseJoinColumns = @JoinColumn(name ="dz_id"))
-	private List<PledgeAgreement> pledgeAgreements;
 
 	@Override
 	public String toString() {

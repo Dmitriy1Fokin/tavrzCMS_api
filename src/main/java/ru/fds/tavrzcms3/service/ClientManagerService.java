@@ -4,6 +4,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
+import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.ClientManager;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
@@ -35,6 +36,10 @@ public class ClientManagerService {
 
     public Optional<ClientManager> getClientManagerById(long clientManagerId){
         return repositoryClientManager.findById(clientManagerId);
+    }
+
+    public Optional<ClientManager> getClientManagerByClient(Client client){
+        return repositoryClientManager.findByClient(client);
     }
 
     public List<ClientManager> getNewClientManagersFromFile(File file) throws IOException {

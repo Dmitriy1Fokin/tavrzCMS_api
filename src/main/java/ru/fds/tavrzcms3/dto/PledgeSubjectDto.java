@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.fds.tavrzcms3.dictionary.Liquidity;
 import ru.fds.tavrzcms3.dictionary.StatusOfMonitoring;
@@ -19,7 +18,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -89,21 +87,6 @@ public class PledgeSubjectDto{
 
     @Pattern(regexp = "да|нет", message = "Возможные варианты: да, нет")
     private String insuranceObligation;
-
-    @Singular
-    private List<Long> pledgeAgreementsIds;
-
-    @Singular
-    private List<Long> costHistoriesIds;
-
-    @Singular
-    private List<Long> monitoringIds;
-
-    @Singular
-    private List<Long> encumbrancesIds;
-
-    @Singular
-    private List<Long> insurancesIds;
 
     private String fullAddress;
 

@@ -7,9 +7,10 @@ spring:
   jpa:
     properties:
       hibernate:
-        show_sql: false
+        show_sql: true
         temp:
           use_jdbc_metadata_defaults: false #Fix Postgres JPA Error: Method org.postgresql.jdbc.PgConnection.createClob() is not yet implemented.
+    open-in-view: false
   servlet:
     multipart:
       max-file-size: 10MB
@@ -192,85 +193,86 @@ excel_table:
         year_built: 32
         status: 33
     pledge_subject_update:
-      pledge_subject_id: 0
-      name: 1
-      liquidity: 2
-      type_of_pledge: 3
-      address_region: 4
-      address_district: 5
-      address_city: 6
-      address_street: 7
-      address_building: 8
-      address_premises: 9
-      insurance_obligation: 10
+      pledge_agreement_id: 0
+      pledge_subject_id: 1
+      name: 2
+      liquidity: 3
+      type_of_pledge: 4
+      address_region: 5
+      address_district: 6
+      address_city: 7
+      address_street: 8
+      address_building: 9
+      address_premises: 10
+      insurance_obligation: 11
       ps_auto:
-        brand: 11
-        model: 12
-        vin: 13
-        num_of_engine: 14
-        num_of_pts: 15
-        year_of_manufacture: 16
-        inventory_num: 17
-        type_of_auto: 18
-        horsepower: 19
+        brand: 12
+        model: 13
+        vin: 14
+        num_of_engine: 15
+        num_of_pts: 16
+        year_of_manufacture: 17
+        inventory_num: 18
+        type_of_auto: 19
+        horsepower: 20
       ps_equipment:
-        brand: 11
-        model: 12
-        serial_number: 13
-        year_of_manufacture: 14
-        inventory_number: 15
-        type_of_equipment: 16
-        productivity: 17
-        type_of_productivity: 18
+        brand: 12
+        model: 13
+        serial_number: 14
+        year_of_manufacture: 15
+        inventory_number: 16
+        type_of_equipment: 17
+        productivity: 18
+        type_of_productivity: 19
       ps_building:
-        area: 11
-        cadastral_num: 12
-        conditional_num: 13
-        readiness_degree: 14
-        year_of_construction: 15
-        market_segment: 16
+        area: 12
+        cadastral_num: 13
+        conditional_num: 14
+        readiness_degree: 15
+        year_of_construction: 16
+        market_segment: 17
       ps_land_lease:
-        area: 11
-        cadastral_num: 12
-        conditional_num: 13
-        permitted_use: 14
-        built_up: 15
-        cadastral_num_of_building: 16
-        begin_date: 17
-        end_date: 18
-        land_category: 19
+        area: 12
+        cadastral_num: 13
+        conditional_num: 14
+        permitted_use: 15
+        built_up: 16
+        cadastral_num_of_building: 17
+        begin_date: 18
+        end_date: 19
+        land_category: 20
       ps_land_owner:
-        area: 11
-        cadastral_num: 12
-        conditional_num: 13
-        permitted_use: 14
-        built_up: 15
-        cadastral_num_of_building: 16
-        land_category: 17
+        area: 12
+        cadastral_num: 13
+        conditional_num: 14
+        permitted_use: 15
+        built_up: 16
+        cadastral_num_of_building: 17
+        land_category: 18
       ps_room:
-        area: 11
-        cadastral_num: 12
-        conditional_num: 13
-        floor_location: 14
-        market_segment_room: 15
-        market_segment_building: 16
+        area: 12
+        cadastral_num: 13
+        conditional_num: 14
+        floor_location: 15
+        market_segment_room: 16
+        market_segment_building: 17
       ps_securities:
-        nominal_value: 11
-        actual_value: 12
-        type_of_securities: 13
+        nominal_value: 12
+        actual_value: 13
+        type_of_securities: 14
       ps_tbo:
-        count_of_tbo: 11
-        carrying_amount: 12
-        type_of_tbo: 13
+        count_of_tbo: 12
+        carrying_amount: 13
+        type_of_tbo: 14
       ps_vessel:
-        imo: 11
-        mmsi: 12
-        flag: 13
-        vessel_type: 14
-        gross_tonnage: 15
-        deadweight: 16
-        year_built: 17
-        status: 18
+        imo: 12
+        mmsi: 13
+        flag: 14
+        vessel_type: 15
+        gross_tonnage: 16
+        deadweight: 17
+        year_built: 18
+        status: 19
     cost_history_new:
       pledge_subject_id: 0
       date: 1

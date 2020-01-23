@@ -190,7 +190,7 @@ public class MonitoringService {
 
     @Transactional
     public List<Monitoring> insertMonitoringInPledgeAgreement(PledgeAgreement pledgeAgreement, Monitoring monitoring){
-        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreement(pledgeAgreement.getPledgeAgreementId());
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsByPledgeAgreement(pledgeAgreement.getPledgeAgreementId());
         List<Monitoring> monitoringList = new ArrayList<>();
         for (PledgeSubject ps : pledgeSubjectList){
             monitoring.setPledgeSubject(ps);
@@ -215,7 +215,7 @@ public class MonitoringService {
     @Transactional
     public List<Monitoring> insertMonitoringInPledgor(Client pledgor, Monitoring monitoring){
         List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getCurrentPledgeAgreementsByPledgor(pledgor.getClientId());
-        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsForPledgeAgreements(pledgeAgreementList);
+        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsByPledgeAgreements(pledgeAgreementList);
         List<Monitoring> monitoringList = new ArrayList<>();
         for(PledgeSubject ps : pledgeSubjectList){
             monitoring.setPledgeSubject(ps);

@@ -27,18 +27,15 @@ public class ClientConverterDtoTest {
                 .typeOfClient(TypeOfClient.INDIVIDUAL)
                 .clientManagerId(2L)
                 .employeeId(1L)
-                .loanAgreementsIds(Arrays.asList(4L, 5L))
-                .pledgeAgreementsIds(Arrays.asList(6L, 7L))
                 .build();
 
         Client client = clientConverter.toEntity(clientDto);
+        client.getClientManager();
 
         assertEquals(clientDto.getClientId(), client.getClientId());
         assertEquals(clientDto.getTypeOfClient(), client.getTypeOfClient());
         assertEquals(clientDto.getClientManagerId(), client.getClientManager().getClientManagerId());
         assertEquals(clientDto.getEmployeeId(), client.getEmployee().getEmployeeId());
-        assertEquals(clientDto.getLoanAgreementsIds().size(), client.getLoanAgreements().size());
-        assertEquals(clientDto.getPledgeAgreementsIds().size(), client.getPledgeAgreements().size());
 
     }
 
@@ -48,10 +45,8 @@ public class ClientConverterDtoTest {
         Client client = Client.builder()
                 .clientId(1L)
                 .typeOfClient(TypeOfClient.LEGAL_ENTITY)
-                .clientManager(new ClientManager().builder().clientManagerId(3L).build())
+                .clientManager(new ClientManager().builder().clientManagerId(18L).build())
                 .employee(new Employee().builder().employeeId(4L).build())
-                .loanAgreement(new LoanAgreement().builder().loanAgreementId(4L).build())
-                .pledgeAgreement(new PledgeAgreement().builder().pledgeAgreementId(7L).build())
                 .build();
 
         ClientDto clientDto = clientConverter.toDto(client);
@@ -60,8 +55,6 @@ public class ClientConverterDtoTest {
         assertEquals(client.getTypeOfClient(), clientDto.getTypeOfClient());
         assertEquals(client.getClientManager().getClientManagerId(), clientDto.getClientManagerId());
         assertEquals(client.getEmployee().getEmployeeId(), clientDto.getEmployeeId());
-        assertEquals(client.getLoanAgreements().size(), clientDto.getLoanAgreementsIds().size());
-        assertEquals(client.getPledgeAgreements().size(), clientDto.getPledgeAgreementsIds().size());
 
     }
 }

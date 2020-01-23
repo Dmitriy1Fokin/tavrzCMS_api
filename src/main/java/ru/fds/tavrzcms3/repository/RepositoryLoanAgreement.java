@@ -13,13 +13,15 @@ import java.util.List;
 
 public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Long>, JpaSpecificationExecutor<LoanAgreement> {
     List<LoanAgreement> findAllByLoanAgreementIdIn(List<Long> ids);
-    List<LoanAgreement> findAllByPledgeAgreements(PledgeAgreement pledgeAgreement);
-    List<LoanAgreement> findAllByPledgeAgreementsIn(List<PledgeAgreement> pledgeAgreement);
-    List<LoanAgreement> findByPledgeAgreementsAndStatusLAEquals(PledgeAgreement pledgeAgreement, StatusOfAgreement statusLA);
-    Integer countAllByClientInAndStatusLAEquals(List<Client> clients, StatusOfAgreement statusLA);
     List<LoanAgreement> findAllByClient(Client client);
-    Integer countAllByStatusLAEquals(StatusOfAgreement statusOfAgreement);
     List<LoanAgreement> findAllByStatusLAEquals(StatusOfAgreement statusOfAgreement);
+
+    @Query("select lp.loanAgreement from LaJoinPa lp where lp.pledgeAgreement = :pledgeAgreement")
+    List<LoanAgreement> findByPledgeAgreement(@Param("pledgeAgreement")PledgeAgreement pledgeAgreement);
+
+    @Query("select lp.loanAgreement from LaJoinPa lp where lp.pledgeAgreement = :pledgeAgreement and lp.loanAgreement.statusLA = :statusLA")
+    List<LoanAgreement> findByPledgeAgreementAndStatusLA(@Param("pledgeAgreement") PledgeAgreement pledgeAgreements,
+                                                          @Param("statusLA") StatusOfAgreement statusOfAgreement);
 
     @Query(nativeQuery = true, value = "select k.*\n" +
                                         "from kd k\n" +
