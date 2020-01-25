@@ -44,6 +44,7 @@ import java.util.Set;
 @Service
 public class PledgeAgreementService {
 
+
     private final RepositoryPledgeAgreement repositoryPledgeAgreement;
     private final RepositoryLoanAgreement repositoryLoanAgreement;
     private final RepositoryPledgeSubject repositoryPledgeSubject;
@@ -55,6 +56,7 @@ public class PledgeAgreementService {
 
     private static final String MSG_WRONG_ID = "Неверный id{";
     private static final String MSG_LINE = "). Строка: ";
+    private static final String NOT_ALL_LOAN_AGREEMENTS_WERE_FOUND = "Not all loan agreements were found";
 
     public PledgeAgreementService(RepositoryPledgeAgreement repositoryPledgeAgreement,
                                   RepositoryLoanAgreement repositoryLoanAgreement,
@@ -137,12 +139,7 @@ public class PledgeAgreementService {
     }
 
     public List<PledgeAgreement> getAllPledgeAgreementByPLedgeSubject(Long pledgeSubjectId){
-        Optional<PledgeSubject> pledgeSubject = repositoryPledgeSubject.findById(pledgeSubjectId);
-        if(pledgeSubject.isPresent()){
-            return repositoryPledgeAgreement.getPledgeAgreementByPLedgeSubject(pledgeSubjectId);
-        }
-        else
-            return Collections.emptyList();
+        return repositoryPledgeAgreement.getPledgeAgreementByPLedgeSubject(pledgeSubjectId);
     }
 
     public List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(Long employeeId, TypeOfPledgeAgreement pervPosl){
@@ -229,19 +226,11 @@ public class PledgeAgreementService {
     }
 
     public List<PledgeAgreement> getCurrentPledgeAgreementsByLoanAgreement(Long loanAgreementId){
-        Optional<LoanAgreement> loanAgreement = repositoryLoanAgreement.findById(loanAgreementId);
-        if(loanAgreement.isPresent())
-            return repositoryPledgeAgreement.findByLoanAgreementAndStatusPA(loanAgreement.get(), StatusOfAgreement.OPEN);
-        else
-            return Collections.emptyList();
+        return repositoryPledgeAgreement.findByLoanAgreementAndStatusPA(loanAgreementId, StatusOfAgreement.OPEN);
     }
 
     public List<PledgeAgreement> getClosedPledgeAgreementsByLoanAgreement(Long loanAgreementId){
-        Optional<LoanAgreement> loanAgreement = repositoryLoanAgreement.findById(loanAgreementId);
-        if(loanAgreement.isPresent())
-            return repositoryPledgeAgreement.findByLoanAgreementAndStatusPA(loanAgreement.get(),StatusOfAgreement.CLOSED);
-        else
-            return Collections.emptyList();
+        return repositoryPledgeAgreement.findByLoanAgreementAndStatusPA(loanAgreementId,StatusOfAgreement.CLOSED);
     }
 
     @Transactional
@@ -307,8 +296,13 @@ public class PledgeAgreementService {
                     + ") кредитного договора. Строка: " + countRow);
         }
 
-        List<LoanAgreement> loanAgreementList = repositoryLoanAgreement.findAllByLoanAgreementIdIn(fileImporter
-                .getLongList(excelColumnNum.getPledgeAgreementNew().getLoanAgreementsIds(), excelColumnNum.getDelimiter()));
+        List<Long> ids = fileImporter
+                .getLongList(excelColumnNum.getPledgeAgreementNew().getLoanAgreementsIds(), excelColumnNum.getDelimiter());
+        List<LoanAgreement> loanAgreementList = repositoryLoanAgreement.findAllByLoanAgreementIdIn(ids);
+
+        if(loanAgreementList.size() < ids.size()){
+            throw new IOException(NOT_ALL_LOAN_AGREEMENTS_WERE_FOUND);
+        }
 
         if(loanAgreementList.isEmpty()){
             throw new IOException("Кредитного договора с таким id отсутствует ("
@@ -390,8 +384,13 @@ public class PledgeAgreementService {
                     + ") кредитного договора. Строка: " + countRow);
         }
 
-        List<LoanAgreement> loanAgreementList = repositoryLoanAgreement.findAllByLoanAgreementIdIn(fileImporter
-                .getLongList(excelColumnNum.getPledgeAgreementUpdate().getLoanAgreementsIds(), excelColumnNum.getDelimiter()));
+        List<Long> ids = fileImporter
+                .getLongList(excelColumnNum.getPledgeAgreementUpdate().getLoanAgreementsIds(), excelColumnNum.getDelimiter());
+        List<LoanAgreement> loanAgreementList = repositoryLoanAgreement.findAllByLoanAgreementIdIn(ids);
+
+        if(loanAgreementList.size() < ids.size()){
+            throw new IOException(NOT_ALL_LOAN_AGREEMENTS_WERE_FOUND);
+        }
 
         if(loanAgreementList.isEmpty()){
             throw new IOException("Кредитного договора с таким id отсутствует ("
@@ -409,7 +408,7 @@ public class PledgeAgreementService {
         List<LoanAgreement> loanAgreementListFromDB = repositoryLoanAgreement.findByPledgeAgreement(pledgeAgreement);
         List<LoanAgreement> loanAgreementListFromRequest = repositoryLoanAgreement.findAllByLoanAgreementIdIn(loanAgreementsIds);
         if(loanAgreementListFromRequest.size() < loanAgreementsIds.size()){
-            throw new NullPointerException("Not all loan agreements were found");
+            throw new NullPointerException(NOT_ALL_LOAN_AGREEMENTS_WERE_FOUND);
         }
 
         List<LoanAgreement> loanAgreementListToDelete = new ArrayList<>(loanAgreementListFromDB);

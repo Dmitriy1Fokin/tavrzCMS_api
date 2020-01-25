@@ -77,15 +77,21 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({NullPointerException.class, IllegalArgumentException.class, IOException.class})
-    protected ResponseEntity<Object> handleException(Exception ex){
+    @ExceptionHandler({NotFoundException.class})
+    protected ResponseEntity<Object> handleNotFoundException(Exception ex){
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP, LocalDateTime.now());
-        body.put(STATUS, HttpStatus.BAD_REQUEST.value());
+        body.put(STATUS, HttpStatus.NOT_FOUND.value());
         body.put(MESSAGE, ex.getMessage());
-        return new ResponseEntity<>(body, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(body, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
-
-
+    @ExceptionHandler({IOException.class})
+    protected ResponseEntity<Object> handleIOException(Exception ex){
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(STATUS, HttpStatus.CONFLICT.value());
+        body.put(MESSAGE, ex.getMessage());
+        return new ResponseEntity<>(body, new HttpHeaders(), HttpStatus.CONFLICT);
+    }
 }

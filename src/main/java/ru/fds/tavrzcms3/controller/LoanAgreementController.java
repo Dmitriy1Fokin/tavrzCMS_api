@@ -107,25 +107,13 @@ public class LoanAgreementController {
         File uploadFile = filesService.uploadFile(file, "loan_agreement_new");
         List<LoanAgreement> loanAgreementList = loanAgreementService.getNewLoanAgreementsFromFile(uploadFile);
 
-        return getPersistentLoanAgreementsDto(loanAgreementList);
+        return dtoFactory.getLoanAgreementsDto(loanAgreementList);
     }
 
     @PutMapping("/update_from_file")
     public List<LoanAgreementDto> updateLoanAgreementFromFile(@RequestParam("file") MultipartFile file) throws IOException {
         File uploadFile = filesService.uploadFile(file, "loan_agreement_update");
         List<LoanAgreement> loanAgreementList = loanAgreementService.getCurrentLoanAgreementsFromFile(uploadFile);
-
-        return getPersistentLoanAgreementsDto(loanAgreementList);
-    }
-
-    private List<LoanAgreementDto> getPersistentLoanAgreementsDto(List<LoanAgreement> loanAgreementList) {
-        for(int i = 0; i < loanAgreementList.size(); i++){
-            Set<ConstraintViolation<LoanAgreement>> violations =  validatorEntity.validateEntity(loanAgreementList.get(i));
-            if(!violations.isEmpty())
-                throw new ConstraintViolationException("object " + (i+1), violations);
-        }
-
-        loanAgreementList = loanAgreementService.updateInsertLoanAgreements(loanAgreementList);
 
         return dtoFactory.getLoanAgreementsDto(loanAgreementList);
     }

@@ -8,6 +8,7 @@ import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
 import ru.fds.tavrzcms3.dto.ClientDto;
 import ru.fds.tavrzcms3.dto.ClientIndividualDto;
 import ru.fds.tavrzcms3.dto.ClientLegalEntityDto;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.ClientManagerService;
 import ru.fds.tavrzcms3.service.EmployeeService;
 
@@ -45,8 +46,10 @@ public class ClientConverterDto implements ConverterDto<Client,ClientDto> {
         return Client.builder()
                 .clientId(dto.getClientId())
                 .typeOfClient(dto.getTypeOfClient())
-                .clientManager(clientManagerService.getClientManagerById(dto.getClientManagerId()).orElse(null))
-                .employee(employeeService.getEmployeeById(dto.getEmployeeId()).orElse(null))
+                .clientManager(clientManagerService.getClientManagerById(dto.getClientManagerId())
+                        .orElseThrow(() -> new NotFoundException("Client manager not found" )))
+                .employee(employeeService.getEmployeeById(dto.getEmployeeId())
+                        .orElseThrow(() -> new NotFoundException(("Employee not found"))))
                 .clientIndividual(clientIndividual)
                 .clientLegalEntity(clientLegalEntity)
                 .build();

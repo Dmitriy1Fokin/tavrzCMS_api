@@ -10,19 +10,24 @@ import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryInsurance;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
+import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class InsuranceService {
 
     private final RepositoryInsurance repositoryInsurance;
     private final RepositoryPledgeSubject repositoryPledgeSubject;
+    private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
 
     private static final String MSG_WRONG_ID = "Неверный id{";
@@ -30,9 +35,11 @@ public class InsuranceService {
 
     public InsuranceService(RepositoryInsurance repositoryInsurance,
                             RepositoryPledgeSubject repositoryPledgeSubject,
+                            ValidatorEntity validatorEntity,
                             ExcelColumnNum excelColumnNum) {
         this.repositoryInsurance = repositoryInsurance;
         this.repositoryPledgeSubject = repositoryPledgeSubject;
+        this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
     }
 
@@ -47,6 +54,7 @@ public class InsuranceService {
                 .orElseThrow(() -> new NullPointerException("Pledge subject not found"));
     }
 
+    @Transactional
     public List<Insurance> getNewInsurancesFromFile(File file) throws IOException{
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -70,9 +78,15 @@ public class InsuranceService {
                 .pledgeSubject(setPledgeSubjectInNewInsurance(fileImporter, countRow))
                 .build();
 
+            Set<ConstraintViolation<Insurance>> violations =  validatorEntity.validateEntity(insurance);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + countRow, violations);
+
             insuranceList.add(insurance);
 
         }while (fileImporter.nextLine());
+
+        insuranceList = updateInsertInsurances(insuranceList);
 
         return insuranceList;
     }
@@ -90,6 +104,7 @@ public class InsuranceService {
                         + MSG_LINE + countRow));
     }
 
+    @Transactional
     public List<Insurance> getCurrentInsurancesFromFile(File file) throws IOException{
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -104,8 +119,6 @@ public class InsuranceService {
 
             Insurance insurance = setCurrentInsurance(fileImporter, countRow);
 
-
-
             insurance.setNumInsurance(fileImporter.getString(excelColumnNum.getInsuranceUpdate().getNumInsurance()));
             insurance.setDateBeginInsurance(fileImporter.getLocalDate(excelColumnNum.getInsuranceUpdate().getDateBegin()));
             insurance.setDateEndInsurance(fileImporter.getLocalDate(excelColumnNum.getInsuranceUpdate().getDateEnd()));
@@ -115,9 +128,15 @@ public class InsuranceService {
             insurance.setFranchiseAmount(fileImporter.getBigDecimal(excelColumnNum.getInsuranceUpdate().getFranchiseAmount()));
             insurance.setPledgeSubject(setPledgeSubjectInCurrentInsurance(fileImporter, countRow));
 
+            Set<ConstraintViolation<Insurance>> violations =  validatorEntity.validateEntity(insurance);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + countRow, violations);
+
             insuranceList.add(insurance);
 
         }while (fileImporter.nextLine());
+
+        insuranceList = updateInsertInsurances(insuranceList);
 
         return insuranceList;
     }

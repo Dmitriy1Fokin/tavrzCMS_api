@@ -10,13 +10,17 @@ import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryEncumbrance;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
+import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class EncumbranceService {
@@ -24,6 +28,7 @@ public class EncumbranceService {
 
     private final RepositoryEncumbrance repositoryEncumbrance;
     private final RepositoryPledgeSubject repositoryPledgeSubject;
+    private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
 
     private static final String MSG_WRONG_ID = "Неверный id{";
@@ -31,9 +36,11 @@ public class EncumbranceService {
 
     public EncumbranceService(RepositoryEncumbrance repositoryEncumbrance,
                               RepositoryPledgeSubject repositoryPledgeSubject,
+                              ValidatorEntity validatorEntity,
                               ExcelColumnNum excelColumnNum) {
         this.repositoryEncumbrance = repositoryEncumbrance;
         this.repositoryPledgeSubject = repositoryPledgeSubject;
+        this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
     }
 
@@ -45,6 +52,7 @@ public class EncumbranceService {
                 .orElseThrow(() -> new NullPointerException("Pledge subject not found"));
     }
 
+    @Transactional
     public List<Encumbrance> getNewEncumbranceFromFile(File file) throws IOException{
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -57,16 +65,10 @@ public class EncumbranceService {
         do{
             countRow += 1;
 
-            TypeOfEncumbrance typeOfEncumbrance;
-            try {
-                typeOfEncumbrance = TypeOfEncumbrance.valueOf(fileImporter.getString(excelColumnNum.getEncumbranceNew().getTypeOfEncumbrance()));
-            }catch(IllegalArgumentException ex){
-                typeOfEncumbrance = null;
-            }
-
             Encumbrance encumbrance = Encumbrance.builder()
                     .nameEncumbrance(fileImporter.getString(excelColumnNum.getEncumbranceNew().getName()))
-                    .typeOfEncumbrance(typeOfEncumbrance)
+                    .typeOfEncumbrance(TypeOfEncumbrance.valueOfString(fileImporter
+                            .getString(excelColumnNum.getEncumbranceNew().getTypeOfEncumbrance())).orElse(null))
                     .inFavorOfWhom(fileImporter.getString(excelColumnNum.getEncumbranceNew().getInFavorOfWhom()))
                     .dateBegin(fileImporter.getLocalDate(excelColumnNum.getEncumbranceNew().getDateBegin()))
                     .dateEnd(fileImporter.getLocalDate(excelColumnNum.getEncumbranceNew().getDateEnd()))
@@ -74,9 +76,15 @@ public class EncumbranceService {
                     .pledgeSubject(setPledgeSubjectInNewEncumbrance(fileImporter, countRow))
                     .build();
 
+            Set<ConstraintViolation<Encumbrance>> violations =  validatorEntity.validateEntity(encumbrance);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + countRow, violations);
+
             encumbranceList.add(encumbrance);
 
         }while (fileImporter.nextLine());
+
+        encumbranceList = updateInsertEncumbrances(encumbranceList);
 
         return encumbranceList;
     }
@@ -94,6 +102,7 @@ public class EncumbranceService {
                         + MSG_LINE + countRow));
     }
 
+    @Transactional
     public List<Encumbrance> getCurrentEncumbranceFromFile(File file) throws IOException{
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -108,24 +117,24 @@ public class EncumbranceService {
 
             Encumbrance encumbrance = setCurrentEncumbrance(fileImporter, countRow);
 
-            TypeOfEncumbrance typeOfEncumbrance;
-            try {
-                typeOfEncumbrance = TypeOfEncumbrance.valueOf(fileImporter.getString(excelColumnNum.getEncumbranceUpdate().getTypeOfEncumbrance()));
-            }catch(IllegalArgumentException ex){
-                typeOfEncumbrance = null;
-            }
-
             encumbrance.setNameEncumbrance(fileImporter.getString(excelColumnNum.getEncumbranceUpdate().getName()));
-            encumbrance.setTypeOfEncumbrance(typeOfEncumbrance);
+            encumbrance.setTypeOfEncumbrance(TypeOfEncumbrance.valueOfString(fileImporter
+                    .getString(excelColumnNum.getEncumbranceUpdate().getTypeOfEncumbrance())).orElse(null));
             encumbrance.setInFavorOfWhom(fileImporter.getString(excelColumnNum.getEncumbranceUpdate().getInFavorOfWhom()));
             encumbrance.setDateBegin(fileImporter.getLocalDate(excelColumnNum.getEncumbranceUpdate().getDateBegin()));
             encumbrance.setDateEnd(fileImporter.getLocalDate(excelColumnNum.getEncumbranceUpdate().getDateEnd()));
             encumbrance.setNumOfEncumbrance(fileImporter.getString(excelColumnNum.getEncumbranceUpdate().getNumOfEncumbrance()));
             encumbrance.setPledgeSubject(setPledgeSubjectInCurrentEncumbrance(fileImporter, countRow));
 
+            Set<ConstraintViolation<Encumbrance>> violations =  validatorEntity.validateEntity(encumbrance);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + countRow, violations);
+
             encumbranceList.add(encumbrance);
 
         }while (fileImporter.nextLine());
+
+        encumbranceList = updateInsertEncumbrances(encumbranceList);
 
         return encumbranceList;
     }

@@ -65,6 +65,7 @@ public class PledgeSubjectService {
     private static final String MSG_OBJECT = "object ";
     private static final String MSG_WRONG_ID = "Неверный id{";
     private static final String MSG_LINE = "). Строка: ";
+    private static final String NOT_ALL_PLEDGE_AGREEMENTS_WERE_FOUND = "Not all pledge agreements were found";
 
     public PledgeSubjectService(RepositoryPledgeSubject repositoryPledgeSubject,
                                 RepositoryPledgeAgreement repositoryPledgeAgreement,
@@ -247,9 +248,14 @@ public class PledgeSubjectService {
                     + ") договора залога. Строка: " + countRow);
         }
 
-        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement
-                .findAllByPledgeAgreementIdIn(fileImporter
-                        .getLongList(excelColumnNum.getPledgeSubjectNew().getPledgeAgreementsIds(), excelColumnNum.getDelimiter()));
+        List<Long> ids = fileImporter
+                .getLongList(excelColumnNum.getPledgeSubjectNew().getPledgeAgreementsIds(), excelColumnNum.getDelimiter());
+        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement.findAllByPledgeAgreementIdIn(ids);
+
+        if(pledgeAgreementList.size() < ids.size()){
+            throw new IOException(NOT_ALL_PLEDGE_AGREEMENTS_WERE_FOUND);
+        }
+
         if(pledgeAgreementList.isEmpty()){
             throw new IOException("Договор залога с таким id отсутствует ("
                     + fileImporter.getLongList(excelColumnNum.getPledgeSubjectNew().getPledgeAgreementsIds(), excelColumnNum.getDelimiter())
@@ -708,9 +714,15 @@ public class PledgeSubjectService {
                     + ") договора залога. Строка: " + countRow);
         }
 
+        List<Long> ids = fileImporter
+                .getLongList(excelColumnNum.getPledgeSubjectUpdate().getPledgeAgreementsIds(), excelColumnNum.getDelimiter());
         List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement
-                .findAllByPledgeAgreementIdIn(fileImporter
-                        .getLongList(excelColumnNum.getPledgeSubjectUpdate().getPledgeAgreementsIds(), excelColumnNum.getDelimiter()));
+                .findAllByPledgeAgreementIdIn(ids);
+
+        if(pledgeAgreementList.size() < ids.size()){
+            throw new IOException(NOT_ALL_PLEDGE_AGREEMENTS_WERE_FOUND);
+        }
+
         if(pledgeAgreementList.isEmpty()){
             throw new IOException("Договор залога с таким id отсутствует ("
                     + fileImporter.getLongList(excelColumnNum.getPledgeSubjectUpdate().getPledgeAgreementsIds(), excelColumnNum.getDelimiter())
@@ -726,7 +738,7 @@ public class PledgeSubjectService {
 
         List<PledgeAgreement> pledgeAgreementListFromRequest = repositoryPledgeAgreement.findAllByPledgeAgreementIdIn(pledgeAgreementsIds);
         if(pledgeAgreementListFromRequest.size() < pledgeAgreementsIds.size()){
-            throw new NullPointerException("Not all pledge agreements were found");
+            throw new NullPointerException(NOT_ALL_PLEDGE_AGREEMENTS_WERE_FOUND);
         }
 
         List<PledgeAgreement> pledgeAgreementListFromDB = repositoryPledgeAgreement.findByPledgeSubject(pledgeSubject);

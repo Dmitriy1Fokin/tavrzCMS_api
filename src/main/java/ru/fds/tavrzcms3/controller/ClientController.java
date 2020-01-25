@@ -59,6 +59,16 @@ public class ClientController {
                 .orElseThrow(()-> new NullPointerException("Client not found"));
     }
 
+    @GetMapping("/employee")
+    public List<ClientDto> getClientsByEmployee(@RequestParam("employeeId") Long employeeId){
+        return dtoFactory.getClientsDto(clientService.getClientsByEmployee(employeeId));
+    }
+
+    @GetMapping("/client_manager")
+    public List<ClientDto> getClientsByClientManager(@RequestParam("clientManagerId") Long clientManagerId){
+        return dtoFactory.getClientsDto(clientService.getClientsByClientManager(clientManagerId));
+    }
+
     @GetMapping("/search")
     public List<ClientDto> getClientBySearchCriteria(@RequestParam Map<String, String> reqParam) throws ReflectiveOperationException {
         return dtoFactory.getClientsDto(clientService.getClientFromSearch(reqParam));
@@ -85,7 +95,7 @@ public class ClientController {
         File uploadFile = filesService.uploadFile(file, "client_legal_entity_new");
         List<Client> clientList = clientService.getNewClientsFromFile(uploadFile, TypeOfClient.LEGAL_ENTITY);
 
-        return getPersistentClientsDto(clientList);
+        return dtoFactory.getClientsDto(clientList);
     }
 
     @PostMapping(value = "insert_from_file/client_individual")
@@ -94,7 +104,7 @@ public class ClientController {
         File uploadFile = filesService.uploadFile(file, "client_individual_new");
         List<Client> clientList = clientService.getNewClientsFromFile(uploadFile, TypeOfClient.INDIVIDUAL);
 
-        return getPersistentClientsDto(clientList);
+        return dtoFactory.getClientsDto(clientList);
     }
 
     @PutMapping(value = "update_from_file/client_legal_entity")
@@ -103,7 +113,7 @@ public class ClientController {
         File uploadFile = filesService.uploadFile(file, "client_legal_entity_update");
         List<Client> clientList = clientService.getCurrentClientsFromFile(uploadFile);
 
-        return getPersistentClientsDto(clientList);
+        return dtoFactory.getClientsDto(clientList);
     }
 
     @PutMapping(value = "update_from_file/client_individual")
@@ -112,19 +122,6 @@ public class ClientController {
         File uploadFile = filesService.uploadFile(file, "client_individual_update");
         List<Client> clientList = clientService.getCurrentClientsFromFile(uploadFile);
 
-        return getPersistentClientsDto(clientList);
-    }
-
-    private List<ClientDto> getPersistentClientsDto(List<Client> clientList) {
-        for(int i = 0; i < clientList.size(); i++){
-            Set<ConstraintViolation<Client>> violations =  validatorEntity.validateEntity(clientList.get(i));
-            if(!violations.isEmpty())
-                throw new ConstraintViolationException("object " + (i+1), violations);
-        }
-
-        clientList = clientService.updateInsertClients(clientList);
-
         return dtoFactory.getClientsDto(clientList);
     }
-
 }

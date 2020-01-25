@@ -133,7 +133,7 @@ public class PledgeAgreementServiceTest {
         Employee employee = repositoryEmployee.findById(1L).orElseThrow(()-> new RuntimeException("Нет такого сотрудника"));
         TypeOfPledgeAgreement pervPosl = TypeOfPledgeAgreement.PERV;
 
-        List<Client> clientList = repositoryClient.findByEmployee(employee);
+        List<Client> clientList = repositoryClient.findByEmployee(employee.getEmployeeId());
         List<PledgeAgreement> pledgeAgreementsTest = repositoryPledgeAgreement.findByClientInAndPervPoslEqualsAndStatusPAEquals(
                 clientList,
                 pervPosl,

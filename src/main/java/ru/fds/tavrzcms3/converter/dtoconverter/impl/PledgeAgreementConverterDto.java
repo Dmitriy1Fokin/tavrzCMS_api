@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.converter.dtoconverter.ConverterDto;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.ClientService;
 import ru.fds.tavrzcms3.service.PledgeAgreementService;
 
@@ -37,7 +38,7 @@ public class PledgeAgreementConverterDto implements ConverterDto<PledgeAgreement
                 .rsDz(dto.getRsDz())
                 .rsZz(dto.getRsZz())
                 .ss(dto.getSs())
-                .client(clientService.getClientById(dto.getClientId()).orElse(null))
+                .client(clientService.getClientById(dto.getClientId()).orElseThrow(() -> new NotFoundException("Client not found")))
                 .build();
     }
 

@@ -30,8 +30,8 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     @Query("select lp.pledgeAgreement from LaJoinPa lp where lp.loanAgreement = :loanAgreement")
     List<PledgeAgreement> findByLoanAgreement(@Param("loanAgreement") LoanAgreement loanAgreement);
 
-    @Query("select lp.pledgeAgreement from LaJoinPa lp where lp.loanAgreement = :loanAgreement and lp.pledgeAgreement.statusPA = :statusPA")
-    List<PledgeAgreement> findByLoanAgreementAndStatusPA(@Param("loanAgreement") LoanAgreement loanAgreement,
+    @Query("select lp.pledgeAgreement from LaJoinPa lp where lp.loanAgreement.loanAgreementId = :loanAgreementId and lp.pledgeAgreement.statusPA = :statusPA")
+    List<PledgeAgreement> findByLoanAgreementAndStatusPA(@Param("loanAgreementId") Long loanAgreementId,
                                                          @Param("statusPA") StatusOfAgreement statusOfAgreement);
 
     @Query(nativeQuery = true, value = "select distinct ps.date_conclusion " +

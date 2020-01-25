@@ -10,19 +10,24 @@ import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryCostHistory;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
+import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CostHistoryService {
 
     private final RepositoryCostHistory repositoryCostHistory;
     private final RepositoryPledgeSubject repositoryPledgeSubject;
+    private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
 
     private static final String MSG_WRONG_ID = "Неверный id{";
@@ -30,9 +35,11 @@ public class CostHistoryService {
 
     public CostHistoryService(RepositoryCostHistory repositoryCostHistory,
                               RepositoryPledgeSubject repositoryPledgeSubject,
+                              ValidatorEntity validatorEntity,
                               ExcelColumnNum excelColumnNum) {
         this.repositoryCostHistory = repositoryCostHistory;
         this.repositoryPledgeSubject = repositoryPledgeSubject;
+        this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
     }
 
@@ -45,6 +52,7 @@ public class CostHistoryService {
         return repositoryCostHistory.findByPledgeSubject(pledgeSubjectId, sortByDateConclusion);
     }
 
+    @Transactional
     public List<CostHistory> getNewCostHistoriesFromFile(File file) throws IOException{
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -70,9 +78,15 @@ public class CostHistoryService {
                     .pledgeSubject(setPledgeSubjectInNewCostHistory(fileImporter, countRow))
                     .build();
 
+            Set<ConstraintViolation<CostHistory>> violations =  validatorEntity.validateEntity(costHistory);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + countRow, violations);
+
             costHistoryList.add(costHistory);
 
         }while (fileImporter.nextLine());
+
+        costHistoryList = updateInsertCostHistories(costHistoryList);
 
         return costHistoryList;
     }
@@ -116,9 +130,15 @@ public class CostHistoryService {
             costHistory.setAppraisalReportDate(fileImporter.getLocalDate(excelColumnNum.getCostHistoryUpdate().getDateAppraisalReport()));
             costHistory.setPledgeSubject(setPledgeSubjectInCurrentCostHistory(fileImporter, countRow));
 
+            Set<ConstraintViolation<CostHistory>> violations =  validatorEntity.validateEntity(costHistory);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + countRow, violations);
+
             costHistoryList.add(costHistory);
 
         }while (fileImporter.nextLine());
+
+        costHistoryList = updateInsertCostHistories(costHistoryList);
 
         return costHistoryList;
     }

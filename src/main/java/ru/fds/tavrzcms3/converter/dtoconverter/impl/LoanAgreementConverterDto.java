@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.converter.dtoconverter.ConverterDto;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.dto.LoanAgreementDto;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.ClientService;
 
 @Component
@@ -29,7 +30,7 @@ public class LoanAgreementConverterDto implements ConverterDto<LoanAgreement, Lo
                 .interestRateLA(dto.getInterestRateLA())
                 .pfo(dto.getPfo())
                 .qualityCategory(dto.getQualityCategory())
-                .client(clientService.getClientById(dto.getClientId()).orElse(null))
+                .client(clientService.getClientById(dto.getClientId()).orElseThrow(() -> new NotFoundException("Client not found")))
                 .build();
     }
 

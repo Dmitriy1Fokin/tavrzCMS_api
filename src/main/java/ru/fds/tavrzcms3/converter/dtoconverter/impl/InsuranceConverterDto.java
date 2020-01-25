@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.converter.dtoconverter.ConverterDto;
 import ru.fds.tavrzcms3.domain.Insurance;
 import ru.fds.tavrzcms3.dto.InsuranceDto;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 
 @Component
@@ -26,7 +27,7 @@ public class InsuranceConverterDto implements ConverterDto<Insurance, InsuranceD
                 .dateInsuranceContract(dto.getDateInsuranceContract())
                 .paymentOfInsurancePremium(dto.getPaymentOfInsurancePremium())
                 .franchiseAmount(dto.getFranchiseAmount())
-                .pledgeSubject(pledgeSubjectService.getPledgeSubjectById(dto.getPledgeSubjectId()).orElse(null))
+                .pledgeSubject(pledgeSubjectService.getPledgeSubjectById(dto.getPledgeSubjectId()).orElseThrow(() -> new NotFoundException("Pledge subject not found")))
                 .build();
     }
 

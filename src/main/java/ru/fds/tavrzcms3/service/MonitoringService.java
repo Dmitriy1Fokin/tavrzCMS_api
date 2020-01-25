@@ -13,14 +13,17 @@ import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryMonitoring;
+import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class MonitoringService {
@@ -29,6 +32,7 @@ public class MonitoringService {
     private final RepositoryMonitoring repositoryMonitoring;
     private final PledgeSubjectService pledgeSubjectService;
     private final PledgeAgreementService pledgeAgreementService;
+    private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
 
     private static final String MSG_WRONG_ID = "Неверный id{";
@@ -37,10 +41,12 @@ public class MonitoringService {
     public MonitoringService(RepositoryMonitoring repositoryMonitoring,
                              PledgeSubjectService pledgeSubjectService,
                              PledgeAgreementService pledgeAgreementService,
+                             ValidatorEntity validatorEntity,
                              ExcelColumnNum excelColumnNum) {
         this.repositoryMonitoring = repositoryMonitoring;
         this.pledgeSubjectService = pledgeSubjectService;
         this.pledgeAgreementService = pledgeAgreementService;
+        this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
     }
 
@@ -53,6 +59,7 @@ public class MonitoringService {
         return repositoryMonitoring.findByPledgeSubject(pledgeSubjectId, sortByDateMonitoring);
     }
 
+    @Transactional
     public List<Monitoring> getNewMonitoringsFromFile(File file) throws IOException{
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -65,33 +72,27 @@ public class MonitoringService {
         do{
             countRow += 1;
 
-            StatusOfMonitoring statusOfMonitoring;
-            try {
-                statusOfMonitoring = StatusOfMonitoring.valueOf(fileImporter.getString(excelColumnNum.getMonitoringNew().getStatus()));
-            }catch (IllegalArgumentException ex){
-                statusOfMonitoring = null;
-            }
-
-            TypeOfMonitoring typeOfMonitoring;
-            try {
-                typeOfMonitoring = TypeOfMonitoring.valueOf(fileImporter.getString(excelColumnNum.getMonitoringNew().getTypeOfMonitoring()));
-            }catch (IllegalArgumentException ex){
-                typeOfMonitoring = null;
-            }
-
             Monitoring monitoring = Monitoring.builder()
                     .dateMonitoring(fileImporter.getLocalDate(excelColumnNum.getMonitoringNew().getDate()))
-                    .statusMonitoring(statusOfMonitoring)
+                    .statusMonitoring(StatusOfMonitoring.valueOfString(fileImporter
+                            .getString(excelColumnNum.getMonitoringNew().getStatus())).orElse(null))
                     .employee(fileImporter.getString(excelColumnNum.getMonitoringNew().getEmployee()))
-                    .typeOfMonitoring(typeOfMonitoring)
+                    .typeOfMonitoring(TypeOfMonitoring.valueOfString(fileImporter
+                            .getString(excelColumnNum.getMonitoringNew().getTypeOfMonitoring())).orElse(null))
                     .notice(fileImporter.getString(excelColumnNum.getMonitoringNew().getNotice()))
                     .collateralValue(fileImporter.getBigDecimal(excelColumnNum.getMonitoringNew().getCollateralValue()))
                     .pledgeSubject(setPledgeSubjectInNewMonitoring(fileImporter, countRow))
                     .build();
 
+            Set<ConstraintViolation<Monitoring>> violations =  validatorEntity.validateEntity(monitoring);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + countRow, violations);
+
             monitoringList.add(monitoring);
 
         }while (fileImporter.nextLine());
+
+        monitoringList = insertMonitoringsInPledgeSubject(monitoringList);
 
         return monitoringList;
     }
@@ -110,6 +111,7 @@ public class MonitoringService {
                         + MSG_LINE + countRow));
     }
 
+    @Transactional
     public List<Monitoring> getCurrentMonitoringsFromFile(File file) throws IOException{
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -124,31 +126,25 @@ public class MonitoringService {
 
             Monitoring monitoring = setCurrentMonitoring(fileImporter, countRow);
 
-            StatusOfMonitoring statusOfMonitoring;
-            try {
-                statusOfMonitoring = StatusOfMonitoring.valueOf(fileImporter.getString(excelColumnNum.getMonitoringUpdate().getStatus()));
-            }catch (IllegalArgumentException ex){
-                statusOfMonitoring = null;
-            }
-
-            TypeOfMonitoring typeOfMonitoring;
-            try {
-                typeOfMonitoring = TypeOfMonitoring.valueOf(fileImporter.getString(excelColumnNum.getMonitoringUpdate().getTypeOfMonitoring()));
-            }catch (IllegalArgumentException ex){
-                typeOfMonitoring = null;
-            }
-
             monitoring.setDateMonitoring(fileImporter.getLocalDate(excelColumnNum.getMonitoringUpdate().getDate()));
-            monitoring.setStatusMonitoring(statusOfMonitoring);
+            monitoring.setStatusMonitoring(StatusOfMonitoring.valueOfString(fileImporter
+                    .getString(excelColumnNum.getMonitoringUpdate().getStatus())).orElse(null));
             monitoring.setEmployee(fileImporter.getString(excelColumnNum.getMonitoringUpdate().getEmployee()));
-            monitoring.setTypeOfMonitoring(typeOfMonitoring);
+            monitoring.setTypeOfMonitoring(TypeOfMonitoring.valueOfString(fileImporter
+                    .getString(excelColumnNum.getMonitoringUpdate().getTypeOfMonitoring())).orElse(null));
             monitoring.setNotice(fileImporter.getString(excelColumnNum.getMonitoringUpdate().getNotice()));
             monitoring.setCollateralValue(fileImporter.getBigDecimal(excelColumnNum.getMonitoringUpdate().getCollateralValue()));
             monitoring.setPledgeSubject(setPledgeSubjectInCurrentMonitoring(fileImporter, countRow));
 
+            Set<ConstraintViolation<Monitoring>> violations =  validatorEntity.validateEntity(monitoring);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + countRow, violations);
+
             monitoringList.add(monitoring);
 
         }while (fileImporter.nextLine());
+
+        monitoringList = insertMonitoringsInPledgeSubject(monitoringList);
 
         return monitoringList;
     }

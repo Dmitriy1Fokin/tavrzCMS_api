@@ -10,6 +10,6 @@ import java.util.Optional;
 
 public interface RepositoryClientManager extends JpaRepository<ClientManager, Long> {
 
-    @Query("select c.clientManager from Client c where c = :client")
-    Optional<ClientManager> findByClient(@Param("client") Client client);
+    @Query("select c.clientManager from Client c where c.clientId = :clientId")
+    Optional<ClientManager> findByClient(@Param("clientId") Long clientId);
 }

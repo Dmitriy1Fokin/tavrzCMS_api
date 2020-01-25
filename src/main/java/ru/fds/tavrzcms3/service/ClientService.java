@@ -17,7 +17,10 @@ import ru.fds.tavrzcms3.repository.RepositoryClient;
 import ru.fds.tavrzcms3.repository.RepositoryClientManager;
 import ru.fds.tavrzcms3.repository.RepositoryEmployee;
 import ru.fds.tavrzcms3.specification.Search;
+import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,24 +29,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ClientService {
 
-    private static final String MSG_WRONG_ID = "Неверный id{";
-    private static final String MSG_LINE = ") отсутствует. Строка: ";
     private final RepositoryClient repositoryClient;
     private final RepositoryEmployee repositoryEmployee;
     private final RepositoryClientManager repositoryClientManager;
+    private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
+
+    private static final String MSG_WRONG_ID = "Неверный id{";
+    private static final String MSG_LINE = ") отсутствует. Строка: ";
 
     public ClientService(RepositoryClient repositoryClient,
                          RepositoryEmployee repositoryEmployee,
                          RepositoryClientManager repositoryClientManager,
+                         ValidatorEntity validatorEntity,
                          ExcelColumnNum excelColumnNum) {
         this.repositoryClient = repositoryClient;
         this.repositoryEmployee = repositoryEmployee;
         this.repositoryClientManager = repositoryClientManager;
+        this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
     }
 
@@ -55,16 +63,12 @@ public class ClientService {
         return repositoryClient.findAll();
     }
 
-    public List<Client> getClientsByIds(List<Long> ids){
-        return repositoryClient.findAllByClientIdIn(ids);
+    public List<Client> getClientsByEmployee(Long employeeId){
+        return repositoryClient.findByEmployee(employeeId);
     }
 
-    public List<Client> getClientByEmployee(Employee employee){
-        return repositoryClient.findByEmployee(employee);
-    }
-
-    public List<Client> getAllClientsByClientManager(ClientManager clientManager){
-        return repositoryClient.findAllByClientManager(clientManager);
+    public List<Client> getClientsByClientManager(Long clientManagerId){
+        return repositoryClient.findAllByClientManager(clientManagerId);
     }
 
     public String getFullNameClient(long clientId){
@@ -116,6 +120,7 @@ public class ClientService {
         return repositoryClient.findAll(specification);
     }
 
+    @Transactional
     public List<Client> getNewClientsFromFile(File file, TypeOfClient typeOfClient) throws IOException {
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -137,9 +142,15 @@ public class ClientService {
             setNewClientManager(fileImporter, client, countRow);
             setNewEmployee(fileImporter, client, countRow);
 
+            Set<ConstraintViolation<Client>> violations =  validatorEntity.validateEntity(client);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + countRow, violations);
+
             clientList.add(client);
 
         }while (fileImporter.nextLine());
+
+        clientList = updateInsertClients(clientList);
 
         return clientList;
     }
@@ -200,6 +211,7 @@ public class ClientService {
     }
 
 
+    @Transactional
     public List<Client> getCurrentClientsFromFile(File file) throws IOException{
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -222,9 +234,15 @@ public class ClientService {
                 setCurrentClientIndividual(fileImporter, client);
             }
 
+            Set<ConstraintViolation<Client>> violations =  validatorEntity.validateEntity(client);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + countRow, violations);
+
             clientList.add(client);
 
         }while (fileImporter.nextLine());
+
+        clientList = updateInsertClients(clientList);
 
         return clientList;
     }

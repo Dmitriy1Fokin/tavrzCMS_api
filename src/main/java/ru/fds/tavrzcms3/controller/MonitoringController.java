@@ -17,16 +17,12 @@ import ru.fds.tavrzcms3.service.FilesService;
 import ru.fds.tavrzcms3.service.MonitoringService;
 import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
-import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/monitoring")
@@ -38,22 +34,19 @@ public class MonitoringController {
     private final ClientService clientService;
     private final FilesService filesService;
     private final DtoFactory dtoFactory;
-    private ValidatorEntity validatorEntity;
 
 
     public MonitoringController(PledgeSubjectService pledgeSubjectService,
                                 MonitoringService monitoringService,
                                 PledgeAgreementService pledgeAgreementService,
                                 ClientService clientService,
-                                FilesService filesService, DtoFactory dtoFactory,
-                                ValidatorEntity validatorEntity) {
+                                FilesService filesService, DtoFactory dtoFactory) {
         this.pledgeSubjectService = pledgeSubjectService;
         this.monitoringService = monitoringService;
         this.pledgeAgreementService = pledgeAgreementService;
         this.clientService = clientService;
         this.filesService = filesService;
         this.dtoFactory = dtoFactory;
-        this.validatorEntity = validatorEntity;
     }
 
     @GetMapping("/pledge_subject")
@@ -106,25 +99,13 @@ public class MonitoringController {
         File uploadFile = filesService.uploadFile(file, "monitoring_new");
         List<Monitoring> monitoringList = monitoringService.getNewMonitoringsFromFile(uploadFile);
 
-        return getPersistentMonitoringDto(monitoringList);
+        return dtoFactory.getMonitoringsDto(monitoringList);
     }
 
     @PutMapping("/update_from_file")
     public List<MonitoringDto> updateMonitoringFromFile(@RequestParam("file") MultipartFile file) throws IOException {
         File uploadFile = filesService.uploadFile(file, "monitoring_update");
         List<Monitoring> monitoringList = monitoringService.getCurrentMonitoringsFromFile(uploadFile);
-
-        return getPersistentMonitoringDto(monitoringList);
-    }
-
-    private List<MonitoringDto> getPersistentMonitoringDto(List<Monitoring> monitoringList) {
-        for(int i = 0; i < monitoringList.size(); i++){
-            Set<ConstraintViolation<Monitoring>> violations =  validatorEntity.validateEntity(monitoringList.get(i));
-            if(!violations.isEmpty())
-                throw new ConstraintViolationException("object " + (i+1), violations);
-        }
-
-        monitoringList = monitoringService.insertMonitoringsInPledgeSubject(monitoringList);
 
         return dtoFactory.getMonitoringsDto(monitoringList);
     }

@@ -12,17 +12,14 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.domain.ClientManager;
 import ru.fds.tavrzcms3.dto.ClientManagerDto;
 import ru.fds.tavrzcms3.dto.DtoFactory;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.ClientManagerService;
 import ru.fds.tavrzcms3.service.FilesService;
-import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/client_manager")
@@ -30,28 +27,31 @@ public class ClientManagerController {
 
     private final ClientManagerService clientManagerService;
     private final FilesService filesService;
-    private final ValidatorEntity validatorEntity;
     private final DtoFactory dtoFactory;
 
     public ClientManagerController(ClientManagerService clientManagerService,
                                    FilesService filesService,
-                                   ValidatorEntity validatorEntity,
                                    DtoFactory dtoFactory) {
         this.clientManagerService = clientManagerService;
         this.filesService = filesService;
-        this.validatorEntity = validatorEntity;
         this.dtoFactory = dtoFactory;
     }
 
     @GetMapping("/{clientManagerId}")
     public ClientManagerDto getClientManager(@PathVariable("clientManagerId") Long clientManagerId){
         return clientManagerService.getClientManagerById(clientManagerId).map(dtoFactory::getClientManagerDto)
-                .orElseThrow(()-> new NullPointerException("Client manager not found"));
+                .orElseThrow(()-> new NotFoundException("Client manager not found"));
     }
 
     @GetMapping("/all")
     public List<ClientManagerDto> getAllClientManagers(){
         return dtoFactory.getClientManagersDto(clientManagerService.getAllClientManager());
+    }
+
+    @GetMapping("/client")
+    public ClientManagerDto getClientManagerByClient(@RequestParam("clientId") Long clientId){
+        return dtoFactory.getClientManagerDto(clientManagerService.getClientManagerByClient(clientId)
+                .orElseThrow(()-> new NotFoundException("Client manager not found")));
     }
 
     @PostMapping("/insert")
@@ -72,25 +72,13 @@ public class ClientManagerController {
         File uploadFile = filesService.uploadFile(file, "client_manager_new");
         List<ClientManager> clientManagerList = clientManagerService.getNewClientManagersFromFile(uploadFile);
 
-        return getPersistentClientManagerDto(clientManagerList);
+        return dtoFactory.getClientManagersDto(clientManagerList);
     }
 
     @PutMapping("/update_from_file")
     public List<ClientManagerDto> updateClientManagerFromFile(@RequestParam("file") MultipartFile file) throws IOException {
         File uploadFile = filesService.uploadFile(file, "client_manager_update");
         List<ClientManager> clientManagerList = clientManagerService.getCurrentClientManagersFromFile(uploadFile);
-
-        return getPersistentClientManagerDto(clientManagerList);
-    }
-
-    private List<ClientManagerDto> getPersistentClientManagerDto(List<ClientManager> clientManagerList) {
-        for(int i = 0; i < clientManagerList.size(); i++){
-            Set<ConstraintViolation<ClientManager>> violations =  validatorEntity.validateEntity(clientManagerList.get(i));
-            if(!violations.isEmpty())
-                throw new ConstraintViolationException("object " + (i+1), violations);
-        }
-
-        clientManagerList = clientManagerService.updateInsertClientManagers(clientManagerList);
 
         return dtoFactory.getClientManagersDto(clientManagerList);
     }

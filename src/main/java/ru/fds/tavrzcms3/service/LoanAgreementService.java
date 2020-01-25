@@ -7,20 +7,20 @@ import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
-import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
 import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
-import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.specification.Search;
+import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -32,20 +32,20 @@ import java.util.Set;
 public class LoanAgreementService {
 
     private final RepositoryLoanAgreement repositoryLoanAgreement;
-    private final RepositoryPledgeAgreement repositoryPledgeAgreement;
     private final ClientService clientService;
+    private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
 
     private static final String MSG_WRONG_ID = "Неверный id{";
     private static final String MSG_LINE = "). Строка: ";
 
     public LoanAgreementService(RepositoryLoanAgreement repositoryLoanAgreement,
-                                RepositoryPledgeAgreement repositoryPledgeAgreement,
                                 ClientService clientService,
+                                ValidatorEntity validatorEntity,
                                 ExcelColumnNum excelColumnNum) {
         this.repositoryLoanAgreement = repositoryLoanAgreement;
-        this.repositoryPledgeAgreement = repositoryPledgeAgreement;
         this.clientService = clientService;
+        this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
     }
 
@@ -55,19 +55,11 @@ public class LoanAgreementService {
     }
 
     public List<LoanAgreement> getCurrentLoanAgreementsByPledgeAgreement(Long pledgeAgreementId){
-        Optional<PledgeAgreement> pledgeAgreement = repositoryPledgeAgreement.findById(pledgeAgreementId);
-        if(pledgeAgreement.isPresent())
-            return repositoryLoanAgreement.findByPledgeAgreementAndStatusLA(pledgeAgreement.get(), StatusOfAgreement.OPEN);
-        else
-            return Collections.emptyList();
+        return repositoryLoanAgreement.findByPledgeAgreementAndStatusLA(pledgeAgreementId, StatusOfAgreement.OPEN);
     }
 
     public List<LoanAgreement> getClosedLoanAgreementsByPledgeAgreement(Long pledgeAgreementId){
-        Optional<PledgeAgreement> pledgeAgreement = repositoryPledgeAgreement.findById(pledgeAgreementId);
-        if(pledgeAgreement.isPresent())
-            return repositoryLoanAgreement.findByPledgeAgreementAndStatusLA(pledgeAgreement.get(), StatusOfAgreement.CLOSED);
-        else
-            return Collections.emptyList();
+        return repositoryLoanAgreement.findByPledgeAgreementAndStatusLA(pledgeAgreementId, StatusOfAgreement.CLOSED);
     }
 
     public List<LoanAgreement> getAllCurrentLoanAgreements(){
@@ -107,6 +99,7 @@ public class LoanAgreementService {
         return repositoryLoanAgreement.findAll(specification);
     }
 
+    @Transactional
     public List<LoanAgreement> getNewLoanAgreementsFromFile(File file) throws IOException {
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -119,18 +112,12 @@ public class LoanAgreementService {
         do {
             countRow += 1;
 
-            StatusOfAgreement statusOfAgreement;
-            try {
-                statusOfAgreement = StatusOfAgreement.valueOf(fileImporter.getString(excelColumnNum.getLoanAgreementNew().getStatus()));
-            }catch (IllegalArgumentException ex){
-                statusOfAgreement = null;
-            }
-
             LoanAgreement loanAgreement = LoanAgreement.builder()
                     .numLA(fileImporter.getString(excelColumnNum.getLoanAgreementNew().getNumLA()))
                     .dateBeginLA(fileImporter.getLocalDate(excelColumnNum.getLoanAgreementNew().getDateBegin()))
                     .dateEndLA(fileImporter.getLocalDate(excelColumnNum.getLoanAgreementNew().getDateEnd()))
-                    .statusLA(statusOfAgreement)
+                    .statusLA(StatusOfAgreement.valueOfString(fileImporter
+                            .getString(excelColumnNum.getLoanAgreementNew().getStatus())).orElse(null))
                     .amountLA(fileImporter.getBigDecimal(excelColumnNum.getLoanAgreementNew().getAmount()))
                     .debtLA(fileImporter.getBigDecimal(excelColumnNum.getLoanAgreementNew().getDebt()))
                     .interestRateLA(fileImporter.getDouble(excelColumnNum.getLoanAgreementNew().getInterestRate()))
@@ -139,9 +126,15 @@ public class LoanAgreementService {
                     .client(setClientInNewLoanAgreement(fileImporter, countRow))
                     .build();
 
+            Set<ConstraintViolation<LoanAgreement>> violations =  validatorEntity.validateEntity(loanAgreement);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + countRow, violations);
+
             loanAgreementList.add(loanAgreement);
 
         }while (fileImporter.nextLine());
+
+        loanAgreementList = updateInsertLoanAgreements(loanAgreementList);
 
         return loanAgreementList;
     }
@@ -159,6 +152,7 @@ public class LoanAgreementService {
                         + MSG_LINE + countRow));
     }
 
+    @Transactional
     public List<LoanAgreement> getCurrentLoanAgreementsFromFile(File file) throws IOException {
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){
@@ -173,17 +167,11 @@ public class LoanAgreementService {
 
             LoanAgreement loanAgreement = setCurrentLoanAgreement(fileImporter, countRow);
 
-            StatusOfAgreement statusOfAgreement;
-            try {
-                statusOfAgreement = StatusOfAgreement.valueOf(fileImporter.getString(excelColumnNum.getLoanAgreementUpdate().getStatus()));
-            }catch (IllegalArgumentException ex){
-                statusOfAgreement = null;
-            }
-
             loanAgreement.setNumLA(fileImporter.getString(excelColumnNum.getLoanAgreementUpdate().getNumLA()));
             loanAgreement.setDateBeginLA(fileImporter.getLocalDate(excelColumnNum.getLoanAgreementUpdate().getDateBegin()));
             loanAgreement.setDateEndLA(fileImporter.getLocalDate(excelColumnNum.getLoanAgreementUpdate().getDateEnd()));
-            loanAgreement.setStatusLA(statusOfAgreement);
+            loanAgreement.setStatusLA(StatusOfAgreement.valueOfString(fileImporter
+                    .getString(excelColumnNum.getLoanAgreementUpdate().getStatus())).orElse(null));
             loanAgreement.setAmountLA(fileImporter.getBigDecimal(excelColumnNum.getLoanAgreementUpdate().getAmount()));
             loanAgreement.setDebtLA(fileImporter.getBigDecimal(excelColumnNum.getLoanAgreementUpdate().getDebt()));
             loanAgreement.setInterestRateLA(fileImporter.getDouble(excelColumnNum.getLoanAgreementUpdate().getInterestRate()));
@@ -191,9 +179,15 @@ public class LoanAgreementService {
             loanAgreement.setQualityCategory(Byte.valueOf(fileImporter.getInteger(excelColumnNum.getLoanAgreementUpdate().getQuality()).toString()));
             loanAgreement.setClient(setClientInCurrentLoanAgreement(fileImporter, countRow));
 
+            Set<ConstraintViolation<LoanAgreement>> violations =  validatorEntity.validateEntity(loanAgreement);
+            if(!violations.isEmpty())
+                throw new ConstraintViolationException("object " + countRow, violations);
+
             loanAgreementList.add(loanAgreement);
 
         }while (fileImporter.nextLine());
+
+        loanAgreementList = updateInsertLoanAgreements(loanAgreementList);
 
         return loanAgreementList;
     }

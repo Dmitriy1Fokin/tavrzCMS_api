@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.fds.tavrzcms3.converter.dtoconverter.ConverterDto;
 import ru.fds.tavrzcms3.domain.Encumbrance;
 import ru.fds.tavrzcms3.dto.EncumbranceDto;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 
 @Component
@@ -26,7 +27,8 @@ public class EncumbranceConverterDto implements ConverterDto<Encumbrance, Encumb
                 .dateBegin(dto.getDateBegin())
                 .dateEnd(dto.getDateEnd())
                 .numOfEncumbrance(dto.getNumOfEncumbrance())
-                .pledgeSubject(pledgeSubjectService.getPledgeSubjectById(dto.getPledgeSubjectId()).orElse(null))
+                .pledgeSubject(pledgeSubjectService.getPledgeSubjectById(dto.getPledgeSubjectId())
+                        .orElseThrow(() -> new NotFoundException("Pledge subject not found")))
                 .build();
     }
 
