@@ -29,6 +29,7 @@ import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectRoom;
 import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectSecurities;
 import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectTBO;
 import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectVessel;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryCostHistory;
@@ -784,7 +785,7 @@ public class PledgeSubjectService {
 
     @Transactional
     public PledgeSubject insertPledgeSubject(PledgeSubject pledgeSubject,
-                                             List<PledgeAgreement> pledgeAgreementList,
+                                             List<Long> pledgeAgreementsIds,
                                              CostHistory costHistory,
                                              Monitoring monitoring){
 
@@ -795,6 +796,11 @@ public class PledgeSubjectService {
 
         monitoring.setPledgeSubject(pledgeSubject);
         repositoryMonitoring.save(monitoring);
+
+        List<PledgeAgreement> pledgeAgreementList = repositoryPledgeAgreement.findAllByPledgeAgreementIdIn(pledgeAgreementsIds);
+        if(pledgeAgreementList.size() < pledgeAgreementsIds.size()){
+            throw new NotFoundException(NOT_ALL_PLEDGE_AGREEMENTS_WERE_FOUND);
+        }
 
         List<PaJoinPs> paJoinPsList = new ArrayList<>(pledgeAgreementList.size());
         for(PledgeAgreement pledgeAgreement : pledgeAgreementList) {

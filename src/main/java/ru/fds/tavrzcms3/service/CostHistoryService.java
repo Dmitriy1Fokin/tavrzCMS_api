@@ -105,6 +105,7 @@ public class CostHistoryService {
                         + MSG_LINE + countRow));
     }
 
+    @Transactional
     public List<CostHistory> getCurrentCostHistoriesFromFile(File file) throws IOException{
         FileImporter fileImporter = FileImporterFactory.getInstance(file);
         for(int i = 0; i < excelColumnNum.getStartRow(); i++){

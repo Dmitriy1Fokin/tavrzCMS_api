@@ -17,16 +17,12 @@ import ru.fds.tavrzcms3.dto.ClientDto;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.service.ClientService;
 import ru.fds.tavrzcms3.service.FilesService;
-import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/client")
@@ -34,16 +30,13 @@ public class ClientController {
 
     private final ClientService clientService;
     private final FilesService filesService;
-    private final ValidatorEntity validatorEntity;
     private final DtoFactory dtoFactory;
 
     public ClientController(ClientService clientService,
                             FilesService filesService,
-                            ValidatorEntity validatorEntity,
                             DtoFactory dtoFactory) {
         this.clientService = clientService;
         this.filesService = filesService;
-        this.validatorEntity = validatorEntity;
         this.dtoFactory = dtoFactory;
     }
 

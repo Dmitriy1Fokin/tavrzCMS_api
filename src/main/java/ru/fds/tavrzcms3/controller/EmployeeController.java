@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.EmployeeDto;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.EmployeeService;
 
 import javax.validation.Valid;
@@ -32,7 +33,7 @@ public class EmployeeController {
     @GetMapping("/{employeeId}")
     public EmployeeDto getEmployee(@PathVariable("employeeId") Long employeeId){
         return employeeService.getEmployeeById(employeeId).map(dtoFactory::getEmployeeDto)
-                .orElseThrow(()-> new NullPointerException("Employee not found"));
+                .orElseThrow(()-> new NotFoundException("Employee not found"));
     }
 
     @GetMapping("/all")

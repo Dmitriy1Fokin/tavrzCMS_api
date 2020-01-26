@@ -12,6 +12,7 @@ import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.Monitoring;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.MonitoringDto;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.ClientService;
 import ru.fds.tavrzcms3.service.FilesService;
 import ru.fds.tavrzcms3.service.MonitoringService;
@@ -61,7 +62,7 @@ public class MonitoringController {
         Monitoring monitoring = dtoFactory.getMonitoringEntity(monitoringDto);
 
         monitoring.setPledgeSubject(pledgeSubjectService.getPledgeSubjectById(pledgeSubjectId)
-                .orElseThrow(() -> new NullPointerException("Pledge subject not found")));
+                .orElseThrow(() -> new NotFoundException("Pledge subject not found")));
 
         monitoring = monitoringService.insertMonitoringInPledgeSubject(monitoring);
 
@@ -76,7 +77,7 @@ public class MonitoringController {
 
         List<Monitoring> monitoringList = monitoringService
                 .insertMonitoringInPledgeAgreement(pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId)
-                        .orElseThrow(() -> new NullPointerException("Pledge agreement not found")), monitoring);
+                        .orElseThrow(() -> new NotFoundException("Pledge agreement not found")), monitoring);
 
         return dtoFactory.getMonitoringsDto(monitoringList);
     }
@@ -89,7 +90,7 @@ public class MonitoringController {
         Optional<Client> client = clientService.getClientById(clienttId);
 
         List<Monitoring> monitoringList = monitoringService.insertMonitoringInPledgor(client
-                .orElseThrow(() -> new NullPointerException("Client not found")), monitoring);
+                .orElseThrow(() -> new NotFoundException("Client not found")), monitoring);
 
         return dtoFactory.getMonitoringsDto(monitoringList);
     }

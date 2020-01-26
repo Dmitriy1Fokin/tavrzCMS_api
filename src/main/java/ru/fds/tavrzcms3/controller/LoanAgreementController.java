@@ -12,18 +12,15 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.LoanAgreementDto;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.FilesService;
 import ru.fds.tavrzcms3.service.LoanAgreementService;
-import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/loan_agreement")
@@ -32,23 +29,20 @@ public class LoanAgreementController {
     private final LoanAgreementService loanAgreementService;
     private final FilesService filesService;
     private final DtoFactory dtoFactory;
-    private final ValidatorEntity validatorEntity;
 
 
     public LoanAgreementController(LoanAgreementService loanAgreementService,
                                    FilesService filesService,
-                                   DtoFactory dtoFactory,
-                                   ValidatorEntity validatorEntity) {
+                                   DtoFactory dtoFactory) {
         this.loanAgreementService = loanAgreementService;
         this.filesService = filesService;
         this.dtoFactory = dtoFactory;
-        this.validatorEntity = validatorEntity;
     }
 
     @GetMapping("/{loanAgreementId}")
     public LoanAgreementDto getLoanAgreement(@PathVariable("loanAgreementId") Long loanAgreementId){
         return loanAgreementService.getLoanAgreementById(loanAgreementId).map(dtoFactory::getLoanAgreementDto)
-                .orElseThrow(()-> new NullPointerException("Loan agreement not found"));
+                .orElseThrow(()-> new NotFoundException("Loan agreement not found"));
     }
 
     @GetMapping("/current")
