@@ -213,4 +213,9 @@ public class MonitoringService {
 
         return monitoringList;
     }
+
+    @Transactional
+    public Monitoring updateMonitoring(Monitoring monitoring){
+        return repositoryMonitoring.save(monitoring);
+    }
 }

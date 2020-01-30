@@ -86,14 +86,16 @@ public class LoanAgreementController {
 
     @PostMapping("/insert")
     public LoanAgreementDto insertLoanAgreement(@Valid @RequestBody LoanAgreementDto loanAgreementDto){
-        LoanAgreement loanAgreement = loanAgreementService.updateInsertLoanAgreement(dtoFactory.getLoanAgreementEntity(loanAgreementDto));
+        LoanAgreement loanAgreement = loanAgreementService.insertLoanAgreement(dtoFactory.getLoanAgreementEntity(loanAgreementDto));
 
         return dtoFactory.getLoanAgreementDto(loanAgreement);
     }
 
     @PutMapping("/update")
     public LoanAgreementDto updateLoanAgreement(@Valid @RequestBody LoanAgreementDto loanAgreementDto){
-        return insertLoanAgreement(loanAgreementDto);
+        LoanAgreement loanAgreement = loanAgreementService.updateLoanAgreement(dtoFactory.getLoanAgreementEntity(loanAgreementDto));
+
+        return dtoFactory.getLoanAgreementDto(loanAgreement);
     }
 
     @PostMapping("/insert_from_file")

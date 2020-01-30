@@ -7,11 +7,13 @@ import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
+import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
 import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
+import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.specification.Search;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
@@ -32,6 +34,7 @@ import java.util.Set;
 public class LoanAgreementService {
 
     private final RepositoryLoanAgreement repositoryLoanAgreement;
+    private final RepositoryPledgeAgreement repositoryPledgeAgreement;
     private final ClientService clientService;
     private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
@@ -40,10 +43,12 @@ public class LoanAgreementService {
     private static final String MSG_LINE = "). Строка: ";
 
     public LoanAgreementService(RepositoryLoanAgreement repositoryLoanAgreement,
+                                RepositoryPledgeAgreement repositoryPledgeAgreement,
                                 ClientService clientService,
                                 ValidatorEntity validatorEntity,
                                 ExcelColumnNum excelColumnNum) {
         this.repositoryLoanAgreement = repositoryLoanAgreement;
+        this.repositoryPledgeAgreement = repositoryPledgeAgreement;
         this.clientService = clientService;
         this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
@@ -220,7 +225,12 @@ public class LoanAgreementService {
 
 
     @Transactional
-    public LoanAgreement updateInsertLoanAgreement(LoanAgreement loanAgreement){
+    public LoanAgreement insertLoanAgreement(LoanAgreement loanAgreement){
+        return repositoryLoanAgreement.save(loanAgreement);
+    }
+
+    @Transactional
+    public LoanAgreement updateLoanAgreement(LoanAgreement loanAgreement){
         return repositoryLoanAgreement.save(loanAgreement);
     }
 

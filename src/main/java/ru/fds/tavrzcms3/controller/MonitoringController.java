@@ -103,6 +103,13 @@ public class MonitoringController {
         return dtoFactory.getMonitoringsDto(monitoringList);
     }
 
+    @PutMapping("/update")
+    public MonitoringDto updateMonitoring(@Valid @RequestBody MonitoringDto monitoringDto){
+        Monitoring monitoring = monitoringService.updateMonitoring(dtoFactory.getMonitoringEntity(monitoringDto));
+
+        return dtoFactory.getMonitoringDto(monitoring);
+    }
+
     @PutMapping("/update_from_file")
     public List<MonitoringDto> updateMonitoringFromFile(@RequestParam("file") MultipartFile file) throws IOException {
         File uploadFile = filesService.uploadFile(file, "monitoring_update");
