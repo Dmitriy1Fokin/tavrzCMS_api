@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.service;
 
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,7 +8,6 @@ import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
 import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
-import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
 import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
@@ -38,6 +38,7 @@ public class LoanAgreementService {
     private final ClientService clientService;
     private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
+    private final AmqpTemplate amqpTemplate;
 
     private static final String MSG_WRONG_ID = "Неверный id{";
     private static final String MSG_LINE = "). Строка: ";
@@ -46,12 +47,14 @@ public class LoanAgreementService {
                                 RepositoryPledgeAgreement repositoryPledgeAgreement,
                                 ClientService clientService,
                                 ValidatorEntity validatorEntity,
-                                ExcelColumnNum excelColumnNum) {
+                                ExcelColumnNum excelColumnNum,
+                                AmqpTemplate amqpTemplate) {
         this.repositoryLoanAgreement = repositoryLoanAgreement;
         this.repositoryPledgeAgreement = repositoryPledgeAgreement;
         this.clientService = clientService;
         this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
+        this.amqpTemplate = amqpTemplate;
     }
 
 
@@ -226,7 +229,9 @@ public class LoanAgreementService {
 
     @Transactional
     public LoanAgreement insertLoanAgreement(LoanAgreement loanAgreement){
-        return repositoryLoanAgreement.save(loanAgreement);
+        loanAgreement = repositoryLoanAgreement.saveAndFlush(loanAgreement);
+        amqpTemplate.convertAndSend("queueAuditNewLoanAgreement", loanAgreement.getLoanAgreementId());
+        return loanAgreement;
     }
 
     @Transactional
