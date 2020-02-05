@@ -22,6 +22,7 @@ import ru.fds.tavrzcms3.repository.RepositoryPaJoinPs;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
 import ru.fds.tavrzcms3.service.ClientService;
+import ru.fds.tavrzcms3.service.MessageService;
 import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.specification.Search;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
@@ -55,19 +56,21 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     private final ClientService clientService;
     private final ExcelColumnNum excelColumnNum;
     private final ValidatorEntity validatorEntity;
+    private final MessageService messageService;
 
     private static final String MSG_WRONG_ID = "Неверный id{";
     private static final String MSG_LINE = "). Строка: ";
     private static final String NOT_ALL_LOAN_AGREEMENTS_WERE_FOUND = "Not all loan agreements were found";
 
     public PledgeAgreementServiceImpl(RepositoryPledgeAgreement repositoryPledgeAgreement,
-                                  RepositoryLoanAgreement repositoryLoanAgreement,
-                                  RepositoryPledgeSubject repositoryPledgeSubject,
-                                  RepositoryPaJoinPs repositoryPaJoinPs,
-                                  RepositoryLaJoinPa repositoryLaJoinPa,
-                                  ClientService clientService,
-                                  ExcelColumnNum excelColumnNum,
-                                  ValidatorEntity validatorEntity) {
+                                      RepositoryLoanAgreement repositoryLoanAgreement,
+                                      RepositoryPledgeSubject repositoryPledgeSubject,
+                                      RepositoryPaJoinPs repositoryPaJoinPs,
+                                      RepositoryLaJoinPa repositoryLaJoinPa,
+                                      ClientService clientService,
+                                      ExcelColumnNum excelColumnNum,
+                                      ValidatorEntity validatorEntity,
+                                      MessageService messageService) {
         this.repositoryPledgeAgreement = repositoryPledgeAgreement;
         this.repositoryLoanAgreement = repositoryLoanAgreement;
         this.repositoryPledgeSubject = repositoryPledgeSubject;
@@ -76,6 +79,7 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
         this.clientService = clientService;
         this.excelColumnNum = excelColumnNum;
         this.validatorEntity = validatorEntity;
+        this.messageService = messageService;
     }
 
     @Override
@@ -298,7 +302,7 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
 
         }while (fileImporter.nextLine());
 
-        pledgeAgreementList = insertUpdatePledgeAgreements(pledgeAgreementList, loanAgreementsList);
+        pledgeAgreementList = insertPledgeAgreements(pledgeAgreementList, loanAgreementsList);
 
         return pledgeAgreementList;
     }
@@ -374,7 +378,7 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
 
         }while (fileImporter.nextLine());
 
-        pledgeAgreementList = insertUpdatePledgeAgreements(pledgeAgreementList, loanAgreementsList);
+        pledgeAgreementList = updatePledgeAgreements(pledgeAgreementList, loanAgreementsList);
 
         return pledgeAgreementList;
     }
@@ -431,7 +435,29 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
 
     @Override
     @Transactional
-    public PledgeAgreement insertUpdatePledgeAgreement(PledgeAgreement pledgeAgreement, List<Long> loanAgreementsIds){
+    public PledgeAgreement insertPledgeAgreement(PledgeAgreement pledgeAgreement, List<Long> loanAgreementsIds){
+        pledgeAgreement = repositoryPledgeAgreement.save(pledgeAgreement);
+
+        List<LoanAgreement> loanAgreementList = repositoryLoanAgreement.findAllByLoanAgreementIdIn(loanAgreementsIds);
+        if(loanAgreementList.size() < loanAgreementsIds.size()){
+            throw new NullPointerException(NOT_ALL_LOAN_AGREEMENTS_WERE_FOUND);
+        }
+
+        List<LaJoinPa> laJoinPaList = new ArrayList<>();
+        for (LoanAgreement agreement : loanAgreementList) {
+            laJoinPaList.add(new LaJoinPa(agreement, pledgeAgreement));
+        }
+
+        repositoryLaJoinPa.saveAll(laJoinPaList);
+
+        messageService.sendNewPledgeAgreement(pledgeAgreement.getPledgeAgreementId());
+
+        return pledgeAgreement;
+    }
+
+    @Override
+    @Transactional
+    public PledgeAgreement updatePledgeAgreement(PledgeAgreement pledgeAgreement, List<Long> loanAgreementsIds){
         pledgeAgreement = repositoryPledgeAgreement.save(pledgeAgreement);
 
         List<LoanAgreement> loanAgreementListFromDB = repositoryLoanAgreement.findByPledgeAgreement(pledgeAgreement);
@@ -452,13 +478,35 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
         }
         repositoryLaJoinPa.saveAll(laJoinPaList);
 
+        messageService.sendExistPledgeAgreement(pledgeAgreement.getPledgeAgreementId());
+
         return pledgeAgreement;
     }
 
     @Override
     @Transactional
-    public List<PledgeAgreement> insertUpdatePledgeAgreements(List<PledgeAgreement> pledgeAgreementList,
-                                                              List<List<LoanAgreement>> loanAgreementsList){
+    public List<PledgeAgreement> insertPledgeAgreements(List<PledgeAgreement> pledgeAgreementList,
+                                                        List<List<LoanAgreement>> loanAgreementsList){
+
+        pledgeAgreementList = repositoryPledgeAgreement.saveAll(pledgeAgreementList);
+        List<LaJoinPa> laJoinPaList = new ArrayList<>();
+        pledgeAgreementList.forEach(pledgeAgreement ->
+                loanAgreementsList.forEach(loanAgreementList ->
+                        loanAgreementList.forEach(loanAgreement ->
+                                laJoinPaList.add(new LaJoinPa(loanAgreement, pledgeAgreement)))));
+
+        repositoryLaJoinPa.saveAll(laJoinPaList);
+
+        pledgeAgreementList.forEach(pledgeAgreement -> messageService.sendNewPledgeAgreement(pledgeAgreement.getPledgeAgreementId()));
+
+        return pledgeAgreementList;
+    }
+
+
+    @Override
+    @Transactional
+    public List<PledgeAgreement> updatePledgeAgreements(List<PledgeAgreement> pledgeAgreementList,
+                                                        List<List<LoanAgreement>> loanAgreementsList){
 
         pledgeAgreementList = repositoryPledgeAgreement.saveAll(pledgeAgreementList);
         List<LaJoinPa> laJoinPaList = new ArrayList<>();
@@ -476,6 +524,8 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
         }
 
         repositoryLaJoinPa.saveAll(laJoinPaList);
+
+        pledgeAgreementList.forEach(pledgeAgreement -> messageService.sendExistPledgeAgreement(pledgeAgreement.getPledgeAgreementId()));
 
         return pledgeAgreementList;
     }

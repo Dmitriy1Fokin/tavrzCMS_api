@@ -33,5 +33,7 @@ public interface LoanAgreementService {
 
     LoanAgreement updateLoanAgreement(LoanAgreement loanAgreement);
 
-    List<LoanAgreement> updateInsertLoanAgreements(List<LoanAgreement> loanAgreementList);
+    List<LoanAgreement> insertLoanAgreements(List<LoanAgreement> loanAgreementList);
+
+    List<LoanAgreement> updateLoanAgreements(List<LoanAgreement> loanAgreementList);
 }

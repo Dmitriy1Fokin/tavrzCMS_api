@@ -64,9 +64,14 @@ public interface PledgeAgreementService {
 
     List<PledgeAgreement> getCurrentPledgeAgreementsFromFile(File file) throws IOException;
 
-    PledgeAgreement insertUpdatePledgeAgreement(PledgeAgreement pledgeAgreement, List<Long> loanAgreementsIds);
+    PledgeAgreement insertPledgeAgreement(PledgeAgreement pledgeAgreement, List<Long> loanAgreementsIds);
 
-    List<PledgeAgreement> insertUpdatePledgeAgreements(List<PledgeAgreement> pledgeAgreementList,
+    PledgeAgreement updatePledgeAgreement(PledgeAgreement pledgeAgreement, List<Long> loanAgreementsIds);
+
+    List<PledgeAgreement> insertPledgeAgreements(List<PledgeAgreement> pledgeAgreementList,
+                                                       List<List<LoanAgreement>> loanAgreementsList);
+
+    List<PledgeAgreement> updatePledgeAgreements(List<PledgeAgreement> pledgeAgreementList,
                                                        List<List<LoanAgreement>> loanAgreementsList);
 
     PledgeAgreement withdrawPledgeSubjectFromPledgeAgreement(Long pledgeAgreementId, Long pledgeSubjectId);

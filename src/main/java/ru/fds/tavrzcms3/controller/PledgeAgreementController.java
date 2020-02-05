@@ -152,14 +152,20 @@ public class PledgeAgreementController {
         List<Long> loanAgreementsIds = pledgeAgreementDtoWrapper.getLoanAgreementsIds();
 
         pledgeAgreement = pledgeAgreementService
-                .insertUpdatePledgeAgreement(pledgeAgreement, loanAgreementsIds);
+                .insertPledgeAgreement(pledgeAgreement, loanAgreementsIds);
 
         return dtoFactory.getPledgeAgreementDto(pledgeAgreement);
     }
 
     @PutMapping("/update")
     public PledgeAgreementDto updatePledgeAgreement(@Valid @RequestBody PledgeAgreementDtoWrapper pledgeAgreementDtoWrapper){
-        return insertPledgeAgreement(pledgeAgreementDtoWrapper);
+        PledgeAgreement pledgeAgreement = dtoFactory.getPledgeAgreementEntity(pledgeAgreementDtoWrapper.getPledgeAgreementDto());
+        List<Long> loanAgreementsIds = pledgeAgreementDtoWrapper.getLoanAgreementsIds();
+
+        pledgeAgreement = pledgeAgreementService
+                .updatePledgeAgreement(pledgeAgreement, loanAgreementsIds);
+
+        return dtoFactory.getPledgeAgreementDto(pledgeAgreement);
     }
 
     @PostMapping("/insert/file")

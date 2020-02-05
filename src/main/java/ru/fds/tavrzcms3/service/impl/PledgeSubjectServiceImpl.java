@@ -37,6 +37,7 @@ import ru.fds.tavrzcms3.repository.RepositoryMonitoring;
 import ru.fds.tavrzcms3.repository.RepositoryPaJoinPs;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeSubject;
+import ru.fds.tavrzcms3.service.MessageService;
 import ru.fds.tavrzcms3.service.PledgeSubjectService;
 import ru.fds.tavrzcms3.specification.Search;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
@@ -63,6 +64,7 @@ public class PledgeSubjectServiceImpl implements PledgeSubjectService {
     private final RepositoryPaJoinPs repositoryPaJoinPs;
     private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
+    private final MessageService messageService;
 
     private static final String MSG_OBJECT = "object ";
     private static final String MSG_WRONG_ID = "Неверный id{";
@@ -70,12 +72,13 @@ public class PledgeSubjectServiceImpl implements PledgeSubjectService {
     private static final String NOT_ALL_PLEDGE_AGREEMENTS_WERE_FOUND = "Not all pledge agreements were found";
 
     public PledgeSubjectServiceImpl(RepositoryPledgeSubject repositoryPledgeSubject,
-                                RepositoryPledgeAgreement repositoryPledgeAgreement,
-                                RepositoryCostHistory repositoryCostHistory,
-                                RepositoryMonitoring repositoryMonitoring,
-                                RepositoryPaJoinPs repositoryPaJoinPs,
-                                ValidatorEntity validatorEntity,
-                                ExcelColumnNum excelColumnNum) {
+                                    RepositoryPledgeAgreement repositoryPledgeAgreement,
+                                    RepositoryCostHistory repositoryCostHistory,
+                                    RepositoryMonitoring repositoryMonitoring,
+                                    RepositoryPaJoinPs repositoryPaJoinPs,
+                                    ValidatorEntity validatorEntity,
+                                    ExcelColumnNum excelColumnNum,
+                                    MessageService messageService) {
         this.repositoryPledgeSubject = repositoryPledgeSubject;
         this.repositoryPledgeAgreement = repositoryPledgeAgreement;
         this.repositoryCostHistory = repositoryCostHistory;
@@ -83,6 +86,7 @@ public class PledgeSubjectServiceImpl implements PledgeSubjectService {
         this.repositoryPaJoinPs = repositoryPaJoinPs;
         this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
+        this.messageService = messageService;
     }
 
     @Override
@@ -766,6 +770,8 @@ public class PledgeSubjectServiceImpl implements PledgeSubjectService {
 
         repositoryPaJoinPs.saveAll(paJoinPsList);
 
+        messageService.sendNewPledgeSubject(pledgeSubject.getPledgeSubjectId());
+
         return pledgeSubject;
     }
 
@@ -790,6 +796,8 @@ public class PledgeSubjectServiceImpl implements PledgeSubjectService {
         }
 
         repositoryPaJoinPs.saveAll(paJoinPsList);
+
+        pledgeSubjectList.forEach(pledgeSubject -> messageService.sendExistPledgeSubject(pledgeSubject.getPledgeSubjectId()));
 
         return pledgeSubjectList;
     }
@@ -820,6 +828,8 @@ public class PledgeSubjectServiceImpl implements PledgeSubjectService {
         }
         repositoryPaJoinPs.saveAll(paJoinPsList);
 
+        messageService.sendNewPledgeSubject(pledgeSubject.getPledgeSubjectId());
+
         return pledgeSubject;
     }
 
@@ -844,6 +854,8 @@ public class PledgeSubjectServiceImpl implements PledgeSubjectService {
         repositoryCostHistory.saveAll(costHistoryList);
         repositoryMonitoring.saveAll(monitoringList);
         repositoryPaJoinPs.saveAll(paJoinPsList);
+
+        pledgeSubjectList.forEach(pledgeSubject -> messageService.sendNewPledgeSubject(pledgeSubject.getPledgeSubjectId()));
 
         return pledgeSubjectList;
     }

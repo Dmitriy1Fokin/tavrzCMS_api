@@ -1,6 +1,5 @@
 package ru.fds.tavrzcms3.service.impl;
 
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +15,7 @@ import ru.fds.tavrzcms3.repository.RepositoryLoanAgreement;
 import ru.fds.tavrzcms3.repository.RepositoryPledgeAgreement;
 import ru.fds.tavrzcms3.service.ClientService;
 import ru.fds.tavrzcms3.service.LoanAgreementService;
+import ru.fds.tavrzcms3.service.MessageService;
 import ru.fds.tavrzcms3.specification.Search;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
@@ -40,23 +40,23 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
     private final ClientService clientService;
     private final ValidatorEntity validatorEntity;
     private final ExcelColumnNum excelColumnNum;
-    private final AmqpTemplate amqpTemplate;
+    private final MessageService messageService;
 
     private static final String MSG_WRONG_ID = "Неверный id{";
     private static final String MSG_LINE = "). Строка: ";
 
     public LoanAgreementServiceImpl(RepositoryLoanAgreement repositoryLoanAgreement,
-                                RepositoryPledgeAgreement repositoryPledgeAgreement,
-                                ClientService clientService,
-                                ValidatorEntity validatorEntity,
-                                ExcelColumnNum excelColumnNum,
-                                AmqpTemplate amqpTemplate) {
+                                    RepositoryPledgeAgreement repositoryPledgeAgreement,
+                                    ClientService clientService,
+                                    ValidatorEntity validatorEntity,
+                                    ExcelColumnNum excelColumnNum,
+                                    MessageService messageService) {
         this.repositoryLoanAgreement = repositoryLoanAgreement;
         this.repositoryPledgeAgreement = repositoryPledgeAgreement;
         this.clientService = clientService;
         this.validatorEntity = validatorEntity;
         this.excelColumnNum = excelColumnNum;
-        this.amqpTemplate = amqpTemplate;
+        this.messageService = messageService;
     }
 
 
@@ -153,7 +153,7 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
 
         }while (fileImporter.nextLine());
 
-        loanAgreementList = updateInsertLoanAgreements(loanAgreementList);
+        loanAgreementList = insertLoanAgreements(loanAgreementList);
 
         return loanAgreementList;
     }
@@ -207,7 +207,7 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
 
         }while (fileImporter.nextLine());
 
-        loanAgreementList = updateInsertLoanAgreements(loanAgreementList);
+        loanAgreementList = updateLoanAgreements(loanAgreementList);
 
         return loanAgreementList;
     }
@@ -243,20 +243,32 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
     @Transactional
     public LoanAgreement insertLoanAgreement(LoanAgreement loanAgreement){
         loanAgreement = repositoryLoanAgreement.saveAndFlush(loanAgreement);
-        amqpTemplate.convertAndSend("queue_audit_new_loan_agreement", loanAgreement.getLoanAgreementId());
+        messageService.sendNewLoanAgreement(loanAgreement.getLoanAgreementId());
         return loanAgreement;
     }
 
     @Override
     @Transactional
     public LoanAgreement updateLoanAgreement(LoanAgreement loanAgreement){
-        return repositoryLoanAgreement.save(loanAgreement);
+        loanAgreement = repositoryLoanAgreement.save(loanAgreement);
+        messageService.sendExistLoanAgreement(loanAgreement.getLoanAgreementId());
+        return loanAgreement;
     }
 
     @Override
     @Transactional
-    public List<LoanAgreement> updateInsertLoanAgreements(List<LoanAgreement> loanAgreementList){
-        return repositoryLoanAgreement.saveAll(loanAgreementList);
+    public List<LoanAgreement> insertLoanAgreements(List<LoanAgreement> loanAgreementList){
+        loanAgreementList = repositoryLoanAgreement.saveAll(loanAgreementList);
+        loanAgreementList.forEach(loanAgreement ->  messageService.sendNewLoanAgreement(loanAgreement.getLoanAgreementId()));
+        return loanAgreementList;
+    }
+
+    @Override
+    @Transactional
+    public List<LoanAgreement> updateLoanAgreements(List<LoanAgreement> loanAgreementList){
+        loanAgreementList = repositoryLoanAgreement.saveAll(loanAgreementList);
+        loanAgreementList.forEach(loanAgreement -> messageService.sendExistLoanAgreement(loanAgreement.getLoanAgreementId()));
+        return loanAgreementList;
     }
 
 
