@@ -30,6 +30,7 @@ import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectSecurities;
 import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectTBO;
 import ru.fds.tavrzcms3.domain.embedded.PledgeSubjectVessel;
 import ru.fds.tavrzcms3.exception.NotFoundException;
+import ru.fds.tavrzcms3.exception.NotFullResultException;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryCostHistory;
@@ -753,7 +754,7 @@ public class PledgeSubjectServiceImpl implements PledgeSubjectService {
 
         List<PledgeAgreement> pledgeAgreementListFromRequest = repositoryPledgeAgreement.findAllByPledgeAgreementIdIn(pledgeAgreementsIds);
         if(pledgeAgreementListFromRequest.size() < pledgeAgreementsIds.size()){
-            throw new NullPointerException(NOT_ALL_PLEDGE_AGREEMENTS_WERE_FOUND);
+            throw new NotFullResultException(NOT_ALL_PLEDGE_AGREEMENTS_WERE_FOUND);
         }
 
         List<PledgeAgreement> pledgeAgreementListFromDB = repositoryPledgeAgreement.findByPledgeSubject(pledgeSubject);

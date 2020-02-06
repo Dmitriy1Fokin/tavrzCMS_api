@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.fds.tavrzcms3.domain.AppRole;
 import ru.fds.tavrzcms3.domain.AppUser;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.repository.RepositoryAppRole;
 import ru.fds.tavrzcms3.repository.RepositoryAppUser;
 import ru.fds.tavrzcms3.service.AppUserDetailsService;
@@ -30,7 +31,7 @@ public class AppUserDetailsServiceImpl implements AppUserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String name){
         AppUser appUser = repositoryAppUser.findByName(name)
-                .orElseThrow(() -> new NullPointerException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         List<AppRole> appRoleList = repositoryAppRole.findByAppUser(appUser);
         List<GrantedAuthority> authorityList = new ArrayList<>();

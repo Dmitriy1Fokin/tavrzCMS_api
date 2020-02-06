@@ -13,6 +13,7 @@ import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.PledgeAgreementDto;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.FilesService;
 import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.wrapper.PledgeAgreementDtoWrapper;
@@ -42,7 +43,7 @@ public class PledgeAgreementController {
     @GetMapping("/{pledgeAgreementId}")
     public PledgeAgreementDto getPledgeAgreement(@PathVariable("pledgeAgreementId") Long pledgeAgreementId){
         return pledgeAgreementService.getPledgeAgreementById(pledgeAgreementId).map(dtoFactory::getPledgeAgreementDto)
-                .orElseThrow(()-> new NullPointerException("Pledge agreement not found"));
+                .orElseThrow(()-> new NotFoundException("Pledge agreement not found"));
     }
 
     @GetMapping("/current")

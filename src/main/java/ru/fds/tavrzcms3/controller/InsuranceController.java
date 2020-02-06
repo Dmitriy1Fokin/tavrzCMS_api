@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.domain.Insurance;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.InsuranceDto;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.FilesService;
 import ru.fds.tavrzcms3.service.InsuranceService;
 
@@ -40,7 +41,7 @@ public class InsuranceController {
     @GetMapping("/{insuranceId}")
     public InsuranceDto getInsurance(@PathVariable("insuranceId") Long insuranceId){
         return insuranceService.getInsuranceById(insuranceId).map(dtoFactory::getInsuranceDto)
-                .orElseThrow(()-> new NullPointerException("Insurance not found"));
+                .orElseThrow(()-> new NotFoundException("Insurance not found"));
     }
 
     @GetMapping("pledge_subject")

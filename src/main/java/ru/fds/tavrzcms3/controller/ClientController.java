@@ -15,6 +15,7 @@ import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.dto.ClientDto;
 import ru.fds.tavrzcms3.dto.DtoFactory;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.ClientService;
 import ru.fds.tavrzcms3.service.FilesService;
 
@@ -49,7 +50,7 @@ public class ClientController {
     public ClientDto getClient(@PathVariable("clientId") Long clientId){
         return clientService.getClientById(clientId)
                 .map(dtoFactory::getClientDto)
-                .orElseThrow(()-> new NullPointerException("Client not found"));
+                .orElseThrow(()-> new NotFoundException("Client not found"));
     }
 
     @GetMapping("/employee")

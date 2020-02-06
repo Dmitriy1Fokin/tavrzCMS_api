@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.domain.Encumbrance;
 import ru.fds.tavrzcms3.dto.DtoFactory;
 import ru.fds.tavrzcms3.dto.EncumbranceDto;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.EncumbranceService;
 import ru.fds.tavrzcms3.service.FilesService;
 
@@ -39,7 +40,7 @@ public class EncumbranceController {
     @GetMapping("/{encumbranceId}")
     public EncumbranceDto getEncumbrance(@PathVariable("encumbranceId") Long encumbranceId){
         return encumbranceService.getEncumbranceById(encumbranceId).map(dtoFactory::getEncumbranceDto)
-                .orElseThrow(()-> new NullPointerException("Encumbrance not found"));
+                .orElseThrow(()-> new NotFoundException("Encumbrance not found"));
     }
 
     @GetMapping("pledge_subject")

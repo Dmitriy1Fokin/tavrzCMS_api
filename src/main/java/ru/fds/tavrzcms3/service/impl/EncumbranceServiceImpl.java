@@ -6,6 +6,7 @@ import ru.fds.tavrzcms3.dictionary.TypeOfEncumbrance;
 import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
 import ru.fds.tavrzcms3.domain.Encumbrance;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryEncumbrance;
@@ -51,7 +52,7 @@ public class EncumbranceServiceImpl implements EncumbranceService {
     }
     @Override public List<Encumbrance> getEncumbranceByPledgeSubject(Long pledgeSubjectId){
         return repositoryPledgeSubject.findById(pledgeSubjectId).map(repositoryEncumbrance::findAllByPledgeSubject)
-                .orElseThrow(() -> new NullPointerException("Pledge subject not found"));
+                .orElseThrow(() -> new NotFoundException("Pledge subject not found"));
     }
 
     @Override

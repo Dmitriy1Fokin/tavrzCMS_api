@@ -14,6 +14,8 @@ import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
 import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
 import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
+import ru.fds.tavrzcms3.exception.NotFoundException;
+import ru.fds.tavrzcms3.exception.NotFullResultException;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryLaJoinPa;
@@ -440,7 +442,7 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
 
         List<LoanAgreement> loanAgreementList = repositoryLoanAgreement.findAllByLoanAgreementIdIn(loanAgreementsIds);
         if(loanAgreementList.size() < loanAgreementsIds.size()){
-            throw new NullPointerException(NOT_ALL_LOAN_AGREEMENTS_WERE_FOUND);
+            throw new NotFullResultException(NOT_ALL_LOAN_AGREEMENTS_WERE_FOUND);
         }
 
         List<LaJoinPa> laJoinPaList = new ArrayList<>();
@@ -463,7 +465,7 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
         List<LoanAgreement> loanAgreementListFromDB = repositoryLoanAgreement.findByPledgeAgreement(pledgeAgreement);
         List<LoanAgreement> loanAgreementListFromRequest = repositoryLoanAgreement.findAllByLoanAgreementIdIn(loanAgreementsIds);
         if(loanAgreementListFromRequest.size() < loanAgreementsIds.size()){
-            throw new NullPointerException(NOT_ALL_LOAN_AGREEMENTS_WERE_FOUND);
+            throw new NotFullResultException(NOT_ALL_LOAN_AGREEMENTS_WERE_FOUND);
         }
 
         List<LoanAgreement> loanAgreementListToDelete = new ArrayList<>(loanAgreementListFromDB);
@@ -534,10 +536,10 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     @Transactional
     public PledgeAgreement withdrawPledgeSubjectFromPledgeAgreement(Long pledgeAgreementId ,Long pledgeSubjectId){
         PledgeAgreement pledgeAgreement = getPledgeAgreementById(pledgeAgreementId)
-                .orElseThrow(() -> new NullPointerException("Pledge agreement not found"));
+                .orElseThrow(() -> new NotFoundException("Pledge agreement not found"));
 
         PledgeSubject pledgeSubject = repositoryPledgeSubject.findById(pledgeSubjectId)
-                .orElseThrow(() -> new NullPointerException("Pledge subject not found"));
+                .orElseThrow(() -> new NotFoundException("Pledge subject not found"));
 
         repositoryPaJoinPs.deleteByPledgeAgreementAndPledgeSubject(pledgeAgreement, pledgeSubject);
 
@@ -548,11 +550,11 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     @Transactional
     public PledgeAgreement insertCurrentPledgeSubjectsInPledgeAgreement(Long pledgeAgreementId ,List<Long> pledgeSubjectsIds){
         PledgeAgreement pledgeAgreement = getPledgeAgreementById(pledgeAgreementId)
-                .orElseThrow(() -> new NullPointerException("Pledge agreement not found"));
+                .orElseThrow(() -> new NotFoundException("Pledge agreement not found"));
 
         List<PledgeSubject> pledgeSubjectListNew = repositoryPledgeSubject.findAllByPledgeSubjectIdIn(pledgeSubjectsIds);
         if(pledgeSubjectListNew.size() < pledgeSubjectsIds.size()){
-            throw new NullPointerException("Not all pledge subjects were found");
+            throw new NotFullResultException("Not all pledge subjects were found");
         }
 
         List<PaJoinPs> paJoinPsList = new ArrayList<>(pledgeSubjectListNew.size());

@@ -11,6 +11,7 @@ import ru.fds.tavrzcms3.domain.ClientManager;
 import ru.fds.tavrzcms3.domain.Employee;
 import ru.fds.tavrzcms3.domain.embedded.ClientIndividual;
 import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryClient;
@@ -79,7 +80,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public String getFullNameClient(long clientId){
         Client client = repositoryClient.findById(clientId)
-                .orElseThrow(() -> new NullPointerException("Client not found"));
+                .orElseThrow(() -> new NotFoundException("Client not found"));
 
         StringBuilder fullName = new StringBuilder();
 
