@@ -100,12 +100,9 @@ public class PledgeSubjectServiceImpl implements PledgeSubjectService {
 
     @Override
     public List<PledgeSubject> getPledgeSubjectsByPledgeAgreement(long pledgeAgreementId){
-        Optional<PledgeAgreement> pledgeAgreement = repositoryPledgeAgreement.findById(pledgeAgreementId);
-        if(pledgeAgreement.isPresent()){
-            return repositoryPledgeSubject.findPledgeSubjectByPledgeAgreement(pledgeAgreement.get());
-        }else {
-            return Collections.emptyList();
-        }
+        return repositoryPledgeAgreement.findById(pledgeAgreementId)
+                .map(repositoryPledgeSubject::findPledgeSubjectByPledgeAgreement)
+                .orElse(Collections.emptyList());
     }
 
     @Override
