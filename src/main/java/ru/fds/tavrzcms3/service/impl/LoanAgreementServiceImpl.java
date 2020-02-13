@@ -250,7 +250,7 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
     @Override
     @Transactional
     public LoanAgreement updateLoanAgreement(LoanAgreement loanAgreement){
-        loanAgreement = repositoryLoanAgreement.save(loanAgreement);
+        loanAgreement = repositoryLoanAgreement.saveAndFlush(loanAgreement);
         messageService.sendExistLoanAgreement(loanAgreement.getLoanAgreementId());
         return loanAgreement;
     }
