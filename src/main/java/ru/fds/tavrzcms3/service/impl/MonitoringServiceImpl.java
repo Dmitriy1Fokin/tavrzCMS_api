@@ -10,6 +10,7 @@ import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.Monitoring;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryMonitoring;
@@ -227,6 +228,9 @@ public class MonitoringServiceImpl implements MonitoringService {
     @Override
     @Transactional
     public Monitoring updateMonitoring(Monitoring monitoring){
-        return repositoryMonitoring.save(monitoring);
+        if(Objects.nonNull(monitoring.getPledgeSubject())){
+            return repositoryMonitoring.save(monitoring);
+        }else
+            throw new NotFoundException("Pledge subject not found");
     }
 }

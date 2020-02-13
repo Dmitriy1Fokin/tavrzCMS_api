@@ -12,9 +12,9 @@ public interface EmployeeService {
 
     List<Employee> getEmployeesExcludeEmployee(Long employeeId);
 
-    Employee getEmployeeByLoanAgreement(long loanAgreementId);
+    Optional<Employee> getEmployeeByLoanAgreement(long loanAgreementId);
 
-    Employee getEmployeeByPledgeAgreement(long pledgeAgreementId);
+    Optional<Employee> getEmployeeByPledgeAgreement(long pledgeAgreementId);
 
     Employee updateInsertEmployee(Employee employee);
 }

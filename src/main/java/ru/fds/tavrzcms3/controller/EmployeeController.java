@@ -24,6 +24,8 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final DtoFactory dtoFactory;
 
+    private static final String MSG_EMP_NOT_FOUND = "Employee not found";
+
     public EmployeeController(EmployeeService employeeService,
                               DtoFactory dtoFactory) {
         this.employeeService = employeeService;
@@ -33,7 +35,7 @@ public class EmployeeController {
     @GetMapping("/{employeeId}")
     public EmployeeDto getEmployee(@PathVariable("employeeId") Long employeeId){
         return employeeService.getEmployeeById(employeeId).map(dtoFactory::getEmployeeDto)
-                .orElseThrow(()-> new NotFoundException("Employee not found"));
+                .orElseThrow(()-> new NotFoundException(MSG_EMP_NOT_FOUND));
     }
 
     @GetMapping("/all")
@@ -48,12 +50,14 @@ public class EmployeeController {
 
     @GetMapping("/loan_agreement")
     public EmployeeDto getEmployeeByLoanAgreement(@RequestParam("loanAgreementId") Long loanAgreementId){
-        return dtoFactory.getEmployeeDto(employeeService.getEmployeeByLoanAgreement(loanAgreementId));
+        return dtoFactory.getEmployeeDto(employeeService.getEmployeeByLoanAgreement(loanAgreementId)
+                .orElseThrow(()-> new NotFoundException(MSG_EMP_NOT_FOUND)));
     }
 
     @GetMapping("/pledge_agreement")
     public EmployeeDto getEmployeeByPledgeAgreement(@RequestParam("pledgeAgreementId") Long pledgeAgreementId){
-        return dtoFactory.getEmployeeDto(employeeService.getEmployeeByPledgeAgreement(pledgeAgreementId));
+        return dtoFactory.getEmployeeDto(employeeService.getEmployeeByPledgeAgreement(pledgeAgreementId)
+                .orElseThrow(()-> new NotFoundException(MSG_EMP_NOT_FOUND)));
     }
 
     @PostMapping("/insert")

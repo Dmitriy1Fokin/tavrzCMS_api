@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
 import ru.fds.tavrzcms3.domain.CostHistory;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryCostHistory;
@@ -177,7 +178,10 @@ public class CostHistoryServiceImpl implements CostHistoryService {
     @Override
     @Transactional
     public CostHistory updateInsertCostHistory(CostHistory costHistory){
-        return repositoryCostHistory.save(costHistory);
+        if(Objects.nonNull(costHistory.getPledgeSubject())){
+            return repositoryCostHistory.save(costHistory);
+        }else
+            throw new NotFoundException("Pledge subject not found");
     }
 
     @Override

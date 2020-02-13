@@ -37,12 +37,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee getEmployeeByLoanAgreement(long loanAgreementId){
+    public Optional<Employee> getEmployeeByLoanAgreement(long loanAgreementId){
         return repositoryEmployee.getEmployeeByLoanAgreement(loanAgreementId);
     }
 
     @Override
-    public Employee getEmployeeByPledgeAgreement(long pledgeAgreementId){
+    public Optional<Employee> getEmployeeByPledgeAgreement(long pledgeAgreementId){
         return repositoryEmployee.getEmployeeByPledgeAgreement(pledgeAgreementId);
     }
 

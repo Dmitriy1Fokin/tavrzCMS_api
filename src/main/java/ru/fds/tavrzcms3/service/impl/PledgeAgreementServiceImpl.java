@@ -492,10 +492,12 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
 
         pledgeAgreementList = repositoryPledgeAgreement.saveAll(pledgeAgreementList);
         List<LaJoinPa> laJoinPaList = new ArrayList<>();
-        pledgeAgreementList.forEach(pledgeAgreement ->
-                loanAgreementsList.forEach(loanAgreementList ->
-                        loanAgreementList.forEach(loanAgreement ->
-                                laJoinPaList.add(new LaJoinPa(loanAgreement, pledgeAgreement)))));
+        for(int i = 0; i < pledgeAgreementList.size(); i++){
+            List<LoanAgreement> loanAgreements = loanAgreementsList.get(i);
+            for(LoanAgreement la : loanAgreements){
+                laJoinPaList.add(new LaJoinPa(la, pledgeAgreementList.get(i)));
+            }
+        }
 
         repositoryLaJoinPa.saveAll(laJoinPaList);
 
