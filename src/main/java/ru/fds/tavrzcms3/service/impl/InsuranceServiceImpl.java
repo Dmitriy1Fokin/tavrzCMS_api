@@ -54,7 +54,7 @@ public class InsuranceServiceImpl implements InsuranceService {
     public List<Insurance> getInsurancesByPledgeSubject(Long pledgeSubjectId){
         return repositoryPledgeSubject.findById(pledgeSubjectId)
                 .map(pledgeSubject -> repositoryInsurance.findAllByPledgeSubject(pledgeSubject,
-                        new Sort(Sort.Direction.DESC, "dateEndInsurance")))
+                        Sort.by(Sort.Direction.DESC, "dateEndInsurance")))
                 .orElseThrow(() -> new NotFoundException("Pledge subject not found"));
     }
 

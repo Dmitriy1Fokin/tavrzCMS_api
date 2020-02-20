@@ -60,8 +60,7 @@ public class MonitoringServiceImpl implements MonitoringService {
 
     @Override
     public List<Monitoring> getMonitoringByPledgeSubject(Long pledgeSubjectId){
-        Sort sortByDateMonitoring = new Sort(Sort.Direction.DESC, "dateMonitoring");
-        return repositoryMonitoring.findByPledgeSubject(pledgeSubjectId, sortByDateMonitoring);
+        return repositoryMonitoring.findByPledgeSubject(pledgeSubjectId, Sort.by(Sort.Direction.DESC, "dateMonitoring"));
     }
 
     @Override

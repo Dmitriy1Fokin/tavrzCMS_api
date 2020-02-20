@@ -51,8 +51,7 @@ public class CostHistoryServiceImpl implements CostHistoryService {
 
     @Override
     public List<CostHistory> getCostHistoryPledgeSubject(Long pledgeSubjectId){
-        Sort sortByDateConclusion = new Sort(Sort.Direction.DESC, "dateConclusion");
-        return repositoryCostHistory.findByPledgeSubject(pledgeSubjectId, sortByDateConclusion);
+        return repositoryCostHistory.findByPledgeSubject(pledgeSubjectId, Sort.by(Sort.Direction.DESC, "dateConclusion"));
     }
 
     @Override

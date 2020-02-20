@@ -27,8 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getAllEmployee(){
-        Sort sortByDateSurname = new Sort(Sort.Direction.ASC, "surname");
-        return repositoryEmployee.findAll(sortByDateSurname);
+        return repositoryEmployee.findAll(Sort.by(Sort.Direction.ASC, "surname"));
     }
 
     @Override

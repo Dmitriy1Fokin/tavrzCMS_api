@@ -38,8 +38,7 @@ public class ClientManagerServiceImpl implements ClientManagerService {
 
     @Override
     public List<ClientManager> getAllClientManager(){
-        Sort sortByDateSurname = new Sort(Sort.Direction.ASC, "surname");
-        return repositoryClientManager.findAll(sortByDateSurname);
+        return repositoryClientManager.findAll(Sort.by(Sort.Direction.ASC, "surname"));
     }
 
     @Override
