@@ -11,7 +11,7 @@
     <groupId>ru.fds</groupId>
     <artifactId>tavrzcms3</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>tavrzcms3</name>
+    <name>tavrzcms_api</name>
     <description>TavrzCMS_API</description>
 
     <properties>
