@@ -8,12 +8,8 @@ import java.util.List;
 
 public interface CostHistoryService {
     List<CostHistory> getCostHistoryPledgeSubject(Long pledgeSubjectId);
-
     List<CostHistory> getNewCostHistoriesFromFile(File file) throws IOException;
-
     List<CostHistory> getCurrentCostHistoriesFromFile(File file) throws IOException;
-
     CostHistory updateInsertCostHistory(CostHistory costHistory);
-
     List<CostHistory> updateInsertCostHistories(List<CostHistory> costHistoryList);
 }

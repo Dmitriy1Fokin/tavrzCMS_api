@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
 import ru.fds.tavrzcms3.domain.Insurance;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
-import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryInsurance;
@@ -19,6 +18,7 @@ import javax.validation.ConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -55,7 +55,7 @@ public class InsuranceServiceImpl implements InsuranceService {
         return repositoryPledgeSubject.findById(pledgeSubjectId)
                 .map(pledgeSubject -> repositoryInsurance.findAllByPledgeSubject(pledgeSubject,
                         Sort.by(Sort.Direction.DESC, "dateEndInsurance")))
-                .orElseThrow(() -> new NotFoundException("Pledge subject not found"));
+                .orElse(Collections.emptyList());
     }
 
     @Override

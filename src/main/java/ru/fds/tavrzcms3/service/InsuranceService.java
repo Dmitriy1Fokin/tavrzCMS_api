@@ -9,14 +9,9 @@ import java.util.Optional;
 
 public interface InsuranceService {
     Optional<Insurance> getInsuranceById(Long insuranceId);
-
     List<Insurance> getInsurancesByPledgeSubject(Long pledgeSubjectId);
-
     List<Insurance> getNewInsurancesFromFile(File file) throws IOException;
-
     List<Insurance> getCurrentInsurancesFromFile(File file) throws IOException;
-
     Insurance updateInsertInsurance(Insurance insurance);
-
     List<Insurance> updateInsertInsurances(List<Insurance> insuranceList);
 }

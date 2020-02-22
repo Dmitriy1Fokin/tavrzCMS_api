@@ -61,7 +61,7 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
 
 
     @Override
-    public Optional<LoanAgreement> getLoanAgreementById(long loanAgreementId){
+    public Optional<LoanAgreement> getLoanAgreementById(Long loanAgreementId){
         return repositoryLoanAgreement.findById(loanAgreementId);
     }
 

@@ -18,6 +18,10 @@ public class SpecificationImpl<T> implements Specification<T> {
         criteria = searchCriteria;
     }
 
+    public SpecificationImpl() {
+
+    }
+
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 

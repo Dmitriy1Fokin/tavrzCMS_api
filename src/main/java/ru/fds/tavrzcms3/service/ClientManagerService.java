@@ -9,16 +9,10 @@ import java.util.Optional;
 
 public interface ClientManagerService {
     List<ClientManager> getAllClientManager();
-
-    Optional<ClientManager> getClientManagerById(long clientManagerId);
-
+    Optional<ClientManager> getClientManagerById(Long clientManagerId);
     Optional<ClientManager> getClientManagerByClient(Long clientId);
-
     List<ClientManager> getNewClientManagersFromFile(File file) throws IOException;
-
     List<ClientManager>  getCurrentClientManagersFromFile(File file) throws IOException;
-
     ClientManager insertUpdateClientManager(ClientManager clientManager);
-
     List<ClientManager> updateInsertClientManagers(List<ClientManager> clientManagerList);
 }

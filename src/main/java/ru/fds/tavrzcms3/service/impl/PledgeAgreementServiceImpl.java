@@ -27,6 +27,7 @@ import ru.fds.tavrzcms3.service.ClientService;
 import ru.fds.tavrzcms3.service.MessageService;
 import ru.fds.tavrzcms3.service.PledgeAgreementService;
 import ru.fds.tavrzcms3.specification.Search;
+import ru.fds.tavrzcms3.utils.DateUtils;
 import ru.fds.tavrzcms3.validate.ValidatorEntity;
 
 import javax.validation.ConstraintViolation;
@@ -59,6 +60,7 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     private final ExcelColumnNum excelColumnNum;
     private final ValidatorEntity validatorEntity;
     private final MessageService messageService;
+    private final DateUtils dateUtils;
 
     private static final String MSG_WRONG_ID = "Неверный id{";
     private static final String MSG_LINE = "). Строка: ";
@@ -72,7 +74,8 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
                                       ClientService clientService,
                                       ExcelColumnNum excelColumnNum,
                                       ValidatorEntity validatorEntity,
-                                      MessageService messageService) {
+                                      MessageService messageService,
+                                      DateUtils dateUtils) {
         this.repositoryPledgeAgreement = repositoryPledgeAgreement;
         this.repositoryLoanAgreement = repositoryLoanAgreement;
         this.repositoryPledgeSubject = repositoryPledgeSubject;
@@ -82,10 +85,11 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
         this.excelColumnNum = excelColumnNum;
         this.validatorEntity = validatorEntity;
         this.messageService = messageService;
+        this.dateUtils = dateUtils;
     }
 
     @Override
-    public Optional<PledgeAgreement> getPledgeAgreementById(long pledgeAgreementId){
+    public Optional<PledgeAgreement> getPledgeAgreementById(Long pledgeAgreementId){
         return repositoryPledgeAgreement.findById(pledgeAgreementId);
     }
 
@@ -173,54 +177,42 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
 
     @Override
     public List<PledgeAgreement> getPledgeAgreementWithMonitoringNotDone(Long employeeId){
-        LocalDate now = LocalDate.now();
-        LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonthValue(), 1);
-        LocalDate secondDate = firstDate.plusMonths(1);
-
-        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringBetweenDates(employeeId, firstDate, secondDate);
+        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringBetweenDates(employeeId,
+                dateUtils.getFirstDateInThisMonthInLastYear(),
+                dateUtils.getLastDateInThisMonthInLastYear());
     }
 
     @Override
     public List<PledgeAgreement> getPledgeAgreementWithMonitoringIsDone(Long employeeId){
-        LocalDate now = LocalDate.now();
-        LocalDate firstDate = LocalDate.of(now.getYear(), now.getMonthValue(), 1);
-        LocalDate secondDate = firstDate.plusMonths(1);
-
-        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringBetweenDates(employeeId, firstDate, secondDate);
+        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringBetweenDates(employeeId,
+                dateUtils.getFirstDateInThisMonth(),
+                dateUtils.getLastDateInThisMonth());
     }
 
     @Override
     public List<PledgeAgreement> getPledgeAgreementWithMonitoringOverDue(Long employeeId){
-        LocalDate now = LocalDate.now();
-        LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonth(), 1);
-
-        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringLessDate(employeeId, firstDate);
+        return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringLessDate(employeeId,
+                dateUtils.getFirstDateInThisMonthInLastYear());
     }
 
     @Override
     public List<PledgeAgreement> getPledgeAgreementWithConclusionNotDone(Long employeeId){
-        LocalDate now = LocalDate.now();
-        LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonthValue(), 1);
-        LocalDate secondDate = firstDate.plusMonths(1);
-
-        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsBetweenDates(employeeId, firstDate, secondDate);
+        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsBetweenDates(employeeId,
+                dateUtils.getFirstDateInThisMonthInLastYear(),
+                dateUtils.getLastDateInThisMonthInLastYear());
     }
 
     @Override
     public List<PledgeAgreement> getPledgeAgreementWithConclusionIsDone(Long employeeId){
-        LocalDate now = LocalDate.now();
-        LocalDate firstDate = LocalDate.of(now.getYear(), now.getMonth(), 1);
-        LocalDate secondDate = firstDate.plusMonths(1);
-
-        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsBetweenDates(employeeId, firstDate, secondDate);
+        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsBetweenDates(employeeId,
+                dateUtils.getFirstDateInThisMonth(),
+                dateUtils.getLastDateInThisMonth());
     }
 
     @Override
     public List<PledgeAgreement> getPledgeAgreementWithConclusionOverdue(Long employeeId){
-        LocalDate now = LocalDate.now();
-        LocalDate firstDate = LocalDate.of(now.getYear()-1, now.getMonth(), 1);
-
-        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsLessDate(employeeId, firstDate);
+        return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsLessDate(employeeId,
+                dateUtils.getFirstDateInThisMonthInLastYear());
     }
 
     @Override

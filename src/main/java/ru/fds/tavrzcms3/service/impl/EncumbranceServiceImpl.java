@@ -6,7 +6,6 @@ import ru.fds.tavrzcms3.dictionary.TypeOfEncumbrance;
 import ru.fds.tavrzcms3.dictionary.excelproprities.ExcelColumnNum;
 import ru.fds.tavrzcms3.domain.Encumbrance;
 import ru.fds.tavrzcms3.domain.PledgeSubject;
-import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.fileimport.FileImporter;
 import ru.fds.tavrzcms3.fileimport.FileImporterFactory;
 import ru.fds.tavrzcms3.repository.RepositoryEncumbrance;
@@ -19,6 +18,7 @@ import javax.validation.ConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -51,8 +51,9 @@ public class EncumbranceServiceImpl implements EncumbranceService {
         return repositoryEncumbrance.findById(encumbranceId);
     }
     @Override public List<Encumbrance> getEncumbranceByPledgeSubject(Long pledgeSubjectId){
-        return repositoryPledgeSubject.findById(pledgeSubjectId).map(repositoryEncumbrance::findAllByPledgeSubject)
-                .orElseThrow(() -> new NotFoundException("Pledge subject not found"));
+        return repositoryPledgeSubject.findById(pledgeSubjectId)
+                .map(repositoryEncumbrance::findAllByPledgeSubject)
+                .orElse(Collections.emptyList());
     }
 
     @Override

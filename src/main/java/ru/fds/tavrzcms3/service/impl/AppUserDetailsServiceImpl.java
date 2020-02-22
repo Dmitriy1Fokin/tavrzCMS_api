@@ -35,12 +35,10 @@ public class AppUserDetailsServiceImpl implements AppUserDetailsService {
 
         List<AppRole> appRoleList = repositoryAppRole.findByAppUser(appUser);
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        if(!appRoleList.isEmpty()){
-            appRoleList.forEach(appRole -> {
-                GrantedAuthority authority = new SimpleGrantedAuthority(appRole.getName());
-                authorityList.add(authority);
-            });
-        }
+        appRoleList.forEach(appRole -> {
+            GrantedAuthority authority = new SimpleGrantedAuthority(appRole.getName());
+            authorityList.add(authority);
+        });
 
         return new User(appUser.getName(), appUser.getPassword(), authorityList);
     }

@@ -21,7 +21,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Optional<Employee> getEmployeeById(long employeeId){
+    public Optional<Employee> getEmployeeById(Long employeeId){
         return repositoryEmployee.findById(employeeId);
     }
 
@@ -36,12 +36,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Optional<Employee> getEmployeeByLoanAgreement(long loanAgreementId){
+    public Optional<Employee> getEmployeeByLoanAgreement(Long loanAgreementId){
         return repositoryEmployee.getEmployeeByLoanAgreement(loanAgreementId);
     }
 
     @Override
-    public Optional<Employee> getEmployeeByPledgeAgreement(long pledgeAgreementId){
+    public Optional<Employee> getEmployeeByPledgeAgreement(Long pledgeAgreementId){
         return repositoryEmployee.getEmployeeByPledgeAgreement(pledgeAgreementId);
     }
 

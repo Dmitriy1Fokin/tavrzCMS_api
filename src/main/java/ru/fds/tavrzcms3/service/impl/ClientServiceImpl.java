@@ -58,7 +58,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Optional<Client> getClientById(long clientId){
+    public Optional<Client> getClientById(Long clientId){
         return repositoryClient.findById(clientId);
     }
 
@@ -78,7 +78,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public String getFullNameClient(long clientId){
+    public String getFullNameClient(Long clientId){
         Client client = repositoryClient.findById(clientId)
                 .orElseThrow(() -> new NotFoundException("Client not found"));
 

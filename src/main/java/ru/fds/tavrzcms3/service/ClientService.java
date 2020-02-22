@@ -10,23 +10,14 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface ClientService {
-    Optional<Client> getClientById(long clientId);
-
+    Optional<Client> getClientById(Long clientId);
     List<Client> getAllClients();
-
     List<Client> getClientsByEmployee(Long employeeId);
-
     List<Client> getClientsByClientManager(Long clientManagerId);
-
-    String getFullNameClient(long clientId);
-
+    String getFullNameClient(Long clientId);
     List<Client> getClientFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException;
-
     List<Client> getNewClientsFromFile(File file, TypeOfClient typeOfClient) throws IOException;
-
     List<Client> getCurrentClientsFromFile(File file) throws IOException;
-
     Client updateInsertClient(Client client);
-
     List<Client> updateInsertClients(List<Client> clientList);
 }

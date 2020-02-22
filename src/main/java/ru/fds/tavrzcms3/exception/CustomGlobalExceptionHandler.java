@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.exception;
 
+import feign.FeignException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -94,4 +95,14 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         body.put(MESSAGE, ex.getMessage());
         return new ResponseEntity<>(body, new HttpHeaders(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler({FeignException.class})
+    protected ResponseEntity<Object> handleFeignException(Exception ex){
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(STATUS, HttpStatus.BAD_REQUEST.value());
+        body.put(MESSAGE, ex.getMessage());
+        return new ResponseEntity<>(body, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
 }

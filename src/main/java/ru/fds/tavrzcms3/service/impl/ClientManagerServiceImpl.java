@@ -42,7 +42,7 @@ public class ClientManagerServiceImpl implements ClientManagerService {
     }
 
     @Override
-    public Optional<ClientManager> getClientManagerById(long clientManagerId){
+    public Optional<ClientManager> getClientManagerById(Long clientManagerId){
         return repositoryClientManager.findById(clientManagerId);
     }
 

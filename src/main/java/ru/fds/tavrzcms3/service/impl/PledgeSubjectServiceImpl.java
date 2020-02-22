@@ -99,7 +99,7 @@ public class PledgeSubjectServiceImpl implements PledgeSubjectService {
     }
 
     @Override
-    public List<PledgeSubject> getPledgeSubjectsByPledgeAgreement(long pledgeAgreementId){
+    public List<PledgeSubject> getPledgeSubjectsByPledgeAgreement(Long pledgeAgreementId){
         return repositoryPledgeAgreement.findById(pledgeAgreementId)
                 .map(repositoryPledgeSubject::findPledgeSubjectByPledgeAgreement)
                 .orElse(Collections.emptyList());
