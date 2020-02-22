@@ -1,7 +1,5 @@
 package ru.fds.tavrzcms3.controller;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -70,22 +68,19 @@ public class ClientController {
 
 
     @PostMapping("/insert")
-    public ClientDto insertClient(@AuthenticationPrincipal User user,
-                                  @Valid @RequestBody ClientDto clientDto){
+    public ClientDto insertClient(@Valid @RequestBody ClientDto clientDto){
         Client client = clientService.updateInsertClient(dtoFactory.getClientEntity(clientDto));
 
         return dtoFactory.getClientDto(client);
     }
 
     @PutMapping("/update")
-    public ClientDto updateClient(@AuthenticationPrincipal User user,
-                                  @Valid @RequestBody ClientDto clientDto){
-        return insertClient(user, clientDto);
+    public ClientDto updateClient(@Valid @RequestBody ClientDto clientDto){
+        return insertClient(clientDto);
     }
 
     @PostMapping("insert_from_file/client_legal_entity")
-    public List<ClientDto> insertClientLegalEntityFromFile(@AuthenticationPrincipal User user,
-                                                           @RequestParam("file") MultipartFile file) throws IOException {
+    public List<ClientDto> insertClientLegalEntityFromFile(@RequestParam("file") MultipartFile file) throws IOException {
         File uploadFile = filesService.uploadFile(file, "client_legal_entity_new");
         List<Client> clientList = clientService.getNewClientsFromFile(uploadFile, TypeOfClient.LEGAL_ENTITY);
 
@@ -93,8 +88,7 @@ public class ClientController {
     }
 
     @PostMapping(value = "insert_from_file/client_individual")
-    public List<ClientDto> insertClientIndividualFromFile(@AuthenticationPrincipal User user,
-                                                          @RequestParam("file") MultipartFile file) throws IOException {
+    public List<ClientDto> insertClientIndividualFromFile(@RequestParam("file") MultipartFile file) throws IOException {
         File uploadFile = filesService.uploadFile(file, "client_individual_new");
         List<Client> clientList = clientService.getNewClientsFromFile(uploadFile, TypeOfClient.INDIVIDUAL);
 
@@ -102,8 +96,7 @@ public class ClientController {
     }
 
     @PutMapping(value = "update_from_file/client_legal_entity")
-    public List<ClientDto> updateClientLegalEntityFromFile(@AuthenticationPrincipal User user,
-                                                           @RequestParam("file") MultipartFile file) throws IOException {
+    public List<ClientDto> updateClientLegalEntityFromFile(@RequestParam("file") MultipartFile file) throws IOException {
         File uploadFile = filesService.uploadFile(file, "client_legal_entity_update");
         List<Client> clientList = clientService.getCurrentClientsFromFile(uploadFile);
 
@@ -111,8 +104,7 @@ public class ClientController {
     }
 
     @PutMapping(value = "update_from_file/client_individual")
-    public List<ClientDto> updateClientIndividualFromFile(@AuthenticationPrincipal User user,
-                                                          @RequestParam("file") MultipartFile file) throws IOException {
+    public List<ClientDto> updateClientIndividualFromFile(@RequestParam("file") MultipartFile file) throws IOException {
         File uploadFile = filesService.uploadFile(file, "client_individual_update");
         List<Client> clientList = clientService.getCurrentClientsFromFile(uploadFile);
 
