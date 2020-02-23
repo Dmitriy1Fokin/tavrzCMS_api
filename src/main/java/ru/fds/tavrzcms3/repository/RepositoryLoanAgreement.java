@@ -23,7 +23,10 @@ public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Lo
     Integer getCountOfCurrentLoanAgreementByEmployee(@Param("employeeId") Long employeeId);
 
     @Query("select lp.loanAgreement from LaJoinPa lp where lp.pledgeAgreement = :pledgeAgreement")
-    List<LoanAgreement> findByPledgeAgreement(@Param("pledgeAgreement")PledgeAgreement pledgeAgreement);
+    List<LoanAgreement> findByPledgeAgreement(@Param("pledgeAgreement") PledgeAgreement pledgeAgreement);
+
+    @Query("select lp.loanAgreement from LaJoinPa lp where lp.pledgeAgreement.pledgeAgreementId in :pledgeAgreementIds")
+    List<LoanAgreement> findByPledgeAgreementIds(@Param("pledgeAgreementIds") List<Long> pledgeAgreementIds);
 
     @Query("select lp.loanAgreement from LaJoinPa lp where lp.pledgeAgreement.pledgeAgreementId = :pledgeAgreementId and lp.loanAgreement.statusLA = :statusLA")
     List<LoanAgreement> findByPledgeAgreementAndStatusLA(@Param("pledgeAgreementId") Long pledgeAgreementId,

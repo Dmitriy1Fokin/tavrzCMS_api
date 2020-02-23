@@ -14,6 +14,7 @@ public interface LoanAgreementService {
     Optional<LoanAgreement> getLoanAgreementById(Long loanAgreementId);
     List<LoanAgreement> getCurrentLoanAgreementsByPledgeAgreement(Long pledgeAgreementId);
     List<LoanAgreement> getClosedLoanAgreementsByPledgeAgreement(Long pledgeAgreementId);
+    List<LoanAgreement> getAllLoanAgreementsByPledgeAgreements(List<Long> pledgeAgreementIds);
     List<LoanAgreement> getAllCurrentLoanAgreements(Pageable pageable);
     Integer getCountOfCurrentLoanAgreements();
     List<LoanAgreement> getCurrentLoanAgreementsByEmployee(Pageable pageable, Long employeeId);

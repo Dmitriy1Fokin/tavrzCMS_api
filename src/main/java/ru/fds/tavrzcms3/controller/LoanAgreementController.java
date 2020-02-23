@@ -89,6 +89,12 @@ public class LoanAgreementController {
                 .getClosedLoanAgreementsByPledgeAgreement(pledgeAgreementId));
     }
 
+    @GetMapping("/all_la_for_pledge_agreements")
+    public List<LoanAgreementDto> getAllLoanAgreementByPledgeAgreements(@RequestParam("pledgeAgreementIds") List<Long> pledgeAgreementIds){
+        return dtoFactory.getLoanAgreementsDto(loanAgreementService
+                .getAllLoanAgreementsByPledgeAgreements(pledgeAgreementIds));
+    }
+
     @GetMapping("/search")
     public List<LoanAgreementDto> getLoanAgreementBySearchCriteria(@RequestParam Map<String, String> reqParam, Pageable pageable) throws ReflectiveOperationException {
         List<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementFromSearch(reqParam, pageable);

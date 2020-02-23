@@ -77,6 +77,11 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
     }
 
     @Override
+    public List<LoanAgreement> getAllLoanAgreementsByPledgeAgreements(List<Long> pledgeAgreementIds){
+        return repositoryLoanAgreement.findByPledgeAgreementIds(pledgeAgreementIds);
+    }
+
+    @Override
     public List<LoanAgreement> getAllCurrentLoanAgreements(Pageable pageable){
         return repositoryLoanAgreement.findAllByStatusLAEquals(pageable, StatusOfAgreement.OPEN).getContent();
     }
