@@ -394,108 +394,6 @@ ALTER SEQUENCE public.cost_history_cost_history_id_seq OWNED BY public.cost_hist
 
 
 --
--- Name: db_role; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.db_role (
-    role_id integer NOT NULL,
-    name character varying NOT NULL
-);
-
-
-ALTER TABLE public.db_role OWNER TO postgres;
-
---
--- Name: db_role_role_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.db_role_role_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.db_role_role_id_seq OWNER TO postgres;
-
---
--- Name: db_role_role_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.db_role_role_id_seq OWNED BY public.db_role.role_id;
-
-
---
--- Name: db_user; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.db_user (
-    user_id bigint NOT NULL,
-    name character varying NOT NULL,
-    password character varying NOT NULL
-);
-
-
-ALTER TABLE public.db_user OWNER TO postgres;
-
---
--- Name: db_user_role; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.db_user_role (
-    user_role_id bigint NOT NULL,
-    user_id bigint NOT NULL,
-    role_id integer NOT NULL
-);
-
-
-ALTER TABLE public.db_user_role OWNER TO postgres;
-
---
--- Name: db_user_role_user_role_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.db_user_role_user_role_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.db_user_role_user_role_id_seq OWNER TO postgres;
-
---
--- Name: db_user_role_user_role_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.db_user_role_user_role_id_seq OWNED BY public.db_user_role.user_role_id;
-
-
---
--- Name: db_user_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.db_user_user_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.db_user_user_id_seq OWNER TO postgres;
-
---
--- Name: db_user_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.db_user_user_id_seq OWNED BY public.db_user.user_id;
-
-
---
 -- Name: dz; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -583,8 +481,7 @@ CREATE TABLE public.employee (
     employee_id bigint NOT NULL,
     surname character varying(255) NOT NULL,
     name character varying(255) NOT NULL,
-    patronymic character varying(255),
-    login bigint
+    patronymic character varying(255)
 );
 
 
@@ -1058,27 +955,6 @@ ALTER TABLE ONLY public.cost_history ALTER COLUMN cost_history_id SET DEFAULT ne
 
 
 --
--- Name: db_role role_id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.db_role ALTER COLUMN role_id SET DEFAULT nextval('public.db_role_role_id_seq'::regclass);
-
-
---
--- Name: db_user user_id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.db_user ALTER COLUMN user_id SET DEFAULT nextval('public.db_user_user_id_seq'::regclass);
-
-
---
--- Name: db_user_role user_role_id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.db_user_role ALTER COLUMN user_role_id SET DEFAULT nextval('public.db_user_role_user_role_id_seq'::regclass);
-
-
---
 -- Name: dz dz_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1142,123 +1018,6 @@ ALTER TABLE ONLY public.pledge_subject ALTER COLUMN pledge_subject_id SET DEFAUL
 
 
 --
--- Data for Name: db_role; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.db_role (role_id, name) FROM stdin;
-1	ROLE_ADMIN
-2	ROLE_USER
-3	ROLE_USER_CHIEF
-4	ROLE_GUEST
-\.
-
-
---
--- Name: client_manager_client_manager_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.client_manager_client_manager_id_seq', 1, true);
-
-
---
--- Name: client_prime_client_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.client_prime_client_id_seq', 1, true);
-
-
---
--- Name: cost_history_cost_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.cost_history_cost_history_id_seq', 1, true);
-
-
---
--- Name: db_role_role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.db_role_role_id_seq', 1, true);
-
-
---
--- Name: db_user_role_user_role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.db_user_role_user_role_id_seq', 1, true);
-
-
---
--- Name: db_user_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.db_user_user_id_seq', 1, true);
-
-
---
--- Name: dz_dz_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.dz_dz_id_seq', 1, true);
-
-
---
--- Name: dz_ps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.dz_ps_id_seq', 1, true);
-
-
---
--- Name: employee_employee_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.employee_employee_id_seq', 1, true);
-
-
---
--- Name: encumbrance_encumbrance_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.encumbrance_encumbrance_id_seq', 1, true);
-
-
---
--- Name: insurance_insurance_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.insurance_insurance_id_seq', 1, true);
-
-
---
--- Name: kd_dz_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.kd_dz_id_seq', 1, true);
-
-
---
--- Name: kd_kd_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.kd_kd_id_seq', 1, true);
-
-
---
--- Name: monitoring_monitoring_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.monitoring_monitoring_id_seq', 1, true);
-
-
---
--- Name: pledge_subject_pledge_subject_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.pledge_subject_pledge_subject_id_seq', 1, true);
-
-
---
 -- Name: client_manager client_manager_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1272,38 +1031,6 @@ ALTER TABLE ONLY public.client_manager
 
 ALTER TABLE ONLY public.cost_history
     ADD CONSTRAINT cost_history_pkey PRIMARY KEY (cost_history_id);
-
-
---
--- Name: db_role db_role_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.db_role
-    ADD CONSTRAINT db_role_pk PRIMARY KEY (role_id);
-
-
---
--- Name: db_user db_user_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.db_user
-    ADD CONSTRAINT db_user_pk PRIMARY KEY (user_id);
-
-
---
--- Name: db_user_role db_user_role_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.db_user_role
-    ADD CONSTRAINT db_user_role_pk PRIMARY KEY (user_role_id);
-
-
---
--- Name: db_user_role db_user_role_user_id_role_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.db_user_role
-    ADD CONSTRAINT db_user_role_user_id_role_id_key UNIQUE (user_id, role_id);
 
 
 --
@@ -1336,6 +1063,7 @@ ALTER TABLE ONLY public.dz_ps
 
 ALTER TABLE ONLY public.employee
     ADD CONSTRAINT employee_pkey PRIMARY KEY (employee_id);
+
 
 
 --
@@ -1490,13 +1218,6 @@ ALTER TABLE ONLY public.pledge_subject
     ADD CONSTRAINT ps_pkey PRIMARY KEY (pledge_subject_id);
 
 
---
--- Name: db_user un_db_user_name; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.db_user
-    ADD CONSTRAINT un_db_user_name UNIQUE (name);
-
 
 --
 -- Name: cost_history trigger_cost_history; Type: TRIGGER; Schema: public; Owner: postgres
@@ -1531,22 +1252,6 @@ CREATE TRIGGER trigger_monitoring BEFORE INSERT OR UPDATE ON public.monitoring F
 --
 
 CREATE TRIGGER trigger_update_costs_dz AFTER UPDATE OF zs_dz, zs_zz, rs_dz, rs_zz, ss ON public.pledge_subject FOR EACH ROW EXECUTE PROCEDURE public.update_costs_dz();
-
-
---
--- Name: db_user_role db_user_role_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.db_user_role
-    ADD CONSTRAINT db_user_role_fk FOREIGN KEY (user_id) REFERENCES public.db_user(user_id);
-
-
---
--- Name: db_user_role db_user_role_fk_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.db_user_role
-    ADD CONSTRAINT db_user_role_fk_1 FOREIGN KEY (role_id) REFERENCES public.db_role(role_id);
 
 
 --
@@ -1603,14 +1308,6 @@ ALTER TABLE ONLY public.dz_ps
 
 ALTER TABLE ONLY public.dz_ps
     ADD CONSTRAINT fk_dz_ps_ps_id FOREIGN KEY (pledge_subject_id) REFERENCES public.pledge_subject(pledge_subject_id);
-
-
---
--- Name: employee fk_employee_db_user; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.employee
-    ADD CONSTRAINT fk_employee_db_user FOREIGN KEY (login) REFERENCES public.db_user(user_id);
 
 
 --
@@ -1739,3 +1436,4 @@ ALTER TABLE ONLY public.kd_dz
 
 ALTER TABLE ONLY public.kd_dz
     ADD CONSTRAINT kd_dz_new_fk_1 FOREIGN KEY (dz_id) REFERENCES public.dz(dz_id);
+
