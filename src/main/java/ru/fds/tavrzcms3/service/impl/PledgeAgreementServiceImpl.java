@@ -104,8 +104,18 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     }
 
     @Override
+    public Integer getCountCurrentPledgeAgreements(){
+        return repositoryPledgeAgreement.countAllByStatusPAEquals(StatusOfAgreement.OPEN);
+    }
+
+    @Override
     public List<PledgeAgreement> getAllCurrentPledgeAgreements(TypeOfPledgeAgreement typeOfPledgeAgreement){
         return repositoryPledgeAgreement.findAllByStatusPAEqualsAndPervPoslEquals(StatusOfAgreement.OPEN, typeOfPledgeAgreement);
+    }
+
+    @Override
+    public Integer getCountCurrentPledgeAgreements(TypeOfPledgeAgreement typeOfPledgeAgreement){
+        return repositoryPledgeAgreement.countAllByStatusPAEqualsAndPervPoslEquals(StatusOfAgreement.OPEN, typeOfPledgeAgreement);
     }
 
     @Override
@@ -171,13 +181,30 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     }
 
     @Override
+    public Integer getCountOfCurrentPledgeAgreementsByEmployee(Long employeeId, TypeOfPledgeAgreement pervPosl){
+        return repositoryPledgeAgreement.getCountOfCurrentPledgeAgreementsForEmployee(employeeId, pervPosl.getTranslate());
+    }
+
+    @Override
     public List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(Long employeeId){
         return repositoryPledgeAgreement.getCurrentPledgeAgreementsForEmployee(employeeId);
     }
 
     @Override
+    public Integer getCountOfCurrentPledgeAgreementsByEmployee(Long employeeId){
+        return repositoryPledgeAgreement.getCountOfCurrentPledgeAgreementsForEmployee(employeeId);
+    }
+
+    @Override
     public List<PledgeAgreement> getPledgeAgreementWithMonitoringNotDone(Long employeeId){
         return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringBetweenDates(employeeId,
+                dateUtils.getFirstDateInThisMonthInLastYear(),
+                dateUtils.getLastDateInThisMonthInLastYear());
+    }
+
+    @Override
+    public Integer getCountPledgeAgreementWithMonitoringNotDone(Long employeeId){
+        return repositoryPledgeAgreement.getCountPledgeAgreementWithMonitoringBetweenDates(employeeId,
                 dateUtils.getFirstDateInThisMonthInLastYear(),
                 dateUtils.getLastDateInThisMonthInLastYear());
     }
@@ -190,14 +217,34 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     }
 
     @Override
+    public Integer getCountPledgeAgreementWithMonitoringIsDone(Long employeeId){
+        return repositoryPledgeAgreement.getCountPledgeAgreementWithMonitoringBetweenDates(employeeId,
+                dateUtils.getFirstDateInThisMonth(),
+                dateUtils.getLastDateInThisMonth());
+    }
+
+    @Override
     public List<PledgeAgreement> getPledgeAgreementWithMonitoringOverDue(Long employeeId){
         return repositoryPledgeAgreement.getPledgeAgreementWithMonitoringLessDate(employeeId,
                 dateUtils.getFirstDateInThisMonthInLastYear());
     }
 
     @Override
+    public Integer getCountPledgeAgreementWithMonitoringOverdue(Long employeeId){
+        return repositoryPledgeAgreement.getCountPledgeAgreementWithMonitoringLessDate(employeeId,
+                dateUtils.getFirstDateInThisMonthInLastYear());
+    }
+
+    @Override
     public List<PledgeAgreement> getPledgeAgreementWithConclusionNotDone(Long employeeId){
         return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsBetweenDates(employeeId,
+                dateUtils.getFirstDateInThisMonthInLastYear(),
+                dateUtils.getLastDateInThisMonthInLastYear());
+    }
+
+    @Override
+    public Integer getCountPledgeAgreementWithConclusionNotDone(Long employeeId){
+        return repositoryPledgeAgreement.getCountPledgeAgreementWithConclusionsBetweenDates(employeeId,
                 dateUtils.getFirstDateInThisMonthInLastYear(),
                 dateUtils.getLastDateInThisMonthInLastYear());
     }
@@ -210,8 +257,21 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     }
 
     @Override
+    public Integer getCountPledgeAgreementWithConclusionIsDone(Long employeeId){
+        return repositoryPledgeAgreement.getCountPledgeAgreementWithConclusionsBetweenDates(employeeId,
+                dateUtils.getFirstDateInThisMonth(),
+                dateUtils.getLastDateInThisMonth());
+    }
+
+    @Override
     public List<PledgeAgreement> getPledgeAgreementWithConclusionOverdue(Long employeeId){
         return repositoryPledgeAgreement.getPledgeAgreementWithConclusionsLessDate(employeeId,
+                dateUtils.getFirstDateInThisMonthInLastYear());
+    }
+
+    @Override
+    public Integer getCountPledgeAgreementWithConclusionOverdue(Long employeeId){
+        return repositoryPledgeAgreement.getCountPledgeAgreementWithConclusionsLessDate(employeeId,
                 dateUtils.getFirstDateInThisMonthInLastYear());
     }
 

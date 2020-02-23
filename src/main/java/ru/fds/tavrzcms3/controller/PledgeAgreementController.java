@@ -51,16 +51,31 @@ public class PledgeAgreementController {
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getAllCurrentPledgeAgreements());
     }
 
+    @GetMapping("/current/count")
+    public Integer getCountOfCurrentPledgeAgreements(){
+        return pledgeAgreementService.getCountCurrentPledgeAgreements();
+    }
+
     @GetMapping("/current/perv")
     public List<PledgeAgreementDto> getCurrentPervPledgeAgreements(){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
                 .getAllCurrentPledgeAgreements(TypeOfPledgeAgreement.PERV));
     }
 
+    @GetMapping("/current/count/perv")
+    public Integer getCountOfCurrentPervPledgeAgreements(){
+        return pledgeAgreementService.getCountCurrentPledgeAgreements(TypeOfPledgeAgreement.PERV);
+    }
+
     @GetMapping("/current/posl")
     public List<PledgeAgreementDto> getCurrentPoslPledgeAgreements(){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
                 .getAllCurrentPledgeAgreements(TypeOfPledgeAgreement.POSL));
+    }
+
+    @GetMapping("/current/count/posl")
+    public Integer getCountOfCurrentPoslPledgeAgreements(){
+        return pledgeAgreementService.getCountCurrentPledgeAgreements(TypeOfPledgeAgreement.POSL);
     }
 
     @GetMapping("/current_pa_for_client")
@@ -78,9 +93,19 @@ public class PledgeAgreementController {
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithConclusionNotDone(employeeId));
     }
 
+    @GetMapping("/with_conclusion_not_done/count")
+    public Integer getCountOfPledgeAgreementsWithConclusionNotDone(@RequestParam("employeeId") Long employeeId){
+        return pledgeAgreementService.getCountPledgeAgreementWithConclusionNotDone(employeeId);
+    }
+
     @GetMapping("/with_conclusion_is_done")
     public List<PledgeAgreementDto> getPledgeAgreementsWithConclusionIsDone(@RequestParam("employeeId") Long employeeId){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithConclusionIsDone(employeeId));
+    }
+
+    @GetMapping("/with_conclusion_is_done/count")
+    public Integer getCountOfPledgeAgreementsWithConclusionIsDone(@RequestParam("employeeId") Long employeeId){
+        return pledgeAgreementService.getCountPledgeAgreementWithConclusionIsDone(employeeId);
     }
 
     @GetMapping("/with_conclusion_overdue")
@@ -88,9 +113,19 @@ public class PledgeAgreementController {
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithConclusionOverdue(employeeId));
     }
 
+    @GetMapping("/with_conclusion_overdue/count")
+    public Integer getCountOfPledgeAgreementsWithConclusionOverdue(@RequestParam("employeeId") Long employeeId){
+        return pledgeAgreementService.getCountPledgeAgreementWithConclusionOverdue(employeeId);
+    }
+
     @GetMapping("/with_monitoring_not_done")
     public List<PledgeAgreementDto> getPledgeAgreementsWithMonitoringNotDone(@RequestParam("employeeId") Long employeeId){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringNotDone(employeeId));
+    }
+
+    @GetMapping("/with_monitoring_not_done/count")
+    public Integer getCountOfPledgeAgreementsWithMonitoringNotDone(@RequestParam("employeeId") Long employeeId){
+        return pledgeAgreementService.getCountPledgeAgreementWithMonitoringNotDone(employeeId);
     }
 
     @GetMapping("/with_monitoring_is_done")
@@ -98,9 +133,19 @@ public class PledgeAgreementController {
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringIsDone(employeeId));
     }
 
+    @GetMapping("/with_monitoring_is_done/count")
+    public Integer getCountOfPledgeAgreementsWithMonitoringIsDone(@RequestParam("employeeId") Long employeeId){
+        return pledgeAgreementService.getCountPledgeAgreementWithMonitoringIsDone(employeeId);
+    }
+
     @GetMapping("/with_monitoring_overdue")
     public List<PledgeAgreementDto> getPledgeAgreementsWithMonitoringOverdue(@RequestParam("employeeId") Long employeeId){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementWithMonitoringOverDue(employeeId));
+    }
+
+    @GetMapping("/with_monitoring_overdue/count")
+    public Integer getCountOfPledgeAgreementsWithMonitoringOverdue(@RequestParam("employeeId") Long employeeId){
+        return pledgeAgreementService.getCountPledgeAgreementWithMonitoringOverdue(employeeId);
     }
 
     @GetMapping("/current_pa_for_loan_agreement")
@@ -124,16 +169,31 @@ public class PledgeAgreementController {
                 .getCurrentPledgeAgreementsByEmployee(employeeId));
     }
 
+    @GetMapping("/current_pa_for_employee/count")
+    public Integer getCountOfCurrentPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
+        return pledgeAgreementService.getCountOfCurrentPledgeAgreementsByEmployee(employeeId);
+    }
+
     @GetMapping("/current_pa_for_employee/perv")
     public List<PledgeAgreementDto> getCurrentPervPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
                 .getCurrentPledgeAgreementsByEmployee(employeeId, TypeOfPledgeAgreement.PERV));
     }
 
+    @GetMapping("/current_pa_for_employee/count/perv")
+    public Integer getCountOfCurrentPervPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
+        return pledgeAgreementService.getCountOfCurrentPledgeAgreementsByEmployee(employeeId, TypeOfPledgeAgreement.PERV);
+    }
+
     @GetMapping("/current_pa_for_employee/posl")
     public List<PledgeAgreementDto> getCurrentPoslPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
                 .getCurrentPledgeAgreementsByEmployee(employeeId, TypeOfPledgeAgreement.POSL));
+    }
+
+    @GetMapping("/current_pa_for_employee/count/posl")
+    public Integer getCountOfCurrentPoslPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
+        return pledgeAgreementService.getCountOfCurrentPledgeAgreementsByEmployee(employeeId, TypeOfPledgeAgreement.POSL);
     }
 
     @GetMapping("/pledge_subject")

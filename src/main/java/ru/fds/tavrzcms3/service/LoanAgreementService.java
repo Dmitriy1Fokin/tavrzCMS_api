@@ -13,7 +13,9 @@ public interface LoanAgreementService {
     List<LoanAgreement> getCurrentLoanAgreementsByPledgeAgreement(Long pledgeAgreementId);
     List<LoanAgreement> getClosedLoanAgreementsByPledgeAgreement(Long pledgeAgreementId);
     List<LoanAgreement> getAllCurrentLoanAgreements();
+    Integer getCountOfCurrentLoanAgreements();
     List<LoanAgreement> getCurrentLoanAgreementsByEmployee(Long employeeId);
+    Integer getCountOfCurrentLoanAgreementsByEmployee(Long employeeId);
     List<LoanAgreement> getCurrentLoanAgreementsByLoaner(Long clientId);
     List<LoanAgreement> getClosedLoanAgreementsByLoaner(Long clientId);
     List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException;

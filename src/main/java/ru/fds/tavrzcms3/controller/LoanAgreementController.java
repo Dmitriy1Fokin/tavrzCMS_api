@@ -50,6 +50,11 @@ public class LoanAgreementController {
         return dtoFactory.getLoanAgreementsDto(loanAgreementService.getAllCurrentLoanAgreements());
     }
 
+    @GetMapping("/current/count")
+    public Integer getCountOfLoanAgreements(){
+        return loanAgreementService.getCountOfCurrentLoanAgreements();
+    }
+
     @GetMapping("/current_la_for_client")
     public List<LoanAgreementDto> getCurrentLoanAgreementsByClient(@RequestParam("clientId") Long clientId){
         return dtoFactory.getLoanAgreementsDto(loanAgreementService.getCurrentLoanAgreementsByLoaner(clientId));
@@ -63,6 +68,11 @@ public class LoanAgreementController {
     @GetMapping("/current_la_for_employee")
     public List<LoanAgreementDto> getCurrentLoanAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
         return dtoFactory.getLoanAgreementsDto(loanAgreementService.getCurrentLoanAgreementsByEmployee(employeeId));
+    }
+
+    @GetMapping("/current_la_for_employee/count")
+    public Integer getCountOfCurrentLoanAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
+        return loanAgreementService.getCountOfCurrentLoanAgreementsByEmployee(employeeId);
     }
 
     @GetMapping("/current_la_for_pledge_agreement")

@@ -81,8 +81,18 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
     }
 
     @Override
+    public Integer getCountOfCurrentLoanAgreements(){
+        return repositoryLoanAgreement.countAllByStatusLAEquals(StatusOfAgreement.OPEN);
+    }
+
+    @Override
     public List<LoanAgreement> getCurrentLoanAgreementsByEmployee(Long employeeId){
         return repositoryLoanAgreement.getLoanAgreementByEmployee(employeeId, StatusOfAgreement.OPEN.getTranslate());
+    }
+
+    @Override
+    public Integer getCountOfCurrentLoanAgreementsByEmployee(Long employeeId){
+        return repositoryLoanAgreement.getCountOfCurrentLoanAgreementByEmployee(employeeId);
     }
 
     @Override
