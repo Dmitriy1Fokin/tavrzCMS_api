@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -20,10 +22,10 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
     List<PledgeAgreement> findAllByPledgeAgreementIdIn(Collection<Long> ids);
     List<PledgeAgreement> findAllByClient(Client client);
     List<PledgeAgreement> findByClientInAndPervPoslEqualsAndStatusPAEquals(List<Client> clients, TypeOfPledgeAgreement pervPosl, StatusOfAgreement statusPA);
-    List<PledgeAgreement> findAllByNumPAContainingIgnoreCase(String numPA);
-    List<PledgeAgreement> findAllByStatusPAEquals(StatusOfAgreement statusPA);
+    Page<PledgeAgreement> findAllByNumPAContainingIgnoreCase(Pageable pageable, String numPA);
+    Page<PledgeAgreement> findAllByStatusPAEquals(Pageable pageable, StatusOfAgreement statusPA);
     Integer countAllByStatusPAEquals(StatusOfAgreement statusPA);
-    List<PledgeAgreement> findAllByStatusPAEqualsAndPervPoslEquals(StatusOfAgreement statusPA, TypeOfPledgeAgreement typeOfPledgeAgreement);
+    Page<PledgeAgreement> findAllByStatusPAEqualsAndPervPoslEquals(Pageable pageable, StatusOfAgreement statusPA, TypeOfPledgeAgreement typeOfPledgeAgreement);
     Integer countAllByStatusPAEqualsAndPervPoslEquals(StatusOfAgreement statusPA, TypeOfPledgeAgreement typeOfPledgeAgreement);
 
     @Query("select pp.pledgeAgreement from PaJoinPs pp where pp.pledgeSubject = :pledgeSubject")
@@ -87,7 +89,8 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
                                         "and d.perv_posl = :pervPosl " +
                                         "and emp.employee_id = :employeeId " +
                                         "order by d.pledgor_id")
-    List<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(@Param("employeeId") Long employeeId,
+    Page<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(Pageable pageable,
+                                                                @Param("employeeId") Long employeeId,
                                                                 @Param("pervPosl") String pervPosl);
 
     @Query(nativeQuery = true, value = "select count(distinct d.dz_id) " +
@@ -107,7 +110,8 @@ public interface RepositoryPledgeAgreement extends JpaRepository<PledgeAgreement
                                         "where d.status = 'открыт' " +
                                         "and emp.employee_id = :employeeId " +
                                         "order by d.pledgor_id")
-    List<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(@Param("employeeId") Long employeeId);
+    Page<PledgeAgreement> getCurrentPledgeAgreementsForEmployee(Pageable pageable,
+                                                                @Param("employeeId") Long employeeId);
 
     @Query(nativeQuery = true, value = "select count(distinct d.dz_id) " +
                                         "from employee as emp " +

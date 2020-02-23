@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 
 import java.io.File;
@@ -12,13 +14,13 @@ public interface LoanAgreementService {
     Optional<LoanAgreement> getLoanAgreementById(Long loanAgreementId);
     List<LoanAgreement> getCurrentLoanAgreementsByPledgeAgreement(Long pledgeAgreementId);
     List<LoanAgreement> getClosedLoanAgreementsByPledgeAgreement(Long pledgeAgreementId);
-    List<LoanAgreement> getAllCurrentLoanAgreements();
+    List<LoanAgreement> getAllCurrentLoanAgreements(Pageable pageable);
     Integer getCountOfCurrentLoanAgreements();
-    List<LoanAgreement> getCurrentLoanAgreementsByEmployee(Long employeeId);
+    List<LoanAgreement> getCurrentLoanAgreementsByEmployee(Pageable pageable, Long employeeId);
     Integer getCountOfCurrentLoanAgreementsByEmployee(Long employeeId);
     List<LoanAgreement> getCurrentLoanAgreementsByLoaner(Long clientId);
     List<LoanAgreement> getClosedLoanAgreementsByLoaner(Long clientId);
-    List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException;
+    List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam, Pageable pageable) throws ReflectiveOperationException;
     List<LoanAgreement> getNewLoanAgreementsFromFile(File file) throws IOException;
     List<LoanAgreement> getCurrentLoanAgreementsFromFile(File file) throws IOException;
     LoanAgreement insertLoanAgreement(LoanAgreement loanAgreement);

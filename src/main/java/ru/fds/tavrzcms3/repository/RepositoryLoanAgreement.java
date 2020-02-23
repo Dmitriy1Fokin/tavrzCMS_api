@@ -1,5 +1,7 @@
 package ru.fds.tavrzcms3.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +16,7 @@ import java.util.List;
 public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Long>, JpaSpecificationExecutor<LoanAgreement> {
     List<LoanAgreement> findAllByLoanAgreementIdIn(List<Long> ids);
     List<LoanAgreement> findAllByClient(Client client);
-    List<LoanAgreement> findAllByStatusLAEquals(StatusOfAgreement statusOfAgreement);
+    Page<LoanAgreement> findAllByStatusLAEquals(Pageable pageable, StatusOfAgreement statusOfAgreement);
     Integer countAllByStatusLAEquals(StatusOfAgreement statusOfAgreement);
 
     @Query("select count(la) from LoanAgreement la join la.client c join c.employee e where e.employeeId = :employeeId")
@@ -41,7 +43,8 @@ public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Lo
                                         "join employee e on cp.employee_id = e.employee_id\n" +
                                         "where e.employee_id = 10\n" +
                                         "and k.status = 'открыт'")
-    List<LoanAgreement> getLoanAgreementByEmployee(@Param("employeeId") Long employeeId,
+    Page<LoanAgreement> getLoanAgreementByEmployee(Pageable pageable,
+                                                   @Param("employeeId") Long employeeId,
                                                    @Param("statusLA") String statusLA);
 
 }

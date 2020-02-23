@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.service.impl;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,8 +100,8 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     }
 
     @Override
-    public List<PledgeAgreement> getAllCurrentPledgeAgreements(){
-        return repositoryPledgeAgreement.findAllByStatusPAEquals(StatusOfAgreement.OPEN);
+    public List<PledgeAgreement> getAllCurrentPledgeAgreements(Pageable pageable){
+        return repositoryPledgeAgreement.findAllByStatusPAEquals(pageable, StatusOfAgreement.OPEN).getContent();
     }
 
     @Override
@@ -109,8 +110,10 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     }
 
     @Override
-    public List<PledgeAgreement> getAllCurrentPledgeAgreements(TypeOfPledgeAgreement typeOfPledgeAgreement){
-        return repositoryPledgeAgreement.findAllByStatusPAEqualsAndPervPoslEquals(StatusOfAgreement.OPEN, typeOfPledgeAgreement);
+    public List<PledgeAgreement> getAllCurrentPledgeAgreements(Pageable pageable, TypeOfPledgeAgreement typeOfPledgeAgreement){
+        return repositoryPledgeAgreement.findAllByStatusPAEqualsAndPervPoslEquals(pageable,
+                StatusOfAgreement.OPEN,
+                typeOfPledgeAgreement).getContent();
     }
 
     @Override
@@ -119,8 +122,8 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     }
 
     @Override
-    public List<PledgeAgreement> getPledgeAgreementsByNumPA(String numPA){
-        return repositoryPledgeAgreement.findAllByNumPAContainingIgnoreCase(numPA);
+    public List<PledgeAgreement> getPledgeAgreementsByNumPA(Pageable pageable, String numPA){
+        return repositoryPledgeAgreement.findAllByNumPAContainingIgnoreCase(pageable, numPA).getContent();
     }
 
     @Override
@@ -176,8 +179,8 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     }
 
     @Override
-    public List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(Long employeeId, TypeOfPledgeAgreement pervPosl){
-        return repositoryPledgeAgreement.getCurrentPledgeAgreementsForEmployee(employeeId, pervPosl.getTranslate());
+    public List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(Long employeeId, TypeOfPledgeAgreement pervPosl, Pageable pageable){
+        return repositoryPledgeAgreement.getCurrentPledgeAgreementsForEmployee(pageable, employeeId, pervPosl.getTranslate()).getContent();
     }
 
     @Override
@@ -186,8 +189,8 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     }
 
     @Override
-    public List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(Long employeeId){
-        return repositoryPledgeAgreement.getCurrentPledgeAgreementsForEmployee(employeeId);
+    public List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(Long employeeId, Pageable pageable){
+        return repositoryPledgeAgreement.getCurrentPledgeAgreementsForEmployee(pageable, employeeId).getContent();
     }
 
     @Override
@@ -276,7 +279,7 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
     }
 
     @Override
-    public List<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException{
+    public List<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam, Pageable pageable) throws ReflectiveOperationException{
         Search<PledgeAgreement> pledgeAgreementSearch = new Search<>(PledgeAgreement.class);
 
         Set<String> clientAttributes = new HashSet<>();
@@ -294,7 +297,7 @@ public class PledgeAgreementServiceImpl implements PledgeAgreementService {
 
         Specification<PledgeAgreement> specification = pledgeAgreementSearch.getSpecification();
 
-        return repositoryPledgeAgreement.findAll(specification);
+        return repositoryPledgeAgreement.findAll(specification, pageable).getContent();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,8 +47,8 @@ public class LoanAgreementController {
     }
 
     @GetMapping("/current")
-    public List<LoanAgreementDto> getLoanAgreements(){
-        return dtoFactory.getLoanAgreementsDto(loanAgreementService.getAllCurrentLoanAgreements());
+    public List<LoanAgreementDto> getLoanAgreements(Pageable pageable){
+        return dtoFactory.getLoanAgreementsDto(loanAgreementService.getAllCurrentLoanAgreements(pageable));
     }
 
     @GetMapping("/current/count")
@@ -66,8 +67,9 @@ public class LoanAgreementController {
     }
 
     @GetMapping("/current_la_for_employee")
-    public List<LoanAgreementDto> getCurrentLoanAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
-        return dtoFactory.getLoanAgreementsDto(loanAgreementService.getCurrentLoanAgreementsByEmployee(employeeId));
+    public List<LoanAgreementDto> getCurrentLoanAgreementByEmployee(Pageable pageable,
+                                                                    @RequestParam("employeeId") Long employeeId){
+        return dtoFactory.getLoanAgreementsDto(loanAgreementService.getCurrentLoanAgreementsByEmployee(pageable, employeeId));
     }
 
     @GetMapping("/current_la_for_employee/count")
@@ -88,8 +90,8 @@ public class LoanAgreementController {
     }
 
     @GetMapping("/search")
-    public List<LoanAgreementDto> getLoanAgreementBySearchCriteria(@RequestParam Map<String, String> reqParam) throws ReflectiveOperationException {
-        List<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementFromSearch(reqParam);
+    public List<LoanAgreementDto> getLoanAgreementBySearchCriteria(@RequestParam Map<String, String> reqParam, Pageable pageable) throws ReflectiveOperationException {
+        List<LoanAgreement> loanAgreementList = loanAgreementService.getLoanAgreementFromSearch(reqParam, pageable);
 
         return dtoFactory.getLoanAgreementsDto(loanAgreementList);
     }

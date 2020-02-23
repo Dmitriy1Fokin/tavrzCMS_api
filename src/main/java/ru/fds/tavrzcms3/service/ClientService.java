@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.service;
 
+import org.springframework.data.domain.Pageable;
 import ru.fds.tavrzcms3.dictionary.TypeOfClient;
 import ru.fds.tavrzcms3.domain.Client;
 
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public interface ClientService {
     Optional<Client> getClientById(Long clientId);
-    List<Client> getAllClients();
+    List<Client> getAllClients(Pageable pageable);
     List<Client> getClientsByEmployee(Long employeeId);
     List<Client> getClientsByClientManager(Long clientManagerId);
     String getFullNameClient(Long clientId);

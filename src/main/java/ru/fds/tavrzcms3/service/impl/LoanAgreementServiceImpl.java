@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.service.impl;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,8 +77,8 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
     }
 
     @Override
-    public List<LoanAgreement> getAllCurrentLoanAgreements(){
-        return repositoryLoanAgreement.findAllByStatusLAEquals(StatusOfAgreement.OPEN);
+    public List<LoanAgreement> getAllCurrentLoanAgreements(Pageable pageable){
+        return repositoryLoanAgreement.findAllByStatusLAEquals(pageable, StatusOfAgreement.OPEN).getContent();
     }
 
     @Override
@@ -86,8 +87,8 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
     }
 
     @Override
-    public List<LoanAgreement> getCurrentLoanAgreementsByEmployee(Long employeeId){
-        return repositoryLoanAgreement.getLoanAgreementByEmployee(employeeId, StatusOfAgreement.OPEN.getTranslate());
+    public List<LoanAgreement> getCurrentLoanAgreementsByEmployee(Pageable pageable, Long employeeId){
+        return repositoryLoanAgreement.getLoanAgreementByEmployee(pageable, employeeId, StatusOfAgreement.OPEN.getTranslate()).getContent();
     }
 
     @Override
@@ -106,7 +107,7 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
     }
 
     @Override
-    public List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException {
+    public List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam, Pageable pageable) throws ReflectiveOperationException {
         Search<LoanAgreement> loanAgreementSearch = new Search<>(LoanAgreement.class);
 
         Set<String> clientAttributes = new HashSet<>();
@@ -124,7 +125,7 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
 
         Specification<LoanAgreement> specification = loanAgreementSearch.getSpecification();
 
-        return repositoryLoanAgreement.findAll(specification);
+        return repositoryLoanAgreement.findAll(specification, pageable).getContent();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.service;
 
+import org.springframework.data.domain.Pageable;
 import ru.fds.tavrzcms3.dictionary.TypeOfPledgeAgreement;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
@@ -14,20 +15,20 @@ import java.util.Optional;
 public interface PledgeAgreementService {
     Optional<PledgeAgreement> getPledgeAgreementById(Long pledgeAgreementId);
     List<PledgeAgreement> getPledgeAgreementsByIds(List<Long> ids);
-    List<PledgeAgreement> getAllCurrentPledgeAgreements();
+    List<PledgeAgreement> getAllCurrentPledgeAgreements(Pageable pageable);
     Integer getCountCurrentPledgeAgreements();
-    List<PledgeAgreement> getAllCurrentPledgeAgreements(TypeOfPledgeAgreement typeOfPledgeAgreement);
+    List<PledgeAgreement> getAllCurrentPledgeAgreements(Pageable pageable, TypeOfPledgeAgreement typeOfPledgeAgreement);
     Integer getCountCurrentPledgeAgreements(TypeOfPledgeAgreement typeOfPledgeAgreement);
-    List<PledgeAgreement> getPledgeAgreementsByNumPA(String numPA);
+    List<PledgeAgreement> getPledgeAgreementsByNumPA(Pageable pageable, String numPA);
     List<LocalDate> getDatesOfConclusion(PledgeAgreement pledgeAgreement);
     List<LocalDate> getDatesOfMonitoring(PledgeAgreement pledgeAgreement);
     List<String> getResultsOfMonitoring(PledgeAgreement pledgeAgreement);
     List<String> getTypeOfCollateral(PledgeAgreement pledgeAgreement);
     List<String> getBriefInfoAboutCollateral(PledgeAgreement pledgeAgreement);
     List<PledgeAgreement> getAllPledgeAgreementByPLedgeSubject(Long pledgeSubjectId);
-    List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(Long employeeId, TypeOfPledgeAgreement pervPosl);
+    List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(Long employeeId, TypeOfPledgeAgreement pervPosl, Pageable pageable);
     Integer getCountOfCurrentPledgeAgreementsByEmployee(Long employeeId, TypeOfPledgeAgreement pervPosl);
-    List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(Long employeeId);
+    List<PledgeAgreement> getCurrentPledgeAgreementsByEmployee(Long employeeId, Pageable pageable);
     Integer getCountOfCurrentPledgeAgreementsByEmployee(Long employeeId);
     List<PledgeAgreement> getPledgeAgreementWithMonitoringNotDone(Long employeeId);
     Integer getCountPledgeAgreementWithMonitoringNotDone(Long employeeId);
@@ -41,7 +42,7 @@ public interface PledgeAgreementService {
     Integer getCountPledgeAgreementWithConclusionIsDone(Long employeeId);
     List<PledgeAgreement> getPledgeAgreementWithConclusionOverdue(Long employeeId);
     Integer getCountPledgeAgreementWithConclusionOverdue(Long employeeId);
-    List<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException;
+    List<PledgeAgreement> getPledgeAgreementFromSearch(Map<String, String> searchParam, Pageable pageable) throws ReflectiveOperationException;
     List<PledgeAgreement> getCurrentPledgeAgreementsByPledgor(Long clientId);
     List<PledgeAgreement> getClosedPledgeAgreementsByPledgor(Long clientId);
     List<PledgeAgreement> getCurrentPledgeAgreementsByLoanAgreement(Long loanAgreementId);

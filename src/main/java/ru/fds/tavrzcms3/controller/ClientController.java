@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,9 +40,9 @@ public class ClientController {
         this.dtoFactory = dtoFactory;
     }
 
-    @GetMapping
-    public List<ClientDto> getAllClients(){
-        return dtoFactory.getClientsDto(clientService.getAllClients());
+    @GetMapping()
+    public List<ClientDto> getAllClients(Pageable pageable){
+        return dtoFactory.getClientsDto(clientService.getAllClients(pageable));
     }
 
     @GetMapping("/{clientId}")

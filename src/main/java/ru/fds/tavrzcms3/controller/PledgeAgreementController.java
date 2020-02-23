@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,8 +48,8 @@ public class PledgeAgreementController {
     }
 
     @GetMapping("/current")
-    public List<PledgeAgreementDto> getCurrentPledgeAgreements(){
-        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getAllCurrentPledgeAgreements());
+    public List<PledgeAgreementDto> getCurrentPledgeAgreements(Pageable pageable){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getAllCurrentPledgeAgreements(pageable));
     }
 
     @GetMapping("/current/count")
@@ -57,9 +58,9 @@ public class PledgeAgreementController {
     }
 
     @GetMapping("/current/perv")
-    public List<PledgeAgreementDto> getCurrentPervPledgeAgreements(){
+    public List<PledgeAgreementDto> getCurrentPervPledgeAgreements(Pageable pageable){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
-                .getAllCurrentPledgeAgreements(TypeOfPledgeAgreement.PERV));
+                .getAllCurrentPledgeAgreements(pageable, TypeOfPledgeAgreement.PERV));
     }
 
     @GetMapping("/current/count/perv")
@@ -68,9 +69,9 @@ public class PledgeAgreementController {
     }
 
     @GetMapping("/current/posl")
-    public List<PledgeAgreementDto> getCurrentPoslPledgeAgreements(){
+    public List<PledgeAgreementDto> getCurrentPoslPledgeAgreements(Pageable pageable){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
-                .getAllCurrentPledgeAgreements(TypeOfPledgeAgreement.POSL));
+                .getAllCurrentPledgeAgreements(pageable, TypeOfPledgeAgreement.POSL));
     }
 
     @GetMapping("/current/count/posl")
@@ -159,14 +160,14 @@ public class PledgeAgreementController {
     }
 
     @GetMapping("/search_by_num")
-    public List<PledgeAgreementDto> getPledgeAgreementsByNum(@RequestParam("numPA") String numPA){
-        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementsByNumPA(numPA));
+    public List<PledgeAgreementDto> getPledgeAgreementsByNum(@RequestParam("numPA") String numPA, Pageable pageable){
+        return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService.getPledgeAgreementsByNumPA(pageable, numPA));
     }
 
     @GetMapping("/current_pa_for_employee")
-    public List<PledgeAgreementDto> getCurrentPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
+    public List<PledgeAgreementDto> getCurrentPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId, Pageable pageable){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
-                .getCurrentPledgeAgreementsByEmployee(employeeId));
+                .getCurrentPledgeAgreementsByEmployee(employeeId, pageable));
     }
 
     @GetMapping("/current_pa_for_employee/count")
@@ -175,9 +176,9 @@ public class PledgeAgreementController {
     }
 
     @GetMapping("/current_pa_for_employee/perv")
-    public List<PledgeAgreementDto> getCurrentPervPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
+    public List<PledgeAgreementDto> getCurrentPervPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId, Pageable pageable){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
-                .getCurrentPledgeAgreementsByEmployee(employeeId, TypeOfPledgeAgreement.PERV));
+                .getCurrentPledgeAgreementsByEmployee(employeeId, TypeOfPledgeAgreement.PERV, pageable));
     }
 
     @GetMapping("/current_pa_for_employee/count/perv")
@@ -186,9 +187,9 @@ public class PledgeAgreementController {
     }
 
     @GetMapping("/current_pa_for_employee/posl")
-    public List<PledgeAgreementDto> getCurrentPoslPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId){
+    public List<PledgeAgreementDto> getCurrentPoslPledgeAgreementByEmployee(@RequestParam("employeeId") Long employeeId, Pageable pageable){
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementService
-                .getCurrentPledgeAgreementsByEmployee(employeeId, TypeOfPledgeAgreement.POSL));
+                .getCurrentPledgeAgreementsByEmployee(employeeId, TypeOfPledgeAgreement.POSL, pageable));
     }
 
     @GetMapping("/current_pa_for_employee/count/posl")
@@ -202,8 +203,8 @@ public class PledgeAgreementController {
     }
 
     @GetMapping("/search")
-    public List<PledgeAgreementDto> getPledgeAgreementBySearchCriteria(@RequestParam Map<String, String> reqParam) throws ReflectiveOperationException {
-        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementFromSearch(reqParam);
+    public List<PledgeAgreementDto> getPledgeAgreementBySearchCriteria(@RequestParam Map<String, String> reqParam, Pageable pageable) throws ReflectiveOperationException {
+        List<PledgeAgreement> pledgeAgreementList = pledgeAgreementService.getPledgeAgreementFromSearch(reqParam, pageable);
         return dtoFactory.getPledgeAgreementsDto(pledgeAgreementList);
     }
 

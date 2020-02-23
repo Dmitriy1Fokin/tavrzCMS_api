@@ -1,6 +1,8 @@
 package ru.fds.tavrzcms3.service.impl;
 
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,8 +65,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<Client> getAllClients(){
-        return repositoryClient.findAll();
+    public List<Client> getAllClients(Pageable pageable){
+        return repositoryClient.findAll(pageable).getContent();
     }
 
     @Override
