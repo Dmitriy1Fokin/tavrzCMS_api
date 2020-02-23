@@ -48,6 +48,7 @@ public class LoanAgreementConverterDto implements ConverterDto<LoanAgreement, Lo
                 .pfo(entity.getPfo())
                 .qualityCategory(entity.getQualityCategory())
                 .clientId(entity.getClient().getClientId())
+                .clientName(clientService.getFullNameClient(entity.getClient().getClientId()))
                 .build();
     }
 }
