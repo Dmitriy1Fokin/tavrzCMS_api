@@ -1,7 +1,6 @@
 package ru.fds.tavrzcms3;
 
 import ru.fds.tavrzcms3.dictionary.TypeOfClient;
-import ru.fds.tavrzcms3.domain.AppUser;
 import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.ClientManager;
 import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
@@ -9,14 +8,6 @@ import ru.fds.tavrzcms3.domain.embedded.ClientLegalEntity;
 import java.util.List;
 
 public final class TestUtils {
-
-    public static AppUser getAppUser(){
-        return AppUser.builder()
-                .userId(1L)
-                .name("name")
-                .password("pass")
-                .build();
-    }
 
     public static ClientManager getClientManager(){
         return ClientManager.builder()

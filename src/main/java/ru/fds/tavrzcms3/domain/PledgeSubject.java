@@ -33,6 +33,7 @@ import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
 import javax.persistence.SecondaryTables;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -60,7 +61,8 @@ import javax.validation.constraints.PositiveOrZero;
 public class PledgeSubject {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "pledge_subject_sequence", sequenceName = "pledge_subject_pledge_subject_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pledge_subject_sequence")
 	@Column(name ="pledge_subject_id")
 	private Long pledgeSubjectId;
 

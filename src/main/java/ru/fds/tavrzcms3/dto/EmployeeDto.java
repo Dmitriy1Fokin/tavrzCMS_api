@@ -23,8 +23,6 @@ public class EmployeeDto{
 
     private String patronymic;
 
-    private Long appUserId;
-
     private String fullName;
 
 }

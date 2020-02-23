@@ -10,8 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -24,7 +23,8 @@ import javax.validation.constraints.NotBlank;
 public class Employee {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "employee_sequence", sequenceName = "employee_employee_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_sequence")
 	@Column(name ="employee_id")
 	private Long employeeId;
 
@@ -38,19 +38,4 @@ public class Employee {
 	
 	@Column(name ="patronymic")
 	private String patronymic;
-
-	@OneToOne
-	@JoinColumn(name = "login")
-	private AppUser appUser;
-
-	@Override
-	public String toString() {
-		return "Employee{" +
-				"employeeId=" + employeeId +
-				", surname='" + surname + '\'' +
-				", name='" + name + '\'' +
-				", patronymic='" + patronymic + '\'' +
-				", appUser=" + appUser +
-				'}';
-	}
 }
