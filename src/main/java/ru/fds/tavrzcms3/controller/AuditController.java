@@ -39,6 +39,11 @@ public class AuditController {
         return auditService.getAuditResult(pageable);
     }
 
+    @GetMapping("/executeAudit")
+    public void executeAudit(){
+        auditService.executeAudit();
+    }
+
     @GetMapping("/ignore")
     public AuditResultDto setIgnore(@RequestParam("auditResultId") String auditResultId){
         return auditService.setIgnore(auditResultId);

@@ -3,15 +3,19 @@ package ru.fds.tavrzcms3.service.external;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.fds.tavrzcms3.dto.external.AuditResultDto;
+import ru.fds.tavrzcms3.service.MessageService;
 
 import java.util.Collection;
 
 @Service
 public class AuditService {
     private final AuditFeignService auditFeignService;
+    private final MessageService messageService;
 
-    public AuditService(AuditFeignService auditFeignService) {
+    public AuditService(AuditFeignService auditFeignService,
+                        MessageService messageService) {
         this.auditFeignService = auditFeignService;
+        this.messageService = messageService;
     }
 
     public Collection<AuditResultDto> getAuditResultAboutLoanAgreement(Long id){
@@ -38,5 +42,8 @@ public class AuditService {
         return auditFeignService.setActual(id);
     }
 
+    public void executeAudit(){
+        messageService.sendExecuteAudit();
+    }
 
 }

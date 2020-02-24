@@ -7,5 +7,6 @@ public interface MessageService {
     void sendExistPledgeAgreement(Long pledgeAgreementId);
     void sendNewPledgeSubject(Long pledgeSubjectId);
     void sendExistPledgeSubject(Long pledgeSubjectId);
+    void sendExecuteAudit();
 
 }

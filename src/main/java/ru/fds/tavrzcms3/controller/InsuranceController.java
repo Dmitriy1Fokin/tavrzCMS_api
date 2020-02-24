@@ -44,7 +44,7 @@ public class InsuranceController {
                 .orElseThrow(()-> new NotFoundException("Insurance not found"));
     }
 
-    @GetMapping("pledge_subject")
+    @GetMapping("/pledge_subject")
     public List<InsuranceDto> getInsurancesByPledgeSubject(@RequestParam("pledgeSubjectId") Long pledgeSubjectId){
         return dtoFactory.getInsurancesDto(insuranceService.getInsurancesByPledgeSubject(pledgeSubjectId));
     }

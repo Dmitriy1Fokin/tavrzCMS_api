@@ -55,7 +55,7 @@ public class MonitoringController {
         return dtoFactory.getMonitoringsDto(monitoringService.getMonitoringByPledgeSubject(pledgeSubjectId));
     }
 
-    @PostMapping("insert")
+    @PostMapping("/insert")
     public MonitoringDto insertMonitoring(@Valid @RequestBody MonitoringDto monitoringDto,
                                           @RequestParam("pledgeSubjectId") Long pledgeSubjectId){
 
@@ -82,7 +82,7 @@ public class MonitoringController {
         return dtoFactory.getMonitoringsDto(monitoringList);
     }
 
-    @PostMapping("insert/client")
+    @PostMapping("/insert/client")
     public List<MonitoringDto> insertMonitoringByClient(@Valid @RequestBody MonitoringDto monitoringDto,
                                                         @RequestParam("clientId") Long clienttId){
         Monitoring monitoring = dtoFactory.getMonitoringEntity(monitoringDto);

@@ -20,6 +20,8 @@ public class MessageServiceImpl implements MessageService {
     private String queueNewPledgeSubject;
     @Value("${queue_name.audit_exist_pledge_subject}")
     private String queueExistPledgeSubject;
+    @Value("${queue_name.execute_audit}")
+    private String queueExecuteAudit;
 
     private final AmqpTemplate amqpTemplate;
 
@@ -55,5 +57,10 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void sendExistPledgeSubject(Long pledgeSubjectId) {
         amqpTemplate.convertAndSend(queueExistPledgeSubject, pledgeSubjectId);
+    }
+
+    @Override
+    public void sendExecuteAudit(){
+        amqpTemplate.convertAndSend(queueExecuteAudit, "");
     }
 }
