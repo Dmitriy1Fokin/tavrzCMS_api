@@ -8,7 +8,7 @@
 <li>...</li>
 </ol>
 Также для работы микросервисов необходим <a href="https://github.com/Dmitriy1Fokin/tavrzCMS_server">TavrzCMS_server</a>. Он служит для взаимодействия сервисов между собой (реестр сервисов).<br><br>
-Стек технологий: Java 11, PostgreSQL 10, MongoDB, Spring(Boot, Security, Data Jpa, Data mongodb, Data jdbc, Web? Eureka), Thymeleaf, RabbitMQ, Flyway, Swagger.<br><br>
+Стек технологий: Java 11, PostgreSQL 10, MongoDB, Spring(Boot, Security, Data Jpa, Data mongodb, Data jdbc, Web, Eureka), Thymeleaf, RabbitMQ, Flyway, Swagger.<br><br>
 <strong>TavrzCMS_api</strong>:
 Сервис для учета/хранения данных о залоговом портфеле. 
 Основные сущности:
