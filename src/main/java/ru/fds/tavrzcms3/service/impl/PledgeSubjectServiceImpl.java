@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.service.impl;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.fds.tavrzcms3.dictionary.TypeOfEquipment;
@@ -111,7 +112,7 @@ public class PledgeSubjectServiceImpl implements PledgeSubjectService {
     }
 
     @Override
-    public List<PledgeSubject> getPledgeSubjectsFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException{
+    public List<PledgeSubject> getPledgeSubjectsFromSearch(Map<String, String> searchParam, Pageable pageable) throws ReflectiveOperationException{
         final String SEARCH_PARAM_TYPE_OF_COLLATERAL = "typeOfCollateral";
 
         Search<PledgeSubject> pledgeSubjectSearch = new Search<>(PledgeSubject.class);
@@ -138,7 +139,7 @@ public class PledgeSubjectServiceImpl implements PledgeSubjectService {
             }
         }
 
-        return repositoryPledgeSubject.findAll(pledgeSubjectSearch.getSpecification());
+        return repositoryPledgeSubject.findAll(pledgeSubjectSearch.getSpecification(), pageable).getContent();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ru.fds.tavrzcms3.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,9 +67,8 @@ public class PledgeSubjectController {
     }
 
     @GetMapping("/search")
-    public List<PledgeSubjectDto> getPledgeSubjectBySearchCriteria(@RequestParam Map<String, String> reqParam) throws ReflectiveOperationException {
-        List<PledgeSubject> pledgeSubjectList = pledgeSubjectService.getPledgeSubjectsFromSearch(reqParam);
-        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectList);
+    public List<PledgeSubjectDto> getPledgeSubjectBySearchCriteria(@RequestParam Map<String, String> reqParam, Pageable pageable) throws ReflectiveOperationException {
+        return dtoFactory.getPledgeSubjectsDto(pledgeSubjectService.getPledgeSubjectsFromSearch(reqParam, pageable));
     }
 
     @PostMapping("/insert")
