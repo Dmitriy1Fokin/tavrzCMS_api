@@ -18,7 +18,7 @@
 <li>Клиент (Залогодатель/Заемщик);</li>
 <li>Кредитный договор;</li>
 <li>Договор залога;</li>
-<li>Предмет залога (транспорт, оборудование, земельные участки, помещения/здания/сооружения, ТМЦ, ценные бумаги, судна;</li>
+<li>Предмет залога (транспорт, оборудование, земельные участки, помещения/здания/сооружения, ТМЦ, ценные бумаги, судна);</li>
 <li>Обременения предмета залога;</li>
 <li>Договоры страхования;</li>
 <li>История мониторингов;</li>
@@ -32,12 +32,12 @@
 <li>Запускаем <a href="https://github.com/Dmitriy1Fokin/tavrzCMS_server">TavrzCMS_server</a> (mvn package --> java –jar file.jar).</li>
 <li>Запускаем базы данных и rabbitMQ (все на дефолтных портах).
 <ol>
-<li>Postgres: user: postgres, password: postgres, db name: tavrzdb, db name: tavrz_sec.</li>
-<li>Mongo: db name: auditCollateralDB.</li></li>
+  <li>Postgres: user: <code>postgres</code>, password: <code>postgres</code>, db name: <code>tavrzdb</code>, db name: <code>tavrz_sec</code>.</li>
+<li>Mongo: db name: <code>auditCollateralDB</code>.</li></li>
 </ol>
 <li>Запускаем TavrzCMS_api (mvn package --> java –jar file.jar). При старте запустится flyway и инициализирует бд и данные в бд. </li>
 <li>Запускаем <a href="https://github.com/Dmitriy1Fokin/tavrzCMS_auditCollateral">TavrzCMS_audit</a> (gradle build --> java –jar file.jar). </li>
-<li>Запускаем <a href="https://github.com/Dmitriy1Fokin/tavrzCMS_tl">TavrzCMS_tl</a> (mvn package --> java –jar file.jar). При старте запустится flyway и инициализирует бд и данные в бд. <strong>ВАЖНО!</strong> Для работы в сервисе необходимо авторизоваться. Всего 12 пользователей: user1, user2 … user12. У всех пароль: pass.</li>
+<li>Запускаем <a href="https://github.com/Dmitriy1Fokin/tavrzCMS_tl">TavrzCMS_tl</a> (mvn package --> java –jar file.jar). При старте запустится flyway и инициализирует бд и данные в бд. <strong>ВАЖНО!</strong> Для работы в сервисе необходимо авторизоваться. Всего 12 пользователей: <code>user1</code>, <code>user2</code> … <code>user12</code>. У всех пароль: <code>pass</code>.</li>
 </ol>
 
 
