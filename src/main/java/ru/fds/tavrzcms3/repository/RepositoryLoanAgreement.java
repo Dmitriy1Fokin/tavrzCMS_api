@@ -44,8 +44,8 @@ public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Lo
                                         "from kd k\n" +
                                         "join client_prime cp on k.loaner_id = cp.client_id\n" +
                                         "join employee e on cp.employee_id = e.employee_id\n" +
-                                        "where e.employee_id = 10\n" +
-                                        "and k.status = 'открыт'")
+                                        "where e.employee_id = :employeeId\n" +
+                                        "and k.status = :statusLA")
     Page<LoanAgreement> getLoanAgreementByEmployee(Pageable pageable,
                                                    @Param("employeeId") Long employeeId,
                                                    @Param("statusLA") String statusLA);
