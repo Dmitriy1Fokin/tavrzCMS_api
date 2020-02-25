@@ -36,7 +36,7 @@
 <li>Mongo: db name: auditCollateralDB.</li></li>
 </ol>
 <li>Запускаем TavrzCMS_api (mvn package --> java –jar file.jar). При старте запустится flyway и инициализирует бд и данные в бд. </li>
-<li>Запускаем <a href="https://github.com/Dmitriy1Fokin/tavrzCMS_auditCollateral">TavrzCMS_audit</a> (mvn package --> java –jar file.jar). </li>
+<li>Запускаем <a href="https://github.com/Dmitriy1Fokin/tavrzCMS_auditCollateral">TavrzCMS_audit</a> (gradle build --> java –jar file.jar). </li>
 <li>Запускаем <a href="https://github.com/Dmitriy1Fokin/tavrzCMS_tl">TavrzCMS_tl</a> (mvn package --> java –jar file.jar). При старте запустится flyway и инициализирует бд и данные в бд. <strong>ВАЖНО!</strong> Для работы в сервисе необходимо авторизоваться. Всего 12 пользователей: user1, user2 … user12. У всех пароль: pass.</li>
 </ol>
 
