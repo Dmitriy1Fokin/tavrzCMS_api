@@ -22,12 +22,37 @@ public class AuditService {
         return auditFeignService.getAuditResultAboutLoanAgreement(id);
     }
 
+    public Collection<AuditResultDto> getActualAuditResultAboutLoanAgreement(Long id){
+        return auditFeignService.getActualAuditResultAboutLoanAgreement(id);
+    }
+
+    public Collection<AuditResultDto> getIgnoreAuditResultAboutLoanAgreement(Long id){
+        return auditFeignService.getIgnoreAuditResultAboutLoanAgreement(id);
+    }
+
+
     public Collection<AuditResultDto> getAuditResultAboutPledgeAgreement(Long id){
         return auditFeignService.getAuditResultAboutPledgeAgreement(id);
     }
 
+    public Collection<AuditResultDto> getActualAuditResultAboutPledgeAgreement(Long id){
+        return auditFeignService.getActualAuditResultAboutPledgeAgreement(id);
+    }
+
+    public Collection<AuditResultDto> getIgnoreAuditResultAboutPledgeAgreement(Long id){
+        return auditFeignService.getIgnoreAuditResultAboutPledgeSubject(id);
+    }
+
     public Collection<AuditResultDto> getAuditResultAboutPledgeSubject(Long id){
         return auditFeignService.getAuditResultAboutPledgeSubject(id);
+    }
+
+    public Collection<AuditResultDto> getActualAuditResultAboutPledgeSubject(Long id){
+        return auditFeignService.getActualAuditResultAboutPledgeSubject(id);
+    }
+
+    public Collection<AuditResultDto> getIgnoreAuditResultAboutPledgeSubject(Long id){
+        return auditFeignService.getIgnoreAuditResultAboutPledgeSubject(id);
     }
 
     public Collection<AuditResultDto> getAuditResult(Pageable pageable){

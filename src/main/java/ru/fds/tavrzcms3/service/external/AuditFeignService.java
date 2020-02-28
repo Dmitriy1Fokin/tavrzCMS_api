@@ -15,11 +15,29 @@ public interface AuditFeignService {
     @GetMapping("/audit/loan_agreement")
     Collection<AuditResultDto> getAuditResultAboutLoanAgreement(@RequestParam("loanAgreementId") Long loanAgreementId);
 
+    @GetMapping("/audit/loan_agreement/actual")
+    Collection<AuditResultDto> getActualAuditResultAboutLoanAgreement(@RequestParam("loanAgreementId") Long loanAgreementId);
+
+    @GetMapping("/audit/loan_agreement/ignore")
+    Collection<AuditResultDto> getIgnoreAuditResultAboutLoanAgreement(@RequestParam("loanAgreementId") Long loanAgreementId);
+
     @GetMapping("/audit/pledge_agreement")
     Collection<AuditResultDto> getAuditResultAboutPledgeAgreement(@RequestParam("pledgeAgreementId") Long pledgeAgreementId);
 
+    @GetMapping("/audit/pledge_agreement/actual")
+    Collection<AuditResultDto> getActualAuditResultAboutPledgeAgreement(@RequestParam("pledgeAgreementId") Long pledgeAgreementId);
+
+    @GetMapping("/audit/pledge_agreement/ignore")
+    Collection<AuditResultDto> getIgnoreAuditResultAboutPledgeAgreement(@RequestParam("pledgeAgreementId") Long pledgeAgreementId);
+
     @GetMapping("/audit/pledge_subject")
     Collection<AuditResultDto> getAuditResultAboutPledgeSubject(@RequestParam("pledgeSubjectId") Long pledgeSubjectId);
+
+    @GetMapping("/audit/pledge_subject/actual")
+    Collection<AuditResultDto> getActualAuditResultAboutPledgeSubject(@RequestParam("pledgeSubjectId") Long pledgeSubjectId);
+
+    @GetMapping("/audit/pledge_subject/ignore")
+    Collection<AuditResultDto> getIgnoreAuditResultAboutPledgeSubject(@RequestParam("pledgeSubjectId") Long pledgeSubjectId);
 
     @GetMapping("/audit")
     Collection<AuditResultDto> getAuditResult(Pageable pageable);
