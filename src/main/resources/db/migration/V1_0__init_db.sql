@@ -521,7 +521,7 @@ CREATE TABLE public.encumbrance (
     date_begin date NOT NULL,
     date_end date NOT NULL,
     num_of_encumbrance character varying NOT NULL,
-    CONSTRAINT check_encumbrance_type_of_encumbrance CHECK (((type_of_encumbrance)::text = ANY (ARRAY[('залог'::character varying)::text, ('арест'::character varying)::text, ('аренда'::character varying)::text, ('сервитут'::character varying)::text, ('доверительное управление'::character varying)::text])))
+    CONSTRAINT check_encumbrance_type_of_encumbrance CHECK (((type_of_encumbrance)::text = ANY (ARRAY[('залог Банка'::character varying)::text, ('залог третьих лиц'::character varying)::text, ('арест'::character varying)::text, ('аренда'::character varying)::text, ('сервитут'::character varying)::text, ('доверительное управление'::character varying)::text])))
 );
 
 
@@ -1065,7 +1065,6 @@ ALTER TABLE ONLY public.employee
     ADD CONSTRAINT employee_pkey PRIMARY KEY (employee_id);
 
 
-
 --
 -- Name: insurance insurance_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
@@ -1216,7 +1215,6 @@ ALTER TABLE ONLY public.pledge_vessel
 
 ALTER TABLE ONLY public.pledge_subject
     ADD CONSTRAINT ps_pkey PRIMARY KEY (pledge_subject_id);
-
 
 
 --
@@ -1436,4 +1434,3 @@ ALTER TABLE ONLY public.kd_dz
 
 ALTER TABLE ONLY public.kd_dz
     ADD CONSTRAINT kd_dz_new_fk_1 FOREIGN KEY (dz_id) REFERENCES public.dz(dz_id);
-

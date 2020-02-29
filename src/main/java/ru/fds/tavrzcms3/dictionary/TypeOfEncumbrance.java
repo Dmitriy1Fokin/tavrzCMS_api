@@ -7,7 +7,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum TypeOfEncumbrance implements BasicEnum<String>{
-    PLEDGE("залог"),
+    PLEDGE_OUR("залог Банка"),
+    PLEDGE_OTHER("залог третьих лиц"),
     ARREST("арест"),
     LEASE("аренда"),
     SERVITUDE("сервитут"),
