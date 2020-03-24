@@ -1228,14 +1228,14 @@ CREATE TRIGGER trigger_cost_history BEFORE INSERT OR UPDATE ON public.cost_histo
 -- Name: dz_ps trigger_delete_costs_dz; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER trigger_delete_costs_dz BEFORE UPDATE ON public.dz_ps FOR EACH ROW EXECUTE PROCEDURE public.delete_costs_dz();
+CREATE TRIGGER trigger_delete_costs_dz AFTER DELETE ON public.dz_ps FOR EACH ROW EXECUTE PROCEDURE public.delete_costs_dz();
 
 
 --
--- Name: dz_ps trigger_insert_costs_dz; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: dz_ps trigger_insert_costs_dz; Type: TRIGGER; Schema: public; Owner: dmitriy
 --
 
-CREATE TRIGGER trigger_insert_costs_dz BEFORE UPDATE ON public.dz_ps FOR EACH ROW EXECUTE PROCEDURE public.insert_costs_dz();
+CREATE TRIGGER trigger_insert_costs_dz AFTER INSERT ON public.dz_ps FOR EACH ROW EXECUTE PROCEDURE public.insert_costs_dz();
 
 
 --
