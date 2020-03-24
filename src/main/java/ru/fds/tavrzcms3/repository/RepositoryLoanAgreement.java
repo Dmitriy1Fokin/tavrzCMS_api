@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.fds.tavrzcms3.dictionary.StatusOfAgreement;
-import ru.fds.tavrzcms3.domain.Client;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 import ru.fds.tavrzcms3.domain.PledgeAgreement;
 
@@ -15,9 +14,9 @@ import java.util.List;
 
 public interface RepositoryLoanAgreement extends JpaRepository<LoanAgreement, Long>, JpaSpecificationExecutor<LoanAgreement> {
     List<LoanAgreement> findAllByLoanAgreementIdIn(List<Long> ids);
-    List<LoanAgreement> findAllByClient(Client client);
     Page<LoanAgreement> findAllByStatusLAEquals(Pageable pageable, StatusOfAgreement statusOfAgreement);
     Integer countAllByStatusLAEquals(StatusOfAgreement statusOfAgreement);
+    List<LoanAgreement> findByNumLAContainingIgnoreCase(String numLA);
 
     @Query("select count(la) from LoanAgreement la join la.client c join c.employee e where e.employeeId = :employeeId")
     Integer getCountOfCurrentLoanAgreementByEmployee(@Param("employeeId") Long employeeId);

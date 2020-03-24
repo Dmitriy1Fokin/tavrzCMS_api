@@ -66,6 +66,11 @@ public class LoanAgreementController {
         return dtoFactory.getLoanAgreementsDto(loanAgreementService.getClosedLoanAgreementsByLoaner(clientId));
     }
 
+    @GetMapping("/num")
+    public List<LoanAgreementDto> getLoanAgreementsByNumLA(@RequestParam("numLA") String numLA){
+        return dtoFactory.getLoanAgreementsDto(loanAgreementService.getLoanAgreementsByNumLA(numLA));
+    }
+
     @GetMapping("/current_la_for_employee")
     public List<LoanAgreementDto> getCurrentLoanAgreementByEmployee(Pageable pageable,
                                                                     @RequestParam("employeeId") Long employeeId){

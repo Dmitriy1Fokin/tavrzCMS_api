@@ -1,6 +1,5 @@
 package ru.fds.tavrzcms3.service;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ru.fds.tavrzcms3.domain.LoanAgreement;
 
@@ -21,6 +20,7 @@ public interface LoanAgreementService {
     Integer getCountOfCurrentLoanAgreementsByEmployee(Long employeeId);
     List<LoanAgreement> getCurrentLoanAgreementsByLoaner(Long clientId);
     List<LoanAgreement> getClosedLoanAgreementsByLoaner(Long clientId);
+    List<LoanAgreement> getLoanAgreementsByNumLA(String numLA);
     List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam, Pageable pageable) throws ReflectiveOperationException;
     List<LoanAgreement> getNewLoanAgreementsFromFile(File file) throws IOException;
     List<LoanAgreement> getCurrentLoanAgreementsFromFile(File file) throws IOException;

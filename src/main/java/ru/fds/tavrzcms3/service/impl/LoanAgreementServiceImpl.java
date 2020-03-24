@@ -112,6 +112,11 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
     }
 
     @Override
+    public List<LoanAgreement> getLoanAgreementsByNumLA(String numLA){
+        return repositoryLoanAgreement.findByNumLAContainingIgnoreCase(numLA);
+    }
+
+    @Override
     public List<LoanAgreement> getLoanAgreementFromSearch(Map<String, String> searchParam, Pageable pageable) throws ReflectiveOperationException {
         Search<LoanAgreement> loanAgreementSearch = new Search<>(LoanAgreement.class);
 
@@ -266,6 +271,7 @@ public class LoanAgreementServiceImpl implements LoanAgreementService {
     @Override
     @Transactional
     public LoanAgreement updateLoanAgreement(LoanAgreement loanAgreement){
+        //TODO: add logic about change perv/posl.
         loanAgreement = repositoryLoanAgreement.saveAndFlush(loanAgreement);
         messageService.sendExistLoanAgreement(loanAgreement.getLoanAgreementId());
         return loanAgreement;
