@@ -7,8 +7,10 @@ import ru.fds.tavrzcms3.domain.PledgeAgreement;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public interface MonitoringService {
+    Optional<Monitoring> getMonitoringById(Long monitoringId);
     List<Monitoring> getMonitoringByPledgeSubject(Long pledgeSubjectId);
     List<Monitoring> getNewMonitoringsFromFile(File file) throws IOException;
     List<Monitoring> getCurrentMonitoringsFromFile(File file) throws IOException;

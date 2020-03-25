@@ -54,7 +54,7 @@ public class MonitoringServiceImpl implements MonitoringService {
         this.excelColumnNum = excelColumnNum;
     }
 
-    private Optional<Monitoring> getMonitoringById(Long monitoringId){
+    public Optional<Monitoring> getMonitoringById(Long monitoringId){
         return repositoryMonitoring.findById(monitoringId);
     }
 
