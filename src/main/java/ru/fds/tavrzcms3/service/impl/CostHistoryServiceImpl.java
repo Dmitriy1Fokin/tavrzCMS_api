@@ -45,7 +45,8 @@ public class CostHistoryServiceImpl implements CostHistoryService {
         this.excelColumnNum = excelColumnNum;
     }
 
-    private Optional<CostHistory> getCostHistoryById(Long costHistoryId){
+    @Override
+    public Optional<CostHistory> getCostHistoryById(Long costHistoryId){
         return repositoryCostHistory.findById(costHistoryId);
     }
 

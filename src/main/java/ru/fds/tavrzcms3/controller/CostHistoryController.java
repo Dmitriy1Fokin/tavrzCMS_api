@@ -1,6 +1,7 @@
 package ru.fds.tavrzcms3.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.fds.tavrzcms3.domain.CostHistory;
 import ru.fds.tavrzcms3.dto.CostHistoryDto;
 import ru.fds.tavrzcms3.dto.DtoFactory;
+import ru.fds.tavrzcms3.exception.NotFoundException;
 import ru.fds.tavrzcms3.service.CostHistoryService;
 import ru.fds.tavrzcms3.service.FilesService;
 
@@ -34,6 +36,13 @@ public class CostHistoryController {
         this.costHistoryService = costHistoryService;
         this.filesService = filesService;
         this.dtoFactory = dtoFactory;
+    }
+
+    @GetMapping("/{costHistoryId}")
+    public CostHistoryDto getCostHistoryById(@PathVariable("costHistoryId") Long costHistoryId){
+        return costHistoryService.getCostHistoryById(costHistoryId)
+                .map(dtoFactory::getCostHistoryDto)
+                .orElseThrow(()-> new NotFoundException("Cost History not found"));
     }
 
     @GetMapping("/pledge_subject")
