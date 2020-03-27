@@ -769,7 +769,7 @@ public class PledgeSubjectServiceImpl implements PledgeSubjectService {
 
         repositoryPaJoinPs.saveAll(paJoinPsList);
 
-        messageService.sendNewPledgeSubject(pledgeSubject.getPledgeSubjectId());
+        messageService.sendExistPledgeSubject(pledgeSubject.getPledgeSubjectId());
 
         return pledgeSubject;
     }
