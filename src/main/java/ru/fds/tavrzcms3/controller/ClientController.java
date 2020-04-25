@@ -62,6 +62,11 @@ public class ClientController {
         return dtoFactory.getClientsDto(clientService.getClientsByClientManager(clientManagerId));
     }
 
+    @GetMapping("/client_manager/count")
+    public Integer getCountClientByClientManager(@RequestParam("clientManagerId") Long clientManagerId){
+        return clientService.getCountClientByClientManager(clientManagerId);
+    }
+
     @GetMapping("/search")
     public List<ClientDto> getClientBySearchCriteria(@RequestParam Map<String, String> reqParam) throws ReflectiveOperationException {
         return dtoFactory.getClientsDto(clientService.getClientFromSearch(reqParam));

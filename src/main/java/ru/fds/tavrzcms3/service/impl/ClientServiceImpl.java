@@ -80,6 +80,11 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public Integer getCountClientByClientManager(Long clientManagerId){
+        return repositoryClient.countByClientManager(clientManagerId);
+    }
+
+    @Override
     public String getFullNameClient(Long clientId){
         Client client = repositoryClient.findById(clientId)
                 .orElseThrow(() -> new NotFoundException("Client not found"));

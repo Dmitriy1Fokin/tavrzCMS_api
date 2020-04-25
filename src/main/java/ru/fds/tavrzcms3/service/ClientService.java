@@ -15,6 +15,7 @@ public interface ClientService {
     List<Client> getAllClients(Pageable pageable);
     List<Client> getClientsByEmployee(Long employeeId);
     List<Client> getClientsByClientManager(Long clientManagerId);
+    Integer getCountClientByClientManager(Long clientManagerId);
     String getFullNameClient(Long clientId);
     List<Client> getClientFromSearch(Map<String, String> searchParam) throws ReflectiveOperationException;
     List<Client> getNewClientsFromFile(File file, TypeOfClient typeOfClient) throws IOException;

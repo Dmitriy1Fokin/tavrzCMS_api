@@ -13,5 +13,7 @@ public interface RepositoryClient extends JpaRepository<Client, Long>, JpaSpecif
     List<Client> findByEmployee(@Param("employeeId") Long employeeId);
     @Query("select c from Client c where c.clientManager.clientManagerId = :clientManagerId")
     List<Client> findAllByClientManager(@Param("clientManagerId") Long clientManagerId);
+    @Query("select count(c) from Client c where c.clientManager.clientManagerId = :clientManagerId")
+    Integer countByClientManager(Long clientManagerId);
     List<Client> findAllByClientIdIn(List<Long> ids);
 }
